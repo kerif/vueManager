@@ -33,8 +33,15 @@
       style="margin-top: 15px; cursor: pointer"
     >
       <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
-      <el-col :span="5" :offset="5">{{ $t('更新于') }}{{ item.updated_at }}</el-col>
-      <el-col :span="6" :offset="1"><i class="el-icon-download" @click="downloadFile"></i></el-col>
+      <el-col :span="4" :offset="8">{{ $t('更新于') }}{{ item.updated_at }}</el-col>
+      <el-col :span="1" :offset="2"><i class="el-icon-download" @click="downloadFile"></i></el-col>
+      <el-col :span="1" :offset="1">
+        <i
+          class="el-icon-close"
+          style="font-size: 16px; font-weight: bold"
+          @click="onDelete(item.id)"
+        ></i>
+      </el-col>
     </el-row>
     <div>
       <h4 v-if="goodData.length">{{ $t('方案预览') }}</h4>
@@ -90,8 +97,27 @@ export default {
         goodsList => {
           console.log(goodsList)
           this.goodData = goodsList
+          console.log(this.goodData)
         }
       )
+    },
+    onDelete(recordId) {
+      this.$request.delUploadRecord(this.$route.params.id, recordId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+          this.goodData = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     onSubmit(isFinish) {
       let params = {}

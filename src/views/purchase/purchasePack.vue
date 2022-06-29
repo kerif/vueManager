@@ -167,6 +167,11 @@
                       </el-col>
                     </el-row>
                   </div>
+                  <div style="display: flex; justify-content: flex-end">
+                    <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
+                      $t('一键装箱')
+                    }}</el-button>
+                  </div>
                   <div
                     style="
                       padding: 20px 0px;
@@ -183,13 +188,13 @@
                       <el-col :span="4"
                         ><div>{{ $t('图片') }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><div>{{ $t('条码') }}</div></el-col
                       >
                       <el-col :span="3"
                         ><div>{{ $t('名称') }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <el-col :span="4"
                         ><div>{{ $t('颜色') }}</div></el-col
                       >
                       <el-col :span="4"
@@ -213,15 +218,34 @@
                           ><img
                             style="width: 20%; cursor: pointer"
                             :src="`${$baseUrl.IMAGE_URL}${item.image}`"
+                            @click="onPic(item.image)"
                           /> </span
                       ></el-col>
-                      <el-col :span="4"
+                      <el-col
+                        :span="3"
+                        class="sku-item"
+                        :class="{
+                          all: item.quantity === sum,
+                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
+                        }"
                         ><div>{{ item.barcode }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <el-col
+                        :span="3"
+                        class="sku-item"
+                        :class="{
+                          all: item.quantity === sum,
+                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
+                        }"
                         ><div>{{ item.cn_name }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <el-col
+                        :span="4"
+                        class="sku-item"
+                        :class="{
+                          all: item.quantity === sum,
+                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
+                        }"
                         ><div>{{ item.color }}</div></el-col
                       >
                       <el-col :span="4"
@@ -236,6 +260,7 @@
                             type="number"
                             size="small"
                             v-model="ele.pack_quantity"
+                            @blur="checkOut(item)"
                             style="margin: 3px 0 0 10px"
                           ></el-input></div
                       ></el-col>
@@ -250,7 +275,6 @@
                 <el-button
                   type="primary"
                   size="small"
-                  :disabled="isBtns"
                   class="calc-btn"
                   :loading="$store.state.btnLoading"
                   @click="onPack(1)"
@@ -262,10 +286,15 @@
         </el-row>
       </div>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -302,12 +331,15 @@ export default {
       orderData: [],
       pack: [],
       num: '',
+      sum: '',
       status: '',
       idx: '',
       pickList: [],
       station_id: '',
       user_id: '',
-      customList: []
+      customList: [],
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created() {
@@ -335,7 +367,7 @@ export default {
         } else if (num < quantity) {
           return '部分装箱'
         } else if (num > quantity) {
-          Message.error('装箱数量大于总数')
+          // Message.error('装箱数量大于总数')
           return '装箱数量大于总数'
         }
       }
@@ -401,6 +433,25 @@ export default {
         item.packData.splice(index, 1)
       })
     },
+    onBox() {
+      this.box.forEach((item, index) => {
+        this.skuList.forEach(ele => {
+          if (index === 0) {
+            ele.packData[index].pack_quantity = ele.quantity
+          } else {
+            ele.packData[index].pack_quantity = 0
+          }
+        })
+      })
+    },
+    checkOut(item) {
+      this.sum = item.packData.reduce(function (acr, pcc) {
+        if (!pcc.pack_quantity) {
+          return acr
+        }
+        return acr + Number(pcc.pack_quantity)
+      }, 0)
+    },
     onOrder(item, index) {
       console.log(item, index)
       this.idx = index
@@ -422,7 +473,7 @@ export default {
           this.skuList.push({
             ...ele.p_goods,
             quantity: ele.picking_quantity,
-            purchase_order_goods_id: ele.purchase_order_goods_id,
+            picking_order_goods_id: ele.id,
             packData: [{ pack_quantity: '' }]
           })
         })
@@ -456,7 +507,7 @@ export default {
         const tempList = this.orderList[index].goods.map(ele => {
           return {
             ...ele.p_goods,
-            purchase_order_goods_id: ele.purchase_order_goods_id,
+            picking_order_goods_id: ele.id,
             quantity: ele.quantity,
             packData: []
           }
@@ -464,7 +515,8 @@ export default {
         this.orderList[index].boxes.forEach(box => {
           box.goods.forEach(goods => {
             tempList.forEach(ele => {
-              if (ele.id === goods.id) {
+              console.log(ele.id, goods.id, ele.id === goods.id)
+              if (ele.picking_order_goods_id === goods.id) {
                 ele.packData.push({
                   pack_quantity: goods.pivot.quantity
                 })
@@ -479,6 +531,10 @@ export default {
       this.$request.channelData(this.stationId).then(res => {
         this.express_line_id = res.data.map(item => item.id)[0]
       })
+    },
+    onPic(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
     getLineType() {
       this.$request.lineType().then(res => {
@@ -519,8 +575,9 @@ export default {
       this.box.forEach((item, index) => {
         const boxItem = { ...item, goods: [] }
         this.skuList.forEach(ele => {
+          console.log(ele)
           boxItem.goods.push({
-            purchase_order_goods_id: ele.purchase_order_goods_id,
+            picking_order_goods_id: ele.picking_order_goods_id,
             pack_quantity: ele.packData[index].pack_quantity
           })
         })
@@ -772,6 +829,22 @@ export default {
   .btn-red {
     cursor: pointer;
     color: red;
+  }
+  .sku-item {
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    padding: 0 25px;
+    border: 1px solid #efefef;
+    &.all {
+      border-color: #3da969;
+      background-color: #3da969;
+      color: #fff;
+    }
+    &.wait {
+      border-color: #ff9933;
+      background-color: #ff9933;
+    }
   }
 }
 </style>

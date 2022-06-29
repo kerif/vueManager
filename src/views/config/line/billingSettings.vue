@@ -512,6 +512,15 @@
             </el-col>
           </el-row>
         </el-form-item>
+        <el-form-item>
+          <div style="red">
+            {{
+              $t(
+                '注: “单边边长”指只要有一边达成条件, 则免抛 “所有边长”指长宽三边全部达成条件, 则免抛'
+              )
+            }}
+          </div>
+        </el-form-item>
       </div>
       <el-form-item>
         <el-button

@@ -189,46 +189,40 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="order_sn" :label="$t('打包单号')">
+        <el-table-column prop="sn" :label="$t('转运单号')">
           <template slot-scope="scope">
-            <span class="choose-order" @click="orderDetail(scope.row.id)">{{
-              scope.row.order_sn
-            }}</span>
+            <span class="choose-order" @click="orderDetail(scope.row.id)">{{ scope.row.sn }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" :label="$t('转运单状态')">
+        <el-table-column prop="quantity" :label="$t('分货数量')"></el-table-column>
+        <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
+        <el-table-column prop="pack_quantity" :label="$t('打包数量')"></el-table-column>
+        <el-table-column :label="$t('拣货差异数量')">
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 1">{{ $t('待处理') }}</span>
-            <span v-if="scope.row.status === 2">{{ $t('待支付') }}</span>
-            <span v-if="scope.row.status === 3">{{ $t('待发货') }}</span>
-            <span v-if="scope.row.status === 4">{{ $t('已发货') }}</span>
-            <span v-if="scope.row.status === 5">{{ $t('已签收') }}</span>
-            <span v-if="scope.row.status === 19">{{ $t('已作废') }}</span>
+            {{ scope.row.picking_quantity - scope.row.quantity }}
           </template>
         </el-table-column>
-        <el-table-column prop="qty" :label="$t('商品数量')"></el-table-column>
-        <el-table-column prop="declare_value" :label="$t('总价值')"></el-table-column>
-        <el-table-column prop="country_name" :label="$t('目的地')">
+        <el-table-column :label="$t('打包差异数量')">
           <template slot-scope="scope">
-            {{ scope.row.address && scope.row.address.country_name }}
+            {{ scope.row.pack_quantity - scope.row.quantity }}
           </template>
         </el-table-column>
-        <el-table-column prop="receiver_name" :label="$t('收件人')">
+        <el-table-column prop="country" :label="$t('目的地')">
           <template slot-scope="scope">
-            {{ scope.row.address && scope.row.address.receiver_name }}
+            {{ scope.row.country && scope.row.country.name }}
           </template>
         </el-table-column>
-        <el-table-column prop="express_line.name" :label="$t('下单渠道')"></el-table-column>
-        <el-table-column prop="payment_mode" :label="$t('付款方式')">
+        <el-table-column prop="user" :label="$t('收件人')">
           <template slot-scope="scope">
-            <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{
-              $t('货到付款')
-            }}</span>
-            <span v-else>{{ $t('预付') }}</span>
+            {{ scope.row.user && scope.row.user.name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="express_line" :label="$t('下单渠道')">
+          <template slot-scope="scope">
+            {{ scope.row.express_line && scope.row.express_line.name }}
           </template>
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
-        <el-table-column prop="customer_name" :label="$t('创建人')"></el-table-column>
       </el-table>
     </div>
     <operate-log :logs="ruleForm.logs"></operate-log>
@@ -344,6 +338,30 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
+        this.ruleForm.orders = res.data.d_orders.map(item => {
+          const id = item.id
+          const country = item.station ? item.station.country : ''
+          const props = item.props.map(ele => ele.cn_name)
+          const sn = item.sn
+          const quantity = item.quantity
+          const picking_quantity = item.picking_quantity
+          const pack_quantity = item.pack_quantity
+          const user = item.user
+          const express_line = item.express_line
+          const created_at = item.created_at
+          return {
+            id,
+            sn,
+            quantity,
+            picking_quantity,
+            pack_quantity,
+            country,
+            props,
+            user,
+            express_line,
+            created_at
+          }
+        })
         this.ids = res.data.package ? res.data.package.id : ''
       })
     },

@@ -1,5 +1,6 @@
 <template>
   <div class="transshipment-detail-container">
+    <backTop></backTop>
     <div class="title">
       <h4>{{ $t('基本信息') }}</h4>
       <div style="margin-left: 30px">
@@ -53,14 +54,28 @@
     <div v-for="item in records" :key="item.id" class="programme">
       <el-row :gutter="10">
         <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
-        <el-col :span="4" :offset="9">{{ $t('更新于') }}&nbsp;&nbsp;{{ item.updated_at }}</el-col>
-        <el-col :span="1" :offset="3"
-          ><i class="el-icon-download" @click="onDownloadFile(item.path)"></i
+        <el-col :span="4" :offset="8">{{ $t('更新于') }}&nbsp;&nbsp;{{ item.updated_at }}</el-col>
+        <el-col :span="1" :offset="2"
+          ><i
+            class="el-icon-download"
+            style="font-size: 16px; font-weight: bold"
+            @click="onDownloadFile(item.path)"
+          ></i
         ></el-col>
+        <el-col :span="1" :offset="1">
+          <i
+            class="el-icon-close"
+            style="font-size: 16px; font-weight: bold"
+            @click="onDelete(item.id)"
+          ></i>
+        </el-col>
       </el-row>
     </div>
     <div v-if="status === 0 || status === 1 || status === 2">
-      <h4>{{ $t('方案预览') }}</h4>
+      <div class="record record-item space">
+        <h4>{{ $t('方案预览') }}</h4>
+        <el-button type="primary" size="small" @click="onClear">{{ $t('一键清空') }}</el-button>
+      </div>
       <div v-for="(item, index) in goodData" :key="index">
         <el-row :gutter="10" class="review font-bold">
           <el-col :span="5"
@@ -68,7 +83,10 @@
           >
           <el-col :span="5" v-if="status === 2">{{ item.sn }}</el-col>
           <el-col :span="5"
-            ><div>{{ $t('客户') }}: {{ item.user_id }}</div></el-col
+            ><div>
+              {{ $t('客户') }}: {{ item.user ? item.user.id : '' }} ---
+              {{ item.user ? item.user.name : '' }}
+            </div></el-col
           >
           <el-col :span="5"
             ><div>{{ $t('收货点') }}: {{ item.station_code }}</div></el-col
@@ -76,9 +94,31 @@
         </el-row>
         <el-table :data="item.goods" style="width: 80%" border stripe class="space">
           <el-table-column type="index" label="#"></el-table-column>
+          <el-table-column prop="purchase_order_sn" :label="$t('采购编号')"></el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')"> </el-table-column>
-          <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
+          <el-table-column label="barcode" prop="barcode"></el-table-column>
+          <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
+          <el-table-column prop="pack_quantity" :label="$t('打包数量')">
+            <template slot-scope="scope">
+              {{ scope.row.pack_quantity ? scope.row.pack_quantity : 0 }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="picking_quantity" :label="$t('拣货数量')">
+            <template slot-scope="scope">
+              {{ scope.row.picking_quantity ? scope.row.picking_quantity : 0 }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('拣货差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.picking_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('打包差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.pack_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
           <el-table-column
             v-if="status === 2"
             prop="picking_quantity"
@@ -125,18 +165,23 @@
           class="space"
         >
           <el-table-column type="index" label="#"></el-table-column>
+          <el-table-column :label="$t('采购编号')" prop="purchase_order_sn"></el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')">
             <template slot-scope="scope">
               {{ scope.row.p_goods ? scope.row.p_goods.number : '' }}
             </template>
           </el-table-column>
+          <el-table-column label="barcode" prop="barcode"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')">
             <template slot-scope="scope">
               {{ scope.row.p_goods ? scope.row.p_goods.cn_name : '' }}
             </template>
           </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
-          <el-table-column prop="picking_quantity" :label="$t('实际分货数量')"></el-table-column>
+          <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
+          <el-table-column prop="" :label="$t('打包数量')"></el-table-column>
+          <el-table-column :label="$t('拣货差异数量')"></el-table-column>
+          <el-table-column :label="$t('打包差异数量')"></el-table-column>
         </el-table>
         <el-table v-else :data="item.boxes" border class="space" style="width: 80%">
           <el-table-column type="index" label="#"></el-table-column>
@@ -147,12 +192,16 @@
       </div>
     </div>
     <div style="margin-top: 50px; text-align: left">
-      <el-button @click="onSubmit(0)" v-if="status === 0" type="primary">{{
+      <el-button @click="onSubmit(0)" v-if="status === 0 && goodData.length" type="primary">{{
         $t('保存')
       }}</el-button>
-      <el-button class="save-btn" v-if="status === 0" type="primary" @click="onSubmit(1)">{{
-        $t('保存并提交')
-      }}</el-button>
+      <el-button
+        class="save-btn"
+        v-if="status === 0 && goodData.length"
+        type="primary"
+        @click="onSubmit(1)"
+        >{{ $t('保存并提交') }}</el-button
+      >
       <el-button v-if="status === 1" type="primary" @click="onPick">{{ $t('拣货') }}</el-button>
       <el-button v-if="status === 2" type="primary" @click="onPack">{{ $t('打包') }}</el-button>
     </div>
@@ -161,6 +210,7 @@
 
 <script>
 import dialog from '@/components/dialog'
+import backTop from './components/scroll.vue'
 export default {
   data() {
     return {
@@ -179,6 +229,9 @@ export default {
   },
   created() {
     this.getList()
+  },
+  components: {
+    backTop
   },
   methods: {
     getList() {
@@ -208,19 +261,12 @@ export default {
                 id: ele.id,
                 purchase_order_sn: ele.p_order ? ele.p_order.sn : '',
                 quantity: ele.quantity,
-                picking_quantity: ele.picking_quantity
+                picking_quantity: ele.picking_quantity,
+                pack_quantity: ele.pack_quantity
               }
             })
           })
         })
-        this.goodData.forEach(item => {
-          if (item.goods) {
-            item.goods.forEach(ele => {
-              ele.name = ele.cn_name
-            })
-          }
-        })
-        console.log(this.goodData)
       })
     },
     onImport(mode) {
@@ -233,9 +279,31 @@ export default {
         goodsList => {
           this.goodData = []
           this.getList()
+          goodsList.forEach(item => {
+            item.user = {}
+            item.user.id = item.user_id
+            item.user.name = item.user_name
+            item.goods.forEach(ele => {
+              ele.cn_name = ele.name
+            })
+          })
+          console.log(this.goodData)
+          console.log(goodsList)
           this.goodData.push(...goodsList)
+          // this.goodData.forEach((item, index) => {
+          //   console.log(index)
+          //   goodsList.forEach((ele, ind) => {
+          //     console.log(ind)
+          //     if (item.number !== ele.number) {
+          //       this.goodData.push(...goodsList)
+          //     }
+          //   })
+          // })
         }
       )
+    },
+    onClear() {
+      this.goodData = []
     },
     onDownload() {
       let params = {
@@ -275,6 +343,24 @@ export default {
       this.$router.push({
         name: 'purchasePack',
         query: { sn: this.sn }
+      })
+    },
+    onDelete(recordId) {
+      this.$request.delUploadRecord(this.$route.params.id, recordId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+          this.goodData = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     onSubmit(isFinish) {

@@ -277,7 +277,7 @@ export default {
       })
     },
     onDistribution(id) {
-      this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
+      this.$confirm(this.$t('您确认分货完成吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

@@ -11,7 +11,7 @@
     <el-form label-width="120px" :model="ruleForm" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('PO单号')">
+          <el-form-item :label="$t('PO单号')" prop="sn">
             <el-input
               v-model="ruleForm.sn"
               maxlength="30"
@@ -128,6 +128,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')"></el-table-column>
+          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
           <el-table-column prop="material" :label="$t('材质')"></el-table-column>
@@ -136,7 +137,6 @@
           <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
-          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img
@@ -267,7 +267,16 @@ export default {
               image: item.image ? item.image.path : ''
             }
           })
-          this.ruleForm.goods.push(...goodsData)
+          for (let i = 0; i < goodsData.length; i++) {
+            let goods = this.ruleForm.goods.map(item => {
+              return item.barcode
+            })
+            if (goods.includes(goodsData[i].barcode)) {
+              this.ruleForm.goods.splice(i, 1, goodsData[i])
+            } else {
+              this.ruleForm.goods.push(...goodsData)
+            }
+          }
         }
       )
     },
@@ -277,10 +286,12 @@ export default {
         ...this.ruleForm,
         is_approved: 0
       }
+      console.log(this.ruleForm.goods)
       this.ruleForm.goods = this.ruleForm.goods.map(item => {
+        console.log(item)
         return {
           ...item,
-          image: item.image ? item.image.path : ''
+          image: item.image
         }
       })
       console.log(this.ruleForm.goods)
@@ -325,7 +336,7 @@ export default {
       this.ruleForm.goods = this.ruleForm.goods.map(item => {
         return {
           ...item,
-          image: item.image ? item.image.path : ''
+          image: item.image
         }
       })
       if (!this.$route.params.id) {

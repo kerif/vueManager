@@ -4530,3 +4530,8 @@ exports.editChannelCategory = (id, params) => {
 exports.delChannelCategory = id => {
   return $form.delete(`channel-categories/${id}`)
 }
+
+// 采购 采购分货 删除上传记录
+exports.delUploadRecord = (id, recordId) => {
+  return $form.delete(`purchase-picking-orders/${id}/record/${recordId}`)
+}

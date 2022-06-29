@@ -319,7 +319,8 @@ export default {
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
           { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
-          { id: 'shipment_sn', name: this.$t('所属发货单') }
+          { id: 'shipment_sn', name: this.$t('所属发货单') },
+          { id: 'shipment_name', name: this.$t('发货单名称') }
         ]
         this.operationInfo = [
           { id: 'created_at', name: this.$t('提交时间') },
@@ -525,7 +526,8 @@ export default {
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
           { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
-          { id: 'shipment_sn', name: this.$t('所属发货单') }
+          { id: 'shipment_sn', name: this.$t('所属发货单') },
+          { id: 'shipment_name', name: this.$t('发货单名称') }
         ]
         this.operationInfo = [
           { id: 'created_at', name: this.$t('提交时间') },

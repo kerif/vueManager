@@ -12,13 +12,7 @@
             />
           </div>
           <div class="row-item">
-            <!-- <el-autocomplete
-              :fetch-suggestions="queryCNSearch"
-              :placeholder="$t('请选择箱号')"
-              v-model="num"
-            >
-            </el-autocomplete> -->
-            <el-select v-model="num" :placeholder="$t('请选择箱号')" clearable>
+            <el-select v-model="num" style="width: 120px" :placeholder="$t('请选择箱号')" clearable>
               <el-option
                 v-for="item in boxNumber"
                 :key="item.id"
@@ -51,7 +45,7 @@
               <span class="font-bold num">{{ waitScanNum }}</span>
             </span>
             <span>
-              <span>{{ $t('箱号') }}：</span>
+              <span>{{ $t('订单号') }}：</span>
               <span class="font-bold num">{{ orderList.length }}</span>
             </span>
           </div>
@@ -80,17 +74,17 @@
           <div class="order-content flex-1">
             <el-row :gutter="30">
               <el-row class="sku-row">
-                <el-col :span="4" :offset="1">{{ $t('图片') }}</el-col>
+                <el-col :span="3" :offset="1">{{ $t('图片') }}</el-col>
                 <el-col :span="4">{{ $t('商品编号') }}</el-col>
                 <el-col :span="4">{{ $t('品名') }}</el-col>
-                <el-col :span="4">{{ $t('条码') }}</el-col>
+                <el-col :span="5">{{ $t('条码') }}</el-col>
                 <el-col :span="4" class="align-center">{{ $t('分货') }}</el-col>
                 <el-col :span="3" class="align-center">{{ $t('拣货') }}</el-col>
               </el-row>
             </el-row>
             <el-row :gutter="30">
               <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
-                <el-col :span="4" :offset="1">
+                <el-col :span="3" :offset="1">
                   <span v-if="ele.p_goods">
                     <img
                       class="img"
@@ -126,7 +120,7 @@
                   >
                 </el-col>
                 <el-col
-                  :span="4"
+                  :span="5"
                   class="sku-item"
                   :class="{
                     all: ele.quantity === Number(ele.picking_quantity),
@@ -182,7 +176,8 @@ export default {
       imgVisible: false,
       imgSrc: '',
       boxNumber: [],
-      num: ''
+      num: '',
+      orderSn: ''
     }
   },
   created() {
@@ -200,10 +195,11 @@ export default {
           }
           this.orderId = res.data ? res.data.id : ''
           this.orderList = res.data ? res.data.orders : []
+          this.orderSn = res.data.sn
           this.boxNumber = this.orderList.map(item => {
             return {
               id: item.id,
-              number: '#' + item.number
+              number: '#' + item.number + '(' + item.sn + ')'
             }
           })
           console.log(this.boxNumber)
@@ -249,7 +245,6 @@ export default {
           }
         }
       } else if (this.num) {
-        console.log(this.num)
         this.orderList.forEach(item => {
           if (item.id === this.num) {
             item.goods.forEach(ele => {
@@ -265,24 +260,6 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    // queryCNSearch(queryString, callback) {
-    //   if (this.sn) {
-    //     this.$request.purchasePickSearch(this.sn).then(res => {
-    //       if (!res.data) {
-    //         this.$message.error(this.$t('拣货单不存在'))
-    //       }
-    //       let list
-    //       list = res.data.orders.map(item => {
-    //         return {
-    //           id: item.id,
-    //           number: item.number
-    //         }
-    //       })
-    //       console.log(list)
-    //       callback && callback(list)
-    //     })
-    //   }
-    // },
     onSave() {
       let params = {
         is_picking_finish: 0,
@@ -292,7 +269,7 @@ export default {
         if (item.goods) {
           item.goods.forEach(ele => {
             params.goods.push({
-              picking_quantity: ele.picking_quantity,
+              picking_quantity: ele.picking_quantity ? ele.picking_quantity : 0,
               picking_divide_order_id: ele.picking_divide_order_id,
               purchase_order_goods_id: ele.purchase_order_goods_id
             })
