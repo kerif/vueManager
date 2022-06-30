@@ -96,15 +96,11 @@ export default {
         },
         goodsList => {
           let tableData = []
-          let num2 = this.goodData.map(item => item.number)
-          let station = this.goodData.map(item => item.station_code)
-          let user = this.goodData.map(item => item.user_id)
+          let data = this.goodData.map(item => {
+            item.user_id, item.station_code, item.number
+          })
           goodsList.forEach(item => {
-            if (
-              num2.includes(item.number) &&
-              station.includes(item.station_code) &&
-              user.includes(item.user_id)
-            ) {
+            if (data.includes(item)) {
               this.goodData.forEach(ele => {
                 if (
                   ele.number === item.number &&
