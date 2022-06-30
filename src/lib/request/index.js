@@ -4535,3 +4535,28 @@ exports.delChannelCategory = id => {
 exports.delUploadRecord = (id, recordId) => {
   return $form.delete(`purchase-picking-orders/${id}/record/${recordId}`)
 }
+
+// 落地配置 新增
+exports.dockingMethod = params => {
+  return $form.post(`express-lines/third-party-multi-channel`, params)
+}
+
+// 落地配置 编辑
+exports.editDockingMethod = (id, params) => {
+  return $form.put(`express-lines/third-party-multi-channel/${id}`, params)
+}
+
+// 落地配置 列表
+exports.dockingList = params => {
+  return $form.get(`express-lines/third-party-multi-channel`, { params })
+}
+
+// 落地配置 详情
+exports.dockingDetail = id => {
+  return $form.get(`express-lines/third-party-multi-channel/${id}`)
+}
+
+// 落地配置 删除
+exports.delDocking = id => {
+  return $form.delete(`express-lines/third-party-multi-channel/${id}`)
+}

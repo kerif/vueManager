@@ -289,10 +289,11 @@ export default {
           })
           let tableData = []
           let num2 = this.goodData.map(item => item.number)
+          let station = this.goodData.map(item => item.station_code)
           goodsList.forEach(item => {
-            if (num2.includes(item.number)) {
+            if (num2.includes(item.number) && station.includes(item.station_code)) {
               this.goodData.forEach(ele => {
-                if (ele.number === item.number) {
+                if (ele.number === item.number && ele.station_code === item.station_code) {
                   let list = []
                   item.goods.forEach(goods1 => {
                     let flag = false
@@ -307,6 +308,7 @@ export default {
                     })
                     if (!flag) {
                       list.push(goods1)
+                      console.log(list)
                     }
                   })
                   ele.goods = ele.goods.concat(list)
@@ -314,8 +316,10 @@ export default {
               })
             } else {
               tableData.push(item)
+              console.log(tableData)
             }
           })
+          console.log(tableData)
           this.goodData = this.goodData.concat(tableData)
         }
       )
@@ -465,7 +469,7 @@ export default {
   width: 80%;
 }
 .space {
-  margin-top: 20px;
+  margin: 20px 0 20px 0;
 }
 .flex-1 {
   flex: 1;

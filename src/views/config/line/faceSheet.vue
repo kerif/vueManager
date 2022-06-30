@@ -62,6 +62,33 @@
         >
         </el-switch>
       </el-form-item>
+      <el-form-item :label="$t('落地配对接方式')">
+        <el-radio-group v-model="type">
+          <el-radio :label="1">{{ $t('单接口') }}</el-radio>
+          <el-radio :label="2">{{ $t('多接口') }}</el-radio>
+        </el-radio-group>
+        <div v-if="type === 1">
+          <span>{{ $t('配单公司') }}</span> <el-select> </el-select>
+        </div>
+        <div v-if="type === 1">
+          <span>{{ $t('渠道代码') }}</span> <el-select> </el-select>
+        </div>
+        <div v-if="type === 2">
+          <el-button>{{ $t('添加') }}</el-button>
+          <el-table border>
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column :label="$t('推送条件')"></el-table-column>
+            <el-table-column :label="$t('配单公司')"></el-table-column>
+            <el-table-column :label="$t('代码')"></el-table-column>
+            <el-table-column :label="$t('操作')">
+              <template>
+                <el-button>{{ $t('编辑') }}</el-button>
+                <el-button>{{ $t('删除') }}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -79,6 +106,7 @@ export default {
         push_type: 1,
         third_push_now: 0
       },
+      type: '',
       dockingList: [],
       channelList: []
     }

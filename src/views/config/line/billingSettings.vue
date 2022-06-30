@@ -513,10 +513,10 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <div style="red">
+          <div class="comment">
             {{
               $t(
-                '注: “单边边长”指只要有一边达成条件, 则免抛 “所有边长”指长宽三边全部达成条件, 则免抛'
+                '注: “单边边长”指只要有一边达成条件, 则免抛。“所有边长”指长宽三边全部达成条件, 则免抛'
               )
             }}
           </div>
@@ -973,6 +973,9 @@ export default {
   }
   .sava-btn {
     min-width: 100px;
+  }
+  .comment {
+    color: red;
   }
   .icon-info {
     color: #74b34f;

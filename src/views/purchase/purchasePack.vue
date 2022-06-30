@@ -578,7 +578,7 @@ export default {
           console.log(ele)
           boxItem.goods.push({
             picking_order_goods_id: ele.picking_order_goods_id,
-            pack_quantity: ele.packData[index].pack_quantity
+            pack_quantity: ele.packData[index].pack_quantity ? ele.packData[index].pack_quantity : 0
           })
         })
         boxList.push(boxItem)

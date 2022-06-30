@@ -51,7 +51,7 @@
             ><div>#{{ item.number }}</div></el-col
           >
           <el-col :span="5"
-            ><div>{{ $t('客户') }}: {{ item.user_id }}</div></el-col
+            ><div>{{ $t('客户') }}: {{ item.user_id }} --- {{ item.user_name }}</div></el-col
           >
           <el-col :span="5"
             ><div>{{ $t('收货点') }}: {{ item.station_code }}</div></el-col
@@ -97,10 +97,11 @@ export default {
         goodsList => {
           let tableData = []
           let num2 = this.goodData.map(item => item.number)
+          let station = this.goodData.map(item => item.station_code)
           goodsList.forEach(item => {
-            if (num2.includes(item.number)) {
+            if (num2.includes(item.number) && station.includes(item.station_code)) {
               this.goodData.forEach(ele => {
-                if (ele.number === item.number) {
+                if (ele.number === item.number && ele.station_code === item.station_code) {
                   let list = []
                   item.goods.forEach(goods1 => {
                     let flag = false
@@ -118,13 +119,18 @@ export default {
                     }
                   })
                   ele.goods = ele.goods.concat(list)
+                  console.log(ele.goods)
                 }
               })
             } else {
+              console.log(item)
               tableData.push(item)
+              console.log(tableData)
             }
           })
+          console.log(tableData)
           this.goodData = this.goodData.concat(tableData)
+          console.log(this.goodData)
         }
       )
     },
@@ -215,7 +221,7 @@ export default {
   width: 80%;
 }
 .space {
-  margin-top: 20px;
+  margin: 20px 0 20px 0;
 }
 .flex-1 {
   flex: 1;
