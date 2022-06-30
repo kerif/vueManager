@@ -96,17 +96,14 @@ export default {
         },
         goodsList => {
           let tableData = []
-          let data = this.goodData.map(item => {
-            item.user_id, item.station_code, item.number
-          })
+          let data = this.goodData.map(item => item.number)
           goodsList.forEach(item => {
-            if (data.includes(item)) {
+            if (data.includes(item.number)) {
               this.goodData.forEach(ele => {
-                if (
-                  ele.number === item.number &&
-                  ele.station_code === item.station_code &&
-                  ele.user_id === item.user_id
-                ) {
+                if (ele.number === item.number) {
+                  ele.user_id = item.user_id
+                  ele.user_name = item.user_name
+                  ele.station_code = item.station_code
                   let list = []
                   item.goods.forEach(goods1 => {
                     let flag = false
@@ -124,18 +121,13 @@ export default {
                     }
                   })
                   ele.goods = ele.goods.concat(list)
-                  console.log(ele.goods)
                 }
               })
             } else {
-              console.log(item)
               tableData.push(item)
-              console.log(tableData)
             }
           })
-          console.log(tableData)
           this.goodData = this.goodData.concat(tableData)
-          console.log(this.goodData)
         }
       )
     },

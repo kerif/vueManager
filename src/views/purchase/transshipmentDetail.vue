@@ -21,6 +21,7 @@
               v-if="status === 0 || status === 1"
               type="textarea"
               v-model="form.remark"
+              :autosize="{ minRows: 3, maxRows: 4 }"
               style="width: 55%"
             ></el-input>
             <div v-else>{{ remark }}</div>
@@ -111,12 +112,12 @@
           </el-table-column>
           <el-table-column :label="$t('拣货差异数量')">
             <template slot-scope="scope">
-              {{ scope.row.picking_quantity - scope.row.quantity }}
+              {{ Number(scope.row.picking_quantity) - Number(scope.row.quantity) }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('打包差异数量')">
             <template slot-scope="scope">
-              {{ scope.row.pack_quantity - scope.row.quantity }}
+              {{ Number(scope.row.pack_quantity) - Number(scope.row.quantity) }}
             </template>
           </el-table-column>
           <el-table-column
@@ -129,6 +130,13 @@
               <span v-for="(ele, index) in item.boxes" :key="index">
                 #{{ index + 1 }}({{ ele.quantity }})</span
               >
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')" width="160">
+            <template slot-scope="scope">
+              <el-button class="btn-light-red" @click="onDelRow(scope.$index, item.goods)">{{
+                $t('删除')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -224,7 +232,8 @@ export default {
       name: '',
       remark: '',
       orders: [],
-      records: []
+      records: [],
+      edit: false
     }
   },
   created() {
@@ -289,11 +298,10 @@ export default {
           })
           let tableData = []
           let num2 = this.goodData.map(item => item.number)
-          let station = this.goodData.map(item => item.station_code)
           goodsList.forEach(item => {
-            if (num2.includes(item.number) && station.includes(item.station_code)) {
+            if (num2.includes(item.number)) {
               this.goodData.forEach(ele => {
-                if (ele.number === item.number && ele.station_code === item.station_code) {
+                if (ele.number === item.number) {
                   let list = []
                   item.goods.forEach(goods1 => {
                     let flag = false
@@ -312,6 +320,7 @@ export default {
                     }
                   })
                   ele.goods = ele.goods.concat(list)
+                  console.log(tableData)
                 }
               })
             } else {
@@ -326,6 +335,12 @@ export default {
     },
     onClear() {
       this.goodData = []
+    },
+    onEditRow() {
+      this.edit = true
+    },
+    onDelRow(index, rows) {
+      rows.splice(index, 1)
     },
     onDownload() {
       let params = {

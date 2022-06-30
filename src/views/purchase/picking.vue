@@ -189,6 +189,7 @@ export default {
   methods: {
     onOrderSn() {
       if (this.sn) {
+        this.$message.error(this.$t('请确认数据是否保存'))
         this.$request.purchasePickSearch(this.sn).then(res => {
           if (!res.data) {
             this.$message.error(this.$t('拣货单不存在'))
