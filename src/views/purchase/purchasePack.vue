@@ -167,10 +167,24 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <div style="display: flex; justify-content: flex-end">
-                    <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
-                      $t('一键装箱')
-                    }}</el-button>
+                  <div style="display: flex; justify-content: space-between">
+                    <div class="flex-item color-item">
+                      <div class="color-tip color-green"></div>
+                      <div>{{ $t('绿色为已装箱数量等于总数') }}</div>
+                    </div>
+                    <div class="flex-item color-item">
+                      <div class="color-tip color-orange"></div>
+                      <div>{{ $t('黄色为已装箱数量不等于总数') }}</div>
+                    </div>
+                    <div class="flex-item color-item">
+                      <div class="color-tip"></div>
+                      <div>{{ $t('白色为已装箱数量为0') }}</div>
+                    </div>
+                    <div>
+                      <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
+                        $t('一键装箱')
+                      }}</el-button>
+                    </div>
                   </div>
                   <div
                     style="
@@ -185,16 +199,16 @@
                       <el-col :span="3"
                         ><div>{{ $t('状态') }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><div>{{ $t('图片') }}</div></el-col
                       >
                       <el-col :span="3"
                         ><div>{{ $t('条码') }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <el-col :span="4"
                         ><div>{{ $t('名称') }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><div>{{ $t('颜色') }}</div></el-col
                       >
                       <el-col :span="4"
@@ -213,7 +227,7 @@
                       <el-col :span="3"
                         ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><span
                           ><img
                             style="width: 20%; cursor: pointer"
@@ -231,7 +245,7 @@
                         ><div>{{ item.barcode }}</div></el-col
                       >
                       <el-col
-                        :span="3"
+                        :span="4"
                         class="sku-item"
                         :class="{
                           all: item.quantity === sum,
@@ -240,7 +254,7 @@
                         ><div>{{ item.cn_name }}</div></el-col
                       >
                       <el-col
-                        :span="4"
+                        :span="3"
                         class="sku-item"
                         :class="{
                           all: item.quantity === sum,
@@ -826,6 +840,20 @@ export default {
   .has-border {
     border: 1px solid #eff1f2;
   }
+  .color-tip {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    border-radius: 50%;
+    margin-right: 15px;
+    &.color-green {
+      background-color: #3da969;
+    }
+    &.color-orange {
+      background-color: #ff9933;
+    }
+  }
   .btn-red {
     cursor: pointer;
     color: red;
@@ -835,6 +863,7 @@ export default {
     line-height: 30px;
     display: inline-block;
     padding: 0 25px;
+    margin: 0 2px;
     border: 1px solid #efefef;
     &.all {
       border-color: #3da969;
