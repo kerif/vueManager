@@ -236,9 +236,12 @@
       </div>
     </div>
     <div style="margin-top: 50px; text-align: left">
-      <el-button @click="onSubmit(0)" v-if="status === 0 && goodData.length" type="primary">{{
-        $t('保存')
-      }}</el-button>
+      <el-button
+        @click="onSubmit(0)"
+        v-if="(status === 0 || status === 1) && goodData.length"
+        type="primary"
+        >{{ $t('保存') }}</el-button
+      >
       <el-button
         class="save-btn"
         v-if="status === 0 && goodData.length"

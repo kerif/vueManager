@@ -62,7 +62,7 @@
         >
         </el-switch>
       </el-form-item>
-      <el-form-item :label="$t('落地配对接方式')">
+      <!-- <el-form-item :label="$t('落地配对接方式')">
         <el-radio-group v-model="type">
           <el-radio :label="1">{{ $t('单接口') }}</el-radio>
           <el-radio :label="2">{{ $t('多接口') }}</el-radio>
@@ -92,7 +92,7 @@
             </el-table-column>
           </el-table>
         </div>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -119,7 +119,7 @@ export default {
   created() {
     this.getDocking()
     this.dockData()
-    this.getList()
+    // this.getList()
   },
   methods: {
     // 获取落地陪配置数据
@@ -154,11 +154,11 @@ export default {
         }
       })
     },
-    getList() {
-      this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
-        console.log(res)
-      })
-    },
+    // getList() {
+    //   this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
+    //     console.log(res)
+    //   })
+    // },
     onAdd() {
       dialog({
         type: 'addEditAbutment'

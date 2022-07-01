@@ -189,7 +189,7 @@
       <el-form-item :label="$t('分箱号')">
         <el-select v-model="shipOrder.boxNum" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in boxNumOptions"
+            v-for="item in shipNumOptions"
             :key="item.id"
             :label="item.name"
             :value="item.id"
