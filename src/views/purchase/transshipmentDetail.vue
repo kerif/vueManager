@@ -1,6 +1,6 @@
 <template>
   <div class="transshipment-detail-container">
-    <backTop></backTop>
+    <!-- <backTop></backTop> -->
     <div class="title">
       <h4>{{ $t('基本信息') }}</h4>
       <div style="margin-left: 30px">
@@ -112,19 +112,22 @@
           </el-table-column>
           <el-table-column :label="$t('拣货差异数量')">
             <template slot-scope="scope">
-              {{ Number(scope.row.picking_quantity) - Number(scope.row.quantity) }}
+              {{
+                Number(scope.row.picking_quantity) - Number(scope.row.quantity)
+                  ? Number(scope.row.picking_quantity) - Number(scope.row.quantity)
+                  : 0
+              }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('打包差异数量')">
             <template slot-scope="scope">
-              {{ Number(scope.row.pack_quantity) - Number(scope.row.quantity) }}
+              {{
+                Number(scope.row.pack_quantity) - Number(scope.row.quantity)
+                  ? Number(scope.row.pack_quantity) - Number(scope.row.quantity)
+                  : 0
+              }}
             </template>
           </el-table-column>
-          <el-table-column
-            v-if="status === 2"
-            prop="picking_quantity"
-            :label="$t('实际分货数量')"
-          ></el-table-column>
           <el-table-column v-if="status === 2" :label="$t('装箱')">
             <template>
               <span v-for="(ele, index) in item.boxes" :key="index">
@@ -205,12 +208,22 @@
           </el-table-column>
           <el-table-column prop="picking_quantity,quantity" :label="$t('拣货差异数量')">
             <template slot-scope="scope">
-              <span>{{ Number(scope.row.picking_quantity) - Number(scope.row.quantity) }}</span>
+              <span>
+                {{
+                  Number(scope.row.picking_quantity) - Number(scope.row.quantity)
+                    ? Number(scope.row.picking_quantity) - Number(scope.row.quantity)
+                    : 0
+                }}</span
+              >
             </template>
           </el-table-column>
           <el-table-column :label="$t('打包差异数量')">
             <template slot-scope="scope">
-              <span>{{ Number(scope.row.pack_quantity) - Number(scope.row.quantity) }}</span>
+              <span>{{
+                Number(scope.row.pack_quantity) - Number(scope.row.quantity)
+                  ? Number(scope.row.pack_quantity) - Number(scope.row.quantity)
+                  : 0
+              }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -241,7 +254,7 @@
 
 <script>
 import dialog from '@/components/dialog'
-import backTop from './components/scroll.vue'
+// import backTop from './components/scroll.vue'
 export default {
   data() {
     return {
@@ -263,7 +276,7 @@ export default {
     this.getList()
   },
   components: {
-    backTop
+    // backTop
   },
   methods: {
     getList(isFlag = true) {
@@ -317,6 +330,8 @@ export default {
             item.user.id = item.user_id
             item.user.name = item.user_name
             item.goods.forEach(ele => {
+              ele.picking_quantity = ele.picking_quantity ? ele.picking_quantity : 0
+              ele.pack_quantity = ele.pack_quantity ? ele.pack_quantity : 0
               ele.cn_name = ele.name
             })
           })

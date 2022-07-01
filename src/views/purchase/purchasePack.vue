@@ -167,8 +167,8 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <div style="display: flex; justify-content: space-between">
-                    <div class="flex-item color-item">
+                  <!-- <div style="display: flex; justify-content: space-between"> -->
+                  <!-- <div class="flex-item color-item">
                       <div class="color-tip color-green"></div>
                       <div>{{ $t('绿色为已装箱数量等于总数') }}</div>
                     </div>
@@ -180,11 +180,11 @@
                       <div class="color-tip"></div>
                       <div>{{ $t('白色为已装箱数量为0') }}</div>
                     </div>
-                    <div>
-                      <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
-                        $t('一键装箱')
-                      }}</el-button>
-                    </div>
+                    <div> -->
+                  <div style="display: flex; justify-content: flex-end">
+                    <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
+                      $t('一键装箱')
+                    }}</el-button>
                   </div>
                   <div
                     style="
@@ -235,33 +235,16 @@
                             @click="onPic(item.image)"
                           /> </span
                       ></el-col>
-                      <el-col
-                        :span="3"
-                        class="sku-item"
-                        :class="{
-                          all: item.quantity === sum,
-                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
-                        }"
+                      <el-col :span="3" class="sku-item"
                         ><div>{{ item.barcode }}</div></el-col
                       >
-                      <el-col
-                        :span="4"
-                        class="sku-item"
-                        :class="{
-                          all: item.quantity === sum,
-                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
-                        }"
+                      <el-col :span="4" class="sku-item"
                         ><div>{{ item.cn_name }}</div></el-col
                       >
-                      <el-col
-                        :span="3"
-                        class="sku-item"
-                        :class="{
-                          all: item.quantity === sum,
-                          wait: (sum < item.quantity || sum > item.quantity) && sum !== 0
-                        }"
-                        ><div>{{ item.color }}</div></el-col
-                      >
+                      <el-col :span="3" class="sku-item"
+                        ><div v-if="item.color">{{ item.color }}</div>
+                        <div v-else>{{ $t('暂无') }}</div>
+                      </el-col>
                       <el-col :span="4"
                         ><div class="num-item">
                           {{ item.quantity }}
@@ -353,7 +336,8 @@ export default {
       user_id: '',
       customList: [],
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      className: ''
     }
   },
   created() {
@@ -459,12 +443,18 @@ export default {
       })
     },
     checkOut(item) {
-      this.sum = item.packData.reduce(function (acr, pcc) {
-        if (!pcc.pack_quantity) {
-          return acr
-        }
-        return acr + Number(pcc.pack_quantity)
-      }, 0)
+      console.log(item)
+      // this.sum = item.packData.reduce(function (acr, pcc) {
+      //   if (!pcc.pack_quantity) {
+      //     return acr
+      //   }
+      //   return acr + Number(pcc.pack_quantity)
+      // }, 0)
+      // if (item.quantity === this.sum) {
+      //   this.className = 'all'
+      // } else if ((this.sum < item.quantity || this.sum > item.quantity) && this.sum !== 0) {
+      //   this.className = 'wait'
+      // }
     },
     onOrder(item, index) {
       console.log(item, index)
