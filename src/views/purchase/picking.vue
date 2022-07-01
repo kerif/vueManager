@@ -6,7 +6,7 @@
           <div class="row-item">
             <el-input
               v-model="sn"
-              :placeholder="$t('请输入或扫码拣货单号,按Enter键结束')"
+              :placeholder="$t('请输入或扫入拣货单号,按Enter键结束')"
               class="ipt"
               @keyup.native.enter="onOrderSn"
             />
@@ -189,7 +189,6 @@ export default {
   methods: {
     onOrderSn() {
       if (this.sn) {
-        this.$message.error(this.$t('请确认数据是否保存'))
         this.$request.purchasePickSearch(this.sn).then(res => {
           if (!res.data) {
             this.$message.error(this.$t('拣货单不存在'))
@@ -205,6 +204,8 @@ export default {
           })
           console.log(this.boxNumber)
         })
+      } else {
+        this.$message.error(this.$t('请确认数据是否保存'))
       }
     },
     onSku() {

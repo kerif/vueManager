@@ -154,6 +154,7 @@ import growthExplain from './growthExplain.vue'
 import distributeScheme from './distributeScheme.vue'
 import confirmReceive from './confirmReceive.vue'
 import classifiyManage from './classifiyManage.vue'
+import addEditAbutment from './addEditAbutment.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -307,6 +308,7 @@ const growthExplainController = Vue.extend(growthExplain)
 const distributeSchemeController = Vue.extend(distributeScheme)
 const confirmReceiveController = Vue.extend(confirmReceive)
 const classifiyManageController = Vue.extend(classifiyManage)
+const addEditAbutmentController = Vue.extend(addEditAbutment)
 
 const mixin = {
   data() {
@@ -577,6 +579,13 @@ function initInstance(type) {
       instance = new classifiyManageController({
         el: document.createElement('div'),
         minxins: [mixin]
+      })
+      break
+    // 新增编辑对接方式
+    case 'addEditAbutment':
+      instance = new addEditAbutmentController({
+        el: document.createElement('div'),
+        mixins: [mixin]
       })
       break
     //分货详细

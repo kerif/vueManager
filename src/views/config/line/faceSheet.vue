@@ -67,19 +67,23 @@
           <el-radio :label="1">{{ $t('单接口') }}</el-radio>
           <el-radio :label="2">{{ $t('多接口') }}</el-radio>
         </el-radio-group>
-        <div v-if="type === 1">
-          <span>{{ $t('配单公司') }}</span> <el-select> </el-select>
+        <div v-if="type === 1" style="margin: 10px 0">
+          <span style="display: inline-block; margin-right: 5px">{{ $t('配单公司') }}</span>
+          <el-select> </el-select>
         </div>
-        <div v-if="type === 1">
-          <span>{{ $t('渠道代码') }}</span> <el-select> </el-select>
+        <div v-if="type === 1" style="margin: 10px 0">
+          <span style="display: inline-block; margin-right: 5px">{{ $t('渠道代码') }}</span>
+          <el-select> </el-select>
         </div>
         <div v-if="type === 2">
-          <el-button>{{ $t('添加') }}</el-button>
-          <el-table border>
+          <div style="display: flex; justify-content: flex-end; margin: 10px 0">
+            <el-button class="btn-main" @click="onAdd">{{ $t('添加') }}</el-button>
+          </div>
+          <el-table border stripe>
             <el-table-column type="index" label="#"></el-table-column>
-            <el-table-column :label="$t('推送条件')"></el-table-column>
-            <el-table-column :label="$t('配单公司')"></el-table-column>
-            <el-table-column :label="$t('代码')"></el-table-column>
+            <el-table-column prop="" :label="$t('推送条件')"></el-table-column>
+            <el-table-column prop="" :label="$t('配单公司')"></el-table-column>
+            <el-table-column prop="" :label="$t('代码')"></el-table-column>
             <el-table-column :label="$t('操作')">
               <template>
                 <el-button>{{ $t('编辑') }}</el-button>
@@ -97,6 +101,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -106,7 +111,7 @@ export default {
         push_type: 1,
         third_push_now: 0
       },
-      type: '',
+      type: 1,
       dockingList: [],
       channelList: []
     }
@@ -114,6 +119,7 @@ export default {
   created() {
     this.getDocking()
     this.dockData()
+    this.getList()
   },
   methods: {
     // 获取落地陪配置数据
@@ -146,6 +152,16 @@ export default {
           this.landing.push_type = res.data.push_type
           this.landing.third_push_now = res.data.third_push_now
         }
+      })
+    },
+    getList() {
+      this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
+        console.log(res)
+      })
+    },
+    onAdd() {
+      dialog({
+        type: 'addEditAbutment'
       })
     },
     // 更新落地配配置

@@ -465,6 +465,7 @@ export default {
         }
         return acr + Number(pcc.pack_quantity)
       }, 0)
+      console.log(this.sum)
     },
     onOrder(item, index) {
       console.log(item, index)
@@ -529,7 +530,6 @@ export default {
         this.orderList[index].boxes.forEach(box => {
           box.goods.forEach(goods => {
             tempList.forEach(ele => {
-              console.log(ele.id, goods.id, ele.id === goods.id)
               if (ele.picking_order_goods_id === goods.id) {
                 ele.packData.push({
                   pack_quantity: goods.pivot.quantity

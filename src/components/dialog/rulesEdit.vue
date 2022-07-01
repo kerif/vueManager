@@ -161,6 +161,70 @@
         ></el-input>
       </el-form-item>
     </el-form>
+    <!-- 采购分货号 -->
+    <el-form :model="pickList" label-width="140px" v-if="this.name === 9">
+      <el-form-item :label="$t('采购分货号前缀')">
+        <el-input
+          v-model="pickList.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <!-- 采购分货转运订单编号 -->
+    <el-form ref="form" :model="shipOrder" label-width="140px" v-if="this.name === 10">
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
+        <el-select v-model="shipOrder.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="(item, index) in linkOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.label"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 分箱号 -->
+      <el-form-item :label="$t('分箱号')">
+        <el-select v-model="shipOrder.boxNum" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in boxNumOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <!-- 采购分货转运订单分箱号 -->
+    <el-form ref="form" :model="purchaseOrder" label-width="140px" v-if="this.name === 11">
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
+        <el-select v-model="purchaseOrder.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="(item, index) in linkOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.label"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 分箱号 -->
+      <el-form-item :label="$t('分箱号')">
+        <el-select v-model="purchaseOrder.boxNum" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in boxNumOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -287,6 +351,24 @@ export default {
           name: this.$t('客户ID')
         }
       ],
+      shipNumOptions: [
+        {
+          id: 0,
+          name: this.$t('数字(1,2,3,4,5......)')
+        },
+        {
+          id: 1,
+          name: this.$t('小写字母(a,b,c,d,e......)')
+        },
+        {
+          id: 2,
+          name: this.$t('大写字母(A,B,C,D,E......)')
+        },
+        {
+          id: 3,
+          name: this.$t('自提点')
+        }
+      ],
       boxRules: {
         boxNum: 1,
         connector: '-'
@@ -302,7 +384,16 @@ export default {
       inventoryRules: {
         prefix: ''
       },
-      purchaseRules: { prefix: '' }
+      purchaseRules: { prefix: '' },
+      pickList: { prefix: '' },
+      shipOrder: {
+        boxNum: 1,
+        connector: '-'
+      },
+      purchaseOrder: {
+        boxNum: 1,
+        connector: '-'
+      }
     }
   },
   mixins: [pagination],
@@ -330,8 +421,16 @@ export default {
             this.invoiceRules.prefix = res.data.prefix
           } else if (this.name === 7) {
             this.inventoryRules.prefix = res.data.prefix
-          } else {
+          } else if (this.name === 8) {
             this.purchaseRules.prefix = res.data.prefix
+          } else if (this.name === 9) {
+            this.pickList.prefix = res.data.prefix
+          } else if (this.name === 10) {
+            this.shipOrder.connector = res.data.link
+            this.shipOrder.boxNum = res.data.sn
+          } else {
+            this.purchaseOrder.connector = res.data.link
+            this.purchaseOrder.boxNum = res.data.sn
           }
         }
       })
@@ -478,10 +577,75 @@ export default {
               })
             }
           })
-      } else {
+      } else if (this.name === 8) {
         this.$request
           .updateRules(this.id, {
             prefix: this.purchaseRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 9) {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.pickList.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 10) {
+        this.$request
+          .updateRules(this.id, {
+            link: this.shipOrder.connector,
+            sn: this.shipOrder.boxNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateRules(this.id, {
+            link: this.purchaseOrder.connector,
+            sn: this.purchaseOrder.boxNum
           })
           .then(res => {
             if (res.ret) {

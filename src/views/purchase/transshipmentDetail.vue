@@ -154,7 +154,10 @@
           >
           <el-col :span="3">{{ item.sn }}</el-col>
           <el-col :span="5"
-            ><div>{{ $t('客户') }}: {{ item.user_id }}</div></el-col
+            ><div>
+              {{ $t('客户') }}: {{ item.user ? item.user.id : '' }} ---
+              {{ item.user ? item.user.name : '' }}
+            </div></el-col
           >
           <el-col :span="5"
             ><div>{{ $t('收货点') }}: {{ item.station ? item.station.code : '' }}</div></el-col
@@ -173,13 +176,21 @@
           class="space"
         >
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column :label="$t('采购编号')" prop="purchase_order_sn"></el-table-column>
+          <el-table-column :label="$t('采购编号')" prop="sn">
+            <template slot-scope="scope">
+              <span>{{ scope.row.p_order ? scope.row.p_order.sn : '' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')">
             <template slot-scope="scope">
               {{ scope.row.p_goods ? scope.row.p_goods.number : '' }}
             </template>
           </el-table-column>
-          <el-table-column label="barcode" prop="barcode"></el-table-column>
+          <el-table-column label="barcode" prop="barcode">
+            <template slot-scope="scope">
+              <span>{{ scope.row.p_goods ? scope.row.p_goods.barcode : '' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')">
             <template slot-scope="scope">
               {{ scope.row.p_goods ? scope.row.p_goods.cn_name : '' }}
@@ -187,9 +198,21 @@
           </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
           <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
-          <el-table-column prop="" :label="$t('打包数量')"></el-table-column>
-          <el-table-column :label="$t('拣货差异数量')"></el-table-column>
-          <el-table-column :label="$t('打包差异数量')"></el-table-column>
+          <el-table-column prop="pack_quantity" :label="$t('打包数量')">
+            <template slot-scope="scope">
+              <span>{{ Number(scope.row.pack_quantity) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="picking_quantity,quantity" :label="$t('拣货差异数量')">
+            <template slot-scope="scope">
+              <span>{{ Number(scope.row.picking_quantity) - Number(scope.row.quantity) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('打包差异数量')">
+            <template slot-scope="scope">
+              <span>{{ Number(scope.row.pack_quantity) - Number(scope.row.quantity) }}</span>
+            </template>
+          </el-table-column>
         </el-table>
         <el-table v-else :data="item.boxes" border class="space" style="width: 80%">
           <el-table-column type="index" label="#"></el-table-column>
@@ -286,7 +309,7 @@ export default {
           id: this.$route.params.id
         },
         goodsList => {
-          this.goodData = []
+          // this.goodData = []
           this.getList()
           goodsList.forEach(item => {
             item.user = {}
@@ -299,9 +322,16 @@ export default {
           let tableData = []
           let num2 = this.goodData.map(item => item.number)
           goodsList.forEach(item => {
+            console.log(num2.includes(item.number))
             if (num2.includes(item.number)) {
               this.goodData.forEach(ele => {
                 if (ele.number === item.number) {
+                  console.log(item.station_code)
+                  console.log(item.user_id)
+                  console.log(item.user_name)
+                  ele.station_code = item.station_code
+                  ele.user.id = item.user_id
+                  ele.user.name = item.user_name
                   let list = []
                   item.goods.forEach(goods1 => {
                     let flag = false
