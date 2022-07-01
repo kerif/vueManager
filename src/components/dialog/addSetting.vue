@@ -56,7 +56,13 @@
           </el-table-column>
           <el-table-column :label="$t('操作')" width="150">
             <template slot-scope="scope">
-              <el-button size="small" @click="editPay(scope.$index, scope.row.id)">{{
+              <el-button
+                size="small"
+                v-if="state === 'edit'"
+                @click="editPay('edit', scope.$index, scope.row.id)"
+                >{{ $t('编辑') }}</el-button
+              >
+              <el-button size="small" v-else @click="editPay('add', scope.$index, scope.row.id)">{{
                 $t('编辑')
               }}</el-button>
               <el-button size="small" v-if="state === 'edit'" @click="deletePay(scope.row.id)">{{
@@ -261,20 +267,25 @@ export default {
       )
     },
     //修改转账支付内容
-    editPay(index, payId) {
+    editPay(status, index, payId) {
       dialog(
         {
           type: 'editPay',
           title: this.$t('修改'),
           id: this.id,
+          status,
           payId,
           payData: {
             name: this.ruleForm.payment_setting_connection[index].name,
             content: this.ruleForm.payment_setting_connection[index].content
           }
         },
-        () => {
-          this.getList()
+        data => {
+          if (status === 'edit') {
+            this.getList()
+          } else {
+            this.$set(this.ruleForm.payment_setting_connection, index, data)
+          }
         }
       )
     },

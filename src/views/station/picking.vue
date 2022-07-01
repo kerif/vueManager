@@ -28,7 +28,7 @@
       <!-- 拣货日志 -->
       <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
       <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
-      <!-- <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane> -->
+      <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
     </el-tabs>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -42,8 +42,13 @@
         height="calc(100vh - 275px)"
       >
         <!-- 操作人 -->
-        <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column :label="$t('操作人')" prop="operator" width="155"></el-table-column>
+        <el-table-column type="index" width="50" label="#"></el-table-column>
+        <el-table-column
+          :label="$t('操作人')"
+          v-if="activeName !== '4'"
+          prop="operator"
+          width="155"
+        ></el-table-column>
         <el-table-column :label="$t('操作类型')" prop="type" v-if="activeName === '2'">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('订单打包') }}</span>
@@ -51,7 +56,12 @@
           </template>
         </el-table-column>
         <!-- 操作时间 -->
-        <el-table-column :label="$t('操作时间')" prop="created_at" width="155"></el-table-column>
+        <el-table-column
+          :label="$t('操作时间')"
+          v-if="activeName !== '4'"
+          prop="created_at"
+          width="155"
+        ></el-table-column>
         <!-- 具体操作 -->
         <el-table-column :label="$t('具体操作')" v-if="activeName === '1'">
           <template slot-scope="scope">
@@ -87,13 +97,13 @@
         <!-- 重量kg -->
         <el-table-column
           :label="'重量' + this.localization.weight_unit"
-          v-if="activeName !== '3'"
+          v-if="activeName !== '3' && activeName !== '4'"
           prop="weight"
         ></el-table-column>
         <!-- 长宽高cm -->
         <el-table-column
           :label="$t('长宽高') + this.localization.length_unit"
-          v-if="activeName !== '3'"
+          v-if="activeName !== '3' && activeName !== '4'"
           prop="dimension"
         ></el-table-column>
         <!-- 物品属性 -->
@@ -130,7 +140,7 @@
         <!-- 备注 -->
         <el-table-column
           :label="$t('备注')"
-          v-if="activeName !== '3'"
+          v-if="activeName !== '3' && activeName !== '4'"
           prop="remark"
           width="200"
         ></el-table-column>
@@ -155,31 +165,38 @@
           prop="packages"
           v-if="activeName === '2'"
         ></el-table-column>
-      </el-table>
-      <!-- <el-table :data="checkData" border v-if="activeName === '4'">
-        <el-table-column type="index" v-if="activeName === '4'" label="#"></el-table-column>
+        <el-table-column :label="$t('操作')" v-if="activeName === '4'">
+          <template slot-scope="scope">
+            <el-button class="btn-main" @click="onExport(scope.row.id)">{{
+              $t('导出清单')
+            }}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column
-          prop=""
+          prop="sn"
           v-if="activeName === '4'"
           :label="$t('盘点单号')"
         ></el-table-column>
         <el-table-column
-          prop=""
+          prop="warehouse_name"
           v-if="activeName === '4'"
           :label="$t('盘点仓库')"
         ></el-table-column>
         <el-table-column
-          prop=""
+          prop="area_finish_count,area_count"
           v-if="activeName === '4'"
           :label="$t('盘点进度')"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.area_finish_count }} / {{ scope.row.area_count }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
-          prop=""
+          prop="created_at"
           v-if="activeName === '4'"
           :label="$t('创建时间')"
         ></el-table-column>
-        <el-table-column :label="$t('操作')"></el-table-column>
-      </el-table> -->
+      </el-table>
       <nle-pagination
         style="margin-top: 5px"
         :pageParams="page_params"
@@ -248,8 +265,7 @@ export default {
           name: this.$t('添加')
         }
       ],
-      type: '',
-      checkData: []
+      type: ''
     }
   },
   methods: {
@@ -272,9 +288,57 @@ export default {
         this.getOrder()
       } else if (this.activeName === '2') {
         this.getPick()
-      } else {
+      } else if (this.activeName === '3') {
         this.getPackage()
+      } else {
+        this.getCheck()
       }
+    },
+    onExport(id) {
+      this.$request.exportInventory(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getCheck()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    getCheck() {
+      this.tableLoading = true
+      this.oderData = []
+      this.$request
+        .inventoryList({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.oderData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 入库日志
     getOrder() {

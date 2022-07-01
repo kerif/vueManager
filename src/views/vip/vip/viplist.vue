@@ -640,13 +640,13 @@ export default {
       })
     },
     getUserSource() {
-      this.$request.userSource().then(res => {
-        res.data.unshift({
-          id: '',
-          name: this.$t('全部')
-        })
-        this.sourceList = res.data
-      })
+      // this.$request.userSource().then(res => {
+      //   res.data.unshift({
+      //     id: '',
+      //     name: this.$t('全部')
+      //   })
+      //   this.sourceList = res.data
+      // })
     },
     inviteMethod(keyword) {
       this.inviteLoading = true

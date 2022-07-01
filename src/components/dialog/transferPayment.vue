@@ -80,23 +80,28 @@ export default {
         }
         // res = await this.$request.addPay(this.contentData)
       } else if (this.type === 'editPay') {
-        this.contentData.payment_settings_id = this.id
-        this.$request.editPay(this.payId, this.contentData).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.success()
-            this.show = false
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        if (this.status === 'add') {
+          this.success(JSON.parse(JSON.stringify(this.contentData)))
+          this.show = false
+        } else {
+          this.contentData.payment_settings_id = this.id
+          this.$request.editPay(this.payId, this.contentData).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.success()
+              this.show = false
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+        }
       } else if (this.type === 'addPayLang') {
         this.contentData.language = this.lang.language_code
         this.$request.editPayLang(this.line.id, this.contentData).then(res => {
