@@ -465,7 +465,6 @@ export default {
         }
         return acr + Number(pcc.pack_quantity)
       }, 0)
-      console.log(this.sum)
     },
     onOrder(item, index) {
       console.log(item, index)

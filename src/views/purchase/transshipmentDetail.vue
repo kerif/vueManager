@@ -266,7 +266,7 @@ export default {
     backTop
   },
   methods: {
-    getList() {
+    getList(isFlag = true) {
       this.$request.pickOrderDetail(this.$route.params.id).then(res => {
         this.status = res.data.status
         this.statusName = res.data.status_name
@@ -277,28 +277,30 @@ export default {
         this.records = res.data.records
         this.form.name = res.data.name
         this.form.remark = res.data.remark
-        this.orders.forEach(item => {
-          this.goodData.push({
-            number: item.number,
-            station_code: item.station.code,
-            user: item.user,
-            user_id: item.user_id,
-            prop_ids: item.props.map(ele => ele.id),
-            sn: item.sn,
-            id: item.id,
-            boxes: item.boxes,
-            goods: item.goods.map(ele => {
-              return {
-                ...ele.p_goods,
-                id: ele.id,
-                purchase_order_sn: ele.p_order ? ele.p_order.sn : '',
-                quantity: ele.quantity,
-                picking_quantity: ele.picking_quantity,
-                pack_quantity: ele.pack_quantity
-              }
+        if (isFlag) {
+          this.orders.forEach(item => {
+            this.goodData.push({
+              number: item.number,
+              station_code: item.station.code,
+              user: item.user,
+              user_id: item.user_id,
+              prop_ids: item.props.map(ele => ele.id),
+              sn: item.sn,
+              id: item.id,
+              boxes: item.boxes,
+              goods: item.goods.map(ele => {
+                return {
+                  ...ele.p_goods,
+                  id: ele.id,
+                  purchase_order_sn: ele.p_order ? ele.p_order.sn : '',
+                  quantity: ele.quantity,
+                  picking_quantity: ele.picking_quantity,
+                  pack_quantity: ele.pack_quantity
+                }
+              })
             })
           })
-        })
+        }
       })
     },
     onImport(mode) {
@@ -309,8 +311,7 @@ export default {
           id: this.$route.params.id
         },
         goodsList => {
-          // this.goodData = []
-          this.getList()
+          this.getList(false)
           goodsList.forEach(item => {
             item.user = {}
             item.user.id = item.user_id
@@ -326,9 +327,6 @@ export default {
             if (num2.includes(item.number)) {
               this.goodData.forEach(ele => {
                 if (ele.number === item.number) {
-                  console.log(item.station_code)
-                  console.log(item.user_id)
-                  console.log(item.user_name)
                   ele.station_code = item.station_code
                   ele.user.id = item.user_id
                   ele.user.name = item.user_name
