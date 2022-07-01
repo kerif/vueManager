@@ -59,7 +59,15 @@
               <el-button size="small" @click="editPay(scope.$index, scope.row.id)">{{
                 $t('编辑')
               }}</el-button>
-              <el-button size="small" @click="deletePay(scope.row.id)">{{ $t('删除') }}</el-button>
+              <el-button size="small" v-if="state === 'edit'" @click="deletePay(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+              <el-button
+                size="small"
+                v-else
+                @click="onDeletePay(scope.$index, ruleForm.payment_setting_connection)"
+                >{{ $t('删除') }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -286,6 +294,9 @@ export default {
           this.getList()
         }
       )
+    },
+    onDeletePay(index, rows) {
+      rows.splice(index, 1)
     },
     //删除转账支付内容
     deletePay(id) {

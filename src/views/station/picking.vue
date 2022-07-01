@@ -156,6 +156,30 @@
           v-if="activeName === '2'"
         ></el-table-column>
       </el-table>
+      <!-- <el-table :data="checkData" border v-if="activeName === '4'">
+        <el-table-column type="index" v-if="activeName === '4'" label="#"></el-table-column>
+        <el-table-column
+          prop=""
+          v-if="activeName === '4'"
+          :label="$t('盘点单号')"
+        ></el-table-column>
+        <el-table-column
+          prop=""
+          v-if="activeName === '4'"
+          :label="$t('盘点仓库')"
+        ></el-table-column>
+        <el-table-column
+          prop=""
+          v-if="activeName === '4'"
+          :label="$t('盘点进度')"
+        ></el-table-column>
+        <el-table-column
+          prop=""
+          v-if="activeName === '4'"
+          :label="$t('创建时间')"
+        ></el-table-column>
+        <el-table-column :label="$t('操作')"></el-table-column>
+      </el-table> -->
       <nle-pagination
         style="margin-top: 5px"
         :pageParams="page_params"
@@ -224,7 +248,8 @@ export default {
           name: this.$t('添加')
         }
       ],
-      type: ''
+      type: '',
+      checkData: []
     }
   },
   methods: {
@@ -363,7 +388,7 @@ export default {
     overflow-y: auto !important;
   }
   .tabLength {
-    width: 300px !important;
+    width: 390px !important;
   }
   .img_box {
     text-align: center;
