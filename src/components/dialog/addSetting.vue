@@ -25,7 +25,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="add-btn" @click="addPay">{{ $t('新增') }}</el-button>
+        <el-button type="primary" v-if="state === 'add'" class="add-btn" @click="addPay('add')">{{
+          $t('新增')
+        }}</el-button>
+        <el-button type="primary" v-else class="add-btn" @click="addPay('edit')">{{
+          $t('新增')
+        }}</el-button>
         <el-table :data="ruleForm.payment_setting_connection" border style="width: 100%">
           <el-table-column type="index" label="#"> </el-table-column>
           <el-table-column prop="name" :label="$t('提示名称')"> </el-table-column>
@@ -228,16 +233,22 @@ export default {
       })
     },
     //新增转账支付内容
-    addPay() {
+    addPay(status) {
       dialog(
         {
           type: 'addPay',
           title: this.$t('新增'),
-          id: this.id
+          id: this.id,
+          status
         },
         data => {
-          // this.getList()
-          this.ruleForm.payment_setting_connection.push(data)
+          if (status === 'add') {
+            if (data.name && data.content) {
+              this.ruleForm.payment_setting_connection.push(data)
+            }
+          } else {
+            this.getList()
+          }
         }
       )
     },

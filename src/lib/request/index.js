@@ -4560,3 +4560,13 @@ exports.dockingDetail = id => {
 exports.delDocking = id => {
   return $form.delete(`express-lines/third-party-multi-channel/${id}`)
 }
+
+// 盘点记录 列表
+exports.inventoryList = params => {
+  return $form.get(`inventory-warehouse`, { params })
+}
+
+// 盘点 盘点导出
+exports.exportInventory = id => {
+  return $form.get(`inventory-warehouse/${id}/export`)
+}

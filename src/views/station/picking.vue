@@ -28,6 +28,7 @@
       <!-- 拣货日志 -->
       <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
       <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
+      <!-- <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane> -->
     </el-tabs>
     <div style="height: calc(100vh - 270px)">
       <el-table
