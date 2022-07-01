@@ -231,7 +231,7 @@
           <el-table-column type="index" label="#"></el-table-column>
           <el-table-column prop="sn" :label="$t('出库箱号')"></el-table-column>
           <el-table-column prop="quantity" :label="$t('商品数量')"></el-table-column>
-          <el-table-column prop="" :label="$t('包含商品')"></el-table-column>
+          <el-table-column :formatter="fileData" :label="$t('包含商品')"></el-table-column>
         </el-table>
       </div>
     </div>
@@ -381,6 +381,17 @@ export default {
     },
     onClear() {
       this.goodData = []
+    },
+    fileData(row) {
+      console.log(row)
+      let arr = []
+      row.goods.forEach((item, match) => {
+        if (match > 10) {
+          return
+        }
+        arr.push(item.p_goods.cn_name)
+      })
+      return arr.join(',')
     },
     onEditRow() {
       this.edit = true
