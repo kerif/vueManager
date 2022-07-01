@@ -130,9 +130,12 @@
           </el-table-column>
           <el-table-column v-if="status === 2" :label="$t('装箱')">
             <template>
-              <span v-for="(ele, index) in item.boxes" :key="index">
-                #{{ index + 1 }}({{ ele.quantity }})</span
-              >
+              <div v-if="item.boxes.length">
+                <span v-for="(ele, index) in item.boxes" :key="index">
+                  #{{ index + 1 }}({{ ele.quantity }})</span
+                >
+              </div>
+              <div v-else>{{ $t('暂无数据') }}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('操作')" width="160">
@@ -386,10 +389,10 @@ export default {
       console.log(row)
       let arr = []
       row.goods.forEach((item, match) => {
-        if (match > 10) {
+        if (match > 20) {
           return
         }
-        arr.push(item.p_goods.cn_name)
+        arr.push(item.p_goods.cn_name + '(' + item.pivot.quantity + ')')
       })
       return arr.join(',')
     },
