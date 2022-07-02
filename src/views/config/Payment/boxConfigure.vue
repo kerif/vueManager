@@ -1,7 +1,7 @@
 <template>
   <div class="how-container">
     <div style="color: orange">
-      {{ $t('注：配置内容将会显示在客户端“预报包裹”页面，客户须阅读勾选') }}
+      {{ $t('注：配置内容将会显示在客户端“已入库包裹”页面，客户须阅读勾选') }}
     </div>
     <el-form label-position="top">
       <el-form-item :label="$t('选择语言')">
@@ -37,16 +37,16 @@ export default {
   data() {
     return {
       params: {
-        title: '',
         language: '',
+        title: '',
         content: ''
       },
       options: []
     }
   },
   created() {
-    this.getHowOrder()
     this.getLanguage()
+    this.getList()
   },
   methods: {
     // 获取语言列表
@@ -72,15 +72,8 @@ export default {
           }
         })
     },
-    // 上传图片
-    onUpload(file) {
-      let params = new FormData()
-      params.append(`images[${0}][file]`, file)
-      return this.$request.uploadImg(params)
-    },
-    // 获取如何下单
-    getHowOrder() {
-      this.$request.getTranshipment().then(res => {
+    getList() {
+      this.$request.multiBoxRule().then(res => {
         if (res.ret) {
           this.params.title = res.data.title
           this.params.content = res.data.content
@@ -88,17 +81,16 @@ export default {
         }
       })
     },
-    // 保存如何下单
     saveNotice(data) {
       this.params.content = data
-      this.$request.updateTranshipment(this.params).then(res => {
+      this.$request.updateMultiBoxRule(this.params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.getHowOrder()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -110,4 +102,5 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+
+<style></style>

@@ -4517,8 +4517,8 @@ exports.channelCategory = id => {
 }
 
 // 分类管理 新增
-exports.addChannelCategory = () => {
-  return $form.get('channel-categories')
+exports.addChannelCategory = params => {
+  return $form.post('channel-categories', params)
 }
 
 // 分类管理 修改
@@ -4569,4 +4569,14 @@ exports.inventoryList = params => {
 // 盘点 盘点导出
 exports.exportInventory = id => {
   return $form.get(`inventory-warehouse/${id}/export`)
+}
+
+// 合箱须知 多语合箱规则
+exports.multiBoxRule = () => {
+  return $form.get('mini-program/merge-box-rule')
+}
+
+// 合箱须知 多语更新合箱规则
+exports.updateMultiBoxRule = params => {
+  return $form.put('mini-program/merge-box-rule', params)
 }

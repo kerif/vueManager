@@ -1,10 +1,17 @@
 <template>
   <div class="channel-container">
     <div class="select-box">
-      <!-- <el-select v-model="value"></el-select> -->
-      <!-- <div class="manage">
+      <el-select v-model="category">
+        <el-option
+          v-for="item in tableData"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+      <div class="manage">
         <el-button type="primary" size="small" @click="onManage">{{ $t('分类管理') }}</el-button>
-      </div> -->
+      </div>
       <add-btn router="addChannel">{{ $t('添加') }}</add-btn>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -24,7 +31,7 @@
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 渠道号 -->
         <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
-        <!-- <el-table-column :label="$t('分类')"></el-table-column> -->
+        <el-table-column :label="$t('分类')" prop="category"></el-table-column>
         <!-- 渠道中文名 -->
         <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
         <!-- 结算方式 -->
@@ -77,21 +84,28 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
-    <!-- <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" @close="clear">
-      <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
-        $t('新增')
-      }}</el-button>
-      <el-table :data="tableData" border>
+    <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" width="80%" @close="clear">
+      <div style="display: flex; justify-content: flex-end">
+        <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
+          $t('新增')
+        }}</el-button>
+      </div>
+      <el-table :data="tableData" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="name" :label="$t('分类')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.name"></el-input>
+            <el-input v-if="scope.row.editState" v-model="scope.row.name"></el-input>
+            <span v-else>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button class="btn-main" @click="onAddEdit(scope.row)">{{ $t('编辑') }}</el-button>
-            <el-button class="btn-main" @click="onAddEdit(scope.row)">{{ $t('保存') }}</el-button>
+            <el-button class="btn-main" v-if="!scope.row.editState" @click="onEdit(scope.row)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-main" v-if="scope.row.editState" @click="onAddEdit(scope.row)">{{
+              $t('保存')
+            }}</el-button>
             <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
               $t('删除')
             }}</el-button>
@@ -101,7 +115,7 @@
       <div style="padding: 10px 0">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       </div>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -126,11 +140,13 @@ export default {
       deleteNum: [],
       value: '',
       showCategory: false,
-      tableData: []
+      tableData: [],
+      category: ''
     }
   },
   created() {
     this.getList()
+    this.getCategory()
   },
   methods: {
     getList() {
@@ -211,21 +227,81 @@ export default {
     },
     onManage() {
       this.showCategory = true
-      // this.$request.categorySearch().then(res => {
-      //   console.log(res)
-      // })
+      this.getCategory()
+    },
+    getCategory() {
+      this.$request.categorySearch().then(res => {
+        this.tableData = res.data
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
+      })
     },
     addCategory() {
       this.tableData.push({
-        name: ''
+        name: '',
+        editState: true
       })
     },
-    onAddEdit() {
-      // this.$request.addChannelCategory().then(res => {
-      //   console.log(res)
-      // })
+    onEdit(row) {
+      row.editState = true
     },
-    onDelete() {},
+    onAddEdit(row) {
+      console.log(row)
+      if (row.id) {
+        row.editState = true
+        this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.addChannelCategory({ name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
+    },
+    onDelete(id) {
+      this.$request.delChannelCategory(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getCategory()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')

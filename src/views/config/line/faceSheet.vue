@@ -62,14 +62,21 @@
         >
         </el-switch>
       </el-form-item>
-      <!-- <el-form-item :label="$t('落地配对接方式')">
+      <el-form-item :label="$t('落地配对接方式')">
         <el-radio-group v-model="type">
           <el-radio :label="1">{{ $t('单接口') }}</el-radio>
           <el-radio :label="2">{{ $t('多接口') }}</el-radio>
         </el-radio-group>
         <div v-if="type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('配单公司') }}</span>
-          <el-select> </el-select>
+          <el-select>
+            <el-option
+              v-for="item in dockingList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            ></el-option>
+          </el-select>
         </div>
         <div v-if="type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('渠道代码') }}</span>
@@ -85,14 +92,18 @@
             <el-table-column prop="" :label="$t('配单公司')"></el-table-column>
             <el-table-column prop="" :label="$t('代码')"></el-table-column>
             <el-table-column :label="$t('操作')">
-              <template>
-                <el-button>{{ $t('编辑') }}</el-button>
-                <el-button>{{ $t('删除') }}</el-button>
+              <template slot-scope="scope">
+                <el-button class="btn-main" @click="onEdit(scope.row.id)">{{
+                  $t('编辑')
+                }}</el-button>
+                <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
+                  $t('删除')
+                }}</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -119,7 +130,7 @@ export default {
   created() {
     this.getDocking()
     this.dockData()
-    // this.getList()
+    this.getList()
   },
   methods: {
     // 获取落地陪配置数据
@@ -154,14 +165,39 @@ export default {
         }
       })
     },
-    // getList() {
-    //   this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
-    //     console.log(res)
-    //   })
-    // },
+    getList() {
+      this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
+        console.log(res)
+      })
+    },
     onAdd() {
       dialog({
-        type: 'addEditAbutment'
+        type: 'addEditAbutment',
+        express_id: this.$route.params.id
+      })
+    },
+    onEdit(id) {
+      dialog({
+        type: 'addEditAbutment',
+        id,
+        express_id: this.$route.params.id
+      })
+    },
+    onDelete(id) {
+      this.$request.delDocking(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 更新落地配配置

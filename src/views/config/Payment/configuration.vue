@@ -27,7 +27,10 @@
                     {{ $t('国家地区') }}
                   </el-menu-item>
                   <el-menu-item index="6">
-                    {{ $t('转运规则') }}
+                    {{ $t('转运须知') }}
+                  </el-menu-item>
+                  <el-menu-item index="7">
+                    {{ $t('合箱须知') }}
                   </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
@@ -55,6 +58,9 @@
             <!-- 转运规则 -->
             <el-col :span="19" v-if="secondTab1 === '6'" class="main-right">
               <transport-configure></transport-configure>
+            </el-col>
+            <el-col :span="19" v-if="secondTab1 === '7'" class="main-right">
+              <box-configure></box-configure>
             </el-col>
           </el-row>
         </div>
@@ -227,6 +233,7 @@ import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
+import boxConfigure from './boxConfigure'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -248,7 +255,8 @@ export default {
     CustomTrack,
     CustomLabel,
     LoginConfigure,
-    customizeBackgroundSystem
+    customizeBackgroundSystem,
+    boxConfigure
     // GroupConfigure
   },
   mixins: [pagination],
