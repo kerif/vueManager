@@ -4575,6 +4575,10 @@ exports.exportInventory = id => {
 exports.multiBoxRule = () => {
   return $form.get('mini-program/merge-box-rule')
 }
+// 合箱须知 小程序 语言切换
+exports.changeLangBoxRule = params => {
+  return $form.get('mini-program/merge-box-rule', { params })
+}
 
 // 合箱须知 多语更新合箱规则
 exports.updateMultiBoxRule = params => {

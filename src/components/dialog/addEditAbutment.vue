@@ -151,6 +151,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
+            this.success()
             this.show = false
           } else {
             this.$message({
@@ -173,6 +174,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,

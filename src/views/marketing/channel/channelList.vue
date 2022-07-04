@@ -1,7 +1,7 @@
 <template>
   <div class="channel-container">
     <div class="select-box">
-      <el-select v-model="category">
+      <el-select v-model="category_id" @change="changeCategory" clearable>
         <el-option
           v-for="item in tableData"
           :key="item.id"
@@ -31,7 +31,11 @@
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 渠道号 -->
         <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
-        <el-table-column :label="$t('分类')" prop="category"></el-table-column>
+        <el-table-column :label="$t('分类')" prop="category">
+          <template slot-scope="scope">
+            <div>{{ scope.row.category ? scope.row.category.name : '' }}</div>
+          </template>
+        </el-table-column>
         <!-- 渠道中文名 -->
         <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
         <!-- 结算方式 -->
@@ -84,13 +88,13 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
-    <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" width="80%" @close="clear">
+    <el-dialog :visible.sync="show" :title="$t('分类管理')" width="80%" @close="clear">
       <div style="display: flex; justify-content: flex-end">
         <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
           $t('新增')
         }}</el-button>
       </div>
-      <el-table :data="tableData" border stripe>
+      <el-table :data="categoryList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="name" :label="$t('分类')">
           <template slot-scope="scope">
@@ -106,9 +110,15 @@
             <el-button class="btn-main" v-if="scope.row.editState" @click="onAddEdit(scope.row)">{{
               $t('保存')
             }}</el-button>
-            <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
+            <el-button class="btn-light-red" v-if="scope.row.id" @click="onDelete(scope.row.id)">{{
               $t('删除')
             }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-else
+              @click="onDeleteCategory(scope.$index, tableData)"
+              >{{ $t('删除') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -123,6 +133,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
+// import dialog from '@/components/dialog'
 // import { Dialog } from 'element-ui'
 export default {
   name: 'vipGroupList',
@@ -139,9 +150,10 @@ export default {
       tableLoading: false,
       deleteNum: [],
       value: '',
-      showCategory: false,
+      show: false,
       tableData: [],
-      category: ''
+      category_id: '',
+      categoryList: []
     }
   },
   created() {
@@ -155,7 +167,8 @@ export default {
         .getChannel({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          category_id: this.category_id
         })
         .then(res => {
           this.tableLoading = false
@@ -225,24 +238,34 @@ export default {
         }
       })
     },
+    changeCategory() {
+      this.page_params.handleQueryChange('category_id', this.category_id)
+      this.getList()
+    },
     onManage() {
-      this.showCategory = true
+      this.show = true
       this.getCategory()
     },
     getCategory() {
       this.$request.categorySearch().then(res => {
+        this.categoryList = res.data
         this.tableData = res.data
+        this.tableData.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
         this.page_params.page = res.meta.current_page
         this.page_params.total = res.meta.total
       })
     },
     addCategory() {
-      this.tableData.push({
+      this.categoryList.push({
         name: '',
         editState: true
       })
     },
     onEdit(row) {
+      console.log(row)
       row.editState = true
     },
     onAddEdit(row) {
@@ -285,7 +308,6 @@ export default {
       }
     },
     onDelete(id) {
-      console.log(id)
       this.$request.delChannelCategory(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -303,11 +325,14 @@ export default {
         }
       })
     },
+    onDeleteCategory(index, row) {
+      row.splice(index, 1)
+    },
+    clear() {},
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
-    clear() {},
     // 删除单条转账支付
     deleteWarehouse(id) {
       this.$confirm(this.$t('您真的要删除此仓库吗'), this.$t('提示'), {

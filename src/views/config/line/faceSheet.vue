@@ -164,6 +164,10 @@ export default {
   created() {
     this.getDocking()
     this.dockData()
+    this.getList()
+  },
+  activated() {
+    this.getList()
   },
   methods: {
     // 获取落地陪配置数据
@@ -215,6 +219,7 @@ export default {
       )
     },
     onEdit(id) {
+      console.log(id)
       dialog(
         {
           type: 'addEditAbutment',
@@ -235,6 +240,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),

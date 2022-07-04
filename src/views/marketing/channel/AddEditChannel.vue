@@ -40,7 +40,7 @@
       <el-form-item :label="$t('渠道分类')">
         <el-row :gutter="20">
           <el-col :span="3">
-            <el-select v-model="category">
+            <el-select v-model="ruleForm.category_id">
               <el-option
                 v-for="item in tableData"
                 :key="item.id"
@@ -122,13 +122,13 @@ export default {
         remark: '',
         settlement_method: '',
         channel_price: '',
-        channel_name: ''
+        channel_name: '',
+        category_id: ''
       },
       options: [],
       localization: {},
       showCategory: false,
       tableData: [],
-      category: '',
       rules: {
         channel_name: [{ required: true, message: this.$t('请输入渠道名称'), trigger: 'blur' }],
         channel_price: [{ required: true, message: this.$t('请输入渠道单价'), trigger: 'blur' }],
@@ -167,8 +167,6 @@ export default {
     getCategory() {
       this.$request.categorySearch().then(res => {
         this.tableData = res.data
-        this.page_params.page = res.meta.current_page
-        this.page_params.total = res.meta.total
       })
     },
     addCategory() {
@@ -220,7 +218,6 @@ export default {
       }
     },
     onDelete(id) {
-      console.log(id)
       this.$request.delChannelCategory(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -238,6 +235,7 @@ export default {
         }
       })
     },
+    clear() {},
     submit(formName) {
       // 编辑状态
       if (this.$route.params.id) {

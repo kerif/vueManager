@@ -155,6 +155,7 @@ import distributeScheme from './distributeScheme.vue'
 import confirmReceive from './confirmReceive.vue'
 import classifiyManage from './classifiyManage.vue'
 import addEditAbutment from './addEditAbutment.vue'
+import addEditCategory from './addEditCategory.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -309,6 +310,7 @@ const distributeSchemeController = Vue.extend(distributeScheme)
 const confirmReceiveController = Vue.extend(confirmReceive)
 const classifiyManageController = Vue.extend(classifiyManage)
 const addEditAbutmentController = Vue.extend(addEditAbutment)
+const addEditCategoryController = Vue.extend(addEditCategory)
 
 const mixin = {
   data() {
@@ -584,6 +586,13 @@ function initInstance(type) {
     // 新增编辑对接方式
     case 'addEditAbutment':
       instance = new addEditAbutmentController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 分类管理
+    case 'addEditCategory':
+      instance = new addEditCategoryController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

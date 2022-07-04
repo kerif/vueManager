@@ -60,7 +60,7 @@ export default {
     // 切换语言
     changeLang() {
       this.$request
-        .getTranshipment({
+        .changeLangBoxRule({
           lang: this.params.language
         })
         .then(res => {
