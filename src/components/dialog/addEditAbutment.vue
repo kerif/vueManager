@@ -10,10 +10,10 @@
           ></el-input>
           <el-select v-model="ruleForm.first_condition" style="width: 10%; margin: 0 2px">
             <el-option
-              v-for="item in symbolData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+              v-for="(item, index) in symbolData"
+              :key="index"
+              :label="item.label"
+              :value="item.label"
             ></el-option>
           </el-select>
           <el-select v-model="ruleForm.type" style="width: 20%; margin: 0 2px">
@@ -26,10 +26,10 @@
           </el-select>
           <el-select v-model="ruleForm.second_condition" style="width: 10%; margin: 0 2px">
             <el-option
-              v-for="item in symbolData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+              v-for="(item, index) in symbolData"
+              :key="index"
+              :label="item.label"
+              :value="item.label"
             ></el-option>
           </el-select>
           <el-input
@@ -40,7 +40,7 @@
         </el-row>
       </el-form-item>
       <el-form-item :label="$t('配单公司')">
-        <el-select v-model="ruleForm.docking_type">
+        <el-select v-model="ruleForm.docking_type" @change="getChannel">
           <el-option
             v-for="item in dockingList"
             :key="item.id"
@@ -73,12 +73,10 @@ export default {
     return {
       symbolData: [
         {
-          id: 1,
-          name: '<'
+          label: '<'
         },
         {
-          id: 2,
-          name: '<='
+          label: '<='
         }
       ],
       modelData: [
@@ -135,7 +133,6 @@ export default {
     getDockingDetail() {
       this.$request.dockingDetail(this.id).then(res => {
         if (res.ret) {
-          console.log(res)
           this.ruleForm = res.data
         } else {
           this.$message({

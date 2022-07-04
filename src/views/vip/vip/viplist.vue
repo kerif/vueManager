@@ -183,7 +183,11 @@
         </div>
       </div>
       <div class="addUser">
-        <search-select :selectArr="sourceList" v-model="page_params.source" @search="onSource">
+        <search-select
+          :selectArr="clientSourceList"
+          v-model="page_params.source"
+          @search="onSource"
+        >
         </search-select>
         <!-- <el-select
           v-model="page_params.source"
@@ -297,6 +301,7 @@
         prop="member_level_name"
         align="center"
       ></el-table-column>
+      <el-table-column :label="$t('成长值')" align="center" prop="growth_value"></el-table-column>
       <el-table-column
         :label="$t('客户组')"
         prop="user_group.name_cn"
@@ -304,6 +309,7 @@
       ></el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
+      <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
       <el-table-column :label="$t('注册时间')" prop="created_at" width="155"></el-table-column>
       <el-table-column
         :label="$t('最后登录时间')"
@@ -534,6 +540,7 @@ export default {
       customerList: [],
       saleList: [],
       sourceList: [],
+      clientSourceList: [],
       inviteLoading: false,
       hasFilterCondition: false
     }
@@ -551,6 +558,7 @@ export default {
     this.getGradeList()
     this.getUserGroup()
     this.getStaff()
+    this.getClientUser()
   },
   activated() {
     this.getList()
@@ -574,7 +582,7 @@ export default {
           user_group_id: this.searchParams.user_group_id
             ? this.searchParams.user_group_id
             : this.page_params.group,
-          searchSource: this.searchParams.searchSource
+          user_source: this.searchParams.searchSource
             ? this.searchParams.searchSource
             : this.page_params.source,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
@@ -648,6 +656,20 @@ export default {
           name: this.$t('全部')
         })
         this.sourceList = res.data
+      })
+    },
+    getClientUser() {
+      this.$request.userSource().then(res => {
+        res.data.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        res.data.forEach(item => {
+          this.clientSourceList.push({
+            value: item.id,
+            label: item.name
+          })
+        })
       })
     },
     inviteMethod(keyword) {

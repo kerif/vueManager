@@ -1,7 +1,7 @@
 <template>
   <div class="landing-container">
     <el-form ref="form" :model="landing" label-width="130px">
-      <el-form-item :label="$t('落地配配置')">
+      <!-- <el-form-item :label="$t('落地配配置')">
         <el-select
           @change="changeChannel"
           v-model="landing.docking_type"
@@ -31,7 +31,7 @@
           >
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('多箱订单推送方式')">
         <el-radio-group v-model="landing.push_type">
           <el-radio :label="1">{{ $t('按订单推送') }}</el-radio>
@@ -63,13 +63,20 @@
         </el-switch>
       </el-form-item>
       <el-form-item :label="$t('落地配对接方式')">
-        <el-radio-group v-model="type">
+        <el-radio-group v-model="landing.channel_type">
           <el-radio :label="1">{{ $t('单接口') }}</el-radio>
-          <el-radio :label="2">{{ $t('多接口') }}</el-radio>
+          <el-radio :label="2" @change="getList">{{ $t('多接口') }}</el-radio>
         </el-radio-group>
-        <div v-if="type === 1" style="margin: 10px 0">
+        <div v-if="landing.channel_type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('配单公司') }}</span>
-          <el-select v-model="landing.docking_type" :placeholder="$t('请选择')">
+          <el-select
+            v-model="landing.docking_type"
+            filterable
+            allow-create
+            default-first-option
+            @change="changeChannel"
+            :placeholder="$t('请选择')"
+          >
             <el-option
               v-for="item in dockingList"
               :key="item.id"
@@ -78,9 +85,15 @@
             ></el-option>
           </el-select>
         </div>
-        <div v-if="type === 1" style="margin: 10px 0">
+        <div v-if="landing.channel_type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('渠道代码') }}</span>
-          <el-select v-model="landing.channel_code" :placeholder="$t('请选择')">
+          <el-select
+            v-model="landing.channel_code"
+            filterable
+            allow-create
+            default-first-option
+            :placeholder="$t('请选择')"
+          >
             <el-option
               v-for="item in channelList"
               :key="item.id"
@@ -89,15 +102,28 @@
             ></el-option>
           </el-select>
         </div>
-        <div v-if="type === 2">
+        <div v-if="landing.channel_type === 2">
           <div style="display: flex; justify-content: flex-end; margin: 10px 0">
             <el-button class="btn-main" @click="onAdd">{{ $t('添加') }}</el-button>
           </div>
-          <el-table border stripe>
+          <el-table border stripe :data="tableData">
             <el-table-column type="index" label="#"></el-table-column>
-            <el-table-column prop="" :label="$t('推送条件')"></el-table-column>
-            <el-table-column prop="" :label="$t('配单公司')"></el-table-column>
-            <el-table-column prop="" :label="$t('代码')"></el-table-column>
+            <el-table-column :label="$t('推送条件')">
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.first_num }} {{ scope.row.first_condition }}
+                  <span v-if="scope.row.type === 1">{{ $t('订单计费重量') }}</span>
+                  <span v-else>{{ $t('订单实际重量') }}</span>
+                  {{ scope.row.second_condition }} {{ scope.row.second_num }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="docking_company" :label="$t('配单公司')">
+              <template slot-scope="scope">
+                <span>{{ scope.row.docking_company ? scope.row.docking_company.name : '' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="channel_code" :label="$t('代码')"></el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
                 <el-button class="btn-main" @click="onEdit(scope.row.id)">{{
@@ -127,17 +153,17 @@ export default {
         docking_type: '',
         channel_code: '',
         push_type: 1,
-        third_push_now: 0
+        third_push_now: 0,
+        channel_type: 1
       },
-      type: 1,
       dockingList: [],
-      channelList: []
+      channelList: [],
+      tableData: []
     }
   },
   created() {
     this.getDocking()
     this.dockData()
-    this.getList()
   },
   methods: {
     // 获取落地陪配置数据
@@ -174,22 +200,31 @@ export default {
     },
     getList() {
       this.$request.dockingList({ express_line_id: this.$route.params.id }).then(res => {
-        console.log(res)
+        this.tableData = res.data
       })
     },
     onAdd() {
-      dialog({
-        type: 'addEditAbutment',
-        express_id: this.$route.params.id
-      })
+      dialog(
+        {
+          type: 'addEditAbutment',
+          express_id: this.$route.params.id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     onEdit(id) {
-      console.log(id)
-      dialog({
-        type: 'addEditAbutment',
-        id,
-        express_id: this.$route.params.id
-      })
+      dialog(
+        {
+          type: 'addEditAbutment',
+          id,
+          express_id: this.$route.params.id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     onDelete(id) {
       console.log(id)
