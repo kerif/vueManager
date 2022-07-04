@@ -59,45 +59,45 @@ export default {
     },
     // 切换语言
     changeLang() {
-      this.$request
-        .getTranshipment({
-          lang: this.params.language
-        })
-        .then(res => {
-          if (res.ret) {
-            this.params.title = res.data.title
-            this.params.content = res.data.content
-            this.params.language = res.data.language
-            this.editor.txt.html(this.params.content)
-          }
-        })
+      // this.$request
+      //   .getTranshipment({
+      //     lang: this.params.language
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.params.title = res.data.title
+      //       this.params.content = res.data.content
+      //       this.params.language = res.data.language
+      //       this.editor.txt.html(this.params.content)
+      //     }
+      //   })
     },
     getList() {
-      this.$request.multiBoxRule().then(res => {
-        if (res.ret) {
-          this.params.title = res.data.title
-          this.params.content = res.data.content
-          this.params.language = res.data.language
-        }
-      })
+      // this.$request.multiBoxRule().then(res => {
+      //   if (res.ret) {
+      //     this.params.title = res.data.title
+      //     this.params.content = res.data.content
+      //     this.params.language = res.data.language
+      //   }
+      // })
     },
     saveNotice(data) {
       this.params.content = data
-      this.$request.updateMultiBoxRule(this.params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      // this.$request.updateMultiBoxRule(this.params).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       type: 'success',
+      //       title: this.$t('操作成功'),
+      //       message: res.msg
+      //     })
+      //     this.getList()
+      //   } else {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      // })
     }
   }
 }

@@ -825,7 +825,7 @@ export default [
             }
           },
           {
-            path: '/order/billDetails/:id/:activeName/:sn',
+            path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
             id: 402,

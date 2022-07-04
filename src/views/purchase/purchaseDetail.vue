@@ -197,7 +197,7 @@
             <span
               v-if="scope.row.status === 3"
               class="choose-order"
-              @click="orderDetail(scope.row.sn)"
+              @click="orderDetail(scope.row.id)"
               >{{ scope.row.sn }}</span
             >
           </template>
@@ -413,11 +413,11 @@ export default {
     deleteTable(index, rows) {
       rows.splice(index, 1)
     },
-    orderDetail(sn) {
+    orderDetail(id) {
       this.$router.push({
         name: 'billDetails',
         params: {
-          sn
+          id
         }
       })
     },

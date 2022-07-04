@@ -118,72 +118,72 @@ export default {
     },
     // 获取落地陪配置数据
     getDocking() {
-      this.$request.dockingPick().then(res => {
-        if (res.ret) {
-          this.dockingList = res.data
-        }
-      })
+      // this.$request.dockingPick().then(res => {
+      //   if (res.ret) {
+      //     this.dockingList = res.data
+      //   }
+      // })
     },
     // 获取渠道代码数据
     getChannel() {
-      this.$request.channelCode(this.ruleForm.docking_type).then(res => {
-        if (res.ret) {
-          this.channelList = res.data
-        }
-      })
+      // this.$request.channelCode(this.ruleForm.docking_type).then(res => {
+      //   if (res.ret) {
+      //     this.channelList = res.data
+      //   }
+      // })
     },
     getDockingDetail() {
-      this.$request.dockingDetail(this.id).then(res => {
-        if (res.ret) {
-          console.log(res)
-          this.ruleForm = res.data
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      // this.$request.dockingDetail(this.id).then(res => {
+      //   if (res.ret) {
+      //     console.log(res)
+      //     this.ruleForm = res.data
+      //   } else {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      // })
     },
     onSubmit() {
-      if (this.id) {
-        this.$request.editDockingMethod(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      } else {
-        let params = {
-          ...this.ruleForm
-        }
-        params.express_line_id = this.express_id
-        this.$request.dockingMethod(params).then(res => {
-          console.log(res)
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      }
+      // if (this.id) {
+      //   this.$request.editDockingMethod(this.id, this.ruleForm).then(res => {
+      //     if (res.ret) {
+      //       this.$notify({
+      //         type: 'success',
+      //         title: this.$t('操作成功'),
+      //         message: res.msg
+      //       })
+      //       this.show = false
+      //     } else {
+      //       this.$message({
+      //         message: res.msg,
+      //         type: 'error'
+      //       })
+      //     }
+      //   })
+      // } else {
+      //   let params = {
+      //     ...this.ruleForm
+      //   }
+      //   params.express_line_id = this.express_id
+      //   this.$request.dockingMethod(params).then(res => {
+      //     console.log(res)
+      //     if (res.ret) {
+      //       this.$notify({
+      //         type: 'success',
+      //         title: this.$t('操作成功'),
+      //         message: res.msg
+      //       })
+      //       this.show = false
+      //     } else {
+      //       this.$message({
+      //         message: res.msg,
+      //         type: 'error'
+      //       })
+      //     }
+      //   })
+      // }
     },
     clear() {
       this.id = ''

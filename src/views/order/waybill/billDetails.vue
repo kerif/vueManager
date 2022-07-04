@@ -1090,9 +1090,10 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.sn) {
-      this.getPurchaseSn()
-    }
+    console.log(this.$route.query.sn, this.$route.params.id)
+    // if (this.$route.query.sn) {
+    //   this.getPurchaseSn()
+    // }
     if (this.$route.params.id) {
       this.getList()
       this.getProduct()
@@ -1370,159 +1371,158 @@ export default {
       })
     },
     getPurchaseSn() {
-      this.$request.purchaseSnDetail(this.$route.params.sn).then(res => {
-        this.tableLoading = false
-        this.form = res.data
-        this.address = res.data.address
-        this.baseMode = res.data.express_line.base_mode
-        this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
-        console.log(this.oderData, 'this.oderData')
-        this.PackageData = res.data.packages
-        this.services = res.data.services
-        this.localization = res.localization
-        if (res.data.picking_divide_order_id !== '') {
-          this.picking_divide_order_id = res.data.picking_divide_order_id
-          console.log(this.picking_divide_order_id)
-          this.getPurchaseDetail()
-        }
-        if (res.data.pre_declare) {
-          this.declare = res.data.pre_declare
-        }
-        let groupStatusName = ['进行中', '已结束', '已取消']
-        this.form.group_status_name = groupStatusName[this.form.group_status]
-        this.paymentData = [
-          {
-            name: this.$t('运费'),
-            amount: res.data.payment.freight_amount,
-            remark:
-              '首费:' +
-              res.data.payment.freights.first_freight_fee +
-              ', 续费' +
-              res.data.payment.freights.next_freight_fee +
-              ', 附加费用' +
-              res.data.payment.express_line_costs_amount
-          },
-          {
-            name: this.$t('增值服务费'),
-            amount: +res.data.payment.value_added_amount,
-            remark: res.data.services.map(item => `${item.name}: ${item.price}`).join('，')
-          },
-          {
-            name: this.$t('渠道服务费'),
-            amount: +res.data.payment.line_service_fee,
-            remark: res.data.payment.line_services
-              .map(item => `${item.name}: ${item.price}`)
-              .join('，')
-          },
-          {
-            name: this.$t('渠道规则费'),
-            amount: +res.data.payment.line_rule_fee,
-            remark: res.data.payment.line_rules
-              .map(item => `${item.name}: ${item.price}`)
-              .join('，')
-          },
-          {
-            name: this.$t('保险费用'),
-            amount: +res.data.payment.insurance_fee,
-            remark: ''
-          },
-          {
-            name: this.$t('关税费用'),
-            amount: +res.data.payment.tariff_fee,
-            remark: ''
-          },
-          {
-            name: this.$t('抵用券减免'),
-            amount: +res.data.payment.coupon_amount,
-            remark: ''
-          },
-          {
-            name: this.$t('积分抵扣'),
-            amount: +res.data.payment.point_amount,
-            remark: ''
-          },
-          {
-            name: this.$t('包裹增值服务'),
-            amount: +res.data.payment.package_service_fee,
-            remark: ''
-          }
-        ]
-        this.TrackingData = [
-          {
-            context: '签收时间',
-            ftime: res.data.signed_at
-          },
-          {
-            context: '发货时间',
-            ftime: res.data.shipped_at
-          },
-          {
-            context: '支付时间',
-            ftime: res.data.paid_at
-          },
-          {
-            context: '打包时间',
-            ftime: res.data.packed_at
-          },
-          {
-            context: '提交时间',
-            ftime: res.data.created_at
-          }
-        ]
-        this.boxData = res.data.box
-        this.userId = res.data.user_id
-        //如果是单箱出库
-        if (this.form.box_type === 1) {
-          this.boxData = [
-            {
-              id: 0,
-              length: res.data.details.length,
-              weight: res.data.details.actual_weight,
-              height: res.data.details.height,
-              width: res.data.details.width,
-              volume_weight: res.data.details.volume_weight,
-              logistics_sn: this.form.order_sn,
-              sn: this.form.order_sn,
-              packages: '全部一箱'
-            }
-          ]
-        }
-        //团购子订单
-        if (this.form.group_buying_status && this.form.group_buying_status === 1) {
-          this.form.status = 3
-          this.form.status_name = '已打包'
-        }
-        switch (this.form.status) {
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 5:
-            this.form.active = this.form.status - 1
-            break
-          case 6:
-            this.form.active = 4
-            break
-          case 11:
-            this.form.active = 2
-            break
-          case 19:
-            this.form.active = 5
-            break
-
-          default:
-            this.form.active = 0
-            break
-        }
-        if (
-          res.data.payment &&
-          (res.data.payment.value_added_service || res.data.payment.line_services)
-        ) {
-          this.addedData = res.data.payment.value_added_service
-          this.addedData.push(...res.data.payment.line_services)
-        }
-        if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
-      })
+      // this.$request.purchaseSnDetail(this.$route.query.sn).then(res => {
+      //   this.tableLoading = false
+      //   this.form = res.data
+      //   this.address = res.data.address
+      //   this.baseMode = res.data.express_line.base_mode
+      //   this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
+      //   console.log(this.oderData, 'this.oderData')
+      //   this.PackageData = res.data.packages
+      //   this.services = res.data.services
+      //   this.localization = res.localization
+      //   if (res.data.picking_divide_order_id !== '') {
+      //     this.picking_divide_order_id = res.data.picking_divide_order_id
+      //     console.log(this.picking_divide_order_id)
+      //     this.getPurchaseDetail()
+      //   }
+      //   if (res.data.pre_declare) {
+      //     this.declare = res.data.pre_declare
+      //   }
+      //   let groupStatusName = ['进行中', '已结束', '已取消']
+      //   this.form.group_status_name = groupStatusName[this.form.group_status]
+      //   this.paymentData = [
+      //     {
+      //       name: this.$t('运费'),
+      //       amount: res.data.payment.freight_amount,
+      //       remark:
+      //         '首费:' +
+      //         res.data.payment.freights.first_freight_fee +
+      //         ', 续费' +
+      //         res.data.payment.freights.next_freight_fee +
+      //         ', 附加费用' +
+      //         res.data.payment.express_line_costs_amount
+      //     },
+      //     {
+      //       name: this.$t('增值服务费'),
+      //       amount: +res.data.payment.value_added_amount,
+      //       remark: res.data.services.map(item => `${item.name}: ${item.price}`).join('，')
+      //     },
+      //     {
+      //       name: this.$t('渠道服务费'),
+      //       amount: +res.data.payment.line_service_fee,
+      //       remark: res.data.payment.line_services
+      //         .map(item => `${item.name}: ${item.price}`)
+      //         .join('，')
+      //     },
+      //     {
+      //       name: this.$t('渠道规则费'),
+      //       amount: +res.data.payment.line_rule_fee,
+      //       remark: res.data.payment.line_rules
+      //         .map(item => `${item.name}: ${item.price}`)
+      //         .join('，')
+      //     },
+      //     {
+      //       name: this.$t('保险费用'),
+      //       amount: +res.data.payment.insurance_fee,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('关税费用'),
+      //       amount: +res.data.payment.tariff_fee,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('抵用券减免'),
+      //       amount: +res.data.payment.coupon_amount,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('积分抵扣'),
+      //       amount: +res.data.payment.point_amount,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('包裹增值服务'),
+      //       amount: +res.data.payment.package_service_fee,
+      //       remark: ''
+      //     }
+      //   ]
+      //   this.TrackingData = [
+      //     {
+      //       context: '签收时间',
+      //       ftime: res.data.signed_at
+      //     },
+      //     {
+      //       context: '发货时间',
+      //       ftime: res.data.shipped_at
+      //     },
+      //     {
+      //       context: '支付时间',
+      //       ftime: res.data.paid_at
+      //     },
+      //     {
+      //       context: '打包时间',
+      //       ftime: res.data.packed_at
+      //     },
+      //     {
+      //       context: '提交时间',
+      //       ftime: res.data.created_at
+      //     }
+      //   ]
+      //   this.boxData = res.data.box
+      //   this.userId = res.data.user_id
+      //   //如果是单箱出库
+      //   if (this.form.box_type === 1) {
+      //     this.boxData = [
+      //       {
+      //         id: 0,
+      //         length: res.data.details.length,
+      //         weight: res.data.details.actual_weight,
+      //         height: res.data.details.height,
+      //         width: res.data.details.width,
+      //         volume_weight: res.data.details.volume_weight,
+      //         logistics_sn: this.form.order_sn,
+      //         sn: this.form.order_sn,
+      //         packages: '全部一箱'
+      //       }
+      //     ]
+      //   }
+      //   //团购子订单
+      //   if (this.form.group_buying_status && this.form.group_buying_status === 1) {
+      //     this.form.status = 3
+      //     this.form.status_name = '已打包'
+      //   }
+      //   switch (this.form.status) {
+      //     case 1:
+      //     case 2:
+      //     case 3:
+      //     case 4:
+      //     case 5:
+      //       this.form.active = this.form.status - 1
+      //       break
+      //     case 6:
+      //       this.form.active = 4
+      //       break
+      //     case 11:
+      //       this.form.active = 2
+      //       break
+      //     case 19:
+      //       this.form.active = 5
+      //       break
+      //     default:
+      //       this.form.active = 0
+      //       break
+      //   }
+      //   if (
+      //     res.data.payment &&
+      //     (res.data.payment.value_added_service || res.data.payment.line_services)
+      //   ) {
+      //     this.addedData = res.data.payment.value_added_service
+      //     this.addedData.push(...res.data.payment.line_services)
+      //   }
+      //   if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
+      // })
     },
     // 获取收件人可选信息
     getAddress() {
