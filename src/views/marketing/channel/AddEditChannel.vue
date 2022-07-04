@@ -37,7 +37,7 @@
           </el-select>
         </el-col>
       </el-form-item>
-      <!-- <el-form-item :label="$t('渠道分类')">
+      <el-form-item :label="$t('渠道分类')">
         <el-row :gutter="20">
           <el-col :span="3">
             <el-select v-model="category">
@@ -55,7 +55,7 @@
             }}</el-button>
           </el-col>
         </el-row>
-      </el-form-item> -->
+      </el-form-item>
       <!-- 备注 -->
       <el-form-item :label="$t('备注')" prop="remark">
         <el-row>
@@ -79,7 +79,7 @@
         >
       </el-form-item>
     </el-form>
-    <!-- <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" width="80%" @close="clear">
+    <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" width="80%" @close="clear">
       <div style="display: flex; justify-content: flex-end">
         <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
           $t('新增')
@@ -110,7 +110,7 @@
       <div style="padding: 10px 0">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       </div>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -165,78 +165,78 @@ export default {
       this.getCategory()
     },
     getCategory() {
-      // this.$request.categorySearch().then(res => {
-      //   this.tableData = res.data
-      //   this.page_params.page = res.meta.current_page
-      //   this.page_params.total = res.meta.total
-      // })
+      this.$request.categorySearch().then(res => {
+        this.tableData = res.data
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
+      })
     },
     addCategory() {
-      // this.tableData.push({
-      //   name: '',
-      //   editState: true
-      // })
+      this.tableData.push({
+        name: '',
+        editState: true
+      })
     },
     onEdit(row) {
       row.editState = true
     },
     onAddEdit(row) {
       console.log(row)
-      // if (row.id) {
-      //   row.editState = true
-      //   this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {
-      //     if (res.ret) {
-      //       this.$notify({
-      //         title: this.$t('操作成功'),
-      //         message: res.msg,
-      //         type: 'success'
-      //       })
-      //       this.getCategory()
-      //     } else {
-      //       this.$notify({
-      //         title: this.$t('操作失败'),
-      //         message: res.msg,
-      //         type: 'warning'
-      //       })
-      //     }
-      //   })
-      // } else {
-      //   this.$request.addChannelCategory({ name: row.name }).then(res => {
-      //     if (res.ret) {
-      //       this.$notify({
-      //         title: this.$t('操作成功'),
-      //         message: res.msg,
-      //         type: 'success'
-      //       })
-      //       this.getCategory()
-      //     } else {
-      //       this.$notify({
-      //         title: this.$t('操作失败'),
-      //         message: res.msg,
-      //         type: 'warning'
-      //       })
-      //     }
-      //   })
-      // }
+      if (row.id) {
+        row.editState = true
+        this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.addChannelCategory({ name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     onDelete(id) {
       console.log(id)
-      // this.$request.delChannelCategory(id).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     this.getCategory()
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.delChannelCategory(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getCategory()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     submit(formName) {
       // 编辑状态

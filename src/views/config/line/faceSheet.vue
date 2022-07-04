@@ -62,7 +62,7 @@
         >
         </el-switch>
       </el-form-item>
-      <!-- <el-form-item :label="$t('落地配对接方式')">
+      <el-form-item :label="$t('落地配对接方式')">
         <el-radio-group v-model="type">
           <el-radio :label="1">{{ $t('单接口') }}</el-radio>
           <el-radio :label="2">{{ $t('多接口') }}</el-radio>
@@ -103,7 +103,7 @@
             </el-table-column>
           </el-table>
         </div>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-// import dialog from '@/components/dialog'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -171,36 +171,36 @@ export default {
       })
     },
     onAdd() {
-      // dialog({
-      //   type: 'addEditAbutment',
-      //   express_id: this.$route.params.id
-      // })
+      dialog({
+        type: 'addEditAbutment',
+        express_id: this.$route.params.id
+      })
     },
     onEdit(id) {
       console.log(id)
-      // dialog({
-      //   type: 'addEditAbutment',
-      //   id,
-      //   express_id: this.$route.params.id
-      // })
+      dialog({
+        type: 'addEditAbutment',
+        id,
+        express_id: this.$route.params.id
+      })
     },
     onDelete(id) {
       console.log(id)
-      // this.$request.delDocking(id).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.delDocking(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 更新落地配配置
     saveDocking() {

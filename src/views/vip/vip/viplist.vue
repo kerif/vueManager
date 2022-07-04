@@ -115,7 +115,7 @@
         >
         </el-date-picker>
       </div>
-      <!-- <div class="search-item">
+      <div class="search-item">
         <div>{{ $t('客户来源') }}</div>
         <el-select
           v-model="searchParams.searchSource"
@@ -129,7 +129,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-      </div> -->
+      </div>
       <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
@@ -183,6 +183,8 @@
         </div>
       </div>
       <div class="addUser">
+        <search-select :selectArr="sourceList" v-model="page_params.source" @search="onSource">
+        </search-select>
         <!-- <el-select
           v-model="page_params.source"
           :placeholder="$t('客户来源')"
@@ -640,13 +642,13 @@ export default {
       })
     },
     getUserSource() {
-      // this.$request.userSource().then(res => {
-      //   res.data.unshift({
-      //     id: '',
-      //     name: this.$t('全部')
-      //   })
-      //   this.sourceList = res.data
-      // })
+      this.$request.userSource().then(res => {
+        res.data.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        this.sourceList = res.data
+      })
     },
     inviteMethod(keyword) {
       this.inviteLoading = true

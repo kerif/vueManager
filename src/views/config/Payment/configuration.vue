@@ -29,9 +29,9 @@
                   <el-menu-item index="6">
                     {{ $t('转运须知') }}
                   </el-menu-item>
-                  <!-- <el-menu-item index="7">
+                  <el-menu-item index="7">
                     {{ $t('合箱须知') }}
-                  </el-menu-item> -->
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -59,9 +59,9 @@
             <el-col :span="19" v-if="secondTab1 === '6'" class="main-right">
               <transport-configure></transport-configure>
             </el-col>
-            <!-- <el-col :span="19" v-if="secondTab1 === '7'" class="main-right">
+            <el-col :span="19" v-if="secondTab1 === '7'" class="main-right">
               <box-configure></box-configure>
-            </el-col> -->
+            </el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -233,7 +233,7 @@ import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
-// import boxConfigure from './boxConfigure'
+import boxConfigure from './boxConfigure'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -255,8 +255,8 @@ export default {
     CustomTrack,
     CustomLabel,
     LoginConfigure,
-    customizeBackgroundSystem
-    // boxConfigure
+    customizeBackgroundSystem,
+    boxConfigure
     // GroupConfigure
   },
   mixins: [pagination],
