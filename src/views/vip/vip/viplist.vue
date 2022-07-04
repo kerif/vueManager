@@ -683,8 +683,8 @@ export default {
       this.dialogPwd = true
     },
     onSource() {
-      // this.page_params.handleQueryChange('source', this.page_params.source)
-      // this.getList()
+      this.page_params.handleQueryChange('source', this.page_params.source)
+      this.getList()
     },
     pwdConfirm(formName) {
       this.$refs[formName].validate(valid => {

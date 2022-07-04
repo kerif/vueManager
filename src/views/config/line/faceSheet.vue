@@ -69,7 +69,7 @@
         </el-radio-group>
         <div v-if="type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('配单公司') }}</span>
-          <el-select>
+          <el-select v-model="landing.docking_type" :placeholder="$t('请选择')">
             <el-option
               v-for="item in dockingList"
               :key="item.id"
@@ -80,7 +80,14 @@
         </div>
         <div v-if="type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('渠道代码') }}</span>
-          <el-select> </el-select>
+          <el-select v-model="landing.channel_code" :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in channelList"
+              :key="item.id"
+              :value="item.code"
+              :label="item.code + '----' + item.name"
+            ></el-option>
+          </el-select>
         </div>
         <div v-if="type === 2">
           <div style="display: flex; justify-content: flex-end; margin: 10px 0">
