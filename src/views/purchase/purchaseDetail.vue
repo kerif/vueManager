@@ -193,7 +193,19 @@
         </el-table-column>
         <el-table-column prop="sn" :label="$t('转运单号')">
           <template slot-scope="scope">
-            <span class="choose-order" @click="orderDetail(scope.row.id)">{{ scope.row.sn }}</span>
+            <span v-if="scope.row.status === 2">{{ scope.row.sn }}</span>
+            <span
+              v-if="scope.row.status === 3"
+              class="choose-order"
+              @click="orderDetail(scope.row.sn)"
+              >{{ scope.row.sn }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" :label="$t('转运状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 2">{{ $t('待打包') }}</span>
+            <span v-if="scope.row.status === 3">{{ $t('已完成') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="quantity" :label="$t('分货数量')"></el-table-column>
@@ -351,6 +363,7 @@ export default {
           const user = item.user
           const express_line = item.express_line
           const created_at = item.created_at
+          const status = item.status
           return {
             id,
             sn,
@@ -361,7 +374,8 @@ export default {
             props,
             user,
             express_line,
-            created_at
+            created_at,
+            status
           }
         })
         this.ids = res.data.package ? res.data.package.id : ''
@@ -399,11 +413,11 @@ export default {
     deleteTable(index, rows) {
       rows.splice(index, 1)
     },
-    orderDetail(id) {
+    orderDetail(sn) {
       this.$router.push({
         name: 'billDetails',
         params: {
-          id
+          sn
         }
       })
     },

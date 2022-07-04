@@ -4580,3 +4580,8 @@ exports.multiBoxRule = () => {
 exports.updateMultiBoxRule = params => {
   return $form.put('mini-program/merge-box-rule', params)
 }
+
+// 采购订单详情
+exports.purchaseSnDetail = sn => {
+  return $form.get(`orders/sn/${sn}`)
+}

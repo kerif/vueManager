@@ -1,6 +1,6 @@
 <template>
   <div class="how-container">
-    <div style="color: orange">
+    <div class="title">
       {{ $t('注：配置内容将会显示在客户端“已入库包裹”页面，客户须阅读勾选') }}
     </div>
     <el-form label-position="top">
@@ -103,4 +103,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.title {
+  color: orange;
+  background: #fce6c9;
+  padding: 10px;
+  border-radius: 2px;
+}
+</style>
