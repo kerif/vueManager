@@ -40,7 +40,13 @@
         </el-row>
       </el-form-item>
       <el-form-item :label="$t('配单公司')">
-        <el-select v-model="ruleForm.docking_type" @change="getChannel">
+        <el-select
+          v-model="ruleForm.docking_type"
+          filterable
+          allow-create
+          default-first-option
+          @change="getChannel"
+        >
           <el-option
             v-for="item in dockingList"
             :key="item.id"
@@ -50,7 +56,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('渠道代码')">
-        <el-select v-model="ruleForm.channel_code">
+        <el-select v-model="ruleForm.channel_code" filterable allow-create default-first-option>
           <el-option
             v-for="item in channelList"
             :key="item.id"

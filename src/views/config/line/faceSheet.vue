@@ -199,6 +199,7 @@ export default {
           this.landing.channel_code = res.data.channel_code
           this.landing.push_type = res.data.push_type
           this.landing.third_push_now = res.data.third_push_now
+          this.landing.channel_type = res.data.channel_type
         }
       })
     },
@@ -219,7 +220,6 @@ export default {
       )
     },
     onEdit(id) {
-      console.log(id)
       dialog(
         {
           type: 'addEditAbutment',
@@ -232,7 +232,6 @@ export default {
       )
     },
     onDelete(id) {
-      console.log(id)
       this.$request.delDocking(id).then(res => {
         if (res.ret) {
           this.$notify({
