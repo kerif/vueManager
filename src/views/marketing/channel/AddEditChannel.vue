@@ -166,7 +166,12 @@ export default {
     },
     getCategory() {
       this.$request.categorySearch().then(res => {
-        this.tableData = res.data
+        this.tableData = res.data.map(item => {
+          return {
+            ...item,
+            editState: false
+          }
+        })
       })
     },
     addCategory() {
@@ -179,7 +184,6 @@ export default {
       row.editState = true
     },
     onAddEdit(row) {
-      console.log(row)
       if (row.id) {
         row.editState = true
         this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {

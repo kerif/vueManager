@@ -116,7 +116,7 @@
             <el-button
               class="btn-light-red"
               v-else
-              @click="onDeleteCategory(scope.$index, tableData)"
+              @click="onDeleteCategory(scope.$index, categoryList)"
               >{{ $t('删除') }}</el-button
             >
           </template>
@@ -248,7 +248,12 @@ export default {
     },
     getCategory() {
       this.$request.categorySearch().then(res => {
-        this.categoryList = res.data
+        this.categoryList = res.data.map(item => {
+          return {
+            ...item,
+            editState: false
+          }
+        })
         this.tableData = res.data
         this.tableData.unshift({
           id: '',
@@ -267,9 +272,9 @@ export default {
     onEdit(row) {
       console.log(row)
       row.editState = true
+      this.$set(row, 'editState', true)
     },
     onAddEdit(row) {
-      console.log(row)
       if (row.id) {
         row.editState = true
         this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {
