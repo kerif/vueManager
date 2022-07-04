@@ -113,9 +113,6 @@ export default {
   methods: {
     init() {
       this.getDocking()
-      if (this.ruleForm.docking_type) {
-        this.getChannel()
-      }
       if (this.id) {
         this.getDockingDetail()
       }
@@ -140,6 +137,7 @@ export default {
       this.$request.dockingDetail(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
+          this.getChannel()
         } else {
           this.$message({
             message: res.msg,
