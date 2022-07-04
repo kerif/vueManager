@@ -117,11 +117,7 @@
       </div>
       <div class="search-item">
         <div>{{ $t('客户来源') }}</div>
-        <el-select
-          v-model="searchParams.searchSource"
-          clearable
-          :placeholder="$t('请选择客户来源')"
-        >
+        <el-select v-model="searchParams.user_source" clearable :placeholder="$t('请选择客户来源')">
           <el-option
             v-for="item in sourceList"
             :key="item.id"
@@ -185,7 +181,7 @@
       <div class="addUser">
         <search-select
           :selectArr="clientSourceList"
-          v-model="page_params.source"
+          v-model="page_params.user_source"
           @search="onSource"
         >
         </search-select>
@@ -503,7 +499,7 @@ export default {
       clientGroupList: [],
       page_params: {
         group: '',
-        source: ''
+        user_source: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -530,7 +526,7 @@ export default {
         min_point: '',
         max_order_count: '',
         min_order_count: '',
-        searchSource: ''
+        user_source: ''
       },
       searchTime: [],
       gradeList: [],
@@ -582,9 +578,9 @@ export default {
           user_group_id: this.searchParams.user_group_id
             ? this.searchParams.user_group_id
             : this.page_params.group,
-          user_source: this.searchParams.searchSource
-            ? this.searchParams.searchSource
-            : this.page_params.source,
+          user_source: this.searchParams.user_source
+            ? this.searchParams.user_source
+            : this.page_params.user_source,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
@@ -624,7 +620,7 @@ export default {
       this.searchParams.max_point = ''
       this.searchParams.min_order_count = ''
       this.searchParams.max_order_count = ''
-      this.searchParams.searchSource = ''
+      this.searchParams.user_source = ''
       this.searchTime = []
       this.getList()
     },
@@ -705,7 +701,7 @@ export default {
       this.dialogPwd = true
     },
     onSource() {
-      this.page_params.handleQueryChange('source', this.page_params.source)
+      this.page_params.handleQueryChange('user_source', this.page_params.user_source)
       this.getList()
     },
     pwdConfirm(formName) {
