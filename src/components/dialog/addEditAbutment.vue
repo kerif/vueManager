@@ -56,7 +56,13 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('渠道代码')">
-        <el-select v-model="ruleForm.channel_code" filterable allow-create default-first-option>
+        <el-select
+          v-model="ruleForm.channel_code"
+          filterable
+          allow-create
+          default-first-option
+          clearable
+        >
           <el-option
             v-for="item in channelList"
             :key="item.id"

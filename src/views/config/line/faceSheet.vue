@@ -92,6 +92,7 @@
             filterable
             allow-create
             default-first-option
+            clearable
             :placeholder="$t('请选择')"
           >
             <el-option
