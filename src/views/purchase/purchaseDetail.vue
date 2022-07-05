@@ -165,6 +165,16 @@
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
           <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
           <el-table-column prop="pack_quantity" :label="$t('打包数量')"></el-table-column>
+          <el-table-column :label="$t('拣货差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.picking_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('打包差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.pack_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img

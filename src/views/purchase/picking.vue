@@ -213,15 +213,9 @@ export default {
         this.orderList.forEach(item => {
           if (item.id === this.num) {
             item.goods.forEach(ele => {
-              let flag = true
               if (ele.p_goods) {
-                if (
-                  this.barcode === ele.p_goods.barcode &&
-                  ele.picking_quantity < ele.quantity &&
-                  flag
-                ) {
+                if (this.barcode === ele.p_goods.barcode) {
                   ele.picking_quantity++
-                  flag = false
                 }
               }
             })
