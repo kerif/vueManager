@@ -14,16 +14,16 @@
       }}</span>
     </div>
     <el-form ref="form" :model="location" label-width="140px">
-      <!-- <el-row :gutter="20">
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('货位生成方式')">
-            <el-radio-group v-model="radio">
+            <el-radio-group v-model="location.type">
               <el-radio :label="0">{{ $t('规则生成') }}</el-radio>
               <el-radio :label="1">{{ $t('自定义添加') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
-      </el-row> -->
+      </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('*区域编号')" v-if="this.state === 'edit'">
@@ -44,7 +44,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <div class="unit">
+          <div class="unit" v-if="location.type === 0">
             <span>{{ $t('货架规格') }}</span
             >&nbsp;&nbsp;
             <el-input
@@ -62,7 +62,7 @@
             ></el-input
             >*{{ $t('层') }}
           </div>
-          <el-form-item :label="$t('仓位数量')">
+          <el-form-item :label="$t('仓位数量')" v-if="location.type === 0">
             <el-input v-model="qty" disabled></el-input>
           </el-form-item>
           <el-form-item :label="$t('同一客户包裹货位规则')">
@@ -92,22 +92,23 @@
         </el-form-item>
       </el-col>
     </el-row> -->
-      <div class="bottom-btn">
+      <div class="bottom-btn" v-if="location.type === 0">
         <el-button type="primary" @click="confirm">{{ $t('生成货位') }}</el-button>
       </div>
     </el-form>
-    <!-- <div v-if="this.state === 'edit'">
-      <el-button class="btn-main">{{ $t('批量导入') }}</el-button>
-      <el-button class="btn-main">{{ $t('添加') }}</el-button>
-    </div> -->
-    <el-table v-if="this.state === 'edit'" :data="tableData" border style="width: 100%">
+    <div
+      v-if="location.type === 1"
+      style="display: flex; justify-content: flex-end; margin-bottom: 5px"
+    >
+      <el-button class="btn-main" @click="addLocationCode">{{ $t('添加') }}</el-button>
+    </div>
+    <el-table v-if="location.type === 1" :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
       <!-- 客户ID -->
       <el-table-column prop="number" :label="$t('区域编号')"> </el-table-column>
-      <!-- <el-table-column :label="$t('货位编码')"></el-table-column> -->
       <!-- 客户昵称 -->
-      <el-table-column prop="column" :label="$t('列数')"> </el-table-column>
-      <el-table-column prop="row" :label="$t('层数')"> </el-table-column>
+      <!-- <el-table-column prop="column" :label="$t('列数')"> </el-table-column>
+      <el-table-column prop="row" :label="$t('层数')"> </el-table-column> -->
       <el-table-column prop="code" :label="$t('货位编码')"> </el-table-column>
       <el-table-column prop="is_used" :label="$t('包裹数量')"> </el-table-column>
       <!-- 最后登录时间 -->
@@ -125,7 +126,7 @@
           <span v-if="scope.row.is_locked === 1">{{ $t('已锁定') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="180px">
         <template slot-scope="scope">
           <el-button
             class="btn-light-red"
@@ -139,15 +140,11 @@
             @click="lockLocation(scope.row.id, 1)"
             >{{ $t('锁定') }}</el-button
           >
-          <!-- <el-button>{{ $t('删除') }}</el-button> -->
+          <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
-    </div> -->
-    <div class="pagination-box" v-if="this.state === 'edit'">
+    <div class="pagination-box" v-if="location.type === 1">
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
     <el-dialog
@@ -164,6 +161,16 @@
         <el-table-column :label="$t('上架时间')" prop="in_storage_at"></el-table-column>
       </el-table>
     </el-dialog>
+    <el-dialog :visible.sync="innerShow" :title="$t('添加')" @close="clearCode" append-to-body>
+      <el-form :model="ruleForm">
+        <el-form-item :label="$t('输入货位编码')">
+          <el-input v-model="ruleForm.codes" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="onConfirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </el-dialog>
 </template>
 <script>
@@ -178,7 +185,8 @@ export default {
         column: '',
         max_count: '',
         number: '',
-        reusable: ''
+        reusable: '',
+        type: 0
       },
       qty: '',
       areaId: '',
@@ -186,10 +194,13 @@ export default {
       warehouseName: '',
       id: '',
       innerVisible: false,
+      innerShow: false,
       finishId: '',
       finishCode: '',
       finishData: [],
-      radio: 0,
+      ruleForm: {
+        codes: ''
+      },
       capacityData: [
         {
           id: 0,
@@ -274,13 +285,40 @@ export default {
         }
       })
     },
+    addLocationCode() {
+      this.innerShow = true
+    },
+    onConfirm() {
+      let params = {
+        codes: [this.ruleForm.codes]
+      }
+      this.$request.addCustomLocation(this.areaId, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.innerShow = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    clearCode() {
+      this.ruleForm.codes = ''
+    },
     clearSecond() {},
     confirm() {
       if (!this.location.number) {
         return this.$message.error(this.$t('请输入区域编号'))
-      } else if (!this.location.column) {
+      } else if (!this.location.column && location.type === 0) {
         return this.$message.error(this.$t('请输入列数'))
-      } else if (!this.location.row) {
+      } else if (!this.location.row && location.type === 0) {
         return this.$message.error(this.$t('请输入层数'))
       }
       if (this.state === 'add') {
@@ -361,7 +399,8 @@ export default {
 <style lang="scss">
 .dialog-editAdd-location {
   .pagination-box {
-    margin-top: 10px;
+    padding: 10px 0;
+    margin: 10px 0;
   }
   .el-dialog__header {
     background-color: #0e102a;

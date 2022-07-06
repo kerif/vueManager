@@ -51,9 +51,38 @@
       </el-row>
     </div>
     <h3>{{ $t('仓库信息') }}</h3>
-    <div class="select-box">
-      <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button>
-      <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
+    <div style="display: flex; justify-content: space-between">
+      <el-form style="flex: 1">
+        <el-form-item :label="$t('允许上架不在货位池内的货位')">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="
+              $t(
+                '关闭时,不在货位池内的货位不允许上架包裹;开启时,会将该不存在的货位自动保存至 未分货 货区'
+              )
+            "
+            placement="top"
+          >
+            <span class="el-icon-question location-icon"></span>
+          </el-tooltip>
+          <el-switch
+            v-model="status"
+            @change="onLocationStatus($event)"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+            :active-value="0"
+            :inactive-value="1"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <div>
+        <el-button type="danger" plain @click="addShelfRules">{{ $t('上架规则') }}</el-button>
+        <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
+      </div>
     </div>
     <el-table
       :data="positionList"
@@ -69,8 +98,14 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('区域编号')" prop="number"></el-table-column>
-      <el-table-column :label="$t('列数')" prop="column"></el-table-column>
-      <el-table-column :label="$t('层数')" prop="row"></el-table-column>
+      <el-table-column :label="$t('货位类型')" prop="type">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 0">{{ $t('规则生成') }}</span>
+          <span v-else>{{ $t('自定义添加') }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column :label="$t('列数')" prop="column"></el-table-column>
+      <el-table-column :label="$t('层数')" prop="row"></el-table-column> -->
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('状态')" width="180px">
@@ -179,10 +214,10 @@
                 style="font-size: 18px; position: absolute; top: 10px; left: 85px"
               ></span>
             </el-tooltip>
-            <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
-              $t('尺寸判断')
-            }}</el-radio>
             <!-- <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
+              $t('尺寸判断')
+            }}</el-radio> -->
+            <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
               $t('自动判断')
             }}</el-radio>
             <el-tooltip
@@ -195,8 +230,8 @@
                 class="el-icon-question question-icon"
                 style="font-size: 18px; position: absolute; top: 10px; left: 210px"
               ></span>
-            </el-tooltip> -->
-            <el-tooltip
+            </el-tooltip>
+            <!-- <el-tooltip
               class="item"
               effect="dark"
               :content="$t('当包裹入库尺寸三边任意一边大于限制尺寸时, 自动判断为大货')"
@@ -206,29 +241,39 @@
                 class="el-icon-question question-icon"
                 style="font-size: 18px; position: absolute; top: 10px; left: 210px"
               ></span>
-            </el-tooltip>
+            </el-tooltip> -->
           </el-radio-group>
-          <!-- <el-checkbox-group v-model="checkList">
-            <div style="display: flex; margin-left: 120px">
-              <el-checkbox label="尺寸判断(cm)"></el-checkbox>
-              <div style="margin-left: 5px">
-                <el-input v-model="value" class="ipt" :placeholder="$t('请输入长')"></el-input>
-                <el-input v-model="value" class="ipt" :placeholder="$t('请输入宽')"></el-input>
-                <el-input v-model="value" class="ipt" :placeholder="$t('请输入高')"></el-input>
-              </div>
+          <div style="display: flex; margin-left: 120px" v-if="ruleForm.big_rule === 1">
+            <el-checkbox label="尺寸判断(cm)" v-model="ruleForm.size_rule"></el-checkbox>
+            <div style="margin-left: 5px">
+              <el-input
+                v-model="ruleForm.location_size.length"
+                class="ipt"
+                :placeholder="$t('请输入长')"
+              ></el-input>
+              <el-input
+                v-model="ruleForm.location_size.width"
+                class="ipt"
+                :placeholder="$t('请输入宽')"
+              ></el-input>
+              <el-input
+                v-model="ruleForm.location_size.height"
+                class="ipt"
+                :placeholder="$t('请输入高')"
+              ></el-input>
             </div>
-            <div style="display: flex; margin-left: 120px">
-              <el-checkbox label="重量判断(KG)"></el-checkbox>
-              <div style="margin-left: 5px">
-                <el-input
-                  v-model="value"
-                  style="width: 50%"
-                  :placeholder="$t('请输入重量')"
-                ></el-input>
-              </div>
+          </div>
+          <div style="display: flex; margin-left: 120px" v-if="ruleForm.big_rule === 1">
+            <el-checkbox label="重量判断(KG)" v-model="ruleForm.weight_rule"></el-checkbox>
+            <div style="margin-left: 5px">
+              <el-input
+                v-model="ruleForm.location_weight"
+                style="width: 320px"
+                :placeholder="$t('请输入重量')"
+              ></el-input>
             </div>
-          </el-checkbox-group> -->
-          <div v-if="ruleForm.big_rule === 1">
+          </div>
+          <!-- <div v-if="ruleForm.big_rule === 1">
             <el-input
               v-model="ruleForm.location_size.length"
               class="ipt"
@@ -244,7 +289,7 @@
               class="ipt"
               :placeholder="$t('请输入高')"
             ></el-input>
-          </div>
+          </div> -->
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -279,7 +324,10 @@ export default {
           width: '',
           height: ''
         },
-        for_big: ''
+        for_big: '',
+        location_weight: '',
+        size_rule: '',
+        weight_rule: ''
       },
       positionList: [],
       typeSendData: [],
@@ -296,8 +344,8 @@ export default {
         { id: 1, name: this.$t('拣货完成') }
       ],
       selectList: [],
-      checkList: [],
-      value: ''
+      value: '',
+      status: ''
     }
   },
   created() {
@@ -421,6 +469,23 @@ export default {
         }
       })
     },
+    onLocationStatus(event) {
+      this.$request.setCustomLocation(this.$route.params.id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 上架规则
     addShelfRules() {
       this.show = true
@@ -507,17 +572,26 @@ export default {
           this.ruleForm.off_shelf_status = res.data.off_shelf_status
           this.ruleForm.big_rule = res.data.big_rule
           this.ruleForm.location_size = res.data.location_size
+          this.ruleForm.size_rule = res.data.size_rule === 1 ? true : false
+          this.ruleForm.weight_rule = res.data.weight_rule === 1 ? true : false
+          this.ruleForm.location_weight = res.data.location_weight
         }
       })
     },
     submit() {
+      if (!this.ruleForm.size_rule && !this.ruleForm.weight_rule) {
+        return this.$message.error(this.$t('请选择判断方式'))
+      }
       this.$request
         .offShelfStatus(this.$route.params.id, {
           area_ids: this.ruleForm.number,
           off_shelf_status: this.ruleForm.off_shelf_status,
           location_size: this.ruleForm.location_size,
           big_rule: this.ruleForm.big_rule,
-          big_area_ids: this.ruleForm.for_big
+          big_area_ids: this.ruleForm.for_big,
+          size_rule: Number(this.ruleForm.size_rule),
+          weight_rule: Number(this.ruleForm.weight_rule),
+          location_weight: this.ruleForm.location_weight
         })
         .then(res => {
           if (res.ret) {
@@ -596,6 +670,11 @@ export default {
     margin-top: 20px;
     color: red;
     font-size: 13px;
+  }
+  .location-icon {
+    color: #74b34f;
+    font-size: 18px;
+    margin-right: 10px;
   }
   .dialog-shelfRules {
     .el-dialog__header {

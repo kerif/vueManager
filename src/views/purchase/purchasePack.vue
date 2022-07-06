@@ -267,12 +267,13 @@
               </div>
             </div>
             <div class="bottom-box">
-              <div v-if="order.length && status !== 3">
+              <div v-if="order.length">
                 <el-button @click="onPack(0)" size="small">{{ $t('保存') }}</el-button>
                 <el-button
                   type="primary"
                   size="small"
                   class="calc-btn"
+                  v-if="status === 2"
                   :loading="$store.state.btnLoading"
                   @click="onPack(1)"
                   >{{ $t('打包完成') }}</el-button

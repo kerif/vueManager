@@ -4589,3 +4589,15 @@ exports.updateMultiBoxRule = params => {
 exports.purchaseSnDetail = sn => {
   return $form.get(`orders/sn/${sn}`)
 }
+
+// 设置上架自定义货位
+exports.setCustomLocation = (warehouseId, status) => {
+  return $form.put(`warehouse-address/${warehouseId}/custom-locations/${status}`)
+}
+
+// 新增自定义货位
+exports.addCustomLocation = (areaId, params) => {
+  return $form.post(`warehouse-address/goods-allocation-areas/${areaId}/locations`, params)
+}
+
+// 删除货区
