@@ -263,7 +263,10 @@
               ></el-input>
             </div>
           </div>
-          <div style="display: flex; margin-left: 120px" v-if="ruleForm.big_rule === 1">
+          <div
+            style="display: flex; margin-left: 120px; margin-top: 5px"
+            v-if="ruleForm.big_rule === 1"
+          >
             <el-checkbox label="重量判断(KG)" v-model="ruleForm.weight_rule"></el-checkbox>
             <div style="margin-left: 5px">
               <el-input

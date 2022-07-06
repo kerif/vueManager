@@ -140,7 +140,9 @@
             @click="lockLocation(scope.row.id, 1)"
             >{{ $t('锁定') }}</el-button
           >
-          <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
+          <el-button class="btn-light-red" @click="onDeleteLocation(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -288,6 +290,23 @@ export default {
     addLocationCode() {
       this.innerShow = true
     },
+    onDeleteLocation(id) {
+      this.$request.delLocation(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     onConfirm() {
       let params = {
         codes: [this.ruleForm.codes]
@@ -380,8 +399,6 @@ export default {
         this.getList() // 列表数据
         this.getDetails() // 详细数据
       }
-      console.log(this.id, 'id')
-      console.log(this.warehouseName, 'warehouseName')
     },
     clear() {
       this.page_params.page = 1

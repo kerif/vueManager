@@ -4601,3 +4601,6 @@ exports.addCustomLocation = (areaId, params) => {
 }
 
 // 删除货区
+exports.delLocation = id => {
+  return $form.delete(`warehouse-address/locations/${id}`)
+}
