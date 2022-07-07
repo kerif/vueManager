@@ -249,16 +249,19 @@
               <el-input
                 v-model="ruleForm.location_size.length"
                 class="ipt"
+                clearable
                 :placeholder="$t('请输入长')"
               ></el-input>
               <el-input
                 v-model="ruleForm.location_size.width"
                 class="ipt"
+                clearable
                 :placeholder="$t('请输入宽')"
               ></el-input>
               <el-input
                 v-model="ruleForm.location_size.height"
                 class="ipt"
+                clearable
                 :placeholder="$t('请输入高')"
               ></el-input>
             </div>
@@ -273,6 +276,7 @@
                 v-model="ruleForm.location_weight"
                 style="width: 320px"
                 :placeholder="$t('请输入重量')"
+                clearable
               ></el-input>
             </div>
           </div>
@@ -584,6 +588,17 @@ export default {
     submit() {
       if (!this.ruleForm.size_rule && !this.ruleForm.weight_rule) {
         return this.$message.error(this.$t('请选择判断方式'))
+      }
+      if (this.ruleForm.weight_rule && !this.ruleForm.location_weight) {
+        return this.$message.error(this.$t('请输入重量'))
+      }
+      if (
+        this.ruleForm.size_rule &&
+        (!this.ruleForm.location_size.width ||
+          !this.ruleForm.location_size.length ||
+          !this.ruleForm.location_size.height)
+      ) {
+        return this.$message.error(this.$t('请输入尺寸'))
       }
       this.$request
         .offShelfStatus(this.$route.params.id, {

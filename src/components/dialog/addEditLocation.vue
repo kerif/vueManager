@@ -570,7 +570,7 @@ export default {
     },
     clear() {
       this.id = ''
-      // this.page_params.page = 1
+      this.location.type = 0
       this.location.locationRule.column = ''
       this.location.locationRule.max_count = ''
       this.location.locationRule.row = ''
@@ -578,9 +578,7 @@ export default {
       this.location.locationRule.number = ''
       this.warehouseName = ''
       this.location.locationRule.reusable = ''
-      this.location.locationCustom.column = ''
       this.location.locationCustom.max_count = ''
-      this.location.locationCustom.row = ''
       this.location.locationCustom.number = ''
       this.location.locationCustom.reusable = ''
     }
