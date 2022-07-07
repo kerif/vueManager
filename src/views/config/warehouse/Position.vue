@@ -69,10 +69,10 @@
           <el-switch
             v-model="status"
             @change="onLocationStatus($event)"
-            :active-text="$t('关')"
-            :inactive-text="$t('开')"
-            :active-value="0"
-            :inactive-value="1"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+            :active-value="1"
+            :inactive-value="0"
             active-color="#13ce66"
             inactive-color="gray"
           >

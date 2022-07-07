@@ -12,7 +12,13 @@
             />
           </div>
           <div class="row-item">
-            <el-select v-model="num" style="width: 120px" :placeholder="$t('请选择箱号')" clearable>
+            <el-select
+              v-model="num"
+              style="width: 120px"
+              @change="changeVal"
+              :placeholder="$t('请选择箱号')"
+              clearable
+            >
               <el-option
                 v-for="item in boxNumber"
                 :key="item.id"
@@ -256,6 +262,7 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
+    changeVal() {},
     onSave() {
       let params = {
         is_picking_finish: 0,
