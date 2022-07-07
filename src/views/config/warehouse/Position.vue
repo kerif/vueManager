@@ -357,6 +357,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getDetail()
   },
   methods: {
     getList() {
@@ -476,6 +477,13 @@ export default {
         }
       })
     },
+    getDetail() {
+      this.$request.aloneWarehouseAddress(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.status = res.data.custom_location
+        }
+      })
+    },
     onLocationStatus(event) {
       this.$request.setCustomLocation(this.$route.params.id, Number(event)).then(res => {
         if (res.ret) {
@@ -484,6 +492,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.getDetail()
         } else {
           this.$notify({
             title: this.$t('操作失败'),

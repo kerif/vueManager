@@ -509,7 +509,11 @@
           v-if="activeName !== 0"
         >
           <template slot-scope="props">
-            <el-table :data="props.row.secondData" class="expand-table">
+            <el-table
+              :data="props.row.secondData"
+              class="expand-table"
+              @selection-change="onGroupSelectChange"
+            >
               <el-table-column type="selection"></el-table-column>
               <!-- 客户ID -->
               <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
@@ -1193,6 +1197,7 @@ export default {
         currency_unit: ''
       },
       selectIDs: [],
+      groupSelectIDs: [],
       agent_name: '',
       payment_type: '',
       pay_delivery: '',
@@ -1872,6 +1877,9 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
+      // if (!this.groupSelectIDs || this.groupSelectIDs.length) {
+      //   return this.$message.error(this.$t('请选择'))
+      // }
       if (this.orderInfo[0].status === 11) {
         return this.$message.error(this.$t('该订单为待审核状态无法更改付款状态请操作审核'))
       }
@@ -2155,6 +2163,9 @@ export default {
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
       this.orderInfo = selection
+    },
+    onGroupSelectChange(select) {
+      this.groupSelectIDs = select.map(item => item.id)
     },
     exChange(row, expandedRows) {
       this.expands = expandedRows.map(item => item.id)

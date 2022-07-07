@@ -137,6 +137,7 @@
               v-model="location.locationCustom.max_count"
               :min="1"
               :max="1000"
+              :disabled="true"
             ></el-input-number>
           </el-form-item>
         </el-col>
@@ -296,6 +297,7 @@
           <el-input v-model="ruleForm.codes" type="textarea"></el-input>
         </el-form-item>
       </el-form>
+      <div style="color: red">*{{ $t('添加多个货位请用回车区分') }}</div>
       <div slot="footer">
         <el-button type="primary" :loading="$store.state.btnLoading" @click="onConfirm">{{
           $t('确定')
