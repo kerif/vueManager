@@ -18,7 +18,10 @@
         <el-col :span="12">
           <el-form-item :label="$t('货位生成方式')">
             <el-radio-group v-model="location.type">
-              <el-radio :label="0">{{ $t('规则生成') }}</el-radio>
+              <el-radio :label="0" :disabled="location.type === 1" v-if="this.state === 'edit'">{{
+                $t('规则生成')
+              }}</el-radio>
+              <el-radio :label="0" v-if="this.state === 'add'">{{ $t('规则生成') }}</el-radio>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -29,7 +32,16 @@
               >
                 <span class="el-icon-question custom-icon"></span>
               </el-tooltip>
-              <el-radio :label="1" @change="changeVal($event)">{{ $t('自定义添加') }}</el-radio>
+              <el-radio
+                :label="1"
+                :disabled="location.type === 1"
+                v-if="this.state === 'edit'"
+                @change="changeVal($event)"
+                >{{ $t('自定义添加') }}</el-radio
+              >
+              <el-radio :label="1" v-if="this.state === 'add'" @change="changeVal($event)">{{
+                $t('自定义添加')
+              }}</el-radio>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -155,9 +167,12 @@
         <el-button type="primary" @click="confirm" v-if="this.state === 'add'">{{
           $t('生成货位')
         }}</el-button>
-        <el-button type="primary" v-if="this.state === 'edit' && location.type === 1">{{
-          $t('保存')
-        }}</el-button>
+        <el-button
+          type="primary"
+          @click="onSave"
+          v-if="this.state === 'edit' && location.type === 1"
+          >{{ $t('保存') }}</el-button
+        >
       </div>
     </el-form>
     <div v-if="this.state === 'edit' && location.type === 1" class="add-btn">
@@ -470,6 +485,29 @@ export default {
       this.ruleForm.codes = ''
     },
     clearSecond() {},
+    onSave() {
+      let params = {
+        ...this.location.locationCustom,
+        type: this.location.type,
+        reusable: Number(this.location.locationCustom.reusable)
+      }
+      this.$request.updateAllLocation(this.id, this.areaId, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     confirm() {
       if (!this.location.locationRule.number && location.type === 0) {
         return this.$message.error(this.$t('请输入区域编号'))
