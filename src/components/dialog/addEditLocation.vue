@@ -4,7 +4,7 @@
     :title="state === 'add' ? $t('新增货位') : $t('编辑货位')"
     class="dialog-editAdd-location"
     @close="clear"
-    width="65%"
+    width="70%"
   >
     <div class="tips">
       <span>{{
@@ -13,7 +13,7 @@
         )
       }}</span>
     </div>
-    <el-form ref="form" :model="location" label-width="140px">
+    <el-form ref="form" :model="location" label-width="155px">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('货位生成方式')">
@@ -612,7 +612,7 @@ export default {
   }
   .unit {
     margin-bottom: 20px;
-    margin-left: 70px;
+    margin-left: 85px;
   }
   .right-unit {
     width: 25% !important;

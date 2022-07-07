@@ -59,7 +59,7 @@
             effect="dark"
             :content="
               $t(
-                '关闭时,不在货位池内的货位不允许上架包裹;开启时,会将该不存在的货位自动保存至 未分货 货区'
+                '关闭时,不在货位池内的货位不允许上架包裹; 开启时,会将该不存在的货位自动保存至 自定义 货区'
               )
             "
             placement="top"
@@ -69,8 +69,8 @@
           <el-switch
             v-model="status"
             @change="onLocationStatus($event)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
+            :active-text="$t('关')"
+            :inactive-text="$t('开')"
             :active-value="0"
             :inactive-value="1"
             active-color="#13ce66"
