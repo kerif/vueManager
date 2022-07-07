@@ -1244,7 +1244,9 @@ export default {
           {
             name: this.$t('包裹增值服务'),
             amount: +res.data.payment.package_service_fee,
-            remark: ''
+            remark: res.data.payment.package_services
+              .map(item => `${item.name}:${item.price}`)
+              .join('，')
           }
         ]
         this.TrackingData = [

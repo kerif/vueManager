@@ -166,6 +166,7 @@
         <el-button
           type="primary"
           @click="onSave"
+          :loading="$store.state.btnLoading"
           v-if="this.state === 'edit' && location.type === 1"
           >{{ $t('保存') }}</el-button
         >
@@ -296,7 +297,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="onConfirm">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="onConfirm">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
   </el-dialog>

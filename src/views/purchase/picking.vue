@@ -262,7 +262,9 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    changeVal() {},
+    changeVal(e) {
+      console.log(e)
+    },
     onSave() {
       let params = {
         is_picking_finish: 0,

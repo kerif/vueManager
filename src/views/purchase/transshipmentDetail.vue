@@ -169,7 +169,7 @@
             ><div>{{ $t('收货点') }}: {{ item.station ? item.station.code : '' }}</div></el-col
           >
           <el-col :span="3"
-            ><el-button class="btn-main" v-if="activeName === '1'" @click="onDownload">{{
+            ><el-button class="btn-main" v-if="activeName === '1'" @click="onDownload(item.id)">{{
               $t('下载面单')
             }}</el-button></el-col
           >
@@ -402,11 +402,11 @@ export default {
     onDelRow(index, rows) {
       rows.splice(index, 1)
     },
-    onDownload() {
+    onDownload(id) {
       let params = {
         type: 2
       }
-      params.ids = this.orders.map(item => item.id)
+      params.ids = [id]
       this.$request.downloadNoodleSheet(params).then(res => {
         if (res.ret) {
           this.$notify({
