@@ -182,7 +182,11 @@
       <el-table-column prop="number" :label="$t('区域编号')"> </el-table-column>
       <el-table-column prop="column" :label="$t('列数')"> </el-table-column>
       <el-table-column prop="row" :label="$t('层数')"> </el-table-column>
-      <el-table-column prop="code" :label="$t('货位编码')"> </el-table-column>
+      <el-table-column prop="code" :label="$t('货位编码')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.code }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="is_used" :label="$t('包裹数量')">
         <template slot-scope="scope">
           <span>{{ scope.row.is_used }}</span>
@@ -234,7 +238,7 @@
       <el-table-column prop="is_used" :label="$t('包裹数量')"> </el-table-column>
       <el-table-column :label="$t('货位状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_locked === 0 && scope.row.is_used === 1">{{
+          <span v-if="scope.row.is_locked === 0 && scope.row.is_used === 0">{{
             $t('未使用')
           }}</span>
           <span
@@ -309,8 +313,7 @@ export default {
           column: '',
           max_count: '',
           number: '',
-          reusable: '',
-          type: 0
+          reusable: ''
         },
         locationCustom: {
           max_count: '',
@@ -431,9 +434,6 @@ export default {
         }
       })
     },
-    changeVal(e) {
-      console.log(e)
-    },
     addLocationCode() {
       this.innerShow = true
     },
@@ -509,6 +509,8 @@ export default {
         return this.$message.error(this.$t('请输入列数'))
       } else if (!this.location.locationRule.row && location.type === 0) {
         return this.$message.error(this.$t('请输入层数'))
+      } else if (!this.location.locationCustom.number && location.type === 1) {
+        return this.$message.error(this.$t('请输入区域编号'))
       }
       let params = {}
       if (this.location.type === 0) {
@@ -550,11 +552,6 @@ export default {
               message: res.msg
             })
             this.getList()
-            // this.location.column = ''
-            // this.location.row = ''
-            // this.qty = ''
-            // this.location.number = ''
-            // this.show = false
             this.success()
           } else {
             this.$message({
