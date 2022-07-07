@@ -30,18 +30,12 @@
                 "
                 placement="top"
               >
-                <span class="el-icon-question custom-icon"></span>
+                <span class="el-icon-question rule-icon"></span>
               </el-tooltip>
-              <el-radio
-                :label="1"
-                :disabled="location.type === 1"
-                v-if="this.state === 'edit'"
-                @change="changeVal($event)"
-                >{{ $t('自定义添加') }}</el-radio
-              >
-              <el-radio :label="1" v-if="this.state === 'add'" @change="changeVal($event)">{{
+              <el-radio :label="1" :disabled="location.type === 0" v-if="this.state === 'edit'">{{
                 $t('自定义添加')
               }}</el-radio>
+              <el-radio :label="1" v-if="this.state === 'add'">{{ $t('自定义添加') }}</el-radio>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -639,6 +633,14 @@ export default {
     margin-bottom: 5px;
   }
   .custom-icon {
+    position: relative;
+    left: -20px;
+    color: #74b34f;
+    font-size: 18px;
+  }
+  .rule-icon {
+    position: relative;
+    left: -15px;
     color: #74b34f;
     font-size: 18px;
   }
