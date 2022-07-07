@@ -510,6 +510,7 @@
         >
           <template slot-scope="props">
             <el-table :data="props.row.secondData" class="expand-table">
+              <el-table-column type="selection"></el-table-column>
               <!-- 客户ID -->
               <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
               <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
