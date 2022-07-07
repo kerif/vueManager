@@ -101,6 +101,7 @@
               v-model="location.locationRule.reusable"
               popper-class="billing-select"
               style="width: 100%"
+              clearable
               :placeholder="$t('请选择')"
             >
               <el-option
@@ -146,6 +147,7 @@
               popper-class="billing-select"
               style="width: 100%"
               :placeholder="$t('请选择')"
+              clearable
             >
               <el-option
                 v-for="item in capacityData"

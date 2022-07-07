@@ -100,8 +100,8 @@
           <template slot-scope="scope">
             <span
               >{{ scope.row.quantity }}
-              <span v-if="scope.row.quantity && scope.row.box_count">/</span>
-              {{ scope.row.box_count }}</span
+              /
+              {{ scope.row.box_count ? scope.row.box_count : 0 }}</span
             >
           </template>
         </el-table-column>
