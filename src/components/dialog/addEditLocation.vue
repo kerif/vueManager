@@ -137,7 +137,7 @@
               v-model="location.locationCustom.max_count"
               :min="1"
               :max="1000"
-              :disabled="true"
+              :disabled="!locationData.length"
             ></el-input-number>
           </el-form-item>
         </el-col>

@@ -1288,6 +1288,7 @@ export default {
       order_sn: '',
       actual_payment_fee: '',
       orderInfo: '',
+      groupInfo: [],
       selectUserID: [],
       user_name: '',
       status: '',
@@ -1877,9 +1878,6 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      // if (!this.groupSelectIDs || this.groupSelectIDs.length) {
-      //   return this.$message.error(this.$t('请选择'))
-      // }
       if (this.orderInfo[0].status === 11) {
         return this.$message.error(this.$t('该订单为待审核状态无法更改付款状态请操作审核'))
       }
@@ -2163,9 +2161,11 @@ export default {
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
       this.orderInfo = selection
+      // this.$refs.table.toggleRowSelection(this.selectIDs)
     },
     onGroupSelectChange(select) {
       this.groupSelectIDs = select.map(item => item.id)
+      this.groupInfo = select
     },
     exChange(row, expandedRows) {
       this.expands = expandedRows.map(item => item.id)
