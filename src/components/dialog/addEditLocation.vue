@@ -168,7 +168,7 @@
           type="primary"
           @click="onSave"
           :loading="$store.state.btnLoading"
-          v-if="this.state === 'edit' && location.type === 1"
+          v-if="this.state === 'edit'"
           >{{ $t('保存') }}</el-button
         >
       </div>
@@ -487,10 +487,19 @@ export default {
     },
     clearSecond() {},
     onSave() {
-      let params = {
-        ...this.location.locationCustom,
-        type: this.location.type,
-        reusable: Number(this.location.locationCustom.reusable)
+      let params = {}
+      if (this.location.type === 0) {
+        params = {
+          ...this.location.locationRule,
+          type: this.location.type,
+          reusable: Number(this.location.locationRule.reusable)
+        }
+      } else {
+        params = {
+          ...this.location.locationCustom,
+          type: this.location.type,
+          reusable: Number(this.location.locationCustom.reusable)
+        }
       }
       this.$request.updateAllLocation(this.id, this.areaId, params).then(res => {
         if (res.ret) {

@@ -24,7 +24,8 @@
                 :key="item.id"
                 :value="item.id"
                 :label="item.number"
-              ></el-option>
+              >
+              </el-option>
             </el-select>
             <el-input
               :placeholder="$t('请输入或扫入条码')"
@@ -72,7 +73,7 @@
         </el-col>
       </el-row>
       <div class="order-list">
-        <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
+        <div class="order-item flex-item" :id="key" v-for="(item, index) in orderList" :key="index">
           <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
             <div class="font-bold index-label">#{{ item.number }}</div>
@@ -183,7 +184,8 @@ export default {
       imgSrc: '',
       boxNumber: [],
       num: '',
-      orderSn: ''
+      orderSn: '',
+      key: ''
     }
   },
   created() {
@@ -262,8 +264,10 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    changeVal(e) {
-      console.log(e)
+    changeVal(id) {
+      this.key = id
+      console.log(document.getElementById(`${this.key}`))
+      document.getElementById(`${this.key}`).scrollIntoView()
     },
     onSave() {
       let params = {
