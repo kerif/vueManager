@@ -1197,7 +1197,6 @@ export default {
         currency_unit: ''
       },
       selectIDs: [],
-      groupSelectIDs: [],
       agent_name: '',
       payment_type: '',
       pay_delivery: '',
@@ -1287,8 +1286,7 @@ export default {
       user_id: '',
       order_sn: '',
       actual_payment_fee: '',
-      orderInfo: '',
-      groupInfo: [],
+      orderInfo: [],
       selectUserID: [],
       user_name: '',
       status: '',
@@ -2161,11 +2159,10 @@ export default {
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
       this.orderInfo = selection
-      // this.$refs.table.toggleRowSelection(this.selectIDs)
     },
-    onGroupSelectChange(select) {
-      this.groupSelectIDs = select.map(item => item.id)
-      this.groupInfo = select
+    onGroupSelectChange(selection) {
+      this.selectIDs = selection.map(item => item.id)
+      this.orderInfo = selection
     },
     exChange(row, expandedRows) {
       this.expands = expandedRows.map(item => item.id)
