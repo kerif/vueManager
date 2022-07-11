@@ -595,7 +595,7 @@ export default {
       })
     },
     submit() {
-      if (!this.ruleForm.size_rule && !this.ruleForm.weight_rule) {
+      if (this.ruleForm.big_rule === 1 && !this.ruleForm.size_rule && !this.ruleForm.weight_rule) {
         return this.$message.error(this.$t('请选择判断方式'))
       }
       if (this.ruleForm.weight_rule && !this.ruleForm.location_weight) {
