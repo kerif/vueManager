@@ -75,7 +75,7 @@
       <div class="order-list">
         <div
           class="order-item flex-item"
-          name="key"
+          :id="item.id"
           v-for="(item, index) in orderList"
           :key="index"
         >
@@ -269,11 +269,9 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    changeVal(id) {
-      this.key = id
-      let aLink = document.createElement('a')
-      aLink.href = `#${this.key}`
-      console.log(aLink)
+    changeVal(value) {
+      let toElement = document.getElementById(value)
+      toElement.scrollIntoView()
     },
     onSave() {
       let params = {
