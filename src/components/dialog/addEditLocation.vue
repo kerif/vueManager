@@ -374,11 +374,11 @@ export default {
           if (res.ret) {
             if (this.location.type === 0) {
               this.tableData = res.data
-              this.locationData = []
+              // this.locationData = []
               this.page_params.page = res.meta.current_page
               this.page_params.total = res.meta.total
             } else {
-              this.tableData = []
+              // this.tableData = []
               this.locationData = res.data
               this.page_params.page = res.meta.current_page
               this.page_params.total = res.meta.total

@@ -73,7 +73,12 @@
         </el-col>
       </el-row>
       <div class="order-list">
-        <div class="order-item flex-item" :id="key" v-for="(item, index) in orderList" :key="index">
+        <div
+          class="order-item flex-item"
+          name="key"
+          v-for="(item, index) in orderList"
+          :key="index"
+        >
           <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
             <div class="font-bold index-label">#{{ item.number }}</div>
@@ -266,8 +271,9 @@ export default {
     },
     changeVal(id) {
       this.key = id
-      console.log(document.getElementById(`${this.key}`))
-      document.getElementById(`${this.key}`).scrollIntoView()
+      let aLink = document.createElement('a')
+      aLink.href = `#${this.key}`
+      console.log(aLink)
     },
     onSave() {
       let params = {
