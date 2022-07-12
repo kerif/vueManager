@@ -604,13 +604,15 @@ export default {
           })
           for (let i = 0; i < this.orderList.length; i++) {
             if (this.orderList[i].status === 2) {
-              this.onOrder(this.orderList[i], i)
-              this.getCloudDetail(this.orderList[i].sn)
-              break
-            } else {
-              this.$router.push({
-                name: 'transshipmentBill'
-              })
+              if (this.orderList.length - i != 1) {
+                this.onOrder(this.orderList[i], i)
+                this.getCloudDetail(this.orderList[i].sn)
+                break
+              } else {
+                this.$router.push({
+                  name: 'transshipmentBill'
+                })
+              }
             }
           }
         } else {
