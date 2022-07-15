@@ -33,6 +33,11 @@
             $t('删除')
           }}</el-button>
         </div>
+        <div v-else-if="item.custom_code === 'pp_order'">
+          <el-button @click="editPurchaseTmp(item.id)" class="btn-blue-green">{{
+            $t('编辑')
+          }}</el-button>
+        </div>
       </div>
       <div class="template-remark">{{ item.remark }}</div>
     </div>
@@ -46,18 +51,28 @@
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
     ></inner-drawer>
+    <purchase-drawer
+      :tmpCode="tmpCode"
+      :editPurchaseTmpDrawer="editPurchaseTmpDrawer"
+      @purchaseInner="purchaseInner"
+      ref="purchase"
+      :ids="ids"
+    ></purchase-drawer>
   </el-drawer>
 </template>
 
 <script>
 import InnerDrawer from './innerDrawer'
+import PurchaseDrawer from './purchaseDrawer.vue'
 export default {
   components: {
-    InnerDrawer
+    InnerDrawer,
+    PurchaseDrawer
   },
   data() {
     return {
       editTmpDrawer: false,
+      editPurchaseTmpDrawer: false,
       code: '',
       name: '',
       tmpName: '',
@@ -113,9 +128,18 @@ export default {
       this.ids = ids
       this.editTmpDrawer = true
     },
+    editPurchaseTmp(ids) {
+      this.ids = ids
+      this.editPurchaseTmpDrawer = true
+    },
     receiveInner() {
       this.editTmpDrawer = false
       this.$refs.inner.clear()
+      this.getTmpList()
+    },
+    purchaseInner() {
+      this.editPurchaseTmpDrawer = false
+      this.$refs.purchase.clear()
       this.getTmpList()
     },
     activeFun(id) {

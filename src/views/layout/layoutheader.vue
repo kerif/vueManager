@@ -65,6 +65,7 @@
         <p>{{ $t('系统有效期') }}：{{ form.expired_at }}</p>
         <p>{{ $t('所属员工组') }}：{{ form.group_name }}</p>
         <p>{{ $t('uuid') }}：{{ form.uuid }}</p>
+        <!-- <p>{{ $t('员工二维码') }}:</p> -->
         <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
       </el-popover>
       <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>

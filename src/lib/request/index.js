@@ -4604,3 +4604,13 @@ exports.addCustomLocation = (areaId, params) => {
 exports.delLocation = id => {
   return $form.delete(`warehouse-address/locations/${id}`)
 }
+
+// 获取员工邀请码
+exports.inviteCode = id => {
+  return $form.get(`admins/${id}/invite-code`)
+}
+
+// 更新员工邀请默认用户组
+exports.inviteUserGroup = (id, groupId) => {
+  return $form.get(`admins/${id}/invite-user-group/${groupId}`)
+}

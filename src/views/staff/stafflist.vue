@@ -62,8 +62,9 @@
         <el-table-column prop="last_login_at" :label="$t('最后登录时间')" width="155">
         </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')" fixed="right" width="205">
+        <el-table-column :label="$t('操作')" fixed="right" width="265">
           <template slot-scope="scope">
+            <!-- <el-button class="btn-main">{{ $t('邀请记录') }}</el-button> -->
             <!-- 编辑 -->
             <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{
               $t('编辑')
@@ -72,6 +73,7 @@
             <el-button class="btn-light-green" @click.stop="editPassword(scope.row.id)">
               {{ $t('修改密码') }}
             </el-button>
+            <!-- <el-button class="btn-deep-purple">{{ $t('员工二维码') }}</el-button> -->
           </template>
         </el-table-column>
       </el-table>

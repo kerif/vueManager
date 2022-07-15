@@ -33,6 +33,7 @@
                 @click="onOrder(item, index)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
+                <i class="el-icon-document" v-if="item.status === 3" @click="downFile(item.id)"></i>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
               </div>
             </div>
@@ -430,6 +431,27 @@ export default {
       this.box.splice(index, 1)
       this.skuList.forEach(item => {
         item.packData.splice(index, 1)
+      })
+    },
+    downFile(id) {
+      let params = {
+        type: 2
+      }
+      params.ids = [id]
+      this.$request.downloadNoodleSheet(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          window.open(res.data.url)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     onBox() {
