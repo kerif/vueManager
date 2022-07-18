@@ -540,11 +540,20 @@ export default {
           }
         })
         this.orderList[index].boxes.forEach(box => {
-          box.goods.forEach(goods => {
+          console.log(box.goods)
+          if (!box.goods.length) {
+            tempList.forEach(ele => {
+              ele.packData.push({
+                pack_quantity: 0
+              })
+            })
+          }
+          box.goods.forEach((goods, i) => {
+            console.log(i)
             tempList.forEach(ele => {
               if (ele.picking_order_goods_id === goods.id) {
                 ele.packData.push({
-                  pack_quantity: goods.pivot.quantity
+                  pack_quantity: goods.pivot.quantity ? goods.pivot.quantity : 0
                 })
               }
             })

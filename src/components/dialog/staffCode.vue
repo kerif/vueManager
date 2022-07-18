@@ -32,6 +32,7 @@
 </template>
 
 <script>
+// import { downloadStreamFile } from '@/utils/index'
 export default {
   data() {
     return {
@@ -66,18 +67,13 @@ export default {
     },
     uploadQRCode() {
       if (this.code) {
+        let url = `${this.$baseUrl.IMAGE_URL}${this.code}`
+        let a = document.createElement('a')
+        a.href = url
+        a.download = 'pic'
+        a.click()
         // window.open(`${this.$baseUrl.IMAGE_URL}${this.code}`)
-        const src = `${this.$baseUrl.IMAGE_URL}${this.code}`
-        fetch(src).then(res => {
-          res.blob().then(myBlob => {
-            const href = URL.createObjectURL(myBlob)
-            const a = document.createElement('a')
-            a.href = href
-            a.download = 'photo.jpg'
-            a.click()
-            a.remove()
-          })
-        })
+        // downloadStreamFile(`${this.$baseUrl.IMAGE_URL}${this.code}`, '二维码', 'jpg')
       }
     },
     onSubmit() {
