@@ -32,13 +32,13 @@ export default {
       this.getList()
     },
     getList() {
-      this.$request.inviteRecord(this.id).then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
+      // this.$request.inviteRecord(this.id).then(res => {
+      //   if (res.ret) {
+      //     this.tableData = res.data
+      //     this.page_params.page = res.meta.current_page
+      //     this.page_params.total = res.meta.total
+      //   }
+      // })
     },
     clear() {}
   }
