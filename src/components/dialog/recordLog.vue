@@ -7,7 +7,9 @@
       <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div style="padding: 20px 0">
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
   </el-dialog>
 </template>
 
@@ -30,13 +32,13 @@ export default {
       this.getList()
     },
     getList() {
-      // this.$request.inviteRecord(this.id).then(res => {
-      //   if (res.ret) {
-      //     this.tableData = res.data
-      //     this.page_params.page = res.meta.current_page
-      //     this.page_params.total = res.meta.total
-      //   }
-      // })
+      this.$request.inviteRecord(this.id).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        }
+      })
     },
     clear() {}
   }

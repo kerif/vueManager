@@ -50,42 +50,53 @@ export default {
       this.getUserGroup()
     },
     getUserGroup() {
-      // this.$request.getUserGroup().then(res => {
-      //   if (res.ret) {
-      //     this.groupList = res.data
-      //   }
-      // })
+      this.$request.getUserGroup().then(res => {
+        if (res.ret) {
+          this.groupList = res.data
+        }
+      })
     },
     getQRCode() {
-      // this.$request.inviteCode(this.id).then(res => {
-      //   if (res.ret) {
-      //     this.code = res.data.invite_code
-      //     this.ruleForm.invite_user_group_id = res.data.invite_user_group_id
-      //   }
-      // })
+      this.$request.inviteCode(this.id).then(res => {
+        if (res.ret) {
+          this.code = res.data.invite_code
+          this.ruleForm.invite_user_group_id = res.data.invite_user_group_id
+        }
+      })
     },
     uploadQRCode() {
       if (this.code) {
-        window.open(`${this.$baseUrl.IMAGE_URL}${this.code}`)
+        // window.open(`${this.$baseUrl.IMAGE_URL}${this.code}`)
+        const src = `${this.$baseUrl.IMAGE_URL}${this.code}`
+        fetch(src).then(res => {
+          res.blob().then(myBlob => {
+            const href = URL.createObjectURL(myBlob)
+            const a = document.createElement('a')
+            a.href = href
+            a.download = 'photo.jpg'
+            a.click()
+            a.remove()
+          })
+        })
       }
     },
     onSubmit() {
-      // let groupId = this.ruleForm.invite_user_group_id
-      // this.$request.inviteUserGroup(this.id, groupId).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     this.show = false
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
+      let groupId = this.ruleForm.invite_user_group_id
+      this.$request.inviteUserGroup(this.id, groupId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.show = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     clear() {}
   }
