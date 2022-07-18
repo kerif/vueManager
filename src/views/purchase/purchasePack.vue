@@ -539,22 +539,22 @@ export default {
             packData: []
           }
         })
-        this.orderList[index].boxes.forEach(box => {
-          console.log(box.goods)
-          if (!box.goods.length) {
-            tempList.forEach(ele => {
-              ele.packData.push({
-                pack_quantity: 0
-              })
+
+        tempList.forEach(ele => {
+          for (let i = 0; i < this.orderList[index].boxes.length; i++) {
+            ele.packData.push({
+              pack_quantity: 0
             })
           }
-          box.goods.forEach((goods, i) => {
-            console.log(i)
+        })
+        this.orderList[index].boxes.forEach((box, index) => {
+          box.goods.forEach(goods => {
             tempList.forEach(ele => {
               if (ele.picking_order_goods_id === goods.id) {
-                ele.packData.push({
-                  pack_quantity: goods.pivot.quantity ? goods.pivot.quantity : 0
-                })
+                // ele.packData.push({
+                //   pack_quantity: goods.pivot.quantity ? goods.pivot.quantity : 0
+                // })
+                ele.packData[index].pack_quantity = goods.pivot.quantity
               }
             })
           })
