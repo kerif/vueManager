@@ -156,6 +156,8 @@ import confirmReceive from './confirmReceive.vue'
 import classifiyManage from './classifiyManage.vue'
 import addEditAbutment from './addEditAbutment.vue'
 import addEditCategory from './addEditCategory.vue'
+import staffCode from './staffCode.vue'
+import recordLog from './recordLog.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -311,6 +313,8 @@ const confirmReceiveController = Vue.extend(confirmReceive)
 const classifiyManageController = Vue.extend(classifiyManage)
 const addEditAbutmentController = Vue.extend(addEditAbutment)
 const addEditCategoryController = Vue.extend(addEditCategory)
+const staffCodeController = Vue.extend(staffCode)
+const recordLogController = Vue.extend(recordLog)
 
 const mixin = {
   data() {
@@ -593,6 +597,20 @@ function initInstance(type) {
     // 分类管理
     case 'addEditCategory':
       instance = new addEditCategoryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 员工二维码
+    case 'staffCode':
+      instance = new staffCodeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 邀请记录
+    case 'recordLog':
+      instance = new recordLogController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -4424,11 +4424,11 @@ exports.transshipmentList = params => {
 
 // 采购 分货方案 新增
 exports.addPickOrder = params => {
-  return $form.post('purchase-picking-orders', params)
+  return $json.post('purchase-picking-orders', params)
 }
 // 采购 分货方案 编辑
 exports.editPickOrder = (id, params) => {
-  return $form.put(`purchase-picking-orders/${id}`, params)
+  return $json.put(`purchase-picking-orders/${id}`, params)
 }
 
 // 采购 分货方案 审核
@@ -4606,11 +4606,16 @@ exports.delLocation = id => {
 }
 
 // 获取员工邀请码
-exports.inviteCode = id => {
-  return $form.get(`admins/${id}/invite-code`)
+exports.inviteCode = (id, config) => {
+  return $form.get(`admins/${id}/invite-code`, config)
 }
 
 // 更新员工邀请默认用户组
 exports.inviteUserGroup = (id, groupId) => {
-  return $form.get(`admins/${id}/invite-user-group/${groupId}`)
+  return $form.put(`admins/${id}/invite-user-group/${groupId}`)
+}
+
+// 获取员工邀请记录
+exports.inviteRecord = id => {
+  return $form.get(`admins/${id}/invite-users`)
 }
