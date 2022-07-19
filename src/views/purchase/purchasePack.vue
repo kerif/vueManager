@@ -105,7 +105,7 @@
                   </div>
                   <div class="weight-box">
                     <el-row :gutter="10">
-                      <el-col :offset="1" :span="4">
+                      <el-col :offset="2" :span="4">
                         <div>
                           <span class="red-text">*</span>
                           <span>{{ $t('重量') }}</span>
@@ -124,7 +124,7 @@
                       v-for="(item, index) in box"
                       :key="index"
                     >
-                      <el-col :span="1">
+                      <el-col :span="2">
                         <div class="index-label font-bold">#{{ index + 1 }}</div>
                       </el-col>
                       <el-col :span="4">
@@ -182,6 +182,43 @@
                       <div>{{ $t('白色为已装箱数量为0') }}</div>
                     </div>
                     <div> -->
+                  <div class="scan-box">
+                    <el-row type="flex">
+                      <el-col :span="16">
+                        <div class="flex-item">
+                          <el-select
+                            :placeholder="$t('请选择箱号')"
+                            v-model="boxNumber"
+                            class="flex-1 check"
+                          >
+                            <el-option
+                              v-for="(item, index) in box"
+                              :key="index"
+                              :label="`# ${index + 1}`"
+                              :value="index"
+                            ></el-option>
+                          </el-select>
+                          <el-input
+                            :placeholder="$t('请输入或扫入商品SKU')"
+                            class="flex-1"
+                            ref="sku"
+                            v-model="sku"
+                            @keyup.native.enter="onSku"
+                          ></el-input>
+                        </div>
+                        <div class="scan-tips align-center">! {{ $t('请输入或扫入商品SKU') }}</div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="align-center">
+                          <div class="font-bold num-box">
+                            <span class="scan-num">{{ scanGoodsNum }}</span>
+                            <span>/{{ totalGoodsNum }}</span>
+                          </div>
+                          <div>{{ $t('已打包商品数量') }}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
                   <div style="display: flex; justify-content: flex-end">
                     <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
                       $t('一键装箱')
@@ -194,6 +231,7 @@
                       border: 1px solid #eff1f2;
                       border-radius: 5px;
                       text-align: center;
+                      overflow: auto;
                     "
                   >
                     <el-row :gutter="10">
@@ -219,50 +257,51 @@
                         ><div>{{ $t('已装箱') }}</div></el-col
                       >
                     </el-row>
-                    <el-row
-                      :gutter="10"
-                      style="margin: 20px 0"
-                      v-for="(item, index) in skuList"
-                      :key="index"
-                    >
-                      <el-col :span="3"
-                        ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
-                      >
-                      <el-col :span="3"
-                        ><span
-                          ><img
-                            style="width: 20%; cursor: pointer"
-                            :src="`${$baseUrl.IMAGE_URL}${item.image}`"
-                            @click="onPic(item.image)"
-                          /> </span
-                      ></el-col>
-                      <el-col :span="3" class="sku-item"
-                        ><div>{{ item.barcode }}</div></el-col
-                      >
-                      <el-col :span="4" class="sku-item"
-                        ><div>{{ item.cn_name }}</div></el-col
-                      >
-                      <el-col :span="3" class="sku-item"
-                        ><div v-if="item.color">{{ item.color }}</div>
-                        <div v-else>{{ $t('暂无') }}</div>
-                      </el-col>
-                      <el-col :span="4"
-                        ><div class="num-item">
-                          {{ item.quantity }}
-                        </div></el-col
-                      >
-                      <el-col :span="3">
+                    <div v-for="(item, ind) in skuList" :key="ind">
+                      <el-row :gutter="10" style="margin: 20px 0">
+                        <el-col :span="3"
+                          ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
+                        >
+                        <el-col :span="3"
+                          ><span
+                            ><img
+                              style="width: 20%; cursor: pointer"
+                              :src="`${$baseUrl.IMAGE_URL}${item.image}`"
+                              @click="onPic(item.image)"
+                            /> </span
+                        ></el-col>
+                        <el-col :span="3" class="sku-item"
+                          ><div>{{ item.barcode }}</div></el-col
+                        >
+                        <el-col :span="4" class="sku-item"
+                          ><div>{{ item.cn_name }}</div></el-col
+                        >
+                        <el-col :span="3" class="sku-item"
+                          ><div v-if="item.color">{{ item.color }}</div>
+                          <div v-else>{{ $t('暂无') }}</div>
+                        </el-col>
+                        <el-col :span="4"
+                          ><div class="num-item">
+                            {{ item.quantity }}
+                          </div></el-col
+                        >
+                        <el-col :span="3">{{ item.scanQty }}</el-col>
+                      </el-row>
+                      <el-row style="background: #f9f9f9; margin: 0 10px">
                         <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
-                          <span>#{{ index + 1 }}</span>
+                          <span style="margin-left: 10px; display: inline-block; width: 20px"
+                            >#{{ index + 1 }}</span
+                          >
                           <el-input
                             type="number"
                             size="small"
                             v-model="ele.pack_quantity"
-                            @blur="checkOut(item)"
-                            style="margin: 3px 0 0 10px"
-                          ></el-input></div
-                      ></el-col>
-                    </el-row>
+                            @blur="checkOut(item, ind)"
+                            style="width: 180px; padding: 10px"
+                          ></el-input>
+                        </div>
+                      </el-row>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -339,7 +378,10 @@ export default {
       customList: [],
       imgVisible: false,
       imgSrc: '',
-      className: ''
+      className: '',
+      boxNumber: '',
+      sku: '',
+      orderNumber: []
     }
   },
   created() {
@@ -414,17 +456,28 @@ export default {
         this.propList = res.data
       })
     },
+    // 扫入 sku
+    onSku() {
+      if (this.boxNumber === '') {
+        return this.$message.error(this.$t('请选择箱号'))
+      } else if (!this.sku.trim()) {
+        return this.$message.error(this.$t('请输入条码'))
+      }
+      this.skuList.forEach((item, index) => {
+        if (item.barcode === this.sku) {
+          console.log(index)
+          item.scanQty++
+          item.packData[this.boxNumber].pack_quantity++
+        }
+      })
+      this.$refs.sku.select()
+    },
     onAddBox() {
       this.skuList.forEach(item => {
-        item.packData = []
-      })
-      for (let i = 0; i <= this.box.length; i++) {
-        this.skuList.forEach(item => {
-          item.packData.push({
-            pack_quantity: ''
-          })
+        item.packData.push({
+          pack_quantity: ''
         })
-      }
+      })
       this.box.push({ weight: '', length: '', height: '', width: '' })
     },
     onDelBox(index) {
@@ -465,19 +518,14 @@ export default {
         })
       })
     },
-    checkOut(item) {
+    checkOut(item, index) {
       console.log(item)
-      // this.sum = item.packData.reduce(function (acr, pcc) {
-      //   if (!pcc.pack_quantity) {
-      //     return acr
-      //   }
-      //   return acr + Number(pcc.pack_quantity)
-      // }, 0)
-      // if (item.quantity === this.sum) {
-      //   this.className = 'all'
-      // } else if ((this.sum < item.quantity || this.sum > item.quantity) && this.sum !== 0) {
-      //   this.className = 'wait'
-      // }
+      console.log(this.skuList[index].packData.length)
+      item.scanQty = this.skuList[index].packData.reduce((pre, cur) => {
+        return pre + Number(cur.pack_quantity)
+      }, 0)
+
+      console.log(item.scanQty)
     },
     onOrder(item, index) {
       console.log(item, index)
@@ -501,7 +549,8 @@ export default {
             ...ele.p_goods,
             quantity: ele.picking_quantity,
             picking_order_goods_id: ele.id,
-            packData: [{ pack_quantity: '' }]
+            packData: [{ pack_quantity: '' }],
+            scanQty: 0
           })
         })
       })
@@ -536,7 +585,8 @@ export default {
             ...ele.p_goods,
             picking_order_goods_id: ele.id,
             quantity: ele.quantity,
-            packData: []
+            packData: [],
+            scanQty: 0
           }
         })
 
@@ -656,24 +706,34 @@ export default {
     }
   },
   computed: {
-    isBtns() {
-      let isBtn = false
-      this.skuList.forEach(item => {
-        if (item.packData) {
-          let num = item.packData.reduce(function (acr, pcc) {
-            if (!pcc.pack_quantity) {
-              return acr
-            }
-            return acr + Number(pcc.pack_quantity)
-          }, 0)
-          if (!num || num > item.quantity || num < item.quantity) {
-            isBtn = true
-          }
-        } else {
-          isBtn = true
-        }
-      })
-      return isBtn
+    // isBtns() {
+    // let isBtn = false
+    // this.skuList.forEach(item => {
+    //   if (item.packData) {
+    //     let num = item.packData.reduce(function (acr, pcc) {
+    //       if (!pcc.pack_quantity) {
+    //         return acr
+    //       }
+    //       return acr + Number(pcc.pack_quantity)
+    //     }, 0)
+    //     if (!num || num > item.quantity || num < item.quantity) {
+    //       isBtn = true
+    //     }
+    //   } else {
+    //     isBtn = true
+    //   }
+    // })
+    // return isBtn
+    // },
+    totalGoodsNum() {
+      return this.skuList.reduce((pre, cur) => {
+        return pre + cur.quantity
+      }, 0)
+    },
+    scanGoodsNum() {
+      return this.skuList.reduce((pre, cur) => {
+        return pre + cur.scanQty
+      }, 0)
     }
   },
   components: {}

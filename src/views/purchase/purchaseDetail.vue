@@ -145,7 +145,7 @@
                 v-if="ruleForm.status === 0"
                 >{{ $t('编辑') }}</el-button
               >
-              <el-button class="btn-main" v-else @click="editGoodsInfo(scope.$index, scope.row)">{{
+              <el-button class="btn-main" v-else @click="editGoodsInfo(scope.row)">{{
                 $t('编辑')
               }}</el-button>
               <el-button
@@ -535,6 +535,7 @@ export default {
       console.log(row)
       dialog({
         type: 'editGoodsInfo',
+        id: this.$route.params.id,
         purchase: JSON.parse(JSON.stringify(row))
       })
     },

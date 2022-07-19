@@ -113,6 +113,7 @@ export default {
         box_count: '',
         image: ''
       },
+      id: '',
       propList: [],
       rules: {
         purchase_price: [{ required: true, message: this.$t('请输入价格'), trigger: 'blur' }],
@@ -161,7 +162,12 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.editPartGoods(this.purchase.id, this.ruleForm).then(res => {
+          let params = {
+            goods: []
+          }
+          let info = [this.ruleForm]
+          params.goods = info
+          this.$request.editPartGoods(this.id, params).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',

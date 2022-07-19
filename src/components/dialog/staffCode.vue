@@ -104,7 +104,7 @@ export default {
   margin-top: 20px;
   text-align: center;
   .imgDialog {
-    width: 50%;
+    width: 25%;
   }
 }
 .img-code {
