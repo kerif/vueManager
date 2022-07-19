@@ -100,12 +100,12 @@ export default {
 </script>
 
 <style lang="scss">
+.el-dialog {
+  max-width: 40%;
+}
 .img_box {
   margin-top: 20px;
   text-align: center;
-  .imgDialog {
-    width: 50%;
-  }
 }
 .img-code {
   display: inline-block;
