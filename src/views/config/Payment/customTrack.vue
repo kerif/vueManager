@@ -17,7 +17,7 @@
     <el-dialog
       :visible.sync="expressDialog"
       width="30%"
-      :title="this.typeId ? $t('编辑') : $t('新增')"
+      :title="typeId ? $t('编辑') : $t('新增')"
       @close="clearType"
     >
       <el-form :model="typeForm" ref="typeForm" class="demo-ruleForm">
@@ -338,6 +338,7 @@ export default {
       })
     },
     clearType() {
+      this.typeId = ''
       this.typeForm.context = ''
     },
     // 获取 单条自定义物流信息
