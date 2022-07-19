@@ -145,6 +145,9 @@
                 v-if="ruleForm.status === 0"
                 >{{ $t('编辑') }}</el-button
               >
+              <el-button class="btn-main" v-else @click="editGoodsInfo(scope.$index, scope.row)">{{
+                $t('编辑')
+              }}</el-button>
               <el-button
                 class="btn-deep-blue"
                 v-if="ruleForm.status !== 0"
@@ -501,7 +504,6 @@ export default {
       })
     },
     editDetail(row) {
-      console.log(row)
       dialog({
         type: 'purchaseDetails',
         row
@@ -524,11 +526,17 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods[index] = data
           this.$set(this.ruleForm.goods, index, data)
         }
       )
+    },
+    editGoodsInfo(row) {
+      console.log(row)
+      dialog({
+        type: 'editGoodsInfo',
+        purchase: JSON.parse(JSON.stringify(row))
+      })
     },
     onDelete() {
       this.$request.deletPurchase(this.$route.params.id).then(res => {

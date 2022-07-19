@@ -64,9 +64,9 @@
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" fixed="right" width="265">
           <template slot-scope="scope">
-            <!-- <el-button class="btn-main" @click="getInvite(scope.row.id)">{{
+            <el-button class="btn-main" @click="getInvite(scope.row.id)">{{
               $t('邀请记录')
-            }}</el-button> -->
+            }}</el-button>
             <!-- 编辑 -->
             <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{
               $t('编辑')
@@ -75,11 +75,11 @@
             <el-button class="btn-light-green" @click.stop="editPassword(scope.row.id)">
               {{ $t('修改密码') }}
             </el-button>
-            <!-- <el-button
+            <el-button
               class="btn-deep-purple"
               @click="getQRcode(scope.row.id, scope.row.username)"
               >{{ $t('员工二维码') }}</el-button
-            > -->
+            >
           </template>
         </el-table-column>
       </el-table>

@@ -158,6 +158,7 @@ import addEditAbutment from './addEditAbutment.vue'
 import addEditCategory from './addEditCategory.vue'
 import staffCode from './staffCode.vue'
 import recordLog from './recordLog.vue'
+import editGoodsInfo from './editGoodsInfo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -315,6 +316,7 @@ const addEditAbutmentController = Vue.extend(addEditAbutment)
 const addEditCategoryController = Vue.extend(addEditCategory)
 const staffCodeController = Vue.extend(staffCode)
 const recordLogController = Vue.extend(recordLog)
+const editGoodsInfoController = Vue.extend(editGoodsInfo)
 
 const mixin = {
   data() {
@@ -611,6 +613,13 @@ function initInstance(type) {
     // 邀请记录
     case 'recordLog':
       instance = new recordLogController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 编辑商品信息
+    case 'editGoodsInfo':
+      instance = new editGoodsInfoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -4619,3 +4619,8 @@ exports.inviteUserGroup = (id, groupId) => {
 exports.inviteRecord = id => {
   return $form.get(`admins/${id}/invite-users`)
 }
+
+// 修改商品部分信息
+exports.editPartGoods = (id, params) => {
+  return $form.put(`purchase-orders/${id}/update-goods-part`, params)
+}
