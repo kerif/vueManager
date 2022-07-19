@@ -67,7 +67,11 @@
             {{ scope.row.pack_orders_count }}/{{ scope.row.orders_count }}
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip :formatter="fileData" :label="$t('包含采购单')"> </el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          :formatter="fileData"
+          :label="$t('包含采购单')"
+        ></el-table-column>
         <el-table-column prop="quantity,orders_count" :label="$t('预计分货(商品数/订单)')">
           <template slot-scope="scope">
             {{ scope.row.quantity ? scope.row.quantity : 0 }}/{{ scope.row.orders_count }}
