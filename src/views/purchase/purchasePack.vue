@@ -199,16 +199,16 @@
                             ></el-option>
                           </el-select>
                           <el-input
-                            :placeholder="$t('请输入或扫入商品SKU')"
+                            :placeholder="$t('请输入或扫入条码')"
                             class="flex-1"
                             ref="sku"
                             v-model="sku"
                             @keyup.native.enter="onSku"
                           ></el-input>
                         </div>
-                        <div class="scan-tips align-center">! {{ $t('请输入或扫入商品SKU') }}</div>
+                        <div class="scan-tips align-center">! {{ $t('请输入或扫入条码') }}</div>
                       </el-col>
-                      <el-col :span="8">
+                      <!-- <el-col :span="8">
                         <div class="align-center">
                           <div class="font-bold num-box">
                             <span class="scan-num">{{ scanGoodsNum }}</span>
@@ -216,7 +216,7 @@
                           </div>
                           <div>{{ $t('已打包商品数量') }}</div>
                         </div>
-                      </el-col>
+                      </el-col> -->
                     </el-row>
                   </div>
                   <div style="display: flex; justify-content: flex-end">
@@ -253,12 +253,19 @@
                       <el-col :span="4"
                         ><div>{{ $t('总数') }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <!-- <el-col :span="3"
                         ><div>{{ $t('已装箱') }}</div></el-col
-                      >
+                      > -->
                     </el-row>
                     <div v-for="(item, ind) in skuList" :key="ind">
-                      <el-row :gutter="10" style="margin: 20px 0">
+                      <el-row
+                        :gutter="10"
+                        style="margin: 20px 0"
+                        class="sku-item"
+                        :class="{
+                          all: sku === item.barcode
+                        }"
+                      >
                         <el-col :span="3"
                           ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
                         >
@@ -270,24 +277,49 @@
                               @click="onPic(item.image)"
                             /> </span
                         ></el-col>
-                        <el-col :span="3" class="sku-item"
+                        <el-col
+                          :span="3"
+                          class="sku-item"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
                           ><div>{{ item.barcode }}</div></el-col
                         >
-                        <el-col :span="4" class="sku-item"
+                        <el-col
+                          :span="4"
+                          class="sku-item"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
                           ><div>{{ item.cn_name }}</div></el-col
                         >
-                        <el-col :span="3" class="sku-item"
+                        <el-col
+                          :span="3"
+                          class="sku-item"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
                           ><div v-if="item.color">{{ item.color }}</div>
                           <div v-else>{{ $t('暂无') }}</div>
                         </el-col>
-                        <el-col :span="4"
+                        <el-col
+                          :span="4"
+                          class="sku-item"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
                           ><div class="num-item">
                             {{ item.quantity }}
                           </div></el-col
                         >
-                        <el-col :span="3">{{ item.scanQty }}</el-col>
+                        <!-- <el-col :span="3">{{ item.scanQty }}</el-col> -->
                       </el-row>
-                      <el-row style="background: #f9f9f9; margin: 0 10px">
+                      <el-row
+                        class="pack-number"
+                        :class="{
+                          all: sku === item.barcode
+                        }"
+                      >
                         <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
                           <span style="margin-left: 10px; display: inline-block; width: 20px"
                             >#{{ index + 1 }}</span
@@ -295,6 +327,7 @@
                           <el-input
                             type="number"
                             size="small"
+                            ref="number"
                             v-model="ele.pack_quantity"
                             @blur="checkOut(item, ind)"
                             style="width: 180px; padding: 10px"
@@ -463,9 +496,8 @@ export default {
       } else if (!this.sku.trim()) {
         return this.$message.error(this.$t('请输入条码'))
       }
-      this.skuList.forEach((item, index) => {
+      this.skuList.forEach(item => {
         if (item.barcode === this.sku) {
-          console.log(index)
           item.scanQty++
           item.packData[this.boxNumber].pack_quantity++
         }
@@ -950,13 +982,22 @@ export default {
     margin: 0 2px;
     border: 1px solid #efefef;
     &.all {
-      border-color: #3da969;
-      background-color: #3da969;
+      border-color: #3540a5;
+      background-color: #3540a5;
       color: #fff;
     }
     &.wait {
       border-color: #ff9933;
       background-color: #ff9933;
+    }
+  }
+  .pack-number {
+    background: #f9f9f9;
+    margin: 0 10px;
+    &.all {
+      border-color: #3540a5;
+      background-color: #3540a5;
+      color: #fff;
     }
   }
 }

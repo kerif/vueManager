@@ -221,8 +221,12 @@ export default {
         this.$message.error(this.$t('请确认数据是否保存'))
       }
     },
-    onSku() {
+    onSku(barcode) {
+      console.log(barcode)
       if (this.num && this.barcode) {
+        let element = document.getElementById(barcode)
+        console.log(element)
+        element.scrollIntoView()
         this.orderList.forEach(item => {
           if (item.id === this.num) {
             item.goods.forEach(ele => {
@@ -270,6 +274,7 @@ export default {
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
     changeVal(value) {
+      console.log(value)
       let toElement = document.getElementById(value)
       toElement.scrollIntoView()
     },
