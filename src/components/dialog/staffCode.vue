@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('员工二维码')" :visible.sync="show" @close="clear">
+  <el-dialog :title="$t('员工二维码')" :visible.sync="show" width="30%" @close="clear">
     <el-form :model="ruleForm">
       <el-form-item :label="$t('新客户归属客户组')">
         <el-select v-model="ruleForm.invite_user_group_id" clearable>
@@ -51,19 +51,19 @@ export default {
       this.getUserGroup()
     },
     getUserGroup() {
-      // this.$request.getUserGroup().then(res => {
-      //   if (res.ret) {
-      //     this.groupList = res.data
-      //   }
-      // })
+      this.$request.getUserGroup().then(res => {
+        if (res.ret) {
+          this.groupList = res.data
+        }
+      })
     },
     getQRCode() {
-      // this.$request.inviteCode(this.id).then(res => {
-      //   if (res.ret) {
-      //     this.code = res.data.invite_code
-      //     this.ruleForm.invite_user_group_id = res.data.invite_user_group_id
-      //   }
-      // })
+      this.$request.inviteCode(this.id).then(res => {
+        if (res.ret) {
+          this.code = res.data.invite_code
+          this.ruleForm.invite_user_group_id = res.data.invite_user_group_id
+        }
+      })
     },
     uploadQRCode() {
       if (this.code) {
@@ -77,22 +77,22 @@ export default {
       }
     },
     onSubmit() {
-      // let groupId = this.ruleForm.invite_user_group_id
-      // this.$request.inviteUserGroup(this.id, groupId).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     this.show = false
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
+      let groupId = this.ruleForm.invite_user_group_id
+      this.$request.inviteUserGroup(this.id, groupId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.show = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     clear() {}
   }

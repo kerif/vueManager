@@ -65,12 +65,12 @@
         <p>{{ $t('系统有效期') }}：{{ form.expired_at }}</p>
         <p>{{ $t('所属员工组') }}：{{ form.group_name }}</p>
         <p>{{ $t('uuid') }}：{{ form.uuid }}</p>
-        <!-- <div>
+        <div>
           {{ $t('员工二维码') }}:
           <div style="margin-left: 80px">
             <img class="img" :src="form.invite_code" />
           </div>
-        </div> -->
+        </div>
         <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
       </el-popover>
       <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
@@ -119,7 +119,7 @@ export default {
           this.form.expired_at = res.data.expired_at
           this.form.group_name = res.data.group_name
           this.form.uuid = res.data.uuid
-          // this.form.invite_code = `${this.$baseUrl.IMAGE_URL}${res.data.invite_code}`
+          this.form.invite_code = `${this.$baseUrl.IMAGE_URL}${res.data.invite_code}`
         }
       })
     },

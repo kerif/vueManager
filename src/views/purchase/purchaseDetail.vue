@@ -120,6 +120,9 @@
         </template>
       </purchase-info>
     </div>
+    <div class="export-btn">
+      <el-button class="btn-light-green" @click="exportTable">{{ $t('导出明细表') }}</el-button>
+    </div>
     <div style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
@@ -398,6 +401,22 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
+    exportTable() {
+      this.$request.exportPartList(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     getWarehouse() {
       this.$request.getSimpleWarehouse().then(res => {
         this.agentData = res.data
@@ -634,6 +653,9 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .export-btn {
+    margin-top: 20px;
   }
 }
 </style>

@@ -1087,17 +1087,6 @@ export default {
       declare: {},
       videoUrl: [],
       picking_divide_order_id: ''
-      // rules: {
-      //   receiver_name: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   timezone: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   phone: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   countryList: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   city: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   postcode: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   street: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   door_no: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }],
-      //   email: [{ required: true, message: this.$t('请输入姓名'), trigger: 'blur' }]
-      // }
     }
   },
   created() {
@@ -1638,7 +1627,7 @@ export default {
       this.boxDialog = true
     },
     getPurchaseDetail() {
-      this.$request.transportGoodList(this.$route.params.id).then(res => {
+      this.$request.transportGoodList(this.picking_divide_order_id).then(res => {
         console.log(res)
       })
     },

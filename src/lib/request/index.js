@@ -4624,3 +4624,8 @@ exports.inviteRecord = id => {
 exports.editPartGoods = (id, params) => {
   return $form.put(`purchase-orders/${id}/update-goods-part`, params)
 }
+
+// 采购 导出明细表
+exports.exportPartList = id => {
+  return $form.post(`purchase-orders/${id}/export-details`)
+}
