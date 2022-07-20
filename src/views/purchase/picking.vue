@@ -73,12 +73,7 @@
         </el-col>
       </el-row>
       <div class="order-list">
-        <div
-          class="order-item flex-item"
-          :id="item.id"
-          v-for="(item, index) in orderList"
-          :key="index"
-        >
+        <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
           <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
             <div class="font-bold index-label">#{{ item.number }}</div>
@@ -221,12 +216,11 @@ export default {
         this.$message.error(this.$t('请确认数据是否保存'))
       }
     },
-    onSku(barcode) {
-      console.log(barcode)
+    onSku() {
       if (this.num && this.barcode) {
-        let element = document.getElementById(barcode)
-        console.log(element)
-        element.scrollIntoView()
+        // let element = document.getElementById(barcode)
+        // console.log(element)
+        // element.scrollIntoView()
         this.orderList.forEach(item => {
           if (item.id === this.num) {
             item.goods.forEach(ele => {

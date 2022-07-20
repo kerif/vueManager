@@ -189,7 +189,7 @@
                             class="flex-1"
                             ref="sku"
                             v-model="sku"
-                            @keyup.native.enter="onSku"
+                            @keyup.native.enter="onSku(sku)"
                           ></el-input>
                         </div>
                         <div class="scan-tips align-center">! {{ $t('请输入或扫入条码') }}</div>
@@ -244,12 +244,11 @@
                       </el-col>
                     </el-row>
                     <div class="line"></div>
-                    <div v-for="(item, ind) in skuList" :key="ind">
+                    <div v-for="(item, ind) in skuList" :key="ind" :id="item.barcode">
                       <el-row
                         :gutter="10"
                         :span="24"
                         style="margin: 20px 0"
-                        class="sku-item"
                         :class="{
                           all: sku === item.barcode
                         }"
@@ -267,7 +266,6 @@
                         ></el-col>
                         <el-col
                           :span="3"
-                          class="sku-item"
                           :class="{
                             all: sku === item.barcode
                           }"
@@ -275,7 +273,6 @@
                         >
                         <el-col
                           :span="4"
-                          class="sku-item"
                           :class="{
                             all: sku === item.barcode
                           }"
@@ -283,7 +280,6 @@
                         >
                         <el-col
                           :span="3"
-                          class="sku-item"
                           :class="{
                             all: sku === item.barcode
                           }"
@@ -292,7 +288,6 @@
                         </el-col>
                         <el-col
                           :span="4"
-                          class="sku-item"
                           :class="{
                             all: sku === item.barcode
                           }"
@@ -471,12 +466,15 @@ export default {
       })
     },
     // 扫入条码
-    onSku() {
+    onSku(sku) {
+      console.log(sku)
       if (this.boxNumber === '') {
         return this.$message.error(this.$t('请选择箱号'))
       } else if (!this.sku.trim()) {
         return this.$message.error(this.$t('请输入条码'))
       }
+      let toElement = document.getElementById(sku)
+      toElement.scrollIntoView()
       this.skuList.forEach(item => {
         if (item.barcode === this.sku) {
           item.scanQty++
@@ -941,6 +939,10 @@ export default {
     border-bottom: 2px solid #eee;
     padding: 10px 0;
     margin: 0 10px;
+  }
+  .all {
+    color: #3540a5;
+    font-weight: bold;
   }
   // .sku-item {
   //   height: 30px;
