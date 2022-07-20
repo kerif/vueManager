@@ -168,20 +168,6 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <!-- <div style="display: flex; justify-content: space-between"> -->
-                  <!-- <div class="flex-item color-item">
-                      <div class="color-tip color-green"></div>
-                      <div>{{ $t('绿色为已装箱数量等于总数') }}</div>
-                    </div>
-                    <div class="flex-item color-item">
-                      <div class="color-tip color-orange"></div>
-                      <div>{{ $t('黄色为已装箱数量不等于总数') }}</div>
-                    </div>
-                    <div class="flex-item color-item">
-                      <div class="color-tip"></div>
-                      <div>{{ $t('白色为已装箱数量为0') }}</div>
-                    </div>
-                    <div> -->
                   <div class="scan-box">
                     <el-row type="flex">
                       <el-col :span="16">
@@ -257,6 +243,7 @@
                         <div>{{ $t('已装箱') }}</div>
                       </el-col>
                     </el-row>
+                    <div class="line"></div>
                     <div v-for="(item, ind) in skuList" :key="ind">
                       <el-row
                         :gutter="10"
@@ -313,21 +300,13 @@
                             {{ item.quantity }}
                           </div></el-col
                         >
-                        <el-col :span="3">
+                        <el-col :span="3" class="num-item">
                           {{ item.scanQty }}
                         </el-col>
                       </el-row>
-                      <el-row>
+                      <el-row class="box-item">
                         <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
-                          <span
-                            style="
-                              margin-left: 10px;
-                              display: inline-block;
-                              width: 20px;
-                              font-weight: bold;
-                            "
-                            >#{{ index + 1 }}</span
-                          >
+                          <span class="box-number">#{{ index + 1 }}</span>
                           <el-input
                             type="number"
                             size="small"
@@ -369,7 +348,6 @@
   </div>
 </template>
 <script>
-// import { Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -446,7 +424,6 @@ export default {
         } else if (num < quantity) {
           return '部分装箱'
         } else if (num > quantity) {
-          // Message.error('装箱数量大于总数')
           return '装箱数量大于总数'
         }
       }
@@ -493,7 +470,7 @@ export default {
         this.propList = res.data
       })
     },
-    // 扫入 sku
+    // 扫入条码
     onSku() {
       if (this.boxNumber === '') {
         return this.$message.error(this.$t('请选择箱号'))
@@ -555,15 +532,11 @@ export default {
       })
     },
     checkOut(item, index) {
-      console.log(item)
       item.scanQty = this.skuList[index].packData.reduce((pre, cur) => {
         return pre + Number(cur.pack_quantity)
       }, 0)
-
-      console.log(item.scanQty)
     },
     onOrder(item, index) {
-      console.log(item, index)
       this.idx = index
       this.status = item.status
       this.order = this.orderList.filter(ele => ele.id === item.id)
@@ -636,9 +609,6 @@ export default {
           box.goods.forEach(goods => {
             tempList.forEach(ele => {
               if (ele.picking_order_goods_id === goods.id) {
-                // ele.packData.push({
-                //   pack_quantity: goods.pivot.quantity ? goods.pivot.quantity : 0
-                // })
                 ele.packData[index].pack_quantity = goods.pivot.quantity
                 ele.scanQty += ele.packData[index].pack_quantity
               }
@@ -742,25 +712,6 @@ export default {
     }
   },
   computed: {
-    // isBtns() {
-    // let isBtn = false
-    // this.skuList.forEach(item => {
-    //   if (item.packData) {
-    //     let num = item.packData.reduce(function (acr, pcc) {
-    //       if (!pcc.pack_quantity) {
-    //         return acr
-    //       }
-    //       return acr + Number(pcc.pack_quantity)
-    //     }, 0)
-    //     if (!num || num > item.quantity || num < item.quantity) {
-    //       isBtn = true
-    //     }
-    //   } else {
-    //     isBtn = true
-    //   }
-    // })
-    // return isBtn
-    // },
     totalGoodsNum() {
       return this.skuList.reduce((pre, cur) => {
         return pre + cur.quantity
@@ -895,9 +846,6 @@ export default {
     min-width: 70px;
     margin-right: 10px;
   }
-  .label-tips {
-    font-size: 14px;
-  }
   .radio-item {
     margin-bottom: 20px;
   }
@@ -912,6 +860,12 @@ export default {
     text-align: right;
     padding: 20px;
     border-top: 1px solid #eff1f2;
+  }
+  .box-number {
+    margin-left: 10px;
+    display: inline-block;
+    width: 20px;
+    font-weight: bold;
   }
   .total-value {
     font-size: 48px;
@@ -974,9 +928,19 @@ export default {
       background-color: #ff9933;
     }
   }
+  .box-item {
+    background: #eff1f2;
+    border-radius: 5px;
+    margin: 0 10px;
+  }
   .btn-red {
     cursor: pointer;
     color: red;
+  }
+  .line {
+    border-bottom: 2px solid #eee;
+    padding: 10px 0;
+    margin: 0 10px;
   }
   // .sku-item {
   //   height: 30px;
