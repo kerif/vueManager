@@ -1180,7 +1180,7 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
-        if (res.data.picking_divide_order_id !== '') {
+        if (res.data.picking_divide_order_id) {
           this.picking_divide_order_id = res.data.picking_divide_order_id
           this.getPurchaseDetail()
         }
@@ -1627,7 +1627,24 @@ export default {
     },
     getPurchaseDetail() {
       this.$request.transportGoodList(this.picking_divide_order_id).then(res => {
-        console.log(res)
+        this.productData = res.data.map(item => {
+          const name = item.p_goods.cn_name
+          const qty = item.p_goods.quantity
+          const material = item.p_goods.material
+          const status_name = '无'
+          const images = [item.p_goods.image]
+          const unit_price = 0
+          const express_num = '无'
+          return {
+            name,
+            qty,
+            material,
+            status_name,
+            images,
+            unit_price,
+            express_num
+          }
+        })
       })
     },
     // 编辑

@@ -218,6 +218,7 @@
                       border-radius: 5px;
                       text-align: center;
                       overflow: auto;
+                      height: 500px;
                     "
                   >
                     <el-row :gutter="10">
@@ -474,7 +475,7 @@ export default {
         return this.$message.error(this.$t('请输入条码'))
       }
       let toElement = document.getElementById(sku)
-      toElement.scrollIntoView()
+      toElement.scrollIntoView(true)
       this.skuList.forEach(item => {
         if (item.barcode === this.sku) {
           item.scanQty++
