@@ -1182,7 +1182,6 @@ export default {
         this.localization = res.localization
         if (res.data.picking_divide_order_id !== '') {
           this.picking_divide_order_id = res.data.picking_divide_order_id
-          console.log(this.picking_divide_order_id)
           this.getPurchaseDetail()
         }
         if (res.data.pre_declare) {
