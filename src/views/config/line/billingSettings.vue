@@ -718,6 +718,10 @@ export default {
         {
           id: 1,
           name: this.$t('多箱单独计算价格后相加为总价')
+        },
+        {
+          id: 3,
+          name: this.$t('多箱单独计算计费重量后向上取值计算价格')
         }
       ],
       localization: {},
