@@ -4629,3 +4629,8 @@ exports.editPartGoods = (id, params) => {
 exports.exportPartList = id => {
   return $form.post(`purchase-orders/${id}/export-details`)
 }
+
+// 员工二维码
+exports.employeeCode = (id, config) => {
+  return $form.get(`admins/${id}/invite-code/data`, config)
+}

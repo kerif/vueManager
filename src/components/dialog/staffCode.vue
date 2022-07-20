@@ -66,15 +66,13 @@ export default {
       })
     },
     uploadQRCode() {
-      if (this.code) {
-        // let url = `${this.$baseUrl.IMAGE_URL}${this.code}`
-        // let a = document.createElement('a')
-        // a.href = url
-        // a.download = 'pic'
-        // a.click()
-        // window.open(`${this.$baseUrl.IMAGE_URL}${this.code}`)
-        downloadStreamFile(`${this.$baseUrl.IMAGE_URL}${this.code}`, '二维码', 'jpg')
+      let param = {
+        responseType: 'blob'
       }
+      this.$request.employeeCode(this.id, param).then(res => {
+        console.log(res)
+        downloadStreamFile(res, 'pic', 'jpg')
+      })
     },
     onSubmit() {
       let groupId = this.ruleForm.invite_user_group_id
