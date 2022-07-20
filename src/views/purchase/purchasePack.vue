@@ -208,7 +208,7 @@
                         </div>
                         <div class="scan-tips align-center">! {{ $t('请输入或扫入条码') }}</div>
                       </el-col>
-                      <!-- <el-col :span="8">
+                      <el-col :span="8">
                         <div class="align-center">
                           <div class="font-bold num-box">
                             <span class="scan-num">{{ scanGoodsNum }}</span>
@@ -216,7 +216,7 @@
                           </div>
                           <div>{{ $t('已打包商品数量') }}</div>
                         </div>
-                      </el-col> -->
+                      </el-col>
                     </el-row>
                   </div>
                   <div style="display: flex; justify-content: flex-end">
@@ -253,13 +253,14 @@
                       <el-col :span="4"
                         ><div>{{ $t('总数') }}</div></el-col
                       >
-                      <!-- <el-col :span="3"
-                        ><div>{{ $t('已装箱') }}</div></el-col
-                      > -->
+                      <el-col :span="3">
+                        <div>{{ $t('已装箱') }}</div>
+                      </el-col>
                     </el-row>
                     <div v-for="(item, ind) in skuList" :key="ind">
                       <el-row
                         :gutter="10"
+                        :span="24"
                         style="margin: 20px 0"
                         class="sku-item"
                         :class="{
@@ -312,16 +313,19 @@
                             {{ item.quantity }}
                           </div></el-col
                         >
-                        <!-- <el-col :span="3">{{ item.scanQty }}</el-col> -->
+                        <el-col :span="3">
+                          {{ item.scanQty }}
+                        </el-col>
                       </el-row>
-                      <el-row
-                        class="pack-number"
-                        :class="{
-                          all: sku === item.barcode
-                        }"
-                      >
+                      <el-row>
                         <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
-                          <span style="margin-left: 10px; display: inline-block; width: 20px"
+                          <span
+                            style="
+                              margin-left: 10px;
+                              display: inline-block;
+                              width: 20px;
+                              font-weight: bold;
+                            "
                             >#{{ index + 1 }}</span
                           >
                           <el-input
@@ -552,7 +556,6 @@ export default {
     },
     checkOut(item, index) {
       console.log(item)
-      console.log(this.skuList[index].packData.length)
       item.scanQty = this.skuList[index].packData.reduce((pre, cur) => {
         return pre + Number(cur.pack_quantity)
       }, 0)
@@ -637,6 +640,7 @@ export default {
                 //   pack_quantity: goods.pivot.quantity ? goods.pivot.quantity : 0
                 // })
                 ele.packData[index].pack_quantity = goods.pivot.quantity
+                ele.scanQty += ele.packData[index].pack_quantity
               }
             })
           })
@@ -764,7 +768,7 @@ export default {
     },
     scanGoodsNum() {
       return this.skuList.reduce((pre, cur) => {
-        return pre + cur.scanQty
+        return pre + (cur.scanQty || 0)
       }, 0)
     }
   },
@@ -974,31 +978,22 @@ export default {
     cursor: pointer;
     color: red;
   }
-  .sku-item {
-    height: 30px;
-    line-height: 30px;
-    display: inline-block;
-    padding: 0 25px;
-    margin: 0 2px;
-    border: 1px solid #efefef;
-    &.all {
-      border-color: #3540a5;
-      background-color: #3540a5;
-      color: #fff;
-    }
-    &.wait {
-      border-color: #ff9933;
-      background-color: #ff9933;
-    }
-  }
-  .pack-number {
-    background: #f9f9f9;
-    margin: 0 10px;
-    &.all {
-      border-color: #3540a5;
-      background-color: #3540a5;
-      color: #fff;
-    }
-  }
+  // .sku-item {
+  //   height: 30px;
+  //   line-height: 30px;
+  //   display: inline-block;
+  //   padding: 0 25px;
+  //   margin: 0 2px;
+  //   border: 1px solid #efefef;
+  //   &.all {
+  //     border-color: #3540a5;
+  //     background-color: #3540a5;
+  //     color: #fff;
+  //   }
+  //   &.wait {
+  //     border-color: #ff9933;
+  //     background-color: #ff9933;
+  //   }
+  // }
 }
 </style>
