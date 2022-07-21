@@ -952,15 +952,6 @@ export default {
   //   padding: 0 25px;
   //   margin: 0 2px;
   //   border: 1px solid #efefef;
-  //   &.all {
-  //     border-color: #3540a5;
-  //     background-color: #3540a5;
-  //     color: #fff;
-  //   }
-  //   &.wait {
-  //     border-color: #ff9933;
-  //     background-color: #ff9933;
-  //   }
   // }
 }
 </style>

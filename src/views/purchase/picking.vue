@@ -32,9 +32,9 @@
               class="ipt"
               v-model="barcode"
               ref="barcode"
-              @keyup.native.enter="onSku"
+              @keyup.native.enter="onSku(barcode)"
             />
-            <el-button type="primary" size="small" class="confirm-btn" @click="onSku">{{
+            <el-button type="primary" size="small" class="confirm-btn" @click="onSku(barcode)">{{
               $t('确认')
             }}</el-button>
           </div>
@@ -73,7 +73,12 @@
         </el-col>
       </el-row>
       <div class="order-list">
-        <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
+        <div
+          class="order-item flex-item"
+          v-for="(item, index) in orderList"
+          :key="index"
+          :id="item.id"
+        >
           <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
             <div class="font-bold index-label">#{{ item.number }}</div>
@@ -90,7 +95,12 @@
               </el-row>
             </el-row>
             <el-row :gutter="30">
-              <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
+              <el-row
+                class="sku-row"
+                v-for="ele in item.goods"
+                :key="ele.id"
+                :id="ele.p_goods.barcode"
+              >
                 <el-col :span="3" :offset="1">
                   <span v-if="ele.p_goods">
                     <img
@@ -105,6 +115,7 @@
                     class="sku-item"
                     :class="{
                       all: ele.quantity === Number(ele.picking_quantity),
+                      pick: barcode === ele.p_goods.barcode,
                       wait:
                         (Number(ele.picking_quantity) < ele.quantity ||
                           Number(ele.picking_quantity) > ele.quantity) &&
@@ -118,6 +129,7 @@
                     class="sku-item"
                     :class="{
                       all: ele.quantity === Number(ele.picking_quantity),
+                      pick: barcode === ele.p_goods.barcode,
                       wait:
                         (Number(ele.picking_quantity) < ele.quantity ||
                           Number(ele.picking_quantity) > ele.quantity) &&
@@ -131,6 +143,7 @@
                   class="sku-item"
                   :class="{
                     all: ele.quantity === Number(ele.picking_quantity),
+                    pick: barcode === ele.p_goods.barcode,
                     wait:
                       (Number(ele.picking_quantity) < ele.quantity ||
                         Number(ele.picking_quantity) > ele.quantity) &&
@@ -216,11 +229,12 @@ export default {
         this.$message.error(this.$t('请确认数据是否保存'))
       }
     },
-    onSku() {
+    onSku(code) {
+      console.log(code)
       if (this.num && this.barcode) {
-        // let element = document.getElementById(barcode)
-        // console.log(element)
-        // element.scrollIntoView()
+        let element = document.getElementById(code)
+        console.log(element)
+        element.scrollIntoView()
         this.orderList.forEach(item => {
           if (item.id === this.num) {
             item.goods.forEach(ele => {
@@ -268,7 +282,6 @@ export default {
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
     changeVal(value) {
-      console.log(value)
       let toElement = document.getElementById(value)
       toElement.scrollIntoView()
     },
@@ -519,6 +532,10 @@ export default {
       border-color: #ff9933;
       background-color: #ff9933;
     }
+  }
+  .pick {
+    font-weight: bold;
+    color: #3540a5;
   }
 }
 </style>
