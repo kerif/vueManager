@@ -1633,7 +1633,7 @@ export default {
           const material = item.p_goods.material
           const status_name = '无'
           const images = [item.p_goods.image]
-          const unit_price = 0
+          const unit_price = item.p_goods.purchase_price
           const express_num = '无'
           return {
             name,
