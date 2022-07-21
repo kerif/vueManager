@@ -326,24 +326,30 @@ export default {
           return params.goods
         }
       })
-      this.$request.purchasePick(this.orderId, params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.$router.push({
-            name: 'transshipmentBill',
-            query: { activeName: '2' }
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+      this.$confirm(this.$t('您确认拣货完成吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.purchasePick(this.orderId, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.$router.push({
+              name: 'transshipmentBill',
+              query: { activeName: '2' }
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   },

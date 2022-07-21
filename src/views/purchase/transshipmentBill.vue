@@ -118,7 +118,7 @@
             >
             <el-button
               class="btn-deep-blue"
-              v-if="['2'].includes(activeName)"
+              v-if="['2', '3'].includes(activeName)"
               @click="onPack(scope.row.sn)"
               >{{ $t('开始打包') }}</el-button
             >

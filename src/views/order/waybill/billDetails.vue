@@ -1629,7 +1629,7 @@ export default {
       this.$request.transportGoodList(this.picking_divide_order_id).then(res => {
         this.productData = res.data.map(item => {
           const name = item.p_goods.cn_name
-          const qty = item.p_goods.quantity
+          const qty = item.pack_quantity
           const material = item.p_goods.material
           const status_name = '无'
           const images = [item.p_goods.image]
