@@ -134,7 +134,9 @@
           <el-table-column prop="material" :label="$t('材质')"></el-table-column>
           <el-table-column prop="casing" :label="$t('包装')"></el-table-column>
           <el-table-column prop="color" :label="$t('颜色')"></el-table-column>
-          <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
+          <el-table-column prop="purchase_price" :label="$t('物品单价')">
+            <template slot-scope="scope"> {{ scope.row.purchase_price }}</template>
+          </el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
@@ -260,8 +262,8 @@ export default {
           type: 'distributeScheme',
           mode
         },
-        goodsData => {
-          goodsData = goodsData.map(item => {
+        goodsList => {
+          let goodsData = goodsList.map(item => {
             return {
               ...item,
               image: item.image ? item.image.path : ''
@@ -271,10 +273,10 @@ export default {
             let goods = this.ruleForm.goods.map(item => {
               return item.barcode
             })
-            if (goods.includes(goodsData[i].barcode)) {
-              this.ruleForm.goods.splice(i, 1, goodsData[i])
+            if (!goods.includes(goodsData[i].barcode)) {
+              this.ruleForm.goods.push(goodsData[i])
             } else {
-              this.ruleForm.goods.push(...goodsData)
+              this.ruleForm.goods.splice(i, 1, goodsData[i])
             }
           }
         }

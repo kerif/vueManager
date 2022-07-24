@@ -236,7 +236,7 @@ export default {
             this.show = false
           } else {
             this.show = false
-            this.success(params)
+            this.success(JSON.parse(JSON.stringify(params)))
           }
         } else {
           return false

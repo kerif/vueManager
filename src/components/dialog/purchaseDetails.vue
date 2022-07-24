@@ -9,6 +9,18 @@
     <h3>{{ $t('基础信息') }}</h3>
     <el-row :gutter="20" class="container-center">
       <el-col :span="10"
+        ><span class="leftWidth">{{ $t('商品编号') }}</span>
+        <span>{{ row.number }}</span>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="container-center">
+      <el-col :span="10"
+        ><span class="leftWidth">barcode</span>
+        <span>{{ row.barcode }}</span>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="container-center">
+      <el-col :span="10"
         ><span class="leftWidth">{{ $t('中文名称') }}</span> <span>{{ row.cn_name }}</span></el-col
       >
     </el-row>
@@ -20,21 +32,21 @@
     </el-row>
     <el-row :gutter="20" class="container-center">
       <el-col :span="10"
-        ><span class="leftWidth">{{ $t('品牌') }}</span>
-        <span>{{ row.brand }}</span>
+        ><span class="leftWidth">{{ $t('材质') }}</span>
+        <span>{{ row.material }}</span>
       </el-col>
     </el-row>
     <el-row :gutter="20" class="container-center">
       <el-col :span="10"
-        ><span class="leftWidth">{{ $t('商品分类') }}</span>
-        <span>{{ row.category_name }}</span></el-col
-      >
+        ><span class="leftWidth">{{ $t('包装') }}</span>
+        <span>{{ row.casing }}</span>
+      </el-col>
     </el-row>
     <el-row :gutter="20" class="container-center">
       <el-col :span="10"
-        ><span class="leftWidth">{{ $t('商品属性') }}</span>
-        <span>{{ row.prop_name }}</span></el-col
-      >
+        ><span class="leftWidth">{{ $t('颜色') }}</span>
+        <span>{{ row.color }}</span>
+      </el-col>
     </el-row>
     <el-row :gutter="20" class="container-center">
       <el-col :span="10"
@@ -55,38 +67,10 @@
       </el-col>
     </el-row>
     <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
-        ><span class="leftWidth">{{ $t('箱规') }}</span>
-        <span>{{ row.box_spec }}</span>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
-        ><span class="leftWidth">{{ $t('条码') }}</span>
-        <span>{{ row.barcode }}</span>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="container-center">
       <el-col :span="12"
         ><span class="leftWidth">{{ $t('物品照片') }}</span>
         <img class="image" :src="$baseUrl.IMAGE_URL + row.image" @click="checkImg(row.image)" />
       </el-col>
-    </el-row>
-    <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
-        ><span class="leftWidth">{{ $t('供应商') }}</span>
-        <span>{{ row.distributor }}</span></el-col
-      >
-    </el-row>
-    <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
-        ><span class="leftWidth">{{ $t('HS CODE') }}</span> <span>{{ row.hs_code }}</span></el-col
-      >
-    </el-row>
-    <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
-        ><span class="leftWidth">{{ $t('SKU') }}</span> <span>{{ row.sku }}</span></el-col
-      >
     </el-row>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
