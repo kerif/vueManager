@@ -84,8 +84,12 @@
                 <i class="el-icon-plus"> </i>
               </el-upload>
             </div>
-            <i class="el-icon-circle-plus-outline" @click="addContent"></i>
-            <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
+            <i class="el-icon-circle-plus-outline cursor" @click="addContent"></i>
+            <i
+              class="el-icon-remove-outline cursor"
+              @click="deleteContent(item)"
+              v-if="index !== 0"
+            ></i>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -137,7 +141,12 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
-    <div slot="footer" v-if="activeName !== '1'">
+    <div class="foot-btn" v-if="activeName === '2'">
+      <div>{{ $t('转义符号') }}:</div>
+      <p v-text="'{{user_id}} = ' + $t('用户id')"></p>
+      <p v-text="'{{user_name}} = ' + $t('用户名')"></p>
+    </div>
+    <div slot="footer" v-if="activeName !== '1'" class="foot-btn reply-btn">
       <el-button style="background-color: #3540a5; color: #fff" @click="save">{{
         $t('保存')
       }}</el-button>
@@ -198,7 +207,7 @@ export default {
         return this.$message.error(this.$t('被关注回复最多只能同时发两条消息'))
       }
       this.replyTypeList.push({
-        form: '',
+        form: 1,
         content: '',
         image: ''
       })
@@ -222,7 +231,6 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            // this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -243,7 +251,6 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            // this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -278,9 +285,6 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          // res.data.forEach(item => {
-          //   this.replyList[0].image = item.path
-          // })
           this.replyTypeList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {
@@ -311,9 +315,6 @@ export default {
       let file = item.file
       this.onUploadImg(file).then(res => {
         if (res.ret) {
-          // res.data.forEach(item => {
-          //   this.replyList[0].image = item.path
-          // })
           this.contentList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {
@@ -466,6 +467,15 @@ export default {
   }
   .el-table td div {
     text-align: center;
+  }
+  .cursor {
+    cursor: pointer;
+  }
+  .foot-btn {
+    margin-left: 55px;
+  }
+  .reply-btn {
+    margin-top: 30px;
   }
   .operat-box {
     position: absolute;
