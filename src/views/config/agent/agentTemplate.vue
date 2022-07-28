@@ -183,8 +183,9 @@ export default {
     },
     // 添加计佣方式
     addCommission() {
-      this.withdrawVisible = true
-      this.getList()
+      // this.withdrawVisible = true
+      // this.getList()
+      this.$router.push({ name: 'agentTemplateAdd' })
       // this.$request.commissionData(0, {
       //   page: this.page_params.page,
       //   size: this.page_params.size
@@ -198,10 +199,11 @@ export default {
     },
     // 编辑 计佣方式
     editCommission(id) {
-      this.setId = id
-      this.withdrawVisible = true
-      this.getList()
-      this.getWithdraw()
+      // this.setId = id
+      // this.withdrawVisible = true
+      // this.getList()
+      // this.getWithdraw()
+      this.$router.push({ name: 'agentTemplateEdit', params: { id: id } })
     },
     // 获取列表数据
     getList() {
@@ -251,13 +253,16 @@ export default {
       })
       if (this.setId) {
         this.$request
-          .commissionUpdate(this.setId, {
-            name: this.form.name,
-            value: this.form.value,
-            type: this.form.type,
-            mode: Number(this.form.mode),
-            rules: arr
-          })
+          .commissionUpdate(
+            {
+              name: this.form.name,
+              value: this.form.value,
+              type: this.form.type,
+              mode: Number(this.form.mode),
+              rules: arr
+            },
+            this.setId
+          )
           .then(res => {
             if (res.ret) {
               this.$notify({

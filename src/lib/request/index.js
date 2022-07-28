@@ -978,16 +978,24 @@ exports.commissionSet = id => {
 }
 // 计佣模版配置 获取表格详情
 exports.commissionData = (id, params) => {
-  return $form.get(`agents/commission-templates/${id}/lines`, { params })
+  return $form.get(`agents/commission-templates/configs/lines`, { params })
 }
 
 // 计佣模版配置 更新单条数据
-exports.commissionUpdate = (id, params) => {
-  return $form.put(`agents/commission-templates/${id}`, params)
+exports.commissionUpdate = (params, id) => {
+  return $json.put(`agents/commission-templates/${id}`, params)
 }
 // 计佣模版配置 新建单条数据
 exports.commissionAdd = params => {
-  return $form.post(`agents/commission-templates`, params)
+  return $json.post(`agents/commission-templates`, params)
+}
+// 计佣模板 每级配置
+exports.agentCommissionConfigs = (id, level) => {
+  return $json.get(`agents/commission-templates/${id}/configs/${level}`)
+}
+// 计佣模板 佣金试算
+exports.agentCommissionCounter = params => {
+  return $json.post('agents/commission-templates/counter', params)
 }
 // 计佣模版配置 删除单条数据
 exports.commissionDelete = id => {
