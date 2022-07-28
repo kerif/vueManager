@@ -312,7 +312,11 @@
         prop="last_login_at"
         width="155"
       ></el-table-column>
-      <el-table-column :label="$t('邀请人')" prop="invitor"></el-table-column>
+      <el-table-column :label="$t('邀请人')" prop="invitor">
+        <template slot-scope="scope">
+          <div>{{ scope.row.invitor }}<span v-if="is_agent_invite === 1">(代理)</span></div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
