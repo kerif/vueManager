@@ -103,14 +103,23 @@
           @click="batchNotify"
           >{{ $t('批量发送通知') }}</el-button
         >
-        <el-button
-          class="btn-deep-purple"
-          v-if="['3', '4', '5'].includes(activeName)"
-          size="small"
-          @click="uploadInvoice(selectIDs)"
-        >
-          {{ $t('导出发票') }}
-        </el-button>
+        <el-dropdown style="margin-left: 10px">
+          <el-button
+            class="btn-deep-purple"
+            v-if="['3', '4', '5'].includes(activeName)"
+            size="small"
+          >
+            {{ $t('导出发票') }}
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 1)">{{
+              $t('模板一')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 2)">{{
+              $t('模板二')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <!-- <div
         style="margin-left: 5px"
@@ -2224,7 +2233,7 @@ export default {
       )
     },
     // 导出发票
-    uploadInvoice(ids) {
+    uploadInvoice(ids, type) {
       if (!ids.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -2235,7 +2244,8 @@ export default {
       }).then(() => {
         this.$request
           .uploadOrder({
-            ids
+            ids,
+            type
           })
           .then(res => {
             if (res.ret) {

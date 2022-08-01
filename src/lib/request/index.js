@@ -3575,8 +3575,8 @@ exports.uploadExcel = (ids, params) => {
   return $form.post(`shipments/order-export-batch`, ids, params)
 }
 // 订单列表 导出发票
-exports.uploadOrder = ids => {
-  return $form.post('orders/invoices', ids)
+exports.uploadOrder = (ids, params) => {
+  return $form.post('orders/invoices', ids, params)
 }
 // 订单列表 导出清单
 exports.orderExport = params => {
