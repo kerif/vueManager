@@ -1379,7 +1379,14 @@ export default {
         }
         switch (this.activeName) {
           case '0':
-            if ([...column].includes(item.id)) {
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if (
+              [...column, 'updated_at', 'packed_at', 'signed_at', 'exceptional_at'].includes(
+                item.id
+              )
+            ) {
               this.checkColumn.push(item)
             }
             break
