@@ -16,15 +16,11 @@
             <el-form-item :label="$t('服务')" class="service-style">
               <el-checkbox-group v-model="user.chosen_services">
                 <div v-for="item in updateService" :key="item.id" class="service">
-                  <!-- <div class="serviceLeft"> -->
                   <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
                   <el-tooltip effect="dark" :content="item.remark" placement="top">
                     <span class="el-icon-warning icon-info"></span>
                   </el-tooltip>
                   <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                  <!-- </div> -->
-                  <!-- <div class="serviceRight"> -->
-                  <!-- </div> -->
                 </div>
               </el-checkbox-group>
             </el-form-item>
@@ -349,11 +345,6 @@
               </el-col>
             </el-row>
           </el-col>
-          <!-- <el-form-item class="saveBtn"> -->
-          <!-- </el-form-item> -->
-          <!-- <div class="save-btn">
-      <el-button @click="submitStorage" type="primary" :loading="$store.state.btnLoading">保存</el-button>
-    </div> -->
         </el-row>
       </el-form>
     </div>
@@ -451,7 +442,6 @@
         </el-col>
       </el-row>
     </div>
-    <!-- <nle-pagination :pageParams="page_params"></nle-pagination> -->
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
@@ -578,7 +568,6 @@ export default {
     },
     getNum(num) {
       if (num) {
-        console.log('num', num)
         this.expressNum = num
         this.getShipmentNum()
       } else {
@@ -605,8 +594,6 @@ export default {
     // 获取可推荐货位
     getAreaLocation() {
       this.locationCode = ''
-      console.log(this.user.warehouse_id, 'ware')
-      console.log(this.userId, 'this.userId')
       if (this.user.warehouse_id && this.userId) {
         this.$request.getAreaLocation(this.user.warehouse_id, this.userId).then(res => {
           if (res.ret) {
@@ -1131,7 +1118,6 @@ export default {
   .weight-style {
     .el-form-item__content .el-input-group {
       height: 80px !important;
-      // width: 450px;
     }
     .el-input-group--append .el-input__inner {
       height: 80px !important;
@@ -1201,9 +1187,6 @@ export default {
     display: inline-block;
     vertical-align: top;
   }
-  .save-btn {
-    // text-align: center;
-  }
   .select-box {
     margin-top: 10px;
     overflow: hidden;
@@ -1225,8 +1208,6 @@ export default {
   }
   .left-img {
     display: inline-block;
-    // margin-top: 20px;
-    // padding: 10px 5px;
   }
   .itemImg {
     border: 1px dashed #ccc;
@@ -1265,17 +1246,6 @@ export default {
       width: 100px;
       margin-left: 5px;
     }
-    // .serviceLeft {
-    //   display: inline-block;
-    //   float: left;
-    // }
-    // .serviceRight {
-    //   display: inline-block;
-    //   float: right;
-    //   .add-value-ipt {
-    //     width: 100px;
-    //   }
-    // }
   }
 }
 </style>
