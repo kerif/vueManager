@@ -312,13 +312,13 @@
         prop="last_login_at"
         width="155"
       ></el-table-column>
-      <el-table-column :label="$t('邀请人')" prop="invitor">
+      <el-table-column :label="$t('邀请人')" prop="invitor" width="120">
         <template slot-scope="scope">
           <div>
-            {{ scope.row.invitor
-            }}<span v-if="scope.row.is_agent_invite === 1"
-              ><img class="group-sty" src="../../../assets/agent.png"
-            /></span>
+            <span>{{ scope.row.invitor }}</span>
+            <span v-if="scope.row.is_agent_invite === 1">
+              <img class="group-sty" src="../../../assets/agent.png" />
+            </span>
           </div>
         </template>
       </el-table-column>
@@ -1173,6 +1173,8 @@ export default {
   }
   .group-sty {
     width: 18px;
+    margin-left: 3px;
+    vertical-align: middle;
   }
 }
 </style>
