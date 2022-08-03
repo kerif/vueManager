@@ -314,7 +314,12 @@
       ></el-table-column>
       <el-table-column :label="$t('邀请人')" prop="invitor">
         <template slot-scope="scope">
-          <div>{{ scope.row.invitor }}<span v-if="is_agent_invite === 1">(代理)</span></div>
+          <div>
+            {{ scope.row.invitor
+            }}<span v-if="scope.row.is_agent_invite === 1"
+              ><img class="group-sty" src="../../../assets/agent.png"
+            /></span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right">
@@ -1165,6 +1170,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .group-sty {
+    width: 18px;
   }
 }
 </style>

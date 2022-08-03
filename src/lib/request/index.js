@@ -4642,3 +4642,48 @@ exports.exportPartList = id => {
 exports.employeeCode = (id, config) => {
   return $form.get(`admins/${id}/invite-code/data`, config)
 }
+
+// 客户标签
+exports.userTag = () => {
+  return $form.get(`user-tags`)
+}
+
+// 客户标签 详情
+exports.tagDetail = id => {
+  return $form.get(`user-tags/${id}`)
+}
+
+// 客户标签 新增
+exports.addTag = params => {
+  return $form.post(`user-tags`, params)
+}
+
+// 客户标签 编辑
+exports.editTag = (id, params) => {
+  return $form.put(`user-tags/${id}`, params)
+}
+
+// 客户标签 删除
+exports.deleteTag = ids => {
+  return $form.delete(`user-tags/batch-destroy`, ids)
+}
+
+// 客户标签 打标签
+exports.printLabel = (id, params) => {
+  return $form.put(`user-tags/${id}/make`, params)
+}
+
+// 客户标签 移除标签
+exports.removeTag = (id, params) => {
+  return $form.put(`user-tags/${id}/remove`, params)
+}
+
+// 客户标签 打标签
+exports.makeTag = params => {
+  return $form.put(`users/make-tags`, params)
+}
+
+// 转为代理客户
+exports.agentCustomer = id => {
+  return $form.put(`users/${id}/invite-users-to-agent-invite`)
+}

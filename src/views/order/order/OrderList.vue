@@ -753,7 +753,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .deleteNoOwner({
             DELETE: this.deleteNum
@@ -1015,7 +1014,6 @@ export default {
       this.$request.checkPackageLabel(id).then(res => {
         if (res.ret) {
           this.urlHtml = res.data.url
-          // this.urlImport = res.data.url
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -1070,7 +1068,6 @@ export default {
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

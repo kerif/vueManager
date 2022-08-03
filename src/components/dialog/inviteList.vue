@@ -6,6 +6,12 @@
     width="70%"
     @close="clear"
   >
+    <div v-if="state === 'invite'" class="flex-item">
+      <el-button class="btn-main" @click="transferAgent">{{ $t('转为代理客户') }}</el-button>
+      <div class="agent-text">
+        {{ $t('提示: 成为代理之前邀请的客户一键转为代理客户') }}
+      </div>
+    </div>
     <el-table
       v-if="state === 'invite'"
       class="data-list"
@@ -21,6 +27,12 @@
       <el-table-column prop="created_at" :label="$t('注册时间')"> </el-table-column>
       <!-- 最后登录时间 -->
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
+      <el-table-column prop="is_agent_invite" :label="$t('是否代理邀请')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.is_agent_invite === 0">{{ $t('否') }}</span>
+          <span v-else>{{ $t('是') }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 卡券包 -->
     <el-table v-else class="data-list" :data="tableData" border style="width: 100%">
@@ -47,7 +59,9 @@
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div> -->
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <div style="padding: 20px 0">
+      <nle-pagination :pageParams="page_params"></nle-pagination>
+    </div>
   </el-dialog>
 </template>
 <script>
@@ -110,6 +124,30 @@ export default {
     },
     clear() {
       this.page_params.page = 1
+    },
+    transferAgent() {
+      this.$confirm(this.$t('确定要转为代理客户'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.agentCustomer(this.id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     }
   }
 }
@@ -126,6 +164,14 @@ export default {
 
   .el-dialog__close {
     color: #fff;
+  }
+  .flex-item {
+    display: flex;
+    align-items: center;
+  }
+  .agent-text {
+    color: red;
+    margin-left: 20px;
   }
 }
 </style>

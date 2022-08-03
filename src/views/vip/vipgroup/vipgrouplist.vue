@@ -17,6 +17,30 @@
         <add-btn @click.native="addVip">{{ $t('添加客户组') }}</add-btn>
       </div>
     </div>
+    <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane :label="$t('客户组')" name="0"></el-tab-pane>
+      <el-tab-pane :label="$t('客户标签')" name="1"></el-tab-pane>
+    </el-tabs>
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <div>
+        <el-button class="btn-main" size="small" @click="addVip">{{ $t('新增') }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
+      </div>
+      <div style="background: #fff; padding: 10px 30px; border-radius: 5px; font-size: 14px">
+        <span v-if="activeName === '0'">{{ $t('注: 每个客户仅能属于一个客户组') }}</span>
+        <span v-else>{{ $t('注: 每个客户可以属于多个标签组') }}</span>
+      </div>
+      <div>
+        <search-group
+          paddingBottom="0"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        ></search-group>
+      </div>
+    </div>
+    <div v-if="activeName === '0'"> -->
     <el-table
       :data="vipGroupList"
       stripe
@@ -59,13 +83,37 @@
           }}</el-button>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-        </div>
-      </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
+  <!-- <div v-else>
+      <el-table
+        :data="labelData"
+        stripe
+        border
+        ref="table"
+        class="data-list"
+        v-loading="tableLoading"
+        height="calc(100vh - 275px)"
+        @selection-change="selectionChange"
+      >
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <el-table-column :label="$t('标签')" prop="name"></el-table-column>
+        <el-table-column :label="$t('成员数量')" prop="users_count"></el-table-column>
+        <el-table-column :label="$t('标签描述')" prop="description"></el-table-column>
+        <el-table-column :label="$t('操作')" width="350">
+          <div></div>
+          <template slot-scope="scope">
+            <el-button class="btn-main" @click="onEditInfo(scope.row.id)">{{
+              $t('修改资料')
+            }}</el-button>
+            <el-button class="btn-light-green">{{ $t('批量导入') }}</el-button>
+            <el-button class="btn-deep-purple">{{ $t('成员') }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div> -->
+  <!-- </div> -->
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
@@ -85,7 +133,9 @@ export default {
     return {
       vipGroupList: [],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      activeName: '0',
+      labelData: []
     }
   },
   mounted() {
@@ -117,6 +167,55 @@ export default {
             })
           }
         })
+      // if (this.activeName === '0') {
+      //   this.$request
+      //     .getUserGroup({
+      //       keyword: this.page_params.keyword,
+      //       page: this.page_params.page,
+      //       size: this.page_params.size
+      //     })
+      //     .then(res => {
+      //       this.tableLoading = false
+      //       if (res.ret) {
+      //         this.vipGroupList = res.data
+      //         this.page_params.page = res.meta.current_page
+      //         this.page_params.total = res.meta.total
+      //         this.$nextTick(() => {
+      //           this.$refs.table.doLayout()
+      //         })
+      //       } else {
+      //         this.$notify({
+      //           title: this.$t('操作失败'),
+      //           message: res.msg,
+      //           type: 'warning'
+      //         })
+      //       }
+      //     })
+      // } else if (this.activeName === '1') {
+      //   this.$request
+      //     .userTag({
+      //       keyword: this.page_params.keyword,
+      //       page: this.page_params.page,
+      //       size: this.page_params.size
+      //     })
+      //     .then(res => {
+      //       this.tableLoading = false
+      //       if (res.ret) {
+      //         this.labelData = res.data
+      //         this.page_params.page = res.meta.current_page
+      //         this.page_params.total = res.meta.total
+      //         this.$nextTick(() => {
+      //           this.$refs.table.doLayout()
+      //         })
+      //       } else {
+      //         this.$notify({
+      //           title: this.$t('操作失败'),
+      //           message: res.msg,
+      //           type: 'warning'
+      //         })
+      //       }
+      //     })
+      // }
     },
     // 用户组分类选择值加载
     goSearchType(val) {
@@ -129,6 +228,15 @@ export default {
       dialog({ type: 'editVip', state: 'add' }, () => {
         this.getList()
       })
+      // if (this.activeName === '0') {
+      //   dialog({ type: 'editVip', state: 'add' }, () => {
+      //     this.getList()
+      //   })
+      // } else if (this.activeName === '1') {
+      //   dialog({ type: 'editLabel' }, () => {
+      //     this.getList()
+      //   })
+      // }
     },
     // 修改资料
     editVip(id, nameCn, nameEn, description) {
@@ -148,18 +256,15 @@ export default {
     },
     // 成员
     member(id) {
-      console.log(id, 'id')
-      dialog({ type: 'vipList', id: id }, () => {
+      dialog({ type: 'vipList', id }, () => {
         this.getList()
       })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择客户组'))
       }
@@ -188,6 +293,58 @@ export default {
             }
           })
       })
+      // if (!this.deleteNum || !this.deleteNum.length) {
+      //   return this.$message.error(
+      //     this.activeName === '0' ? this.$t('请选择客户组') : this.$t('请选择标签')
+      //   )
+      // }
+      // this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
+      //   confirmButtonText: this.$t('确定'),
+      //   cancelButtonText: this.$t('取消'),
+      //   type: 'warning'
+      // }).then(() => {
+      //   if (this.activeName === '0') {
+      //     this.$request
+      //       .userGroupDelete({
+      //         DELETE: this.deleteNum
+      //       })
+      //       .then(res => {
+      //         if (res.ret) {
+      //           this.$notify({
+      //             title: this.$t('操作成功'),
+      //             message: res.msg,
+      //             type: 'success'
+      //           })
+      //           this.getList()
+      //         } else {
+      //           this.$message({
+      //             message: res.msg,
+      //             type: 'error'
+      //           })
+      //         }
+      //       })
+      //   } else {
+      //     this.$request
+      //       .deleteTag({
+      //         DELETE: this.deleteNum
+      //       })
+      //       .then(res => {
+      //         if (res.ret) {
+      //           this.$notify({
+      //             title: this.$t('操作成功'),
+      //             message: res.msg,
+      //             type: 'success'
+      //           })
+      //           this.getList()
+      //         } else {
+      //           this.$message({
+      //             message: res.msg,
+      //             type: 'error'
+      //           })
+      //         }
+      //       })
+      //   }
+      // })
     },
     tradeAuth(id, stgAuth) {
       this.$confirm(
@@ -217,6 +374,14 @@ export default {
           }
         })
       })
+    },
+    handleClick() {
+      this.getList()
+    },
+    onEditInfo(id) {
+      dialog({ type: 'editLabel', id }, () => {
+        this.getList()
+      })
     }
   }
 }
@@ -230,7 +395,6 @@ export default {
     margin-left: 10px;
   }
   .btn-flex {
-    // width: 100%;
     overflow: hidden;
     display: flex;
     justify-content: space-between;

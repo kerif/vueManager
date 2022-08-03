@@ -551,7 +551,7 @@ export default [
             meta: {
               level: 2,
               group: '客户',
-              name: '客户组'
+              name: '客户分类'
             }
           },
           {
