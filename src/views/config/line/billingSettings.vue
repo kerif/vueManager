@@ -1039,6 +1039,8 @@ export default {
   .remark {
     float: left;
     color: red;
+    font-weight: bold;
+    font-size: 18px;
   }
   .unit {
     display: flex;

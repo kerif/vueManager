@@ -15,10 +15,6 @@
       <!-- 最后登录时间 -->
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
     </el-table>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
-    </div> -->
     <div class="pagination-box">
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
@@ -49,7 +45,6 @@ export default {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
-            console.log(this.tableData, 'tableData')
           }
         })
     },

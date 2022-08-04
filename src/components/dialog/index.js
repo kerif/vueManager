@@ -160,6 +160,7 @@ import staffCode from './staffCode.vue'
 import recordLog from './recordLog.vue'
 import editGoodsInfo from './editGoodsInfo.vue'
 import editLabel from './editLabel.vue'
+import labelMember from './labelMember.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -319,6 +320,7 @@ const staffCodeController = Vue.extend(staffCode)
 const recordLogController = Vue.extend(recordLog)
 const editGoodsInfoController = Vue.extend(editGoodsInfo)
 const editLabelController = Vue.extend(editLabel)
+const labelMemberController = Vue.extend(labelMember)
 
 const mixin = {
   data() {
@@ -629,6 +631,13 @@ function initInstance(type) {
     // 编辑标签
     case 'editLabel':
       instance = new editLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签成员
+    case 'labelMember':
+      instance = new labelMemberController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

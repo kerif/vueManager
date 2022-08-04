@@ -108,12 +108,14 @@
               $t('修改资料')
             }}</el-button>
             <el-button class="btn-light-green">{{ $t('批量导入') }}</el-button>
-            <el-button class="btn-deep-purple">{{ $t('成员') }}</el-button>
+            <el-button class="btn-deep-purple" @click="member(scope.row.id)">{{
+              $t('成员')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </div> -->
-  <!-- </div> -->
+    </div>
+  </div> -->
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
@@ -259,6 +261,15 @@ export default {
       dialog({ type: 'vipList', id }, () => {
         this.getList()
       })
+      // if (this.activeName === '0') {
+      //   dialog({ type: 'vipList', id }, () => {
+      //     this.getList()
+      //   })
+      // } else if (this.activeName === '1') {
+      //   dialog({ type: 'labelMember', id }, () => {
+      //     this.getList()
+      //   })
+      // }
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
