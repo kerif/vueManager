@@ -227,7 +227,7 @@ export default {
     },
     // 添加客户组
     addVip() {
-      dialog({ type: 'editVip', state: 'add' }, () => {
+      dialog({ type: 'editVip' }, () => {
         this.getList()
       })
       // if (this.activeName === '0') {
@@ -245,11 +245,10 @@ export default {
       dialog(
         {
           type: 'editVip',
-          id: id,
+          id,
           name_cn: nameCn,
           name_en: nameEn,
-          description: description,
-          state: 'edit'
+          description: description
         },
         () => {
           this.getList()

@@ -3,13 +3,20 @@
     <el-button class="btn-main" @click="addMember">{{ $t('添加') }}</el-button>
     <el-table :data="tableData" border class="data-list">
       <el-table-column type="index" label="#"></el-table-column>
-      <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
+      <el-table-column prop="id" :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+          <el-input v-model="scope.row.id"></el-input>
+        </template>
+      </el-table-column>
       <el-table-column prop="name" :label="$t('客户昵称')"></el-table-column>
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"></el-table-column>
       <el-table-column :label="$t('操作')">
-        <template>
+        <template slot-scope="scope">
           <el-button class="btn-main">{{ $t('保存') }}</el-button>
-          <el-button class="btn-light-red">{{ $t('移除') }}</el-button>
+          <el-button class="btn-light-red" @click="removeMember(scope.row.id)">{{
+            $t('移除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +63,10 @@ export default {
         id: ''
       })
     },
-    clear() {}
+    removeMember() {},
+    clear() {
+      this.id = ''
+    }
   }
 }
 </script>
