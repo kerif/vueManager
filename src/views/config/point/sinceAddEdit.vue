@@ -24,7 +24,6 @@
             <el-select
               v-model="form.country_id"
               @change="changeCountry"
-              @blur="trigger"
               filterable
               class="country-select"
               :placeholder="$t('请选择')"
@@ -231,6 +230,16 @@
         >
         </el-switch>
       </el-form-item>
+      <el-form-item :label="$t('是否同行货')">
+        <el-row>
+          <el-col :span="10">
+            <el-radio-group v-model="form.is_stg">
+              <el-radio :label="0">{{ $t('否') }}</el-radio>
+              <el-radio :label="1">{{ $t('是') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <div>
         <el-form-item>
           <div>{{ $t('支持线路') }}</div>
@@ -380,7 +389,8 @@ export default {
         announcement: '',
         opening_hours: '',
         allow_all_order: 0,
-        notify_after_received: 0
+        notify_after_received: 0,
+        is_stg: 0
       },
       areaData: null,
       referenceTime: {
@@ -516,6 +526,7 @@ export default {
         this.form.announcement = res.data.announcement
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
+        this.form.is_stg = res.data.is_stg
         if (res.data.area_id) {
           this.areaData = res.data.sub_area_id
             ? [res.data.area_id, res.data.sub_area_id]
@@ -558,16 +569,12 @@ export default {
     },
     // 切换国家
     changeCountry() {
-      console.log(this.form.country_id, 'form.country_id')
       this.areaData = []
       ++this.keyValue
       this.form.expressLines = []
       const selectList = this.countryList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
-      console.log(this.newWarehouseList)
-      console.log(this.areas, 'this.areas')
     },
-    trigger() {},
     editSet() {
       this.announcementDailog = true
       this.announcementData.opening_hours = this.form.opening_hours
@@ -606,7 +613,6 @@ export default {
         })
         res.data.forEach(item => {
           if (item.timezone === '0852') {
-            console.log(item.timezone, item.id, 'timezone')
             this.timezoneId = item.id
           }
         })
@@ -643,7 +649,6 @@ export default {
         })
         .then(res => {
           this.lineData = res.data
-          console.log(this.lineData, 'lineData')
         })
     },
     // 获取计佣方式
@@ -662,14 +667,11 @@ export default {
     },
     confirmLines() {
       this.lineVisible = false
-      console.log(this.lineIds, 'lineIds')
       let selectIds = this.form.expressLines.map(item => item.id)
       let selectLine = this.lineData.filter(item => {
         return this.lineIds.includes(item.id) && !selectIds.includes(item.id)
       })
       this.form.expressLines = this.form.expressLines.concat(selectLine)
-      console.log(selectLine)
-      console.log(this.form.expressLines)
     },
     clear() {
       this.lineIds = []
