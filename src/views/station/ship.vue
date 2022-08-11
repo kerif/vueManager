@@ -264,6 +264,11 @@
             <el-option v-for="item in modeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
+          <!-- <el-autocomplete
+            v-model="form.logistics_type_id"
+            :fetch-suggestions="querySearchLogistics"
+            :placeholder="$t('请选择')"
+          ></el-autocomplete> -->
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
       </el-form>
@@ -493,7 +498,6 @@ export default {
         .then(res => {
           if (res.ret) {
             this.urlExcel = res.data.url
-            // window.location.href = this.urlExcel
             window.open(this.urlExcel)
             this.$notify({
               title: this.$t('操作成功'),
@@ -506,6 +510,22 @@ export default {
               message: res.msg,
               type: 'warning'
             })
+          }
+        })
+    },
+    querySearchLogistics(queryString, cb) {
+      var list = [{}]
+      this.$request
+        .getShipStatus({
+          keyword: this.form.logistics_type_id
+        })
+        .then(res => {
+          if (res.ret) {
+            for (let i of res.data) {
+              i.value = i.name
+            }
+            list = res.data
+            cb && cb(list)
           }
         })
     },
@@ -686,7 +706,6 @@ export default {
     },
     // 导出清单
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -701,8 +720,6 @@ export default {
           })
           .then(res => {
             if (res.ret) {
-              // this.urlExcel = res.data.url
-              // window.open(this.urlExcel)
               this.$notify({
                 title: this.$t('操作成功'),
                 message: res.msg,
@@ -804,7 +821,6 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      // this.getList()
     },
     // 发货时间
     // 创建时间
@@ -816,7 +832,6 @@ export default {
         'times',
         `${this.shipped_begin_date} ${this.shipped_end_date}`
       )
-      // this.getList()
     },
     // 删除发货单
     deleteShip(id) {
@@ -845,7 +860,6 @@ export default {
     },
     // 跳转至订单 运单
     goOrder(orderSn, status) {
-      console.log(status, '我是传过去的ID')
       this.$router.push({
         name: 'wayBillList',
         query: { order_sn: orderSn, activeName: status.toString() }
@@ -911,7 +925,6 @@ export default {
     },
     // 提交表单
     submitForm() {
-      console.log('111')
       this.onTime(this.timeList)
       this.onShipment(this.shipmentList)
       this.onShipStatus()
@@ -924,7 +937,6 @@ export default {
         .sendingNotify({
           ids: this.deleteNum,
           type: command
-          // type: this.activeName === '2' ? 2 : 3
         })
         .then(res => {
           if (res.ret) {
@@ -941,7 +953,6 @@ export default {
             })
           }
         })
-      // console.log(command)
     }
   }
 }

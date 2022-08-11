@@ -22,6 +22,7 @@
       </el-table-column>
       <el-table-column :label="$t('佣金') + localization.currency_unit" prop="commission_amount">
       </el-table-column>
+      <el-table-column :label="$t('代理级别')" prop="level"></el-table-column>
       <el-table-column :label="$t('成交时间')" prop="created_at"> </el-table-column>
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">

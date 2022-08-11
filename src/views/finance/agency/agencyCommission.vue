@@ -67,6 +67,7 @@
         <el-table-column prop="order_status" :label="$t('订单状态')" width="100"> </el-table-column>
         <el-table-column prop="order_amount" :label="$t('计佣金额')" width="100"> </el-table-column>
         <el-table-column prop="agent_name" :label="$t('代理')"> </el-table-column>
+        <el-table-column prop="level" :label="$t('代理级别')"></el-table-column>
         <el-table-column prop="commission_amount" :label="$t('可获佣金')" width="100">
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('成交时间')" width="100"> </el-table-column>
