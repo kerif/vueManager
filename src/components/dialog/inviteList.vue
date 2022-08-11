@@ -55,10 +55,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
-    </div> -->
+
     <div style="padding: 20px 0">
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>

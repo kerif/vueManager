@@ -63,7 +63,6 @@ export default {
       this.supplierName = item.name
     },
     confirm(formName) {
-      console.log('supplierId', this.supplierId)
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.status === 'alone') {
@@ -86,7 +85,6 @@ export default {
                     type: 'error'
                   })
                 }
-                this.show = false
               })
           } else {
             this.$request.batchClaim({ ids: this.id, user_id: this.supplierId }).then(res => {
@@ -119,9 +117,7 @@ export default {
       this.$refs[user].resetFields()
       this.show = false
     },
-    init() {
-      console.log(this.status)
-    }
+    init() {}
   }
 }
 </script>

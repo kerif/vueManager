@@ -37,44 +37,28 @@
         label="最后登录时间">
       </el-table-column>   -->
     </el-table>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
-    </div> -->
-    <!-- <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
-    </div> -->
   </el-dialog>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
-// import { pagination } from '@/mixin'
 export default {
   data() {
     return {
       tableData: []
     }
   },
-  // components: {
-  //   NlePagination
-  // },
-  // mixins: [pagination],
+
   methods: {
     getList() {
       this.$request.getInvalidLog(this.id).then(res => {
         if (res.ret) {
           this.tableData = res.data
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         }
       })
     },
     init() {
       this.getList()
     },
-    clear() {
-      // this.page_params.page = 1
-    }
+    clear() {}
   }
 }
 </script>

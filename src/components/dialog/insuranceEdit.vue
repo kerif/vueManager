@@ -144,8 +144,6 @@ export default {
       this.ruleForm.remark = ''
     },
     init() {
-      // this.start = this.start
-      // console.log(this.start, 'start')
       this.getList()
     }
   }

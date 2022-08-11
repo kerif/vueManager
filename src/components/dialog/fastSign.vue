@@ -393,7 +393,6 @@ export default {
     // 添加签收照片 取消
     returnShip() {
       this.innerVisible = false
-      // this.show = true
     },
     getUser() {},
     getCountry() {
@@ -478,7 +477,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
         })
       } else {
@@ -507,7 +505,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
         })
       }
@@ -515,7 +512,7 @@ export default {
     // 确认创建发货单
     confirmSign() {
       this.sign.sign_images = this.goodsImgList.map(item => item.url)
-      console.log(this.sign.sign_images, 'this.sign.sign_images')
+
       if (this.form.on_delivery_status > 0 && this.form.on_delivery_status !== 2) {
         this.$confirm(
           this.$t('该订单为货到付款订单（未付款），是否确认收款并签收'),
@@ -587,7 +584,7 @@ export default {
     },
     init() {
       // this.getUser()
-      console.log(this.state, 'state')
+
       if (this.state === 'batch') {
         this.textarea2 = this.orderSnNum.join('\n')
         this.search()

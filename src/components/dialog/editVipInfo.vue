@@ -215,11 +215,9 @@ export default {
     },
     handleSelect(item) {
       this.supplierId = item.id
-      console.log(typeof this.supplierId, 'this.supplierId 我是选择的ID')
       this.supplierName = item.name
     },
     submit() {
-      console.log(this.supplierId, 'this.supplierId,  我是保存的ID')
       this.$request
         .updateVipInfo(this.id, {
           ...this.form,
@@ -241,7 +239,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     // 获取支持国家数据

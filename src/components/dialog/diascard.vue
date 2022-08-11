@@ -58,7 +58,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
     },
@@ -68,10 +67,7 @@ export default {
     cancelDialog() {
       this.show = false
     },
-    init() {
-      // this.deleteNum = this.deleteNum
-      console.log(this.deleteNum, 'deleteNum')
-    }
+    init() {}
   }
 }
 </script>
@@ -79,7 +75,6 @@ export default {
 .dialog-discard {
   .el-textarea {
     width: 50% !important;
-    // margin-left: 50px;
   }
   .el-form-item__label {
     width: 200px;

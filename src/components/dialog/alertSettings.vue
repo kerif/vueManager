@@ -67,7 +67,6 @@ export default {
                 type: 'error'
               })
             }
-            // this.innerVisible = false
           })
         } else {
           return false

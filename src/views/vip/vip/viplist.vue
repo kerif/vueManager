@@ -303,6 +303,7 @@
         prop="user_group.name_cn"
         align="center"
       ></el-table-column>
+      <!-- <el-table-column :label="$t('客户标签')"></el-table-column> -->
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
       <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
@@ -937,7 +938,6 @@ export default {
         .then(res => {
           if (res.ret) {
             this.urlExcel = res.data.url
-            // window.location.href = this.urlExcel
             window.open(this.urlExcel)
             this.$notify({
               title: this.$t('操作成功'),
@@ -978,7 +978,6 @@ export default {
         })
         .then(res => {
           for (let i of res.data) {
-            // i.value = i.id
             i.value = i.id + '---' + i.name
           }
           list = res.data
@@ -1147,15 +1146,12 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
-    // text-align: right;
   }
   .addUser {
     display: flex;
     justify-content: flex-end;
     flex: 1;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
       margin-right: 10px;
     }
   }
@@ -1164,7 +1160,6 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
     float: left;
     display: flex;

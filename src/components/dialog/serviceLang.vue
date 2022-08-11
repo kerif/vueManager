@@ -67,7 +67,6 @@ export default {
         .then(res => {
           this.ruleForm.name = res.data.name
           this.ruleForm.remark = res.data.remark
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     // 获取包裹增值服务的语言
@@ -79,11 +78,9 @@ export default {
         .then(res => {
           this.ruleForm.name = res.data.name
           this.ruleForm.remark = res.data.remark
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     confirm(formName) {
-      console.log(this.state, 'state')
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.state === 'service') {
@@ -102,7 +99,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else if (this.state === 'package') {
             this.$request.updatePackageLang(this.line.id, this.ruleForm).then(res => {
@@ -120,7 +116,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {

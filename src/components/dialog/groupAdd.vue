@@ -101,7 +101,7 @@ export default {
     },
     handleSelect(item) {
       this.supplierId = item.id
-      console.log(this.supplierId, 'this.supplierId')
+
       if (this.supplierId) {
         this.getDetails()
       }
@@ -112,7 +112,6 @@ export default {
       this.$request.getUserDetails(this.supplierId).then(res => {
         if (res.ret) {
           this.detailsData = res.data
-          console.log(this.detailsData, '111')
         } else {
           this.$message({
             message: res.msg,
@@ -122,7 +121,6 @@ export default {
       })
     },
     confirm(formName) {
-      console.log('supplierId', this.supplierId)
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request
@@ -144,7 +142,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
         } else {
           return false
@@ -156,7 +153,6 @@ export default {
       this.detailsData = {}
       this.$refs['user'].resetFields()
       this.$refs['user'].clearValidate()
-      console.log(this.detailsData, 'detailsData')
     },
     cancelDialog(user) {
       this.$refs[user].resetFields()
@@ -168,11 +164,6 @@ export default {
 </script>
 <style lang="scss">
 .dialog-group {
-  // .changeQuery {
-  //   .el-autocomplete {
-  //     width: 100%;
-  //   }
-  // }
   .el-form-item__label {
     // width: 200px;
   }

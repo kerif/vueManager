@@ -70,7 +70,6 @@ export default {
 <style lang="scss">
 .dialog-change-line {
   .el-input {
-    // width: 300px !important;
     margin-left: 50px;
   }
   .el-textarea {

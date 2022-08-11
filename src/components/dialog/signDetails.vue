@@ -109,7 +109,7 @@
           <!-- <span>{{form.address && form.address.receiver_name}}</span> -->
           <div class="bale-left packed-details">
             <span class="leftWidth">{{ $t('支付截图') }}</span>
-            <!-- ${$baseUrl.IMAGE_URL}${item}` -->
+
             <div
               class="left-img"
               v-for="(item, index) in form.payment && form.payment.payment_images"
@@ -351,7 +351,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
         })
       } else {
@@ -376,7 +375,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
     },

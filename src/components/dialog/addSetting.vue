@@ -366,7 +366,6 @@ export default {
           account_content
         }
       })
-      console.log(this.ruleForm, 'this.ruleForm')
       if (this.state === 'add') {
         this.$request.addPayments(this.ruleForm).then(res => {
           if (res.ret) {
@@ -383,7 +382,6 @@ export default {
               type: 'error'
             })
           }
-          // this.show = false
         })
       } else {
         this.$request.updatePayments(this.id, this.ruleForm).then(res => {
@@ -401,7 +399,6 @@ export default {
               type: 'error'
             })
           }
-          // this.show = false
         })
       }
     },
@@ -462,9 +459,7 @@ export default {
       this.getRate()
       this.getCurrent()
       this.getLanguageList()
-      console.log(this.state, 'this.state')
       if (this.state === 'edit') {
-        console.log(this.id)
         this.getList()
       }
     }
@@ -560,8 +555,6 @@ export default {
   }
   .input-sty {
     width: 35% !important;
-    // .el-input {
-    // }
     display: inline-block;
     .el-input__inner {
       // width: 30%;

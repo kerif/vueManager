@@ -93,9 +93,6 @@
           </div>
         </template>
       </el-table>
-      <!-- <div class="pagination-box">
-    <nle-pagination :pageParams="page_params"></nle-pagination>
-     </div> -->
     </el-dialog>
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
@@ -107,12 +104,10 @@
   </div>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
 import WaybillListTmpDrawer from '@/views/order/waybill/components/waybillListTmpDrawer'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    // NlePagination
     WaybillListTmpDrawer
   },
   mixins: [pagination],
@@ -131,9 +126,7 @@ export default {
       id: null
     }
   },
-  mounted() {
-    console.log('router', this.$router)
-  },
+  mounted() {},
   methods: {
     getList() {
       this.$request
@@ -185,11 +178,9 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 批量导出
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -217,8 +208,6 @@ export default {
     },
     // 跳转至订单 运单
     goOrder(orderSn, status) {
-      console.log(111)
-      console.log(this.$router)
       this.$router.push({
         name: 'wayBillList',
         query: { order_sn: orderSn, activeName: status.toString() }
@@ -252,7 +241,6 @@ export default {
                 type: 'warning'
               })
             }
-            this.show = false
           })
       })
     },
@@ -286,7 +274,6 @@ export default {
                 type: 'warning'
               })
             }
-            this.show = false
           })
       })
     },
@@ -295,8 +282,7 @@ export default {
       this.$request.uploadAloneExcel(this.id).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
-          // window.open(this.urlExcel)
+
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -320,8 +306,6 @@ export default {
       this.showTmpDrawer = false
     },
     init() {
-      console.log(this.id, '我是接收的id')
-      console.log(this.status, '我是接收的status')
       if (this.id) {
         this.getList()
       }

@@ -76,7 +76,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     clear() {

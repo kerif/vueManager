@@ -35,7 +35,6 @@ export default {
     init() {},
     confirm() {
       if (!this.ruleForm.name) return this.$message.error(this.$t('请输入标签名称'))
-      console.log(this.ruleForm.name, 'this.ruleForm.name')
       this.$request.newLabel({ name: this.ruleForm.name }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -51,7 +50,6 @@ export default {
             type: 'error'
           })
         }
-        // this.show = false
       })
     }
   }

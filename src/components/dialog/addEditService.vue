@@ -88,7 +88,6 @@ export default {
     },
     // 订单编辑状态下保存
     UpdateService() {
-      console.log('我是编辑', this.id)
       this.$request.updateService(this.id, this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -104,12 +103,10 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     // 添加订单增值服务
     addService() {
-      console.log('我是添加', this.id)
       this.$request.addValue(this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -125,12 +122,10 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     // 添加包裹增值服务
     addParcel() {
-      console.log('我是添加', this.id)
       this.$request.addParcel(this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -146,12 +141,10 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     // 包裹增值服务编辑后保存
     UpdateParcel() {
-      console.log('我是编辑', this.id)
       this.$request.updateParcel(this.id, this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -167,7 +160,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     confirm(formName) {
@@ -197,7 +189,6 @@ export default {
       this.show = false
     },
     init() {
-      console.log(this.name, 'name')
       if (this.state === 'edit') {
         this.getList()
       }
@@ -209,11 +200,9 @@ export default {
 .dialog-addStaff {
   .el-input {
     width: 40%;
-    // margin-left: 50px;
   }
   .el-textarea {
     width: 40%;
-    // margin-left: 50px;
   }
   .el-dialog__header {
     background-color: #0e102a;

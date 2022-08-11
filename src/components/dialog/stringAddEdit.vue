@@ -74,13 +74,12 @@ export default {
           this.user = res.data
           this.stringData = this.stringData.map(item => {
             const value = res.data.translation[item.language_code]
-            console.log(value, 'value')
+
             return {
               ...item,
               value
             }
           })
-          console.log(this.stringData, 'this.stringData')
         }
       })
     },
@@ -89,7 +88,7 @@ export default {
       this.stringData.forEach(item => {
         translation[item.language_code] = item.value
       })
-      console.log(translation, 'translation')
+
       if (this.state === 'add') {
         this.$request
           .addString({
@@ -111,7 +110,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       } else if (this.state === 'edit') {
         this.$request
@@ -134,10 +132,8 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
-      console.log(this.user, 'stringData')
     },
     clear() {
       this.user.key = ''

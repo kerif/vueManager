@@ -94,10 +94,8 @@ export default {
     },
     uploadExcel(item) {
       let file = item.file
-      console.log(file)
       this.onUpload(file).then(res => {
         if (res.ret) {
-          console.log(res.data)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

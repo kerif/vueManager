@@ -68,7 +68,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else {
             // 如果是添加状态
@@ -87,7 +86,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {

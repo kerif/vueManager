@@ -92,7 +92,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else if (this.value === 'tariff') {
             this.$request.uploadTariffExplanation(this.ruleForm).then(res => {
@@ -110,7 +109,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {

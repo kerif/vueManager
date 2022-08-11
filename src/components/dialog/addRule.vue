@@ -154,7 +154,6 @@ export default {
     },
     getMsgDetail() {
       this.$request.replyMessageDetail(this.id).then(res => {
-        console.log(res.data)
         this.ruleForm.ruleName = res.data.name
         this.ruleForm.dynamicItem = res.data.keywords
         this.ruleForm.reply_type = res.data.reply_type
@@ -217,11 +216,6 @@ export default {
       })
     },
     onDeleteImg(index) {
-      // if (this.ruleForm.replyList[0].image) {
-      //   this.ruleForm.replyList[0].image = ''
-      // } else if (this.ruleForm.replyList[1].image) {
-      //   this.ruleForm.replyList[1].image = ''
-      // }
       this.ruleForm.replyList[index].image = ''
     },
     // 上传打包照片
@@ -230,9 +224,6 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          // res.data.forEach((item, index) => {
-          //   this.ruleForm.replyList[index].image = item.path
-          // })
           this.ruleForm.replyList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {

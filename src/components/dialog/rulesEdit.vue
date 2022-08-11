@@ -464,10 +464,8 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       } else if (this.name === 2) {
-        console.log(this.orderRules, 'orderRules')
         this.$request
           .updateRules(this.id, {
             prefix: this.orderRules.prefix,
@@ -667,8 +665,6 @@ export default {
     },
     init() {
       this.getList()
-      console.log(this.id, 'id')
-      console.log(this.name, 'name')
     },
     clear() {
       this.userRules.prefix = ''

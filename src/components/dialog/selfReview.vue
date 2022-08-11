@@ -102,7 +102,6 @@ export default {
       })
     },
     confirm() {
-      // console.log(this.ruleForm.show_rate, 'ruleForm.show_rate')
       if (this.baleImgList) {
         this.ruleForm.payment_images = this.baleImgList
       } else {
@@ -130,7 +129,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     // 上传打包照片

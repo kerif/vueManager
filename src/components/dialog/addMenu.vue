@@ -186,7 +186,6 @@ export default {
       }
     }
   },
-  created() {},
   methods: {
     onPreview(image) {
       dialog({
@@ -244,7 +243,6 @@ export default {
     },
     getMenuDetail() {
       this.$request.getMenuDetail(this.id).then(res => {
-        console.log(res.data)
         this.ruleForm.menuName = res.data.name
         this.ruleForm.radio = res.data.type
         this.ruleForm.content = res.data.content

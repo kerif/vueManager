@@ -74,7 +74,6 @@ export default {
       })
     },
     confirm() {
-      // console.log(this.company.company, 'this.company.company')
       if (this.company.sn === '') {
         return this.$message.error(this.$t('请输入转运快递单号头程'))
       } else if (this.company.company === '') {
@@ -101,7 +100,6 @@ export default {
               type: 'warning'
             })
           }
-          this.show = false
         })
     },
     goExpress() {
@@ -115,8 +113,6 @@ export default {
     init() {
       this.getCompany()
       this.getInfo()
-      // this.company.sn = this.logistics_sn
-      // this.company.company = this.logistics_company
     }
   }
 }

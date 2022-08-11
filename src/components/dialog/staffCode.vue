@@ -70,7 +70,6 @@ export default {
         responseType: 'blob'
       }
       this.$request.employeeCode(this.id, param).then(res => {
-        console.log(res)
         downloadStreamFile(res, 'pic', 'jpg')
       })
     },

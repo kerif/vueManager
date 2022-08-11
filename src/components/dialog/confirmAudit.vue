@@ -116,7 +116,6 @@ export default {
         customer_images: this.baleImgList
       }
       this.$request.approveWithdraw(this.userid, this.withdrawsId, info).then(res => {
-        console.log(res)
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -131,7 +130,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     init() {

@@ -57,10 +57,6 @@
         }}{{ `${localization.currency_unit ? localization.currency_unit : ''}` }}{{ count }}
       </p>
     </div>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
-    </div> -->
   </el-dialog>
 </template>
 <script>
@@ -106,7 +102,6 @@ export default {
             this.page_params.total = res.meta.total
             this.localization = res.localization
             this.count = res.data.reduce((p, e) => p + e.amount, 0)
-            console.log(this.count, 'this.count')
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -132,7 +127,6 @@ export default {
             this.page_params.total = res.meta.total
             this.localization = res.localization
             this.count = res.data.reduce((p, e) => p + e.amount, 0)
-            console.log(this.count, 'this.count')
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -146,8 +140,6 @@ export default {
       if (!this.lineNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      // this.success(this.lineNum)
-      // this.show = false
       this.$request
         .updateAddable(this.id, {
           ids: this.lineNum
@@ -167,7 +159,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     clear() {

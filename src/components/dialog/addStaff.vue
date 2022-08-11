@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.id, 'id')
       this.$request.getGroup(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -82,7 +81,6 @@ export default {
                   type: 'error'
                 })
               }
-              // this.show = false
             })
           } else {
             // 如果是添加状态
@@ -101,7 +99,6 @@ export default {
                   type: 'error'
                 })
               }
-              // this.show = false
             })
           }
         } else {

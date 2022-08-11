@@ -79,7 +79,6 @@ export default {
         .then(res => {
           this.ruleForm.picture_name = res.data.picture_name
           res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     confirm(formName) {
@@ -105,7 +104,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
         } else {
           return false
@@ -156,14 +154,7 @@ export default {
       this.show = false
     },
     init() {
-      // this.line = this.line
-      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      // this.transCode = this.transCode
-      // console.log(this.line, 'line')
-      // console.log(this.lang, 'lang')
-      // console.log(this.transCode, 'this.transCode')
-      // console.log(this.ruleForm.language, 'this.ruleForm.language')
       if (this.transCode === 1) {
         this.getLang()
       }

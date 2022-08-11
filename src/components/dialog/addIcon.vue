@@ -102,7 +102,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       } else {
         this.$request.updateIcon(this.id, this.ruleForm).then(res => {
@@ -120,7 +119,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       }
     },
@@ -128,7 +126,6 @@ export default {
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
-        console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
             this.baleImgList.push(item.path)
@@ -165,7 +162,6 @@ export default {
       this.ruleForm.icon = []
     },
     init() {
-      console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
         this.getList()
       }

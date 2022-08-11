@@ -63,7 +63,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
     },
@@ -81,7 +80,6 @@ export default {
 .dialog-join {
   .el-textarea {
     width: 50% !important;
-    // margin-left: 50px;
   }
   .el-form-item__label {
     width: 200px;

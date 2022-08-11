@@ -104,20 +104,17 @@ export default {
     selectionChange(selection) {
       // this.lineNum = selection.map(item => (item.name))
       this.lineNum = selection
-      console.log(this.lineNum, 'this.lineNum')
     },
     confirm() {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.user, '1111')
       this.success(this.user)
       this.show = false
     },
     onRowChange(row) {
       this.chooseId = row.id
       this.user = row
-      // console.log(this.user, 'this.user')
     },
     clear() {
       this.page_params.page = 1
