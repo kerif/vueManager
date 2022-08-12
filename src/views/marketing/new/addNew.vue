@@ -19,6 +19,37 @@
           v-model="ruleForm.name"
         ></el-input>
       </el-form-item>
+      <!-- <el-form-item>
+        <el-radio-group v-model="radio">
+          <el-radio :label="0">{{ $t('抵扣金额') }}</el-radio>
+          <el-radio :label="1">{{ $t('折扣优惠') }}</el-radio>
+          <el-radio :label="2">{{ $t('重量减免') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div>{{ $t('注: 该类型重量均指"计费重量", 仅减免重量对应运费(不含增值费)') }}</div>
+      <el-form-item :label="$t('计算可折扣优惠')">
+        <el-checkbox-group v-model="checkList">
+          <el-checkbox :label="$t('允许与积分同时使用')"></el-checkbox>
+          <el-checkbox
+            :label="$t('允许使用销售价格表(若不勾选, 选用该消费券时, 按路线配置原价格计算优惠)')"
+          ></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item :label="$t('最低可折扣消费')">
+        <el-input v-model="value" :placeholder="$t('请输入订单最低消费')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('折扣')">
+        <el-input v-model="value" :placeholder="$t('例: 如打九折, 请输入0.9')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('抵扣上限￥')">
+        <el-input v-model="value" :placeholder="$t('请输入可抵扣最大金额')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('订单最低重量')">
+        <el-input v-model="value" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('减免重量')">
+        <el-input v-model="value" :placeholder="$t('请输入')"></el-input>
+      </el-form-item> -->
       <el-form-item :label="$t('金额')" prop="amount">
         <el-input
           class="input-sty"

@@ -164,14 +164,11 @@ export default {
     // }
     if (this.$route.params.type) {
       this.$route.params.type = Number(this.$route.params.type)
-      console.log(this.$route.params.type, 'this.$route.params.type')
     }
-    console.log(this.$route.params.type, 'type')
-    console.log(typeof this.$route.params.type, 'type')
+
     this.getTypeStatistics()
   },
   activated() {
-    console.log(1111)
     // this.getList()
     // this.getLanguageList()
   },

@@ -330,6 +330,12 @@
                   {{ scope.row.shipment_sn }}
                 </span>
               </template>
+              <template v-else-if="item.id === 'third_tracking_status_name'">
+                <span>{{ scope.row.third_tracking_status_name }}</span>
+              </template>
+              <template v-else-if="item.id === 'pack_status_name'">
+                <span>{{ scope.row.pack_status_name }}</span>
+              </template>
               <template v-else-if="item.id === 'exceptional_at'">
                 <span>{{ scope.row.exceptional_at }}</span>
               </template>
@@ -401,6 +407,19 @@
                 >
                   {{ $t('打包') }}
                 </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="activeName === '3' && scope.row.pack_status === 0"
+                  @click.native="
+                    packed(
+                      scope.row.id,
+                      scope.row.order_sn,
+                      scope.row.is_parent,
+                      activeName,
+                      scope.row.express_line.id
+                    )
+                  "
+                  >{{ $t('打包') }}</el-dropdown-item
+                >
                 <el-dropdown-item
                   v-if="activeName === '3'"
                   @click.native="addInvoice([scope.row.id])"
@@ -1305,9 +1324,14 @@ export default {
               item.name = this.timeLabel
             }
             if (
-              [...column, 'updated_at', 'packed_at', 'signed_at', 'exceptional_at'].includes(
-                item.id
-              )
+              [
+                ...column,
+                'updated_at',
+                'packed_at',
+                'signed_at',
+                'exceptional_at',
+                'third_tracking_status_name'
+              ].includes(item.id)
             ) {
               this.checkColumn.push(item)
             }
@@ -1348,7 +1372,9 @@ export default {
                 'updated_at',
                 'packed_at',
                 'shipment_sn',
-                'boxes_count'
+                'boxes_count',
+                'third_tracking_status_name',
+                'pack_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1367,7 +1393,8 @@ export default {
                 'coupon_amount',
                 'updated_at',
                 'shipment_sn',
-                'boxes_count'
+                'boxes_count',
+                'third_tracking_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)

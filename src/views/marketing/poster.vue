@@ -231,7 +231,6 @@ export default {
     },
     // 预览小程序海报
     previewBackground(image) {
-      console.log(image, 'image')
       this.choosePoster = image
     },
     // 上传海报配置背景图像

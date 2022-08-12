@@ -346,6 +346,7 @@
                 v-if="$route.params.parent == 0"
                 class="btn-main change-btn"
                 @click="changeWarehouse"
+                :disabled="status === 3"
                 >{{ $t('更改') }}</el-button
               >
             </el-form-item>
@@ -372,6 +373,7 @@
                 v-if="$route.params.parent == 0"
                 class="btn-main change-btn"
                 @click="changeLine"
+                :disabled="status === 3"
                 >{{ $t('更改') }}</el-button
               >
             </el-form-item>
@@ -779,6 +781,7 @@ export default {
       showDeclare: false,
       unit: '',
       currency: '',
+      status: '',
       declareType: [
         {
           id: 1,
@@ -1249,6 +1252,7 @@ export default {
         this.localization = res.localization
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.baseMode = this.form.express_line.base_mode
+        this.status = res.data.status
         this.getExpressServes()
       })
     },
