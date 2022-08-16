@@ -3607,8 +3607,8 @@ exports.uploadShipmentLabel = (id, ids) => {
   return $form.post(`shipments/${id}/order-shipment-label`, ids)
 }
 // 发货单 获取弹窗里可使用的物流状态
-exports.getShipStatus = () => {
-  return $form.get('shipments/logistics-types')
+exports.getShipStatus = params => {
+  return $form.get('shipments/logistics-types', { params })
 }
 // 发货单 更改当前物流状态
 exports.changeShipStatus = params => {
@@ -4696,4 +4696,9 @@ exports.userRelation = () => {
 // 批量分发优惠券
 exports.launchCoupon = (id, params) => {
   return $form.put(`coupons/${id}/launch`, params)
+}
+
+// 更新物流
+exports.rememberShip = params => {
+  return $form.put(`orders/logistics`, params)
 }

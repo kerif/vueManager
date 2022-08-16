@@ -2,7 +2,6 @@
   <el-dialog
     :visible.sync="show"
     :title="id ? $t('修改客户标签') : $t('新增客户标签')"
-    class="edit-label-container"
     @close="clear"
   >
     <el-form :model="ruleForm">
@@ -51,6 +50,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
+            this.show = false
           } else {
             this.$message({
               message: res.msg,
@@ -66,6 +66,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
+            this.show = false
           } else {
             this.$message({
               message: res.msg,
@@ -89,7 +90,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.edit-label-container {
-}
-</style>
+<style></style>

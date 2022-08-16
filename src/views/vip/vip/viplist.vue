@@ -142,7 +142,7 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
-        <el-button class="btn-main" size="small" @click="showLabel = true">{{
+        <el-button class="btn-main" size="small" @click="onUserLabel">{{
           $t('添加标签')
         }}</el-button>
         <el-button-group style="margin: 0 0 0 10px">
@@ -300,7 +300,13 @@
         prop="user_group.name_cn"
         align="center"
       ></el-table-column>
-      <!-- <el-table-column :label="$t('客户标签')"></el-table-column> -->
+      <el-table-column :label="$t('客户标签')" prop="tags">
+        <template slot-scope="scope">
+          <el-tag v-for="item in scope.row.tags" :key="item.id" type="warning">{{
+            item.name
+          }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
       <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
@@ -464,6 +470,12 @@
         <el-button type="primary" @click="pwdConfirm('ruleForm')">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <add-user-label
+      :showLabel="showLabel"
+      :deleteNum="deleteNum"
+      @passVal="passVal"
+      ref="label"
+    ></add-user-label>
   </div>
 </template>
 <script>
@@ -472,6 +484,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
+import addUserLabel from './addUserLabel.vue'
 export default {
   name: 'viplist',
   data() {
@@ -902,9 +915,6 @@ export default {
     // 获取客户组
     getCategory() {
       this.$request.getSimple().then(res => {
-        // if (res.ret) {
-        //   this.clientGroupList = res.data
-        // }
         res.data.forEach(item => {
           this.clientGroupList.push({
             value: item.id,
@@ -1007,7 +1017,6 @@ export default {
             message: res.msg,
             type: 'warning'
           })
-          this.dialogVisible = false
         }
       })
     },
@@ -1017,6 +1026,16 @@ export default {
         this.getList()
       })
     },
+    onUserLabel() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择客户'))
+      }
+      this.showLabel = true
+      this.$refs.label.getList()
+    },
+    passVal() {
+      this.showLabel = false
+    },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
     },
@@ -1025,7 +1044,6 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择客户'))
       }
-      console.log(type)
       if (type === 0) {
         this.$request
           .customerForbid({
@@ -1099,7 +1117,8 @@ export default {
     SearchSelect,
     SearchGroup,
     NlePagination,
-    AddBtn
+    AddBtn,
+    addUserLabel
   }
 }
 </script>

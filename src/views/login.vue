@@ -15,9 +15,9 @@
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div v-if="customData.login_logo">
+          <div v-if="customData.login_image">
             <img
-              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
               alt=""
             />
@@ -88,9 +88,9 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div v-if="customData.login_logo">
+          <div v-if="customData.login_image">
             <img
-              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
               alt=""
             />
@@ -181,9 +181,9 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div v-if="customData.login_logo">
+          <div v-if="customData.login_image">
             <img
-              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
               alt=""
             />
@@ -410,9 +410,6 @@ export default {
     year: function () {
       return new Date().getFullYear()
     }
-    // logo() {
-    //   return location.domain.includes('haiouoms.com')
-    // }
   },
   mounted() {
     this.userInfo.username = localStorage.getItem('USERNAME') || ''

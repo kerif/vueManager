@@ -8,7 +8,7 @@
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-light-red" @click="removeMember(scope.row.id)">{{
+          <el-button class="btn-light-red" @click="removeMember(scope.$index, tableData)">{{
             $t('移除')
           }}</el-button>
         </template>
@@ -20,7 +20,14 @@
     <el-dialog :title="$t('用户')" :visible.sync="showInner" append-to-body @close="clearInner">
       <el-form :model="form">
         <el-form-item :label="$t('用户')">
-          <el-input v-model="form.user_id" type="textarea"></el-input>
+          <el-select v-model="form.user_id" multiple filterable>
+            <el-option
+              v-for="item in userData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -45,8 +52,9 @@ export default {
       id: '',
       showInner: false,
       form: {
-        user_id: ''
-      }
+        user_id: []
+      },
+      userData: []
     }
   },
   methods: {
@@ -57,7 +65,8 @@ export default {
     },
     getList() {
       this.$request
-        .getUserMembers(this.id, {
+        .getUsers({
+          tag_id: this.id,
           page: this.page_params.page,
           size: this.page_params.size
         })
@@ -69,18 +78,28 @@ export default {
           }
         })
     },
+    getUserList() {
+      this.$request.Automatic().then(res => {
+        this.userData = res.data
+      })
+    },
     addMember() {
       this.showInner = true
+      this.getUserList()
     },
-    removeMember() {},
+    removeMember(index, rows) {
+      rows.splice(index, 1)
+    },
     onSave() {
-      this.$request.printLabel(this.id, { user_ids: this.form.user_id.split(',') }).then(res => {
+      this.$request.printLabel(this.id, { user_ids: this.form.user_id }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.showInner = false
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -89,7 +108,9 @@ export default {
         }
       })
     },
-    clearInner() {},
+    clearInner() {
+      this.form.user_id = []
+    },
     clear() {
       this.id = ''
     }

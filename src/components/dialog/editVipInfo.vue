@@ -134,6 +134,20 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('客户标签')" class="label-sty">
+            <el-select v-model="tag_ids" @change="changeLabel($event)" multiple clearable>
+              <el-option
+                v-for="item in labelData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -168,7 +182,9 @@ export default {
       options: [],
       id: '',
       userId: '',
-      name: ''
+      name: '',
+      tag_ids: [],
+      labelData: []
     }
   },
   methods: {
@@ -217,6 +233,39 @@ export default {
       this.supplierId = item.id
       this.supplierName = item.name
     },
+    getUserLabel() {
+      this.$request.userTag().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.labelData = res.data
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    changeLabel(e) {
+      console.log(e)
+      this.$request.makeTag({ tag_ids: this.tag_ids }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.success()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     submit() {
       this.$request
         .updateVipInfo(this.id, {
@@ -260,6 +309,7 @@ export default {
     init() {
       this.getList()
       this.searchCountry()
+      this.getUserLabel()
     }
   }
 }

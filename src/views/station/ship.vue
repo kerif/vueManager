@@ -258,18 +258,22 @@
           <el-select
             v-model="form.logistics_type_id"
             filterable
+            clearable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
+            @change="changeLogistic($event)"
           >
             <el-option v-for="item in modeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
-          <!-- <el-autocomplete
-            v-model="form.logistics_type_id"
-            :fetch-suggestions="querySearchLogistics"
-            :placeholder="$t('请选择')"
-          ></el-autocomplete> -->
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="is_member" v-show="isVisible" @change="onRember">{{
+            $t('是否记住')
+          }}</el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -418,7 +422,9 @@ export default {
       radio: '',
       type: 1,
       showTmpDrawer: false,
-      uploadType: 3
+      uploadType: 3,
+      is_member: false,
+      isVisible: false
     }
   },
   created() {
@@ -442,6 +448,19 @@ export default {
   },
   mounted() {
     this.getList()
+  },
+  watch: {
+    'form.logistics_type_id': function (val) {
+      console.log(val)
+      this.modeData.forEach(item => {
+        console.log(item.id === val)
+        if (item.id !== val) {
+          this.isVisible = true
+        } else {
+          this.isVisible = false
+        }
+      })
+    }
   },
   methods: {
     initSize() {
@@ -487,6 +506,9 @@ export default {
           })
         }
       })
+    },
+    changeLogistic(e) {
+      if (!e) return (this.isVisible = false)
     },
     // 下载excel
     uploadList(type) {
@@ -541,6 +563,29 @@ export default {
     },
     uploadListExcel() {
       this.showTmpDrawer = true
+    },
+    onRember() {
+      let params = {
+        is_member: Number(this.is_member),
+        logistics_type_id: this.form.logistics_type_id ? this.form.logistics_type_id : '',
+        shipment_ids: this.deleteNum,
+        context: this.form.logistics_type_id
+      }
+      this.$request.rememberShip(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     uploadBaleImg(item) {
       let file = item.file
