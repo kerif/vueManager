@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" v-if="customData">
+  <div class="login-container" v-show="customData">
     <div class="login-header">
       <img
         v-if="customData.login_logo"
@@ -410,6 +410,9 @@ export default {
     year: function () {
       return new Date().getFullYear()
     }
+    // logo() {
+    //   return location.domain.includes('haiouoms.com')
+    // }
   },
   mounted() {
     this.userInfo.username = localStorage.getItem('USERNAME') || ''

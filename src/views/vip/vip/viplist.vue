@@ -142,12 +142,9 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
-        <!-- <el-button class="btn-purple" size="small" @click="goServies('services')">{{
-          $t('分配客服')
+        <el-button class="btn-main" size="small" @click="showLabel = true">{{
+          $t('添加标签')
         }}</el-button>
-        <el-button class="btn-deep-blue" size="small" @click="goServies('sale')">{{
-          $t('分配销售')
-        }}</el-button> -->
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-purple" size="small" @click="goServies('services')">{{
             $t('分配客服')
@@ -548,7 +545,8 @@ export default {
       sourceList: [],
       clientSourceList: [],
       inviteLoading: false,
-      hasFilterCondition: false
+      hasFilterCondition: false,
+      showLabel: false
     }
   },
   mixins: [pagination],

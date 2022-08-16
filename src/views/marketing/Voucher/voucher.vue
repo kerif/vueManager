@@ -160,18 +160,96 @@
       :visible.sync="show"
       :title="$t('请选择')"
       class="change-status-dialog dialog-container"
-      width="35%"
+      width="50%"
       @close="clear"
     >
       <div class="status-box">
-        <el-radio-group v-model="ruleForm.status">
+        <!-- <el-radio-group v-model="ruleForm.status">
           <el-radio :label="1">{{ $t('客户组投放') }}</el-radio>
           <el-radio :label="2">{{ $t('单个客户投放') }}</el-radio>
-        </el-radio-group>
+        </el-radio-group> -->
+        <div class="box">
+          <div class="box-one">
+            <div class="box-one-top">
+              <div>{{ $t('用户组') }}</div>
+              <div>{{ userList.length }}</div>
+            </div>
+            <div class="box-one-bottom">
+              <el-checkbox-group v-model="userList">
+                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-two">
+            <div class="box-two-left">
+              <div>{{ $t('特定等级组') }}</div>
+              <div>{{ levelList.length }}</div>
+            </div>
+            <div class="box-two-bottom">
+              <el-checkbox-group v-model="levelList">
+                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-two">
+            <div class="box-two-left">
+              <div>{{ $t('客户标签组') }}</div>
+              <div>{{ tags.length }}</div>
+            </div>
+            <div class="box-two-bottom">
+              <el-checkbox-group v-model="tags">
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-three">
+            <div class="box-three-top">
+              <div>{{ $t('特定客户') }}</div>
+              <div>{{ customerList.length }}</div>
+            </div>
+            <div style="padding: 10px">
+              <el-autocomplete
+                v-model="selectUser"
+                :fetch-suggestions="querySearchUser"
+                value-key="name"
+                clearable
+                :placeholder="$t('请输入客户ID')"
+                @select="handleSelect"
+                style="width: 200px"
+              >
+                <template #default="{ item }">
+                  <div class="name">{{ item.id }}---{{ item.name }}</div>
+                </template>
+              </el-autocomplete>
+            </div>
+            <div style="padding: 10px; height: 300px; overflow: auto">
+              <div
+                class="customer-item"
+                style="margin: 10px"
+                v-for="(item, index) in customerList"
+                :key="index"
+              >
+                {{ item.id }}---{{ item.name }}
+                <i
+                  class="el-icon-delete"
+                  style="color: red; cursor: pointer"
+                  @click="delCustomer(index)"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div slot="footer">
         <el-button @click="show = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+        <el-button type="primary" @click="onConfirm">{{ $t('确定') }}</el-button>
+        <!-- <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button> -->
       </div>
     </el-dialog>
     <!-- 分享 -->
@@ -186,7 +264,6 @@
         <img :src="`${$baseUrl.IMAGE_URL}${imgShare}`" alt="" class="goods-img" />
       </span>
       <div slot="footer">
-        <!-- <el-button @click="show = false">{{ $t('取消') }}</el-button> -->
         <el-button type="primary" @click="uploadCode">{{ $t('下载二维码') }}</el-button>
       </div>
     </el-dialog>
@@ -242,7 +319,15 @@ export default {
       ruleForm: {
         status: []
       },
-      imgShare: ''
+      imgShare: '',
+      selectUser: '',
+      tags: [],
+      userList: [],
+      modeList: [],
+      levelList: [],
+      customerList: [],
+      vipList: [],
+      labelList: []
     }
   },
   created() {
@@ -253,8 +338,6 @@ export default {
     if (this.$route.query.type) {
       this.type = this.$route.query.type
     }
-    // if (this.$route.query.type === '2') {
-    // }
   },
   activated() {
     this.$nextTick(() => {
@@ -268,6 +351,35 @@ export default {
   computed: {
     formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    },
+    sum() {
+      let sum1 = 0,
+        sum2 = 0,
+        sum3 = 0,
+        sum4 = 0
+      this.modeList.forEach(item => {
+        this.userList.forEach(ele => {
+          if (item.id === ele) {
+            sum1 += Number(item.users_count)
+          }
+        })
+      })
+      this.vipList.forEach(item => {
+        this.levelList.forEach(ele => {
+          if (item.id === ele) {
+            sum2 += Number(item.users_count)
+          }
+        })
+      })
+      this.labelList.forEach(item => {
+        this.tags.forEach(ele => {
+          if (item.id === ele) {
+            sum3 += Number(item.users_count)
+          }
+        })
+      })
+      sum4 = this.customerList.length
+      return sum1 + sum2 + sum3 + sum4
     }
   },
   methods: {
@@ -311,6 +423,37 @@ export default {
             })
           }
         })
+    },
+    getGroupList() {
+      this.$request.userRelation().then(res => {
+        if (res.ret) {
+          this.modeList = res.data.groups
+          this.vipList = res.data.levels
+          this.labelList = res.data.tags
+        }
+      })
+    },
+    // 选择客户
+    querySearchUser(keyword, cb) {
+      this.$request
+        .getUsers({ keyword })
+        .then(res => {
+          if (res.ret) {
+            cb(res.data)
+          } else {
+            cb([])
+          }
+        })
+        .catch(() => cb([]))
+    },
+    handleSelect(item) {
+      if (this.customerList.map(item => item.id).includes(item.id)) {
+        return false
+      }
+      this.customerList.push(item)
+    },
+    delCustomer(index) {
+      this.customerList.splice(index, 1)
     },
     // 记录
     recoding(id) {
@@ -381,14 +524,12 @@ export default {
       })
     },
     confirm() {
-      console.log(this.ruleForm.status)
       if (!this.ruleForm.status) {
         return this.$message.info(this.$t('请选择客户或客户组'))
       }
       this.show = false
       if (this.ruleForm.status === 2) {
         dialog({ type: 'selectCus' }, data => {
-          console.log(data, '我是客户data')
           this.$request
             .addLaunch(this.servingId, {
               user_id: [data.id]
@@ -411,7 +552,6 @@ export default {
         })
       } else {
         dialog({ type: 'selectGroup' }, data => {
-          console.log(data, '我是客户组data')
           this.$request
             .addLaunchGroup(this.servingId, {
               group_id: [data.id]
@@ -436,11 +576,48 @@ export default {
     },
     clear() {
       this.ruleForm.status = []
+      this.id = ''
+      this.userList = []
+      this.customerList = []
+      this.levelList = []
+      this.tags = []
+    },
+    onConfirm() {
+      this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request
+          .launchCoupon(this.servingId, {
+            group_ids: this.userList,
+            level_ids: this.levelList,
+            user_ids: this.customerList.map(item => item.id),
+            tag_ids: this.tags
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('保存成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      })
     },
     // 投放第一步
     serving(id) {
       this.show = true
       this.servingId = id
+      this.getGroupList()
     },
     // 获取全部语言
     getLanguageList() {
@@ -514,15 +691,12 @@ export default {
     },
     // 选择不同类型优惠券
     onVocherTypeChange() {
-      console.log(this.type)
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
     // 转账 修改语言
     onLang(line, lang) {
-      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      // console.log(line['trans_' + lang.language_code])
       dialog({ type: 'voucherLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getList()
       })
@@ -567,6 +741,70 @@ export default {
       .operat-box {
         opacity: 1;
         transition: all 0.5s ease-in;
+      }
+    }
+  }
+  .box {
+    display: flex;
+    margin: 20px 0;
+    text-align: left;
+    .box-one {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      .box-one-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-one-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-two {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-two-left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-two-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-three {
+      width: 240px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-three-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
       }
     }
   }

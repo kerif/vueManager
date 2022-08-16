@@ -20,13 +20,94 @@
         </el-col>
       </el-row>
       <el-form-item :label="$t('适用对象')">
-        <el-radio-group v-model="ruleForm.scope" @change="selectMode">
+        <el-radio-group v-model="ruleForm.scope">
+          <el-radio :label="0">{{ $t('所有用户') }}</el-radio>
+          <el-radio :label="1">{{ $t('部分用户') }}</el-radio>
+        </el-radio-group>
+        <div class="box" v-if="ruleForm.scope === 1">
+          <div class="box-one">
+            <div class="box-one-top">
+              <div>{{ $t('用户组') }}</div>
+              <div>{{ ruleForm.group_ids.length }}</div>
+            </div>
+            <div class="box-one-bottom">
+              <el-checkbox-group v-model="ruleForm.group_ids">
+                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-two">
+            <div class="box-two-left">
+              <div>{{ $t('特定等级组') }}</div>
+              <div>{{ ruleForm.level_ids.length }}</div>
+            </div>
+            <div class="box-two-bottom">
+              <el-checkbox-group v-model="ruleForm.level_ids">
+                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-two">
+            <div class="box-two-left">
+              <div>{{ $t('客户标签组') }}</div>
+              <div>{{ ruleForm.tag_ids.length }}</div>
+            </div>
+            <div class="box-two-bottom">
+              <el-checkbox-group v-model="ruleForm.tag_ids">
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
+                  item.name
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </div>
+          <div class="box-three">
+            <div class="box-three-top">
+              <div>{{ $t('特定客户') }}</div>
+              <div>{{ customerList.length }}</div>
+            </div>
+            <div style="padding: 10px">
+              <el-autocomplete
+                v-model="selectUserId"
+                :fetch-suggestions="querySearchUser"
+                value-key="name"
+                clearable
+                :placeholder="$t('请输入客户ID')"
+                @select="handleSelect"
+                style="width: 200px"
+              >
+                <template #default="{ item }">
+                  <div class="name">{{ item.id }}---{{ item.name }}</div>
+                </template>
+              </el-autocomplete>
+            </div>
+            <div style="padding: 10px; height: 300px; overflow: auto">
+              <div
+                class="customer-item"
+                style="margin: 10px"
+                v-for="(item, index) in customerList"
+                :key="index"
+              >
+                {{ item.id }}---{{ item.name }}
+                <i
+                  class="el-icon-delete"
+                  style="color: red; cursor: pointer"
+                  @click="delCustomer(index)"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <el-radio-group v-model="ruleForm.scope" @change="selectMode">
           <el-radio :label="0">{{ $t('所有用户') }}</el-radio>
           <el-radio :label="1">{{ $t('特定用户组') }}</el-radio>
           <el-radio :label="2">{{ $t('特定会员等级') }}</el-radio>
           <el-radio :label="3">{{ $t('特定用户') }}</el-radio>
-        </el-radio-group>
-        <el-checkbox-group
+        </el-radio-group> -->
+        <!-- <el-checkbox-group
           v-model="ruleForm.ids"
           v-if="ruleForm.scope === 1 || ruleForm.scope === 2"
           class="checked-list"
@@ -34,8 +115,8 @@
           <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
             >{{ item.name }}
           </el-checkbox>
-        </el-checkbox-group>
-        <div v-if="ruleForm.scope === 3">
+        </el-checkbox-group> -->
+        <!-- <div v-if="ruleForm.scope === 3">
           <div class="search">
             <el-autocomplete
               class="inline-input"
@@ -62,7 +143,7 @@
               ></i>
             </div>
           </div>
-        </div>
+        </div> -->
       </el-form-item>
       <el-form-item :label="$t('适用渠道（可多选）')">
         <el-cascader
@@ -72,6 +153,7 @@
           collapse-tags
           clearable
         ></el-cascader>
+        {{ ruleForm.express_line_ids }}
       </el-form-item>
       <div>{{ $t('设置价格') }}</div>
       <div class="value-sty">
@@ -123,11 +205,13 @@ export default {
       ruleForm: {
         name: '',
         index: '',
-        scope: -1,
-        ids: [],
+        scope: 0,
         express_line_ids: [],
         discount: '',
-        discount_type: ''
+        discount_type: '',
+        group_ids: [],
+        level_ids: [],
+        tag_ids: []
       },
       options: [],
       props: { multiple: true, checkStrictly: false },
@@ -136,6 +220,9 @@ export default {
       modeList: [],
       customerList: [],
       selectUser: '',
+      selectUserId: '',
+      labelList: [],
+      vipList: [],
       time: [],
       discountData: [
         {
@@ -148,6 +235,37 @@ export default {
         }
       ],
       arr: []
+    }
+  },
+  computed: {
+    sum() {
+      let sum1 = 0,
+        sum2 = 0,
+        sum3 = 0,
+        sum4 = 0
+      this.modeList.forEach(item => {
+        this.ruleForm.group_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum1 += Number(item.users_count)
+          }
+        })
+      })
+      this.vipList.forEach(item => {
+        this.ruleForm.level_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum2 += Number(item.users_count)
+          }
+        })
+      })
+      this.labelList.forEach(item => {
+        this.ruleForm.tag_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum3 += Number(item.users_count)
+          }
+        })
+      })
+      sum4 = this.customerList.length
+      return sum1 + sum2 + sum3 + sum4
     }
   },
   methods: {
@@ -170,15 +288,15 @@ export default {
             })
           })
           this.ruleForm.express_line_ids = arr
-          this.selectMode(res.data.scope)
-          if (res.data.scope === 1) {
-            this.ruleForm.ids = res.data.user_groups.map(item => item.id)
-          } else if (res.data.scope === 2) {
-            this.ruleForm.ids = res.data.member_levels.map(item => item.id)
-          } else if (res.data.scope === 3) {
-            this.customerList = res.data.users
-            this.ruleForm.ids = this.customerList.map(item => item.id)
-          }
+          // this.selectMode(res.data.scope)
+          // if (res.data.scope === 1) {
+          //   this.ruleForm.ids = res.data.user_groups.map(item => item.id)
+          // } else if (res.data.scope === 2) {
+          //   this.ruleForm.ids = res.data.member_levels.map(item => item.id)
+          // } else if (res.data.scope === 3) {
+          //   this.customerList = res.data.users
+          //   this.ruleForm.ids = this.customerList.map(item => item.id)
+          // }
         }
       })
     },
@@ -208,6 +326,7 @@ export default {
                     })
             }
           })
+          console.log(this.options)
         }
         if (this.id) {
           this.getList()
@@ -251,7 +370,7 @@ export default {
     },
     // 选择适用方式
     selectMode(val) {
-      this.ruleForm.ids = []
+      // this.ruleForm.ids = []
       if (val === 1) {
         this.getUserGroup()
       } else if (val === 2) {
@@ -276,39 +395,77 @@ export default {
         return false
       }
       this.customerList.push(item)
-      this.ruleForm.ids = this.customerList.map(item => item.id)
+      // this.ruleForm.ids = this.customerList.map(item => item.id)
     },
     delCustomer(index) {
       this.customerList.splice(index, 1)
-      this.ruleForm.ids = this.customerList.map(item => item.id)
+      // this.ruleForm.ids = this.customerList.map(item => item.id)
     },
-    async confirm() {
-      this.ruleForm.express_line_ids = this.ruleForm.express_line_ids.map(item => item[1])
+    confirm() {
       this.ruleForm.effect_at = this.time[0]
       this.ruleForm.expire_at = this.time[1]
-      let res = {}
+      this.ruleForm.express_line_ids = this.ruleForm.express_line_ids.map(item => item[1])
+      let user_ids = this.customerList.map(item => item.id)
       if (this.id) {
-        res = await this.$request.updateSales(this.id, { ...this.ruleForm })
-      } else {
-        res = await this.$request.addSales({ ...this.ruleForm })
-      }
-      if (res.ret) {
-        this.$notify({
-          type: 'success',
-          title: this.$t('操作成功'),
-          message: res.msg
+        this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.updateSales(this.id, { ...this.ruleForm, user_ids }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         })
-        this.show = false
-        this.success()
       } else {
-        this.$message({
-          message: res.msg,
-          type: 'error'
+        this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.addSales({ ...this.ruleForm, user_ids }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         })
       }
     },
     init() {
       this.getLine()
+      this.getGroupList()
+    },
+    getGroupList() {
+      this.$request.userRelation().then(res => {
+        if (res.ret) {
+          this.modeList = res.data.groups
+          this.vipList = res.data.levels
+          this.labelList = res.data.tags
+        }
+      })
     },
     clear() {
       this.selectUser = ''
@@ -316,8 +473,8 @@ export default {
       this.id = ''
       this.ruleForm.name = ''
       this.ruleForm.index = ''
-      this.ruleForm.scope = -1
-      this.ruleForm.ids = []
+      this.ruleForm.scope = 0
+      // this.ruleForm.ids = []
       this.ruleForm.express_line_ids = []
       this.ruleForm.discount = ''
       this.ruleForm.discount_type = ''
@@ -348,6 +505,70 @@ export default {
     padding: 10px 20px;
     margin-top: 10px;
     border: 1px solid #ccc;
+  }
+  .box {
+    display: flex;
+    margin: 20px 0;
+    text-align: left;
+    .box-one {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      .box-one-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-one-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-two {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-two-left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-two-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-three {
+      width: 240px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-three-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+    }
   }
 }
 </style>

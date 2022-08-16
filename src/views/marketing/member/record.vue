@@ -3,14 +3,14 @@
     <el-dialog
       :title="$t('添加')"
       :visible.sync="addDialog"
-      width="40%"
+      width="50%"
       @close="resetForm('form')"
       class="dialog-container"
     >
       <div>
         <el-form ref="form" :model="form" label-position="top">
           <el-form-item :label="$t('选择客户')" prop="customer">
-            <div class="search">
+            <!-- <div class="search">
               <el-autocomplete
                 class="inline-input"
                 v-model="selectUser"
@@ -25,6 +25,85 @@
                   <div class="name">{{ item.id }}---{{ item.name }}</div>
                 </template>
               </el-autocomplete>
+            </div> -->
+            <div>
+              <div class="box">
+                <div class="box-one">
+                  <div class="box-one-top">
+                    <div>{{ $t('用户组') }}</div>
+                    <div>{{ form.group_ids.length }}</div>
+                  </div>
+                  <div class="box-one-bottom">
+                    <el-checkbox-group v-model="form.group_ids">
+                      <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
+                        item.name
+                      }}</el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                </div>
+                <div class="box-two">
+                  <div class="box-two-left">
+                    <div>{{ $t('特定等级组') }}</div>
+                    <div>{{ form.level_ids.length }}</div>
+                  </div>
+                  <div class="box-two-bottom">
+                    <el-checkbox-group v-model="form.level_ids">
+                      <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id">{{
+                        item.name
+                      }}</el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                </div>
+                <div class="box-two">
+                  <div class="box-two-left">
+                    <div>{{ $t('客户标签组') }}</div>
+                    <div>{{ form.tag_ids.length }}</div>
+                  </div>
+                  <div class="box-two-bottom">
+                    <el-checkbox-group v-model="form.tag_ids">
+                      <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
+                        item.name
+                      }}</el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                </div>
+                <div class="box-three">
+                  <div class="box-three-top">
+                    <div>{{ $t('特定客户') }}</div>
+                    <div>{{ customerList.length }}</div>
+                  </div>
+                  <div style="padding: 10px">
+                    <el-autocomplete
+                      v-model="selectUserId"
+                      :fetch-suggestions="querySearchUser"
+                      value-key="name"
+                      clearable
+                      :placeholder="$t('请输入客户ID')"
+                      @select="handleSelect"
+                      style="width: 200px"
+                    >
+                      <template #default="{ item }">
+                        <div class="name">{{ item.id }}---{{ item.name }}</div>
+                      </template>
+                    </el-autocomplete>
+                  </div>
+                  <div style="padding: 10px; height: 300px; overflow: auto">
+                    <div
+                      class="customer-item"
+                      style="margin: 10px"
+                      v-for="(item, index) in customerList"
+                      :key="index"
+                    >
+                      {{ item.id }}---{{ item.name }}
+                      <i
+                        class="el-icon-delete"
+                        style="color: red; cursor: pointer"
+                        @click="delCustomer(index)"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </el-form-item>
           <el-form-item :label="$t('选择分类')" prop="radio1">
@@ -121,9 +200,7 @@
           <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
             >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
           ></el-button>
-          <el-button size="mini" type="primary" @click="addDialog = true">{{
-            $t('添加')
-          }}</el-button>
+          <el-button size="mini" type="primary" @click="addUser()">{{ $t('添加') }}</el-button>
         </div>
       </div>
       <div class="screen" v-show="hasFilterCondition">
@@ -240,20 +317,23 @@ export default {
       rule: '',
       timeList: [],
       tableData: [],
-      userList: [],
       selectUser: '',
       validTimeList: [],
       form: {
-        user_id: '',
+        // user_id: '',
         resource_type: '',
         code: '',
         value: '',
         order_sn: '',
         valid_time: 0,
-        remark: ''
+        remark: '',
+        tag_ids: [],
+        level_ids: [],
+        group_ids: []
       },
       detailsForm: {},
       title: '',
+      selectUserId: '',
       localization: {},
       page_params: {
         resource_type: '',
@@ -282,12 +362,47 @@ export default {
           label: this.$t('支出')
         }
       ],
-      ruleOption: []
+      ruleOption: [],
+      labelList: [],
+      modeList: [],
+      vipList: [],
+      customerList: []
     }
   },
   created() {
     this.getList()
     this.getRecordDefault()
+  },
+  computed: {
+    sum() {
+      let sum1 = 0,
+        sum2 = 0,
+        sum3 = 0,
+        sum4 = 0
+      this.modeList.forEach(item => {
+        this.form.group_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum1 += item.users_count
+          }
+        })
+      })
+      this.vipList.forEach(item => {
+        this.form.level_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum2 += item.users_count
+          }
+        })
+      })
+      this.labelList.forEach(item => {
+        this.form.tag_ids.forEach(ele => {
+          if (item.id === ele) {
+            sum3 += item.users_count
+          }
+        })
+      })
+      sum4 = this.customerList.length
+      return sum1 + sum2 + sum3 + sum4
+    }
   },
   methods: {
     // 获取初始化
@@ -331,6 +446,22 @@ export default {
           }
         })
     },
+    addUser() {
+      this.addDialog = true
+      this.getGroupList()
+    },
+    getGroupList() {
+      this.$request.userRelation().then(res => {
+        if (res.ret) {
+          this.modeList = res.data.groups
+          this.vipList = res.data.levels
+          this.labelList = res.data.tags
+        }
+      })
+    },
+    delCustomer(index) {
+      this.customerList.splice(index, 1)
+    },
     //获取客户列表
     querySearchUser(keyword, cb) {
       this.$request
@@ -346,7 +477,11 @@ export default {
     },
     // 选择客户
     handleSelect(item) {
-      this.form.user_id = item.id
+      // this.form.user_id = item.id
+      if (this.customerList.map(item => item.id).includes(item.id)) {
+        return false
+      }
+      this.customerList.push(item)
     },
     //详情
     getRecordDetails(id, type) {
@@ -369,21 +504,28 @@ export default {
     },
     // 添加
     confirm() {
-      this.$request.addInOutRecord({ ...this.form }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.addDialog = false
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        let user_ids = this.customerList.map(item => item.id)
+        this.$request.addInOutRecord({ ...this.form, user_ids }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.addDialog = false
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     search() {
@@ -429,6 +571,70 @@ export default {
   }
   .search-group {
     width: 22.5%;
+  }
+  .box {
+    display: flex;
+    margin: 20px 0;
+    text-align: left;
+    .box-one {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      .box-one-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-one-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-two {
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-two-left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+      .box-two-bottom {
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+        .el-checkbox {
+          margin: 10px 0;
+          display: block;
+        }
+      }
+    }
+    .box-three {
+      width: 240px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      margin-left: 20px;
+      .box-three-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #eee;
+        border-bottom: 1px solid #eee;
+      }
+    }
   }
 }
 </style>

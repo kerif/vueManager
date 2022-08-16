@@ -4687,3 +4687,13 @@ exports.makeTag = params => {
 exports.agentCustomer = id => {
   return $form.put(`users/${id}/invite-users-to-agent-invite`)
 }
+
+// 获取用户关联数据
+exports.userRelation = () => {
+  return $form.get(`coupons/user-relations`)
+}
+
+// 批量分发优惠券
+exports.launchCoupon = (id, params) => {
+  return $form.put(`coupons/${id}/launch`, params)
+}
