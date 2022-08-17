@@ -844,6 +844,8 @@
           <el-select
             v-model="form.logistics_type_id"
             filterable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -856,6 +858,14 @@
             </el-option>
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
+        </el-form-item>
+        <el-form-item
+          v-if="
+            this.form.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -873,9 +883,12 @@
         <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              v-if="scope.row.id"
+              class="btn-light-red"
+              @click="deleteTable(scope.row.id)"
+              >{{ $t('删除') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -1257,7 +1270,8 @@ export default {
       images: [],
       ruleForm: {
         textarea: ''
-      }
+      },
+      is_member: false
     }
   },
   activated() {
@@ -1729,28 +1743,32 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeOrderStatus({
-          logistics_type_id: this.form.logistics_type_id,
-          order_ids: this.selectIDs
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-            this.selectIDs = []
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        order_ids: this.selectIDs,
+        is_member: Number(this.is_member)
+      }
+      if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+        params.logistics_type_id = this.form.logistics_type_id
+      } else {
+        params.context = this.form.logistics_type_id
+      }
+      this.$request.changeOrderStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.selectIDs = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     clear() {
       this.form.logistics_type_id = ''

@@ -237,6 +237,7 @@
             </el-tooltip>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('展示最新轨迹')" width="150"></el-table-column>
         <el-table-column
           :label="$t('物品名称')"
           prop="package_name"

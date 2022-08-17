@@ -107,7 +107,9 @@
             <el-button class="btn-main" @click="onEditInfo(scope.row.id)">{{
               $t('修改资料')
             }}</el-button>
-            <!-- <el-button class="btn-light-green">{{ $t('批量导入') }}</el-button> -->
+            <el-button class="btn-light-green" @click="onBatchImport">{{
+              $t('批量导入')
+            }}</el-button>
             <el-button class="btn-deep-purple" @click="member(scope.row.id)">{{
               $t('成员')
             }}</el-button>
@@ -334,25 +336,22 @@ export default {
               }
             })
         } else {
-          this.$request
-            .deleteTag({
-              ids: this.deleteNum
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  title: this.$t('操作成功'),
-                  message: res.msg,
-                  type: 'success'
-                })
-                this.getList()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
+          let ids = this.deleteNum
+          this.$request.deleteTag(ids).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         }
       })
     },
@@ -387,6 +386,16 @@ export default {
     },
     handleClick() {
       this.getList()
+    },
+    onBatchImport() {
+      dialog(
+        {
+          type: 'batchTag'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     onEditInfo(id) {
       dialog({ type: 'editLabel', id }, () => {

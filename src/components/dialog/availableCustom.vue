@@ -48,6 +48,19 @@
           </el-checkbox-group>
         </div>
       </div>
+      <div class="box-two">
+        <div class="box-two-left">
+          <div>{{ $t('客户标签组') }}</div>
+          <div>{{ tag_ids.length }}</div>
+        </div>
+        <div class="box-two-bottom">
+          <el-checkbox-group v-model="tag_ids">
+            <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
+              item.name
+            }}</el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>
       <div class="box-three">
         <div class="box-three-top">
           <div>{{ $t('特定客户') }}</div>
@@ -103,7 +116,9 @@ export default {
       selectUser: '',
       customerList: [],
       modeList: [],
-      vipList: []
+      vipList: [],
+      labelList: [],
+      tag_ids: []
     }
   },
   methods: {
@@ -113,6 +128,7 @@ export default {
       }
       this.getGradeList()
       this.getUserGroup()
+      this.getLabelList()
     },
     getList() {
       this.$request.authDetail(this.id).then(res => {
@@ -121,6 +137,7 @@ export default {
           this.levelList = res.data.member_levels.map(item => item.id)
           this.userList = res.data.user_groups.map(item => item.id)
           this.customerList = res.data.users
+          this.tag_ids = res.data.user_tags.map(item => item.id)
         } else {
           this.$message({
             message: res.msg,
@@ -177,6 +194,20 @@ export default {
         }
       })
     },
+    // 客户标签
+    getLabelList() {
+      this.$request.userTag({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.labelList = res.data
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     handleSelect(item) {
       if (this.customerList.map(item => item.id).includes(item.id)) {
         return false
@@ -190,7 +221,8 @@ export default {
       let params = {
         auth_target: this.auth_target,
         user_group_ids: this.userList,
-        member_level_ids: this.levelList
+        member_level_ids: this.levelList,
+        tag_ids: this.tag_ids
       }
       params.user_ids = this.customerList.map(item => item.id)
       this.$request.userAuth(this.id, params).then(res => {
@@ -217,6 +249,7 @@ export default {
       this.userList = []
       this.customerList = []
       this.levelList = []
+      this.tag_ids = []
     }
   }
 }

@@ -258,22 +258,24 @@
           <el-select
             v-model="form.logistics_type_id"
             filterable
-            clearable
             allow-create
             default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
-            @change="changeLogistic($event)"
+            @clear="onClear"
           >
             <el-option v-for="item in modeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-checkbox v-model="is_member" v-if="search" @change="onRember">{{
-            $t('是否记住')
-          }}</el-checkbox>
+        <el-form-item
+          v-if="
+            this.form.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -448,7 +450,15 @@ export default {
   mounted() {
     this.getList()
   },
-  computed: {},
+  computed: {
+    // visibleBtn() {
+    //   let isBtn = false
+    //   if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+    //     isBtn = false
+    //   }
+    //   return isBtn
+    // }
+  },
   methods: {
     initSize() {
       if (localStorage.getItem('ship_size')) {
@@ -494,9 +504,7 @@ export default {
         }
       })
     },
-    changeLogistic(e) {
-      console.log(e)
-    },
+    onClear() {},
     // 下载excel
     uploadList(type) {
       this.$request
@@ -550,29 +558,6 @@ export default {
     },
     uploadListExcel() {
       this.showTmpDrawer = true
-    },
-    onRember() {
-      let params = {
-        is_member: Number(this.is_member),
-        logistics_type_id: this.form.logistics_type_id ? this.form.logistics_type_id : '',
-        shipment_ids: this.deleteNum,
-        context: this.form.logistics_type_id
-      }
-      this.$request.rememberShip(params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
     },
     uploadBaleImg(item) {
       let file = item.file
@@ -670,28 +655,32 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeShipStatus({
-          logistics_type_id: this.form.logistics_type_id,
-          shipment_ids: this.deleteNum
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-            this.deleteNum = []
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        shipment_ids: this.deleteNum,
+        is_member: Number(this.is_member)
+      }
+      if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+        params.logistics_type_id = this.form.logistics_type_id
+      } else {
+        params.context = this.form.logistics_type_id
+      }
+      this.$request.changeShipStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.deleteNum = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 导出清单
     // unloadShip (id) {

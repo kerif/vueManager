@@ -4664,8 +4664,8 @@ exports.editTag = (id, params) => {
 }
 
 // 客户标签 删除
-exports.deleteTag = ids => {
-  return $form.delete(`user-tags/batch-destroy`, ids)
+exports.deleteTag = params => {
+  return $form.delete('user-tags/batch-destroy', params)
 }
 
 // 客户标签 打标签
@@ -4701,4 +4701,14 @@ exports.launchCoupon = (id, params) => {
 // 更新物流
 exports.rememberShip = params => {
   return $form.put(`orders/logistics`, params)
+}
+
+// 下载客户标签模板
+exports.dowmLoadUserTagTmp = () => {
+  return $form.get('users/user-to-tag-template')
+}
+
+// 上传客户标签模板
+exports.uploadUserTagTmp = file => {
+  return $file.post('users/template-update-tag', file)
 }

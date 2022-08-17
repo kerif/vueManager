@@ -142,9 +142,12 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
-        <el-button class="btn-main" size="small" @click="onUserLabel">{{
-          $t('添加标签')
-        }}</el-button>
+        <el-button-group style="margin: 0 0 0 10px">
+          <el-button class="btn-main" size="small" @click="onUserLabel">{{
+            $t('添加标签')
+          }}</el-button>
+          <el-button class="btn-main" size="small" @click="onBatchTag">...</el-button>
+        </el-button-group>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-purple" size="small" @click="goServies('services')">{{
             $t('分配客服')
@@ -300,11 +303,15 @@
         prop="user_group.name_cn"
         align="center"
       ></el-table-column>
-      <el-table-column :label="$t('客户标签')" prop="tags">
+      <el-table-column :label="$t('客户标签')" prop="tags" width="200">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.tags" :key="item.id" type="warning">{{
-            item.name
-          }}</el-tag>
+          <el-tag
+            v-for="item in scope.row.tags"
+            style="margin: 0 5px 10px 0"
+            :key="item.id"
+            type="warning"
+            >{{ item.name }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
@@ -1032,6 +1039,16 @@ export default {
       }
       this.showLabel = true
       this.$refs.label.getList()
+    },
+    onBatchTag() {
+      dialog(
+        {
+          type: 'batchTag'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     passVal() {
       this.showLabel = false

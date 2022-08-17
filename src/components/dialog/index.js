@@ -161,6 +161,7 @@ import recordLog from './recordLog.vue'
 import editGoodsInfo from './editGoodsInfo.vue'
 import editLabel from './editLabel.vue'
 import labelMember from './labelMember.vue'
+import batchTag from './batchTag.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -321,6 +322,7 @@ const recordLogController = Vue.extend(recordLog)
 const editGoodsInfoController = Vue.extend(editGoodsInfo)
 const editLabelController = Vue.extend(editLabel)
 const labelMemberController = Vue.extend(labelMember)
+const batchTagController = Vue.extend(batchTag)
 
 const mixin = {
   data() {
@@ -638,6 +640,13 @@ function initInstance(type) {
     // 标签成员
     case 'labelMember':
       instance = new labelMemberController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签
+    case 'batchTag':
+      instance = new batchTagController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

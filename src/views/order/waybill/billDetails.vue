@@ -896,6 +896,14 @@
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
+        <el-form-item
+          v-if="
+            this.form.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
@@ -1086,7 +1094,8 @@ export default {
       countryList: [],
       declare: {},
       videoUrl: [],
-      picking_divide_order_id: ''
+      picking_divide_order_id: '',
+      is_member: false
     }
   },
   created() {
@@ -1563,27 +1572,32 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeOrderStatus({
-          logistics_type_id: this.logist.logistics_type_id,
-          order_ids: this.$route.params.id
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        logistics_type_id: this.logist.logistics_type_id,
+        order_ids: this.$route.params.id,
+        is_member: Number(this.is_member)
+      }
+      if (this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)) {
+        params.logistics_type_id = this.logist.logistics_type_id
+      } else {
+        params.context = this.logist.logistics_type_id
+      }
+      this.$request.changeOrderStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 打包
     packed(id, order_sn, status, is_parent, line_id) {
