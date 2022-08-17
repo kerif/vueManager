@@ -336,7 +336,7 @@ export default {
         } else {
           this.$request
             .deleteTag({
-              DELETE: this.deleteNum
+              ids: this.deleteNum
             })
             .then(res => {
               if (res.ret) {

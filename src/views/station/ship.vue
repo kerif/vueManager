@@ -271,7 +271,7 @@
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="is_member" v-show="isVisible" @change="onRember">{{
+          <el-checkbox v-model="is_member" v-if="search" @change="onRember">{{
             $t('是否记住')
           }}</el-checkbox>
         </el-form-item>
@@ -423,8 +423,7 @@ export default {
       type: 1,
       showTmpDrawer: false,
       uploadType: 3,
-      is_member: false,
-      isVisible: false
+      is_member: false
     }
   },
   created() {
@@ -449,19 +448,7 @@ export default {
   mounted() {
     this.getList()
   },
-  watch: {
-    'form.logistics_type_id': function (val) {
-      console.log(val)
-      this.modeData.forEach(item => {
-        console.log(item.id === val)
-        if (item.id !== val) {
-          this.isVisible = true
-        } else {
-          this.isVisible = false
-        }
-      })
-    }
-  },
+  computed: {},
   methods: {
     initSize() {
       if (localStorage.getItem('ship_size')) {
@@ -508,7 +495,7 @@ export default {
       })
     },
     changeLogistic(e) {
-      if (!e) return (this.isVisible = false)
+      console.log(e)
     },
     // 下载excel
     uploadList(type) {
