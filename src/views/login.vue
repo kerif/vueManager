@@ -2,20 +2,20 @@
   <div class="login-container">
     <div class="login-header">
       <img
-        v-if="!location.hostname.includes('haioumos')"
+        v-if="!this.hostname.includes('haiouoms')"
         style="width: 46px; height: 46px"
         :src="$baseUrl.IMAGE_URL + customData.login_logo"
         alt=""
       />
       <img v-else src="../assets/logo-top.png" class="img-sty" />
-      <span v-if="!location.hostname.includes('haioumos')">{{ customData.login_title }}</span>
+      <span v-if="!this.hostname.includes('haiouoms')">{{ customData.login_title }}</span>
       <span v-else>{{ $t('海鸥集运管理系统') }}</span>
     </div>
     <div class="main">
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div v-if="!location.hostname.includes('haioumos')">
+          <div v-if="!this.hostname.includes('haiouoms')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -88,7 +88,7 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div v-if="!location.hostname.includes('haioumos')">
+          <div v-if="!this.hostname.includes('haiouoms')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -181,7 +181,7 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div v-if="!location.hostname.includes('haioumos')">
+          <div v-if="!this.hostname.includes('haiouoms')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -377,6 +377,7 @@ export default {
       welcome: 1,
       forgetStep: 1,
       groupBuy: '',
+      hostname: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -424,6 +425,7 @@ export default {
   },
   methods: {
     getInit() {
+      this.hostname = location.hostname
       this.$request.initConfig({ domain: location.hostname }).then(res => {
         this.customData = res.data
         this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
