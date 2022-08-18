@@ -244,6 +244,10 @@ export default {
             })
           })
           this.ruleForm.express_line_ids = arr
+          this.ruleForm.group_ids = res.data.user_groups
+          this.ruleForm.level_ids = res.data.member_levels
+          this.customerList = res.data.users
+          this.ruleForm.tag_ids = res.data.user_tags
           // this.selectMode(res.data.scope)
           // if (res.data.scope === 1) {
           //   this.ruleForm.ids = res.data.user_groups.map(item => item.id)
@@ -434,6 +438,9 @@ export default {
       this.ruleForm.express_line_ids = []
       this.ruleForm.discount = ''
       this.ruleForm.discount_type = ''
+      this.ruleForm.group_ids = []
+      this.ruleForm.level_ids = []
+      this.ruleForm.tag_ids = []
       this.time = []
       this.modeList = []
     }
