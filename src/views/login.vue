@@ -1,21 +1,21 @@
 <template>
-  <div class="login-container" v-show="customData">
+  <div class="login-container">
     <div class="login-header">
       <img
-        v-if="customData.login_logo"
+        v-if="!location.hostname.includes('haioumos')"
         style="width: 46px; height: 46px"
         :src="$baseUrl.IMAGE_URL + customData.login_logo"
         alt=""
       />
       <img v-else src="../assets/logo-top.png" class="img-sty" />
-      <span v-if="customData.login_title">{{ customData.login_title }}</span>
+      <span v-if="!location.hostname.includes('haioumos')">{{ customData.login_title }}</span>
       <span v-else>{{ $t('海鸥集运管理系统') }}</span>
     </div>
     <div class="main">
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div v-if="customData.login_image">
+          <div v-if="!location.hostname.includes('haioumos')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -88,7 +88,7 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div v-if="customData.login_image">
+          <div v-if="!location.hostname.includes('haioumos')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -181,7 +181,7 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div v-if="customData.login_image">
+          <div v-if="!location.hostname.includes('haioumos')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"

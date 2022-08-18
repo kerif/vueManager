@@ -12,9 +12,7 @@ export default {
     }
   },
   created() {
-    const loading = document.getElementById('loading')
-    if (loading != null && location.hostname) {
-      document.body.removeChild(loading)
+    if (location.hostname) {
       this.getInit()
     }
   },
