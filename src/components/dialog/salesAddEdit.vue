@@ -101,49 +101,6 @@
             </div>
           </div>
         </div>
-        <!-- <el-radio-group v-model="ruleForm.scope" @change="selectMode">
-          <el-radio :label="0">{{ $t('所有用户') }}</el-radio>
-          <el-radio :label="1">{{ $t('特定用户组') }}</el-radio>
-          <el-radio :label="2">{{ $t('特定会员等级') }}</el-radio>
-          <el-radio :label="3">{{ $t('特定用户') }}</el-radio>
-        </el-radio-group> -->
-        <!-- <el-checkbox-group
-          v-model="ruleForm.ids"
-          v-if="ruleForm.scope === 1 || ruleForm.scope === 2"
-          class="checked-list"
-        >
-          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
-            >{{ item.name }}
-          </el-checkbox>
-        </el-checkbox-group> -->
-        <!-- <div v-if="ruleForm.scope === 3">
-          <div class="search">
-            <el-autocomplete
-              class="inline-input"
-              v-model="selectUser"
-              :fetch-suggestions="querySearchUser"
-              value-key="name"
-              clearable
-              :placeholder="$t('请输入客户ID')"
-              @select="handleSelect"
-              style="width: 200px"
-            >
-              <template #default="{ item }">
-                <div class="name">{{ item.id }}---{{ item.name }}</div>
-              </template>
-            </el-autocomplete>
-          </div>
-          <div class="customer checked-list">
-            <div class="customer-item" v-for="(item, index) in customerList" :key="index">
-              {{ item.id }}---{{ item.name }}
-              <i
-                class="el-icon-delete"
-                style="color: red; cursor: pointer"
-                @click="delCustomer(index)"
-              ></i>
-            </div>
-          </div>
-        </div> -->
       </el-form-item>
       <el-form-item :label="$t('适用渠道（可多选）')">
         <el-cascader

@@ -82,6 +82,7 @@ export default {
               type: 'success'
             })
             this.$emit('passVal', false)
+            this.$parent.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),

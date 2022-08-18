@@ -1038,7 +1038,6 @@ export default {
         return this.$message.error(this.$t('请选择客户'))
       }
       this.showLabel = true
-      this.$refs.label.getList()
     },
     onBatchTag() {
       dialog(

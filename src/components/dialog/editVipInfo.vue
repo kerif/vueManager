@@ -137,7 +137,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('客户标签')" class="label-sty">
-            <el-select v-model="tag_ids" @change="changeLabel($event)" multiple clearable>
+            <el-select v-model="tag_ids" multiple clearable>
               <el-option
                 v-for="item in labelData"
                 :key="item.id"
@@ -145,6 +145,7 @@
                 :value="item.id"
               ></el-option>
             </el-select>
+            <el-button style="margin-left: 5px" @click="saveTag">{{ $t('保存') }}</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -247,9 +248,8 @@ export default {
         }
       })
     },
-    changeLabel(e) {
-      console.log(e)
-      this.$request.makeTag({ tag_ids: this.tag_ids }).then(res => {
+    saveTag() {
+      this.$request.makeTag({ user_ids: [this.id], tag_ids: this.tag_ids }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
