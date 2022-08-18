@@ -1,22 +1,5 @@
 <template>
   <div class="vipgroup-list-container">
-    <!-- <div class="btn-flex">
-      <div class="vip-group-search">
-        <search-group
-          paddingBottom="0"
-          v-model="page_params.keyword"
-          @search="goSearch"
-        ></search-group>
-        <div class="bottom-sty">
-          <el-button class="btn-light-red" size="small" @click="deleteData">{{
-            $t('删除')
-          }}</el-button>
-        </div>
-      </div>
-      <div class="select-box">
-        <add-btn @click.native="addVip">{{ $t('添加客户组') }}</add-btn>
-      </div>
-    </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="$t('客户组')" name="0"></el-tab-pane>
       <el-tab-pane :label="$t('客户标签')" name="1"></el-tab-pane>
@@ -84,7 +67,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
     <div v-else>
       <el-table
@@ -117,12 +99,12 @@
         </el-table-column>
       </el-table>
     </div>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
-// import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
@@ -130,7 +112,6 @@ export default {
   components: {
     SearchGroup,
     NlePagination
-    // AddBtn
   },
   mixins: [pagination],
   data() {
@@ -148,29 +129,6 @@ export default {
   methods: {
     getList() {
       this.tableLoading = true
-      // this.$request
-      //   .getUserGroup({
-      //     keyword: this.page_params.keyword,
-      //     page: this.page_params.page,
-      //     size: this.page_params.size
-      //   })
-      //   .then(res => {
-      //     this.tableLoading = false
-      //     if (res.ret) {
-      //       this.vipGroupList = res.data
-      //       this.page_params.page = res.meta.current_page
-      //       this.page_params.total = res.meta.total
-      //       this.$nextTick(() => {
-      //         this.$refs.table.doLayout()
-      //       })
-      //     } else {
-      //       this.$notify({
-      //         title: this.$t('操作失败'),
-      //         message: res.msg,
-      //         type: 'warning'
-      //       })
-      //     }
-      //   })
       if (this.activeName === '0') {
         this.$request
           .getUserGroup({
@@ -229,14 +187,11 @@ export default {
     },
     // 添加客户组
     addVip() {
-      // dialog({ type: 'editVip' }, () => {
-      //   this.getList()
-      // })
       if (this.activeName === '0') {
         dialog({ type: 'editVip', state: 'add' }, () => {
           this.getList()
         })
-      } else if (this.activeName === '1') {
+      } else {
         dialog({ type: 'editLabel' }, () => {
           this.getList()
         })
@@ -259,9 +214,6 @@ export default {
     },
     // 成员
     member(id) {
-      // dialog({ type: 'vipList', id }, () => {
-      //   this.getList()
-      // })
       if (this.activeName === '0') {
         dialog({ type: 'vipList', id }, () => {
           this.getList()
@@ -277,34 +229,6 @@ export default {
     },
     // 删除
     deleteData() {
-      // if (!this.deleteNum || !this.deleteNum.length) {
-      //   return this.$message.error(this.$t('请选择客户组'))
-      // }
-      // this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
-      //   confirmButtonText: this.$t('确定'),
-      //   cancelButtonText: this.$t('取消'),
-      //   type: 'warning'
-      // }).then(() => {
-      //   this.$request
-      //     .userGroupDelete({
-      //       DELETE: this.deleteNum
-      //     })
-      //     .then(res => {
-      //       if (res.ret) {
-      //         this.$notify({
-      //           title: this.$t('操作成功'),
-      //           message: res.msg,
-      //           type: 'success'
-      //         })
-      //         this.getList()
-      //       } else {
-      //         this.$message({
-      //           message: res.msg,
-      //           type: 'error'
-      //         })
-      //       }
-      //     })
-      // })
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(
           this.activeName === '0' ? this.$t('请选择客户组') : this.$t('请选择标签')
@@ -336,8 +260,7 @@ export default {
               }
             })
         } else {
-          let ids = this.deleteNum
-          this.$request.deleteTag(ids).then(res => {
+          this.$request.deleteTag({ ids: this.deleteNum }).then(res => {
             if (res.ret) {
               this.$notify({
                 title: this.$t('操作成功'),

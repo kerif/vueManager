@@ -237,7 +237,19 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('展示最新轨迹')" width="150"></el-table-column>
+        <el-table-column
+          :label="$t('物流状态')"
+          prop="third_tracking_status_name"
+          key="third_tracking_status_name"
+          v-if="activeName === '1'"
+          width="150"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" class="copy-number" @click="packageTrack(scope.row.id)">{{
+              scope.row.third_tracking_status_name
+            }}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="$t('物品名称')"
           prop="package_name"
@@ -514,12 +526,14 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
+    <tracking :showTracking="showTracking" :trackId="trackId" @receiveVal="receiveVal"></tracking>
   </div>
 </template>
 
 <script>
 import OrderListSearch from './components/orderListSearch'
 import BatchModify from './components/batchModify'
+import tracking from './components/tracking'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
@@ -527,7 +541,8 @@ export default {
   components: {
     OrderListSearch,
     NlePagination,
-    BatchModify
+    BatchModify,
+    tracking
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -563,7 +578,9 @@ export default {
         member_level: ''
       },
       showBatch: false,
-      packageData: []
+      showTracking: false,
+      packageData: [],
+      trackId: ''
     }
   },
   activated() {
@@ -609,11 +626,18 @@ export default {
     passVal() {
       this.showBatch = false
     },
+    receiveVal() {
+      this.showTracking = false
+    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
       this.getList()
       this.getCounts()
+    },
+    packageTrack(id) {
+      this.trackId = id
+      this.showTracking = true
     },
     computedParams() {
       let params = {

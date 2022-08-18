@@ -4665,7 +4665,7 @@ exports.editTag = (id, params) => {
 
 // 客户标签 删除
 exports.deleteTag = params => {
-  return $form.delete('user-tags/batch-destroy', params)
+  return $form.delete('user-tags/batch-destroy', { params })
 }
 
 // 客户标签 打标签

@@ -11,7 +11,7 @@
       <el-form-item :label="$t('标签描述')">
         <el-input
           type="textarea"
-          :rows="2"
+          :autosize="{ minRows: 2, maxRows: 4 }"
           :placeholder="$t('请输入标签描述')"
           v-model="ruleForm.description"
         ></el-input>
@@ -51,6 +51,7 @@ export default {
               type: 'success'
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,
@@ -67,6 +68,7 @@ export default {
               type: 'success'
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,
