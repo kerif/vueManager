@@ -153,7 +153,6 @@
           collapse-tags
           clearable
         ></el-cascader>
-        {{ ruleForm.express_line_ids }}
       </el-form-item>
       <div>{{ $t('设置价格') }}</div>
       <div class="value-sty">
