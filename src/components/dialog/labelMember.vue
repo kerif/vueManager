@@ -8,7 +8,7 @@
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-light-red" @click="removeMember(scope.$index, tableData)">{{
+          <el-button class="btn-light-red" @click="removeMember(scope.row.id)">{{
             $t('移除')
           }}</el-button>
         </template>
@@ -87,8 +87,22 @@ export default {
       this.showInner = true
       this.getUserList()
     },
-    removeMember(index, rows) {
-      rows.splice(index, 1)
+    removeMember(id) {
+      this.$request.removeTag(this.id, { user_ids: [id] }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     onSave() {
       this.$request.printLabel(this.id, { user_ids: this.form.user_id }).then(res => {

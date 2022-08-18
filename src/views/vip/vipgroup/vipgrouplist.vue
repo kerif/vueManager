@@ -4,14 +4,14 @@
       <el-tab-pane :label="$t('客户组')" name="0"></el-tab-pane>
       <el-tab-pane :label="$t('客户标签')" name="1"></el-tab-pane>
     </el-tabs>
-    <div style="display: flex; align-items: center; justify-content: space-between">
+    <div class="flex">
       <div>
         <el-button class="btn-main" size="small" @click="addVip">{{ $t('新增') }}</el-button>
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
       </div>
-      <div style="background: #fff; padding: 10px 30px; border-radius: 5px; font-size: 14px">
+      <div class="tag">
         <span v-if="activeName === '0'">{{ $t('注: 每个客户仅能属于一个客户组') }}</span>
         <span v-else>{{ $t('注: 每个客户可以属于多个标签组') }}</span>
       </div>
@@ -87,7 +87,7 @@
           <div></div>
           <template slot-scope="scope">
             <el-button class="btn-main" @click="onEditInfo(scope.row.id)">{{
-              $t('修改资料')
+              $t('修改标签')
             }}</el-button>
             <el-button class="btn-light-green" @click="onBatchImport">{{
               $t('批量导入')
@@ -340,6 +340,17 @@ export default {
     overflow: hidden;
     display: flex;
     justify-content: space-between;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .tag {
+      background: #fff;
+      padding: 10px 30px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
   }
   .vip-group-search {
     width: 12.5%;
