@@ -32,9 +32,9 @@
             </div>
             <div class="box-one-bottom">
               <el-checkbox-group v-model="ruleForm.group_ids">
-                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
@@ -45,9 +45,9 @@
             </div>
             <div class="box-two-bottom">
               <el-checkbox-group v-model="ruleForm.level_ids">
-                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
@@ -58,9 +58,9 @@
             </div>
             <div class="box-two-bottom">
               <el-checkbox-group v-model="ruleForm.tag_ids">
-                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
@@ -367,7 +367,7 @@ export default {
       this.ruleForm.express_line_ids = this.ruleForm.express_line_ids.map(item => item[1])
       let user_ids = this.customerList.map(item => item.id)
       if (this.id) {
-        this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
+        this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认设置`), this.$t('提示'), {
           confirmButtonText: this.$t('确定'),
           cancelButtonText: this.$t('取消'),
           type: 'warning'

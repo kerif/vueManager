@@ -176,9 +176,9 @@
             </div>
             <div class="box-one-bottom">
               <el-checkbox-group v-model="userList">
-                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
@@ -189,9 +189,9 @@
             </div>
             <div class="box-two-bottom">
               <el-checkbox-group v-model="levelList">
-                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in vipList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
@@ -202,9 +202,9 @@
             </div>
             <div class="box-two-bottom">
               <el-checkbox-group v-model="tags">
-                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">{{
-                  item.name
-                }}</el-checkbox>
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id"
+                  >{{ item.name }}({{ item.users_count }})</el-checkbox
+                >
               </el-checkbox-group>
             </div>
           </div>
