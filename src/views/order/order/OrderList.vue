@@ -526,14 +526,12 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <tracking :showTracking="showTracking" :trackId="trackId" @receiveVal="receiveVal"></tracking>
   </div>
 </template>
 
 <script>
 import OrderListSearch from './components/orderListSearch'
 import BatchModify from './components/batchModify'
-import tracking from './components/tracking'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
@@ -541,8 +539,7 @@ export default {
   components: {
     OrderListSearch,
     NlePagination,
-    BatchModify,
-    tracking
+    BatchModify
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -578,7 +575,6 @@ export default {
         member_level: ''
       },
       showBatch: false,
-      showTracking: false,
       packageData: [],
       trackId: ''
     }
@@ -626,9 +622,6 @@ export default {
     passVal() {
       this.showBatch = false
     },
-    receiveVal() {
-      this.showTracking = false
-    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
@@ -636,8 +629,10 @@ export default {
       this.getCounts()
     },
     packageTrack(id) {
-      this.trackId = id
-      this.showTracking = true
+      dialog({
+        type: 'tracking',
+        id
+      })
     },
     computedParams() {
       let params = {

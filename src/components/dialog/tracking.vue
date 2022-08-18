@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="showTracking" :title="$t('轨迹')" :before-close="close" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('轨迹')" @close="clear">
     <el-table :data="trackData" border stripe>
       <el-table-column label="#" type="index"></el-table-column>
       <el-table-column prop="status_name" :label="$t('物流轨迹')"></el-table-column>
@@ -12,35 +12,22 @@
 export default {
   data() {
     return {
+      id: '',
       trackData: []
     }
   },
-  created() {
-    if (this.trackId) {
-      this.getList()
-    }
-  },
-  props: {
-    showTracking: {
-      type: Boolean,
-      default: false
-    },
-    trackId: {
-      type: [Number, String]
-    }
-  },
   methods: {
+    init() {
+      if (this.id) {
+        this.getList()
+      }
+    },
     getList() {
-      this.$request.getPackageDetails(this.trackId).then(res => {
-        console.log(res)
+      this.$request.getPackageDetails(this.id).then(res => {
         if (res.ret) {
           this.trackData = res.data.tracking_logs
-          console.log(res)
         }
       })
-    },
-    close() {
-      this.$emit('receiveVal', false)
     },
     clear() {}
   }
