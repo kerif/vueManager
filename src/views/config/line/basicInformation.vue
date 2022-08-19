@@ -121,7 +121,7 @@
                 </el-tooltip>
               </el-radio>
               <el-radio :label="1"
-                >{{ $t('集包立即付款(原箱出库)') }}
+                >{{ $t('集包立即付款') }}
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -131,7 +131,7 @@
                   <span class="el-icon-question icon-info"></span>
                 </el-tooltip>
               </el-radio>
-              <el-radio :label="2">{{ $t('集包立即付款(合箱出库)') }}</el-radio>
+              <!-- <el-radio :label="2">{{ $t('集包立即付款(合箱出库)') }}</el-radio> -->
             </el-radio-group>
           </el-col>
         </el-row>
