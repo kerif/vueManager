@@ -346,7 +346,6 @@
                 v-if="$route.params.parent == 0"
                 class="btn-main change-btn"
                 @click="changeWarehouse"
-                :disabled="status === 3"
                 >{{ $t('更改') }}</el-button
               >
             </el-form-item>
@@ -373,7 +372,6 @@
                 v-if="$route.params.parent == 0"
                 class="btn-main change-btn"
                 @click="changeLine"
-                :disabled="status === 3"
                 >{{ $t('更改') }}</el-button
               >
             </el-form-item>

@@ -280,7 +280,9 @@
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="changeStatus">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- 轨迹 -->

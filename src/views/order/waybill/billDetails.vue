@@ -883,6 +883,8 @@
           <el-select
             v-model="logist.logistics_type_id"
             filterable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -898,8 +900,8 @@
         </el-form-item>
         <el-form-item
           v-if="
-            this.form.logistics_type_id &&
-            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+            this.logist.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)
           "
         >
           <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
@@ -907,7 +909,9 @@
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="changeStatus">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- 编辑信息 -->
@@ -1573,7 +1577,6 @@ export default {
     // 更改物流状态
     changeStatus() {
       let params = {
-        logistics_type_id: this.logist.logistics_type_id,
         order_ids: this.$route.params.id,
         is_member: Number(this.is_member)
       }
