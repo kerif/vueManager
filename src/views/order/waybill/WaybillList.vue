@@ -333,9 +333,9 @@
               <template v-else-if="item.id === 'third_tracking_status_name'">
                 <span>{{ scope.row.third_tracking_status_name }}</span>
               </template>
-              <template v-else-if="item.id === 'pack_status_name'">
+              <!-- <template v-else-if="item.id === 'pack_status_name'">
                 <span>{{ scope.row.pack_status_name }}</span>
-              </template>
+              </template> -->
               <template v-else-if="item.id === 'exceptional_at'">
                 <span>{{ scope.row.exceptional_at }}</span>
               </template>
@@ -1389,8 +1389,8 @@ export default {
                 'packed_at',
                 'shipment_sn',
                 'boxes_count',
-                'third_tracking_status_name',
-                'pack_status_name'
+                'third_tracking_status_name'
+                // 'pack_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
