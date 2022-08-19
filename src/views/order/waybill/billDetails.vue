@@ -1318,8 +1318,10 @@ export default {
             this.form.active = 4
             break
           case 11:
-          case 12:
             this.form.active = 2
+            break
+          case 12:
+            this.form.active = 1
             break
           case 19:
             this.form.active = 5
