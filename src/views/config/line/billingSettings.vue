@@ -706,7 +706,7 @@ export default {
           name: 1
         }
       ],
-      ceilDatas: [
+      ceilData: [
         {
           id: 0,
           name: `${this.$t('不开启多箱计价按总重量体积计算价格')}`
@@ -768,8 +768,7 @@ export default {
         }
       ],
       billingName: 0,
-      unitName: '',
-      ceilData: []
+      unitName: ''
     }
   },
   watch: {
@@ -777,8 +776,8 @@ export default {
       console.log(val, 'val')
       this.billingName = val === 0 ? this.$t('重量') : this.$t('体积')
       this.unitName = val === 0 ? this.localization.weight_unit : this.$t('立方')
-      this.form.multi_boxes = val === 0 ? 0 : 2
-      this.ceilData = val === 0 ? this.ceilDatas : this.ceilDatas.filter(item => item.id !== 0)
+      // this.form.multi_boxes = val === 0 ? 0 : 2
+      // this.ceilData = val === 0 ? this.ceilData : this.ceilData.filter(item => item.id !== 0)
       console.log(this.billingName, 'this.billingName')
       console.log(this.unitName, 'this.unitName')
     }
@@ -828,6 +827,7 @@ export default {
         this.form.base_mode = res.data.base_mode
         this.form.has_factor = res.data.has_factor
         this.form.multi_boxes = res.data.multi_boxes
+        console.log(this.form.multi_boxes, res.data.multi_boxes)
         this.form.weight_rise = res.data.weight_rise
         this.form.min_weight = res.data.min_weight
         this.form.ceil_weight = Boolean(res.data.ceil_weight)
