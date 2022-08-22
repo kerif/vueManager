@@ -133,15 +133,6 @@
     </div>
     <div class="bottom-sty">
       <div>
-        <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
-          $t('禁止登录')
-        }}</el-button>
-        <el-button class="btn-blue-green" size="small" @click="forbidLogin(1)">{{
-          $t('允许登录')
-        }}</el-button>
-        <el-button class="btn-light-red" size="small" @click="deleteData">{{
-          $t('删除')
-        }}</el-button>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-main" size="small" @click="onUserLabel">{{
             $t('添加标签')
@@ -378,7 +369,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div class="flex-btn">
+      <div>
+        <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
+          $t('禁止登录')
+        }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="forbidLogin(1)">{{
+          $t('允许登录')
+        }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
+      </div>
+      <div>
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
+    </div>
     <el-dialog :title="$t('客户合并')" :visible.sync="dialogVisible" width="50%">
       <div>
         <p>{{ $t('当前客户ID') }}</p>
@@ -1203,6 +1209,11 @@ export default {
     width: 18px;
     margin-left: 3px;
     vertical-align: middle;
+  }
+  .flex-btn {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
 }
 </style>
