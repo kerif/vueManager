@@ -769,7 +769,6 @@ export default {
       ],
       billingName: 0,
       unitName: ''
-      // ceilData: []
     }
   },
   watch: {
@@ -777,8 +776,6 @@ export default {
       console.log(val, 'val')
       this.billingName = val === 0 ? this.$t('重量') : this.$t('体积')
       this.unitName = val === 0 ? this.localization.weight_unit : this.$t('立方')
-      // this.form.multi_boxes = val === 0 ? 0 : 2
-      // this.ceilData = val === 0 ? this.ceilDatas : this.ceilDatas.filter(item => item.id !== 0)
       console.log(this.billingName, 'this.billingName')
       console.log(this.unitName, 'this.unitName')
     }

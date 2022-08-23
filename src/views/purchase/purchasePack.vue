@@ -12,17 +12,17 @@
       </div>
       <div class="has-border order-box programmes" v-if="pickingSN">
         <el-row :gutter="10">
-          <el-col :span="5">
+          <el-col :span="6">
             <div class="font-bold">{{ name }}</div>
           </el-col>
-          <el-col :span="19">
+          <el-col :span="18">
             <div>{{ remark }}</div>
           </el-col>
         </el-row>
       </div>
       <div class="has-border">
         <el-row class="order-box" type="flex" v-show="orderList.length">
-          <el-col :span="5">
+          <el-col :span="6">
             <div class="font-bold left-title">{{ $t('请选择订单号') }}</div>
             <div class="order-list">
               <div
@@ -35,10 +35,13 @@
                 <span class="font-bold">#{{ item.sn }}</span>
                 <i class="el-icon-document" v-if="item.status === 3" @click="downFile(item.id)"></i>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
+                <!-- <el-button class="btn-main" @click="showData = true">{{
+                  $t('批量导入')
+                }}</el-button> -->
               </div>
             </div>
           </el-col>
-          <el-col :span="19" class="right-box">
+          <el-col :span="18" class="right-box">
             <div class="top-box" v-if="order.length">
               <div class="right-item has-border">
                 <div class="font-bold right-tile">{{ $t('打包详细') }}</div>
@@ -341,6 +344,20 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="showData" @close="clear">
+      <el-form>
+        <el-form-item :label="$t('第一步:下载模板 ')">
+          <el-button @click="exportBoxData(item.id)">{{ $t('下载模板') }}</el-button>
+        </el-form-item>
+        <el-form-item :label="$t('第二步:上传模板 ')">
+          <el-button>{{ $t('上传模板') }}</el-button>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showData = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary">{{ $t('确认') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -392,7 +409,8 @@ export default {
       className: '',
       boxNumber: '',
       sku: '',
-      orderNumber: []
+      orderNumber: [],
+      showData: false
     }
   },
   created() {
@@ -651,6 +669,41 @@ export default {
         callback && callback(list)
       })
     },
+    onUpload(file) {
+      this.params = new FormData()
+      this.params.append(`files[${0}][file]`, file)
+      this.param = new FormData()
+      this.param.append(`file`, file)
+      return this.$request.uploadFiles(this.params)
+    },
+    importBoxData(id) {
+      console.log(id)
+      // this.$request.importPurchaseGoodsTmp().then(res => {
+      //   console.log(res)
+      // })
+      // let orderId = id
+      // this.$request.importPurchaseAnalysis(orderId).then(res => {
+      //   console.log(res)
+      // })
+    },
+    // exportBoxData(id) {
+    //   let orderId = id
+    //   this.$request.exportPurchaseGoodsTmp(orderId).then(res => {
+    //     if (res.ret) {
+    //       this.$notify({
+    //         type: 'success',
+    //         title: this.$t('操作成功'),
+    //         message: res.msg
+    //       })
+    //     } else {
+    //       this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // },
+    clear() {},
     onPack(type) {
       if (!this.express_line_id) {
         return this.$message.error(this.$t('请选择渠道'))
@@ -728,9 +781,6 @@ export default {
 <style lang="scss">
 .pack-container {
   font-size: 14px;
-  .content-box {
-    padding: 20px;
-  }
   .el-row {
     display: flex;
     flex-wrap: wrap;

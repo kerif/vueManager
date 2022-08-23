@@ -4712,3 +4712,18 @@ exports.dowmLoadUserTagTmp = () => {
 exports.uploadUserTagTmp = file => {
   return $file.post('users/template-update-tag', file)
 }
+
+// 采购 打包 导入模板
+exports.importPurchaseGoodsTmp = () => {
+  return $form.get(`purchase-picking-orders/order/box-goods-template`)
+}
+
+// 采购 打包 导入解析
+exports.importPurchaseAnalysis = (orderId, file) => {
+  return $file.post(`purchase-picking-orders//order/${orderId}/box-goods-excel-parse`, file)
+}
+
+// 采购 导出
+exports.exportPurchaseGoodsTmp = orderId => {
+  return $form.post(`purchase-picking-orders/order/${orderId}/box-goods-export`)
+}
