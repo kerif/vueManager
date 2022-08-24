@@ -370,7 +370,7 @@
       </el-table-column>
     </el-table>
     <div class="flex-btn">
-      <div>
+      <div class="flex-left">
         <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
           $t('禁止登录')
         }}</el-button>
@@ -381,7 +381,7 @@
           $t('删除')
         }}</el-button>
       </div>
-      <div>
+      <div class="flex-right">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       </div>
     </div>
@@ -1212,8 +1212,13 @@ export default {
   }
   .flex-btn {
     display: flex;
-    justify-content: space-around;
     align-items: center;
+    .flex-left {
+      flex: 1;
+    }
+    .flex-right {
+      flex: auto;
+    }
   }
 }
 </style>
