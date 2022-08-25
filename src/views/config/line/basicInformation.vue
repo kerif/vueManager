@@ -323,7 +323,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!-- <el-form-item>
+      <el-form-item>
         <el-row>
           <el-col :span="10">
             <div>{{ $t('提示') }}</div>
@@ -335,7 +335,7 @@
             ></el-input>
           </el-col>
         </el-row>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -397,8 +397,8 @@ export default {
         is_delivery: 0,
         label_ids: [],
         order_mode: 0,
-        require_size: 0
-        // tips: ''
+        require_size: 0,
+        tips: ''
       },
       referenceTime: {
         minTime: '',
@@ -565,7 +565,7 @@ export default {
         this.form.require_size = res.data.require_size
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
         this.form.label_ids = res.data.labels.map(item => item.id)
-        // this.form.tips = res.data.tips
+        this.form.tips = res.data.tips
       })
     },
     onSelectChange(e) {

@@ -583,11 +583,17 @@ export default {
       this.tags = []
     },
     onConfirm() {
-      this.$confirm(this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        this.sum > 0
+          ? this.$t(`您当前已选${this.sum}位客户，是否确认全部投放`)
+          : this.$t('请先选择客户'),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.$request
           .launchCoupon(this.servingId, {
             group_ids: this.userList,
@@ -602,6 +608,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
+              this.show = false
               this.getList()
             } else {
               this.$notify({

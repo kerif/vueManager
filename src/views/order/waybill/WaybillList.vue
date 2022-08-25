@@ -114,6 +114,9 @@
             <el-dropdown-item @click.native="uploadInvoice(selectIDs, 2)">{{
               $t('模板二')
             }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 3)">{{
+              $t('模板三')
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
