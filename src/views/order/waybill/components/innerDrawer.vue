@@ -223,6 +223,7 @@ export default {
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
           { id: 'user_customer', name: this.$t('所属客服') },
+          { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
           { id: 'personal_code', name: this.$t('个人通关码') }
         ]
@@ -235,6 +236,7 @@ export default {
           { id: 'postcode', name: this.$t('邮编') },
           { id: 'address_email', name: this.$t('地址邮箱') },
           { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'street_door_no', name: this.$t('街道/门牌号') },
           { id: 'street', name: this.$t('街道') },
           { id: 'door_no', name: this.$t('门牌号') },
           { id: 'info_address', name: this.$t('详细地址') },
@@ -434,6 +436,7 @@ export default {
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
           { id: 'user_customer', name: this.$t('所属客服') },
+          { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
           { id: 'personal_code', name: this.$t('个人通关码') }
         ]
@@ -446,6 +449,7 @@ export default {
           { id: 'postcode', name: this.$t('邮编') },
           { id: 'address_email', name: this.$t('地址邮箱') },
           { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'street_door_no', name: this.$t('街道/门牌号') },
           { id: 'street', name: this.$t('街道') },
           { id: 'door_no', name: this.$t('门牌号') },
           { id: 'info_address', name: this.$t('详细地址') },
