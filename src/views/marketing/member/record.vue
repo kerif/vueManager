@@ -515,23 +515,27 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        let user_ids = this.customerList.map(item => item.id)
-        this.$request.addInOutRecord({ ...this.form, user_ids }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.addDialog = false
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        if (this.sum > 0) {
+          let user_ids = this.customerList.map(item => item.id)
+          this.$request.addInOutRecord({ ...this.form, user_ids }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.addDialog = false
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          this.addDialog = false
+        }
       })
     },
     search() {

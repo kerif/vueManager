@@ -594,30 +594,34 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.$request
-          .launchCoupon(this.servingId, {
-            group_ids: this.userList,
-            level_ids: this.levelList,
-            user_ids: this.customerList.map(item => item.id),
-            tag_ids: this.tags
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('保存成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.show = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+        if (this.sum > 0) {
+          this.$request
+            .launchCoupon(this.servingId, {
+              group_ids: this.userList,
+              level_ids: this.levelList,
+              user_ids: this.customerList.map(item => item.id),
+              tag_ids: this.tags
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  title: this.$t('保存成功'),
+                  message: res.msg,
+                  type: 'success'
+                })
+                this.show = false
+                this.getList()
+              } else {
+                this.$notify({
+                  title: this.$t('操作失败'),
+                  message: res.msg,
+                  type: 'warning'
+                })
+              }
+            })
+        } else {
+          this.show = false
+        }
       })
     },
     // 投放第一步

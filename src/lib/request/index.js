@@ -940,6 +940,10 @@ exports.agentTemplate = params => {
 exports.deleteAgent = id => {
   return $form.delete(`agents/${id}`)
 }
+// 代理管理 导出清单
+exports.uploadAgent = params => {
+  return $form.post(`agents/agent-export`, params)
+}
 // 发票管理 全部
 exports.manageInvoice = params => {
   return $form.get('invoice', { params })
