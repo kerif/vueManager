@@ -4733,6 +4733,6 @@ exports.exportPurchaseGoodsTmp = orderId => {
 }
 
 // 修改所属仓库
-exports.editAffiliations = (id, params) => {
-  return $form.put(`admin-groups/${id}/warehouse-affiliation`, params)
+exports.editAffiliations = (id, ids) => {
+  return $json.put(`admin-groups/${id}/warehouse-affiliation`, ids)
 }

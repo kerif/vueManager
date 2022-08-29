@@ -37,34 +37,32 @@ export default {
     getList() {
       this.$request.getAffiliation(this.id).then(res => {
         if (res.ret) {
-          this.warehouseId = res.data.map(item => item.id)
+          this.warehouseId = res.data.length ? res.data.map(item => item.id) : [this.allHouse[0].id]
         }
       })
     },
     // 获取全部仓库
     getAllWarehouse() {
-      // this.allHouse = [
-      //   {
-      //     id: 0,
-      //     warehouse_name: this.$t('全部仓库')
-      //   }
-      // ]
+      this.allHouse = [
+        {
+          id: 0,
+          warehouse_name: this.$t('全部仓库')
+        }
+      ]
       this.$request.getAffiliationAll().then(res => {
         if (res.ret) {
           if (res.data.length) {
-            // this.allHouse = this.allHouse.concat(
-            //   res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name }))
-            // )
-            this.allHouse = res.data.map(item => ({
-              id: item.id,
-              warehouse_name: item.warehouse_name
-            }))
+            this.allHouse = this.allHouse.concat(
+              res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name }))
+            )
           }
         }
       })
     },
     confirm() {
-      this.$request.editAffiliations(this.id, { ids: this.warehouseId }).then(res => {
+      let allId = this.allHouse[0].id
+      let ids = this.warehouseId.includes(allId) ? [] : this.warehouseId
+      this.$request.editAffiliations(this.id, { ids }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
