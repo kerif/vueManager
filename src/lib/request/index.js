@@ -4731,3 +4731,8 @@ exports.importPurchaseAnalysis = (orderId, file) => {
 exports.exportPurchaseGoodsTmp = orderId => {
   return $form.post(`purchase-picking-orders/order/${orderId}/box-goods-export`)
 }
+
+// 修改所属仓库
+exports.editAffiliations = (id, params) => {
+  return $form.put(`admin-groups/${id}/warehouse-affiliation`, params)
+}

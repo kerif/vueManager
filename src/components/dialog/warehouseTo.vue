@@ -6,7 +6,7 @@
     @close="clear"
   >
     <div>{{ $t('*所属仓库') }}</div>
-    <el-select v-model="warehouseId" :placeholder="$t('请选择')">
+    <el-select v-model="warehouseId" multiple :placeholder="$t('请选择')">
       <el-option
         v-for="item in allHouse"
         :key="item.id"
@@ -26,7 +26,7 @@
 export default {
   data() {
     return {
-      warehouseId: 0,
+      warehouseId: [],
       userList: [],
       allHouse: [],
       id: ''
@@ -37,31 +37,34 @@ export default {
     getList() {
       this.$request.getAffiliation(this.id).then(res => {
         if (res.ret) {
-          this.warehouseId = res.data.id || 0
+          this.warehouseId = res.data.map(item => item.id)
         }
       })
     },
     // 获取全部仓库
     getAllWarehouse() {
-      this.allHouse = [
-        {
-          id: 0,
-          warehouse_name: this.$t('全部仓库')
-        }
-      ]
+      // this.allHouse = [
+      //   {
+      //     id: 0,
+      //     warehouse_name: this.$t('全部仓库')
+      //   }
+      // ]
       this.$request.getAffiliationAll().then(res => {
         if (res.ret) {
           if (res.data.length) {
-            this.allHouse = this.allHouse.concat(
-              res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name }))
-            )
+            // this.allHouse = this.allHouse.concat(
+            //   res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name }))
+            // )
+            this.allHouse = res.data.map(item => ({
+              id: item.id,
+              warehouse_name: item.warehouse_name
+            }))
           }
-          // this.allHouse = res.data
         }
       })
     },
     confirm() {
-      this.$request.editAffiliation(this.id, this.warehouseId).then(res => {
+      this.$request.editAffiliations(this.id, { ids: this.warehouseId }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
