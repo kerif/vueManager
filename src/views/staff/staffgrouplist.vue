@@ -30,7 +30,8 @@
         <!-- 成员数量 -->
         <el-table-column prop="admin_count" :label="$t('成员数量')" width="100"> </el-table-column>
         <!-- 所属仓库 -->
-        <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
+        <el-table-column prop="warehouses" :label="$t('所属仓库')" :formatter="fileData">
+        </el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="450">
           <template slot-scope="scope">
@@ -155,6 +156,20 @@ export default {
       dialog({ type: 'pickPoint', id: id }, () => {
         this.getList()
       })
+    },
+    fileData(row) {
+      let arr = []
+      if (!row.warehouses.length) {
+        return (arr = ['全部仓库'])
+      } else {
+        row.warehouses.forEach((item, match) => {
+          if (match > 10) {
+            return
+          }
+          arr.push(item.warehouse_name)
+        })
+        return arr.join(',')
+      }
     },
     // 成员
     member(id) {

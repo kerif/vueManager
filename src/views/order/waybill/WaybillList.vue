@@ -1243,7 +1243,9 @@ export default {
         keyword: '',
         status: '',
         order_type: '',
-        member_level: ''
+        member_level: '',
+        sale_id: '',
+        customer_id: ''
       },
       hasFilterCondition: false,
       page_params: {

@@ -180,6 +180,23 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="2">&nbsp;</el-col>
+            <el-col :span="11">
+              <el-form-item>
+                <el-select
+                  v-model="searchFieldData.sale_id"
+                  :placeholder="$t('所属销售')"
+                  clearable
+                >
+                  <el-option
+                    v-for="item in staffList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-col>
         <el-col :span="4" :xl="3">
@@ -222,6 +239,22 @@
             >
               <el-option
                 v-for="item in pickList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="customer_id">
+            <el-select
+              v-model="searchFieldData.customer_id"
+              clearable
+              filterable
+              :placeholder="$t('所属客服')"
+            >
+              <el-option
+                v-for="item in staffList"
                 :key="item.id"
                 :value="item.id"
                 :label="item.name"
@@ -407,7 +440,8 @@ export default {
       wareHouseList: [],
       countryName: [],
       pickList: [],
-      vipList: []
+      vipList: [],
+      staffList: []
     }
   },
   created() {
@@ -418,6 +452,7 @@ export default {
     this.getSimpleList()
     this.getPackagePick()
     this.getGradeList()
+    this.getStaff()
   },
   activated() {
     this.initQuery()
@@ -450,6 +485,8 @@ export default {
       this.searchFieldData.status = ''
       this.searchFieldData.order_type = ''
       this.searchFieldData.member_level = ''
+      this.searchFieldData.sale_id = ''
+      this.searchFieldData.customer_id = ''
     },
     handleSel() {
       if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
@@ -487,6 +524,12 @@ export default {
         if (res.ret) {
           this.pickList = res.data
         }
+      })
+    },
+    // 获取员工
+    getStaff() {
+      this.$request.getStaff({ size: 1000 }).then(res => {
+        this.staffList = res.data
       })
     },
     getGradeList() {
