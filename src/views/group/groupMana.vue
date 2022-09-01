@@ -121,7 +121,10 @@
               <el-dropdown-item class="item-sty" @click.native="cancelGroup(scope.row.id)">
                 <span>{{ $t('取消拼团') }}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="changeMsg(scope.row.id)">
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="changeMsg(scope.row.id, scope.row.leader)"
+              >
                 <span>{{ $t('修改团单信息') }}</span>
               </el-dropdown-item>
               <!-- 操作日志 -->
@@ -307,8 +310,8 @@ export default {
     getLogs(id) {
       dialog({ type: 'vipLogs', id: id })
     },
-    changeMsg(id) {
-      dialog({ type: 'groupChange', id: id }, () => {
+    changeMsg(id, leader) {
+      dialog({ type: 'groupChange', id: id, leader }, () => {
         this.getList()
       })
     },

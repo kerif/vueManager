@@ -439,7 +439,7 @@
     >
       <div v-if="staffStatus === 'group'">
         <span>{{ $t('选择客户组') }}</span> &nbsp;&nbsp;
-        <el-select v-model="groupId" clearable :placeholder="$t('请选择')">
+        <el-select v-model="groupId" filterable clearable :placeholder="$t('请选择')">
           <el-option
             v-for="item in groupList"
             :key="item.id"
@@ -451,7 +451,7 @@
       <div v-else>
         <span>{{ $t('选择员工') }}</span
         >&nbsp;&nbsp;
-        <el-select v-model="saleId" clearable :placeholder="$t('请选择')">
+        <el-select v-model="saleId" filterable clearable :placeholder="$t('请选择')">
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>

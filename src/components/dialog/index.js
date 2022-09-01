@@ -163,6 +163,7 @@ import editLabel from './editLabel.vue'
 import labelMember from './labelMember.vue'
 import batchTag from './batchTag.vue'
 import tracking from './tracking.vue'
+import addGroupAddress from './addGroupAddress.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -325,6 +326,7 @@ const editLabelController = Vue.extend(editLabel)
 const labelMemberController = Vue.extend(labelMember)
 const batchTagController = Vue.extend(batchTag)
 const trackingController = Vue.extend(tracking)
+const addGroupAddressController = Vue.extend(addGroupAddress)
 
 const mixin = {
   data() {
@@ -656,6 +658,13 @@ function initInstance(type) {
     // 轨迹
     case 'tracking':
       instance = new trackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加拼团地址
+    case 'addGroupAddress':
+      instance = new addGroupAddressController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
