@@ -48,7 +48,11 @@
           v-if="activeName !== '4'"
           prop="operator"
           width="155"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.operator }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('操作类型')" prop="type" v-if="activeName === '2'">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('订单打包') }}</span>
