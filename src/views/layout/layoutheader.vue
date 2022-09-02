@@ -68,7 +68,7 @@
         <div>
           {{ $t('员工二维码') }}:
           <div style="margin-left: 80px">
-            <img class="img" :src="form.invite_code" />
+            <img class="img" :src="form.invite_code ? form.invite_code : ''" />
           </div>
         </div>
         <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
