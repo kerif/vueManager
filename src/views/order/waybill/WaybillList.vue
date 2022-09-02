@@ -879,6 +879,7 @@
             :placeholder="$t('选择日期时间')"
           >
           </el-date-picker>
+          <span style="color: red; margin-left: 5px">{{ $t('不选则默认是当前时间') }}</span>
         </el-form-item>
         <el-form-item :label="$t('备注')">
           <el-input
