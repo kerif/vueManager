@@ -1,27 +1,5 @@
 <template>
   <div class="picking-list-container">
-    <div class="select">
-      <el-select
-        v-model="type"
-        v-if="activeName === '1'"
-        :placeholder="$t('请选择')"
-        @change="changeVal"
-        :clearable="true"
-        class="selected"
-      >
-        <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
-          {{ item.name }}
-        </el-option>
-      </el-select>
-      <div class="searchGroup">
-        <search-group
-          :placeholder="$t('请输入关键字')"
-          v-model="page_params.keyword"
-          @search="goSearch"
-        ></search-group>
-      </div>
-    </div>
-    <div class="clear"></div>
     <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
       <!-- 入库日志 -->
       <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
@@ -30,6 +8,59 @@
       <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
       <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
     </el-tabs>
+    <!-- <div v-show="hasFilterCondition" class="search">
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <el-date-picker
+            size="mini"
+            v-model="date"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始时间')"
+            :end-placeholder="$t('结束时间')"
+          >
+          </el-date-picker>
+        </el-col>
+        <el-col :span="3" :offset="1">
+          <el-button size="small" type="primary" @click="onSearch">{{ $t('搜索') }}</el-button>
+          <el-button size="small" @click="onReset">{{ $t('重置') }}</el-button>
+        </el-col>
+      </el-row>
+    </div> -->
+    <div class="select">
+      <!-- <div>
+        <el-button class="btn-main" @click="exportLog">{{ $t('导出日志') }}</el-button>
+      </div> -->
+      <div style="display: flex">
+        <el-select
+          v-model="type"
+          v-if="activeName === '1'"
+          :placeholder="$t('请选择')"
+          @change="changeVal"
+          :clearable="true"
+          class="selected"
+        >
+          <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
+            {{ item.name }}
+          </el-option>
+        </el-select>
+        <div class="searchGroup">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          ></search-group>
+        </div>
+        <!-- <div class="filter" v-if="activeName !== '4'">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div> -->
+      </div>
+    </div>
+    <div class="clear"></div>
     <div style="height: calc(100vh - 270px)">
       <el-table
         border
@@ -235,6 +266,8 @@ export default {
       imgSrc: '',
       tableLoading: false,
       localization: {},
+      hasFilterCondition: false,
+      date: [],
       typeList: [
         {
           id: 1,
@@ -316,6 +349,69 @@ export default {
         }
       })
     },
+    // exportLog() {
+    //   if (this.activeName === '1') {
+    //     this.$request
+    //       .exportStorageLog({
+    //         keyword: this.page_params.keyword
+    //       })
+    //       .then(res => {
+    //         if (res.ret) {
+    //           this.$notify({
+    //             title: this.$t('操作成功'),
+    //             message: res.msg,
+    //             type: 'success'
+    //           })
+    //         } else {
+    //           this.$notify({
+    //             title: this.$t('操作失败'),
+    //             message: res.msg,
+    //             type: 'warning'
+    //           })
+    //         }
+    //       })
+    //   } else if (this.activeName === '2') {
+    //     this.$request
+    //       .exportPickLog({
+    //         keyword: this.page_params.keyword
+    //       })
+    //       .then(res => {
+    //         if (res.ret) {
+    //           this.$notify({
+    //             title: this.$t('操作成功'),
+    //             message: res.msg,
+    //             type: 'success'
+    //           })
+    //         } else {
+    //           this.$notify({
+    //             title: this.$t('操作失败'),
+    //             message: res.msg,
+    //             type: 'warning'
+    //           })
+    //         }
+    //       })
+    //   } else if (this.activeName === '3') {
+    //     this.$request
+    //       .exportPackageLog({
+    //         keyword: this.page_params.keyword
+    //       })
+    //       .then(res => {
+    //         if (res.ret) {
+    //           this.$notify({
+    //             title: this.$t('操作成功'),
+    //             message: res.msg,
+    //             type: 'success'
+    //           })
+    //         } else {
+    //           this.$notify({
+    //             title: this.$t('操作失败'),
+    //             message: res.msg,
+    //             type: 'warning'
+    //           })
+    //         }
+    //       })
+    //   }
+    // },
     getCheck() {
       this.tableLoading = true
       this.oderData = []
@@ -452,6 +548,7 @@ export default {
 <style lang="scss">
 .picking-list-container {
   .waybill-data-list {
+    margin-top: 20px;
     background-color: inherit;
     overflow-y: auto !important;
   }
@@ -467,16 +564,15 @@ export default {
   .select {
     display: flex;
     justify-content: flex-end;
-    flex: 1;
-    .searchGroup {
-      width: 21.5%;
-      float: right;
-    }
+    align-items: center;
     .selected {
       width: 150px;
     }
   }
-
+  .search {
+    padding: 20px;
+    background: #fff;
+  }
   .clear {
     clear: both;
   }

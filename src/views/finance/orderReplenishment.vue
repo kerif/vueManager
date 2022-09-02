@@ -189,27 +189,27 @@ export default {
       end_date: '',
       options: [
         {
-          id: 1,
+          id: 0,
           name: this.$t('待支付')
         },
         {
-          id: 2,
+          id: 1,
           name: this.$t('待审核')
         },
         {
-          id: 3,
+          id: 2,
           name: this.$t('审核失败')
         },
         {
-          id: 4,
+          id: 3,
           name: this.$t('已支付')
         },
         {
-          id: 5,
+          id: 4,
           name: this.$t('审核完成')
         },
         {
-          id: 6,
+          id: 5,
           name: this.$t('已作废')
         }
       ],
@@ -333,16 +333,15 @@ export default {
     },
     onStatus() {
       this.page_params.handleQueryChange('state', this.state)
-      this.getList()
     },
     onPay() {
       this.page_params.handleQueryChange('pay', this.pay)
-      this.getList()
     },
     submitForm() {
       this.onTime(this.formInline.timeList)
       this.onStatus()
       this.onPay()
+      this.getList()
     },
     resetForm() {
       this.formInline.pay = ''

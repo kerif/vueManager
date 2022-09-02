@@ -4736,3 +4736,18 @@ exports.exportPurchaseGoodsTmp = orderId => {
 exports.editAffiliations = (id, ids) => {
   return $json.put(`admin-groups/${id}/warehouse-affiliation`, ids)
 }
+
+// 包裹日志导出
+exports.exportPackageLog = params => {
+  return $form.get('package-process-logs/export', { params })
+}
+
+// 入库日志导出
+exports.exportStorageLog = params => {
+  return $form.get('shipment-logs/in-storage-export', { params })
+}
+
+// 拣货日志导出
+exports.exportPickLog = params => {
+  return $form.get('shipment-logs/picking-export', { params })
+}
