@@ -1119,7 +1119,7 @@ export default {
       videoUrl: [],
       picking_divide_order_id: '',
       is_member: false,
-      logisticRemark: '',
+      logisticsRemark: '',
       created_at: ''
     }
   },
@@ -1603,7 +1603,7 @@ export default {
       let params = {
         order_ids: this.$route.params.id,
         is_member: Number(this.is_member),
-        reamrk: this.logisticRemark,
+        reamrk: this.logisticsRemark,
         created_at: this.created_at
       }
       if (this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)) {

@@ -734,6 +734,8 @@ export default {
     },
     clear() {
       this.form.logistics_type_id = ''
+      this.logisticsRemark = ''
+      this.created_at = ''
     },
     clearSn() {
       this.tableSn = ''
