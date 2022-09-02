@@ -8,9 +8,9 @@
       <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
       <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
     </el-tabs>
-    <!-- <div v-show="hasFilterCondition" class="search">
+    <div v-show="hasFilterCondition" class="search">
       <el-row :gutter="20">
-        <el-col :span="5">
+        <el-col :span="6">
           <el-date-picker
             size="mini"
             v-model="date"
@@ -23,16 +23,16 @@
           >
           </el-date-picker>
         </el-col>
-        <el-col :span="3" :offset="1">
+        <el-col :span="3">
           <el-button size="small" type="primary" @click="onSearch">{{ $t('搜索') }}</el-button>
           <el-button size="small" @click="onReset">{{ $t('重置') }}</el-button>
         </el-col>
       </el-row>
-    </div> -->
+    </div>
     <div class="select">
-      <!-- <div>
+      <div>
         <el-button class="btn-main" @click="exportLog">{{ $t('导出日志') }}</el-button>
-      </div> -->
+      </div>
       <div style="display: flex">
         <el-select
           v-model="type"
@@ -53,11 +53,11 @@
             @search="goSearch"
           ></search-group>
         </div>
-        <!-- <div class="filter" v-if="activeName !== '4'">
+        <div class="filter" v-if="activeName !== '4'">
           <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
             >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
           ></el-button>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="clear"></div>
@@ -349,69 +349,68 @@ export default {
         }
       })
     },
-    // exportLog() {
-    //   if (this.activeName === '1') {
-    //     this.$request
-    //       .exportStorageLog({
-    //         keyword: this.page_params.keyword
-    //       })
-    //       .then(res => {
-    //         if (res.ret) {
-    //           this.$notify({
-    //             title: this.$t('操作成功'),
-    //             message: res.msg,
-    //             type: 'success'
-    //           })
-    //         } else {
-    //           this.$notify({
-    //             title: this.$t('操作失败'),
-    //             message: res.msg,
-    //             type: 'warning'
-    //           })
-    //         }
-    //       })
-    //   } else if (this.activeName === '2') {
-    //     this.$request
-    //       .exportPickLog({
-    //         keyword: this.page_params.keyword
-    //       })
-    //       .then(res => {
-    //         if (res.ret) {
-    //           this.$notify({
-    //             title: this.$t('操作成功'),
-    //             message: res.msg,
-    //             type: 'success'
-    //           })
-    //         } else {
-    //           this.$notify({
-    //             title: this.$t('操作失败'),
-    //             message: res.msg,
-    //             type: 'warning'
-    //           })
-    //         }
-    //       })
-    //   } else if (this.activeName === '3') {
-    //     this.$request
-    //       .exportPackageLog({
-    //         keyword: this.page_params.keyword
-    //       })
-    //       .then(res => {
-    //         if (res.ret) {
-    //           this.$notify({
-    //             title: this.$t('操作成功'),
-    //             message: res.msg,
-    //             type: 'success'
-    //           })
-    //         } else {
-    //           this.$notify({
-    //             title: this.$t('操作失败'),
-    //             message: res.msg,
-    //             type: 'warning'
-    //           })
-    //         }
-    //       })
-    //   }
-    // },
+    onSearch() {
+      this.getList()
+    },
+    onReset() {
+      this.date = []
+    },
+    exportLog() {
+      let params = {
+        keyword: this.page_params.keyword,
+        begin_date: this.date && this.date[0],
+        end_date: this.date && this.date[1]
+      }
+      if (this.activeName === '1') {
+        this.$request.exportStorageLog(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.activeName === '2') {
+        this.$request.exportPickLog(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.activeName === '3') {
+        this.$request.exportPackageLog(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
+    },
     getCheck() {
       this.tableLoading = true
       this.oderData = []
@@ -449,7 +448,9 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          type: this.type
+          type: this.type,
+          begin_date: this.date && this.date[0],
+          end_date: this.date && this.date[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -478,7 +479,9 @@ export default {
         .getPick({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          begin_date: this.date && this.date[0],
+          end_date: this.date && this.date[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -505,7 +508,9 @@ export default {
         .getPackageLog({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          begin_date: this.date && this.date[0],
+          end_date: this.date && this.date[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -563,7 +568,7 @@ export default {
   }
   .select {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     .selected {
       width: 150px;

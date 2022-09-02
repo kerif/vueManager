@@ -277,6 +277,25 @@
         >
           <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
         </el-form-item>
+        <el-form-item :label="$t('时间')">
+          <el-date-picker
+            v-model="created_at"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            :placeholder="$t('选择日期时间')"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item :label="$t('备注')">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            :placeholder="$t('请输入内容')"
+            v-model="logisticsRemark"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
@@ -427,7 +446,9 @@ export default {
       type: 1,
       showTmpDrawer: false,
       uploadType: 3,
-      is_member: false
+      is_member: false,
+      created_at: '',
+      logisticsRemark: ''
     }
   },
   created() {
@@ -659,7 +680,9 @@ export default {
     changeStatus() {
       let params = {
         shipment_ids: this.deleteNum,
-        is_member: Number(this.is_member)
+        is_member: Number(this.is_member),
+        remark: this.logisticsRemark,
+        created_at: this.created_at
       }
       if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
         params.logistics_type_id = this.form.logistics_type_id
