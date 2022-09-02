@@ -201,15 +201,15 @@ export default {
           name: this.$t('审核失败')
         },
         {
-          id: 3,
+          id: 11,
           name: this.$t('已支付')
         },
         {
-          id: 4,
+          id: 12,
           name: this.$t('审核完成')
         },
         {
-          id: 5,
+          id: 99,
           name: this.$t('已作废')
         }
       ],
