@@ -720,6 +720,10 @@ exports.saveCountries = id => {
 exports.getTransaction = params => {
   return $form.get('transaction-records', { params })
 }
+// 财务 订单补款 导出
+exports.exportAdditional = params => {
+  return $form.get('order-additional-fees/export', { params })
+}
 // 财务 订单财务审核 退款审核
 exports.financesData = params => {
   return $form.get('order-finances/refunds', { params })

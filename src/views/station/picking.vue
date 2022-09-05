@@ -9,11 +9,11 @@
       <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
     </el-tabs>
     <div v-show="hasFilterCondition" class="search">
-      <el-row :gutter="20">
-        <el-col :span="6">
+      <el-form :inline="true" :model="formInline">
+        <el-form-item>
           <el-date-picker
             size="mini"
-            v-model="date"
+            v-model="formInline.date"
             type="daterange"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -22,12 +22,12 @@
             :end-placeholder="$t('结束时间')"
           >
           </el-date-picker>
-        </el-col>
-        <el-col :span="3">
+        </el-form-item>
+        <el-form-item>
           <el-button size="small" type="primary" @click="onSearch">{{ $t('搜索') }}</el-button>
           <el-button size="small" @click="onReset">{{ $t('重置') }}</el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+      </el-form>
     </div>
     <div class="select">
       <div>
@@ -267,7 +267,9 @@ export default {
       tableLoading: false,
       localization: {},
       hasFilterCondition: false,
-      date: [],
+      formInline: {
+        date: []
+      },
       typeList: [
         {
           id: 1,
@@ -353,13 +355,13 @@ export default {
       this.getList()
     },
     onReset() {
-      this.date = []
+      this.formInline.date = []
     },
     exportLog() {
       let params = {
         keyword: this.page_params.keyword,
-        begin_date: this.date && this.date[0],
-        end_date: this.date && this.date[1]
+        begin_date: this.formInline.date && this.formInline.date[0],
+        end_date: this.formInline.date && this.formInline.date[1]
       }
       if (this.activeName === '1') {
         this.$request.exportStorageLog(params).then(res => {
@@ -449,8 +451,8 @@ export default {
           page: this.page_params.page,
           size: this.page_params.size,
           type: this.type,
-          begin_date: this.date && this.date[0],
-          end_date: this.date && this.date[1]
+          begin_date: this.formInline.date && this.formInline.date[0],
+          end_date: this.formInline.date && this.formInline.date[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -480,8 +482,8 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          begin_date: this.date && this.date[0],
-          end_date: this.date && this.date[1]
+          begin_date: this.formInline.date && this.formInline.date[0],
+          end_date: this.formInline.date && this.formInline.date[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -509,8 +511,8 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          begin_date: this.date && this.date[0],
-          end_date: this.date && this.date[1]
+          begin_date: this.formInline.date && this.formInline.date[0],
+          end_date: this.formInline.date && this.formInline.date[1]
         })
         .then(res => {
           this.tableLoading = false

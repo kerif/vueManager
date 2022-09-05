@@ -64,6 +64,11 @@
         }}</el-button>
         <el-button class="btn-main" @click="setSupplement">{{ $t('补款方式设置') }}</el-button>
       </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="uploadList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
       <div class="headr-r" style="display: flex">
         <div class="searchGroup">
           <search-group
@@ -268,6 +273,33 @@ export default {
         this.statusList = res.data
       })
     },
+    uploadList() {
+      let params = {
+        state: this.formInline.state,
+        status: this.activeName === '-1' ? '' : this.activeName,
+        pay: this.formInline.pay,
+        keyword: this.page_params.keyword,
+        begin_date: this.begin_date,
+        end_date: this.end_date
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.exportAdditional(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     getPaymentType() {
       this.$request.paymentData().then(res => {
         this.paymentList = res.data
@@ -387,5 +419,10 @@ export default {
 .order-replenishment-search {
   background: #fff;
   padding-left: 10px;
+}
+.changeVou {
+  float: right;
+  margin-right: 7px;
+  margin-left: 5px;
 }
 </style>

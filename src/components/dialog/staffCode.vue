@@ -74,7 +74,8 @@ export default {
       })
     },
     onSubmit() {
-      let groupId = this.ruleForm.invite_user_group_id || 0
+      let groupId = this.ruleForm.invite_user_group_id
+      // let groupId = this.ruleForm.invite_user_group_id || 0
       this.$request.inviteUserGroup(this.id, groupId).then(res => {
         if (res.ret) {
           this.$notify({
