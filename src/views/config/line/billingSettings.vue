@@ -747,11 +747,11 @@ export default {
         {
           id: 4,
           name: this.$t('长宽高乘积')
+        },
+        {
+          id: 5,
+          name: this.$t('体积重量减实际重量')
         }
-        // {
-        //   id: 5,
-        //   name: this.$t('体积重量减实际重量')
-        // }
       ],
       conditionOptions: [
         {
