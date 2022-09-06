@@ -679,7 +679,7 @@
                   <span>{{ $t('打包视频') }}</span>
                   <div style="display: flex; flex-wrap: wrap">
                     <div
-                      style="margin: 10px 20px; width: 320px; height: 260px"
+                      style="margin: 10px 20px; width: 30%"
                       v-for="item in videoUrl"
                       :key="item.id"
                     >

@@ -507,7 +507,10 @@
             <el-col :span="5">
               <div class="unit">
                 <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
-                <span>{{ localization ? localization.length_unit : '' }}</span>
+                <span style="display: inline-block; width: 80px"
+                  >{{ localization ? localization.length_unit : '' }} /
+                  {{ localization ? localization.weight_unit : '' }}</span
+                >
               </div>
             </el-col>
           </el-row>
