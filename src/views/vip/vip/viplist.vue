@@ -133,8 +133,8 @@
           type="daterange"
           value-format="yyyy-MM-dd"
           range-separator="至"
-          start-placeholde="开始日期"
-          end-placeholde="结束日期"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         ></el-date-picker>
       </div>
       <div class="search-item">
