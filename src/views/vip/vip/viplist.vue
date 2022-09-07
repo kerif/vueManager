@@ -127,6 +127,17 @@
         </el-select>
       </div>
       <div class="search-item">
+        <div>{{ $t('最后登录时间') }}</div>
+        <el-date-picker
+          v-model="loginTime"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholde="开始日期"
+          end-placeholde="结束日期"
+        ></el-date-picker>
+      </div>
+      <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
       </div>
@@ -562,6 +573,7 @@ export default {
         user_source: ''
       },
       searchTime: [],
+      loginTime: [],
       gradeList: [],
       groupList: [],
       staffList: [],
@@ -602,6 +614,9 @@ export default {
       if (!this.searchTime) {
         this.searchTime = []
       }
+      if (!this.loginTime) {
+        this.loginTime = []
+      }
       console.log(this.page_params.group)
       this.$request
         .getUsers({
@@ -618,7 +633,9 @@ export default {
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
-          end_date: this.searchTime[1]
+          end_date: this.searchTime[1],
+          last_begin_date: this.loginTime[0],
+          last_end_date: this.loginTime[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -656,6 +673,7 @@ export default {
       this.searchParams.max_order_count = ''
       this.searchParams.user_source = ''
       this.searchTime = []
+      this.loginTime = []
       this.getList()
     },
     // 搜索等级列表
@@ -954,7 +972,9 @@ export default {
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
-          end_date: this.searchTime[1]
+          end_date: this.searchTime[1],
+          last_begin_date: this.loginTime[0],
+          last_end_date: this.loginTime[1]
         })
         .then(res => {
           if (res.ret) {

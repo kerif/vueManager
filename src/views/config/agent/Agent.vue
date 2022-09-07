@@ -45,6 +45,11 @@
           $t('导出清单')
         }}</el-button>
       </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="exportOeder">{{
+          $t('导出订单')
+        }}</el-button>
+      </div>
     </div>
     <el-table
       class="data-list"
@@ -395,6 +400,27 @@ export default {
         if (res.ret) {
           // this.urlExcel = res.data.url
           // window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 导出订单
+    exportOeder() {
+      let params = {}
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.exportAgentOrder(params).then(res => {
+        if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

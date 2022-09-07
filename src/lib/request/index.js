@@ -948,6 +948,10 @@ exports.deleteAgent = id => {
 exports.uploadAgent = params => {
   return $form.post(`agents/agent-export`, params)
 }
+// 代理管理 导出订单
+exports.exportAgentOrder = params => {
+  return $form.post(`agents/order-agent-export`, params)
+}
 // 发票管理 全部
 exports.manageInvoice = params => {
   return $form.get('invoice', { params })
