@@ -1,4 +1,4 @@
- /**进行了axios的二次封装 */
+ /**axios二次封装 */
 import axios from "axios";
 import config from '../config/index'
 
@@ -23,23 +23,22 @@ class HttpRequest  //类是es6引进的,方法定义不能加function,方法之�
     interceptors(instance) //自定义函数，封装了请求拦截器和响应拦截器，拦截器会在每次发起ajax请求时自动触发
     {
         //添加请求拦截器
-       instance.interceptors.request.use(function (config){
+       instance.interceptors.request.use(config => {
         //在发送请求前做点什么
         console.log("发送请求前行为")
         return config;
-       },function (error){
+       },error => {
         //对请求错误做些什么
         console.log("请求错误");
         return Promise.reject(error);
        });
 
        //添加响应拦截器
-       instance.interceptors.response.use(function (response){
+       instance.interceptors.response.use(response => {
         //对响应数据做点什么
         console.log("处理响应数据")
-        //console.log(response.data);
          return response
-       },function (error){
+       },error => {
         //对响应错误做点什么
         console.log("响应错误");
         return Promise.reject(error); //返回一个带有拒绝原因的Promise对象
@@ -49,7 +48,7 @@ class HttpRequest  //类是es6引进的,方法定义不能加function,方法之�
 
     request(options) {
           const instance = axios.create()
-           options = {...this.getInsideConfig(),...options}
+          options = {...this.getInsideConfig(), ...options}
           this.interceptors(instance)
           return instance(options)
     }

@@ -1,4 +1,3 @@
-//import Mock from 'mockjs'
 //处理传进来的参数的url分离出username和password
 function param2Obj(url) {   //将url中的参数解码,然后返回一个json对象
     const search = url.split('?')[1]  //split 将url按?进行分割,会返回一个数组，[1]表示的是数组的第二个元素
