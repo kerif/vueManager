@@ -21,7 +21,14 @@
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header style = "background-color: #FA842B"></el-header>
+        <el-header style = "background-color: #FA842B; display: flex; align-items: center; justify-content: end;">
+          <div class = "searchGoods" style = "display: flex; justify-content: end; align-items: center;">
+            <el-input v-model = "searchData" placeholder="输入商品名/商家名" style = "width: 250px; display: flex;"></el-input>
+            <el-button type = "primary" 
+            style = "margin-left: 10px;"
+            @click = "showResult">搜索</el-button>  
+          </div>
+        </el-header>
         <el-main style = "background-color: #ccc"></el-main>
       </el-container>
     </el-container>
@@ -36,7 +43,15 @@ export default {
   name:'myMall',
   data()
   {
-    return{}
+    return{
+      searchData: '',
+    }
+  },
+
+  methods: {
+    showResult() {
+      console.log("内容" + this.searchData + "axios请求模拟数据并返回到页面上");
+    }
   }
 }
 </script>
