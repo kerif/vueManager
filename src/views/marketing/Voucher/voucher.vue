@@ -112,6 +112,9 @@
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="200px" fixed="right">
           <template slot-scope="scope">
+            <!-- <el-button class="btn-main" @click="ManageExchangeCode(scope.row.id)">{{
+              $t('兑换码管理')
+            }}</el-button> -->
             <!-- 投放 -->
             <el-button
               class="btn-purple detailsBtn"
@@ -710,6 +713,12 @@ export default {
       this.transCode = line['trans_' + lang.language_code]
       dialog({ type: 'voucherLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getList()
+      })
+    },
+    ManageExchangeCode(id) {
+      dialog({
+        type: 'addExchangeCode',
+        id
       })
     }
   }

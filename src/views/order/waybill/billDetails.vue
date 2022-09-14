@@ -30,13 +30,22 @@
       >
       </el-alert>
       <div class="tools">
-        <el-button
-          @click="downloadInvoice"
-          icon="el-icon-tickets"
-          mini
-          v-if="[3, 4, 5].includes(form.status)"
-          >{{ $t('发票') }}</el-button
-        >
+        <el-dropdown style="margin-right: 10px" v-if="[3, 4, 5].includes(form.status)">
+          <el-button icon="el-icon-tickets" mini>
+            {{ $t('发票') }}
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="downloadInvoice(1)">{{
+              $t('模板一')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="downloadInvoice(2)">{{
+              $t('模板二')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="downloadInvoice(3)">{{
+              $t('模板三')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button
           type="primary"
           @click="packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)"
@@ -679,11 +688,17 @@
                   <span>{{ $t('打包视频') }}</span>
                   <div style="display: flex; flex-wrap: wrap">
                     <div
-                      style="margin: 10px 20px; width: 30%"
+                      style="margin: 10px 20px 10px 0; width: 30%"
                       v-for="item in videoUrl"
                       :key="item.id"
                     >
                       <video :src="item.url" controls autoplay width="80%"></video>
+                      <el-button
+                        class="btn-main"
+                        style="margin: 0 10px"
+                        @click="onDeleteVideo(item.id)"
+                        >{{ $t('删除') }}</el-button
+                      >
                     </div>
                   </div>
                 </div>
@@ -1155,6 +1170,22 @@ export default {
         }
       })
     },
+    onDeleteVideo(id) {
+      this.$request.delVideo(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 国家列表
     getCountrys() {
       this.$request.getCountry().then(res => {
@@ -1372,7 +1403,7 @@ export default {
       })
     },
     // 导出发票
-    downloadInvoice() {
+    downloadInvoice(type) {
       this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1380,7 +1411,8 @@ export default {
       }).then(() => {
         this.$request
           .uploadOrder({
-            ids: this.$route.params.id
+            ids: this.$route.params.id,
+            type
           })
           .then(res => {
             if (res.ret) {

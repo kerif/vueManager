@@ -4759,3 +4759,28 @@ exports.exportStorageLog = params => {
 exports.exportPickLog = params => {
   return $form.get('shipment-logs/picking-export', { params })
 }
+
+// 已集包修改商品信息
+exports.editGoodInfo = (id, params) => {
+  return $form.put(`packages/${id}/product-info`, params)
+}
+
+// 删除视频
+exports.delVideo = id => {
+  return $form.delete(`orders/videos/${id}`)
+}
+
+// 新建优惠券兑换码
+exports.addCouponCode = (id, params) => {
+  return $form.post(`coupons/${id}/codes`, params)
+}
+
+// 作废优惠券码
+exports.cancelCouponCode = id => {
+  return $form.put(`coupons/codes/${id}/disabled`)
+}
+
+// 优惠券兑换码列表
+exports.couponCodeList = id => {
+  return $form.get(`coupons/${id}/codes`)
+}

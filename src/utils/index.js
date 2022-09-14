@@ -96,6 +96,17 @@ export const getId = (arr, result = []) => {
   }
 }
 
+export const getClassIds = (arr, result = [], newResult = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    let ids = newResult.concat([arr[i]].value)
+    if (arr[i].children && arr[i].children.length > 0) {
+      getClassIds(arr[i].children, result, ids)
+    } else {
+      result.push(ids)
+    }
+  }
+}
+
 export const changeFavicon = link => {
   let $favicon = document.querySelector('link[rel="icon"]')
   if ($favicon !== null) {

@@ -164,6 +164,7 @@ import labelMember from './labelMember.vue'
 import batchTag from './batchTag.vue'
 import tracking from './tracking.vue'
 import addGroupAddress from './addGroupAddress.vue'
+import addExchangeCode from './addExchangeCode.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -327,6 +328,7 @@ const labelMemberController = Vue.extend(labelMember)
 const batchTagController = Vue.extend(batchTag)
 const trackingController = Vue.extend(tracking)
 const addGroupAddressController = Vue.extend(addGroupAddress)
+const addExchangeCodeController = Vue.extend(addExchangeCode)
 
 const mixin = {
   data() {
@@ -665,6 +667,13 @@ function initInstance(type) {
     // 添加拼团地址
     case 'addGroupAddress':
       instance = new addGroupAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 兑换码
+    case 'addExchangeCode':
+      instance = new addExchangeCodeController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
