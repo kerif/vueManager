@@ -86,6 +86,9 @@
             >
           </div>
           <div class="number-top">
+            <span>{{ $t('所属客服') }}: {{ form.user_customer_name }}</span>
+          </div>
+          <div class="number-top">
             <span>{{ $t('会员等级') }}: --- {{ form.user_member_level }}</span>
           </div>
           <div class="number-top">
@@ -1178,6 +1181,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.getVideo()
         } else {
           this.$message({
             message: res.msg,
