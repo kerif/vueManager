@@ -112,9 +112,15 @@
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="200px" fixed="right">
           <template slot-scope="scope">
-            <!-- <el-button class="btn-main" @click="ManageExchangeCode(scope.row.id)">{{
-              $t('兑换码管理')
-            }}</el-button> -->
+            <el-button
+              class="btn-main"
+              v-if="
+                (scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2) &&
+                scope.row.type !== '新用户福利'
+              "
+              @click="ManageExchangeCode(scope.row.id)"
+              >{{ $t('兑换码管理') }}</el-button
+            >
             <!-- 投放 -->
             <el-button
               class="btn-purple detailsBtn"

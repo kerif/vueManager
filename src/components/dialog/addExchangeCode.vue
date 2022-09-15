@@ -2,11 +2,18 @@
   <el-dialog :visible.sync="show" :title="$t('兑换码管理')" @close="clear">
     <div>
       <el-button class="btn-main" @click="onAddCode">{{ $t('新增兑换码') }}</el-button>
-      <span>{{ $t('注: 领取与使用情况, 请在该优惠券记录中查看') }}</span>
+      <span style="margin-left: 10px">{{ $t('注: 领取与使用情况, 请在该优惠券记录中查看') }}</span>
     </div>
     <el-table :data="tableData" border stripe style="margin-top: 20px">
       <el-table-column label="#" type="index"></el-table-column>
-      <el-table-column :label="$t('兑换码')" prop="code"></el-table-column>
+      <el-table-column :label="$t('兑换码')" prop="code">
+        <template slot-scope="scope">
+          <div :title="$t('复制单号')" class="copy-sty" @click="copyNumber(scope.row.code)">
+            <span>{{ scope.row.code }}</span
+            ><i class="el-icon-copy-document"></i>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('兑换码备注')" prop="remark"></el-table-column>
       <el-table-column :label="$t('可领取量')" prop="received_count"></el-table-column>
       <el-table-column :label="$t('使用/领取')" prop="used_count"></el-table-column>
@@ -109,6 +116,17 @@ export default {
     },
     cancelDialog() {
       this.showCode = false
+    },
+    copyNumber(code) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', code)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
     },
     clear() {},
     clearCode() {
