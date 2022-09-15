@@ -11,11 +11,11 @@ import App from './App.vue';
 
 import router from '../router/index.js';
 import store from '../store'
-import http from 'axios'
+import axios from 'axios'
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
-Vue.prototype.$EventBus = new Vue() //用于兄弟组件之间传值
+Vue.prototype.$EventBus = new Vue() //事件总线, 可用于兄弟组件之间传值
 
 Vue.config.productionTip = false
 Vue.use(Button)
@@ -59,7 +59,7 @@ Vue.use(DatePicker)
 Vue.use(Dialog)
 
 Vue.use(Pagination)
-Vue.prototype.$http = http;
+Vue.prototype.$http = axios;
 import '../api/mock.js'
 new Vue({
   store,

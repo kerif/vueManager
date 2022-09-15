@@ -19,7 +19,7 @@
         <el-select
             v-if = "item.type === 'select'"
             placeholder="请选择"
-            v-model="localForm[item.model]" 
+            v-model = "localForm[item.model]" 
         >
             <el-option
                 v-for = "item in item.opts"
@@ -46,7 +46,7 @@
                     formLabel: Array,
                     form: Object,
                     inline: Boolean,
-                    primaryButton:Boolean //用于表单界面初始化按钮样式
+                    //primaryButton:Boolean //用于表单界面初始化按钮样式
                 },
         data() {
             return{
@@ -65,7 +65,7 @@
                 
             },
         },
-        beforeCreate(){
+        created(){
                 this.$EventBus.$on('fleshForm',(row)=>{
                 this.localForm = row
             }
