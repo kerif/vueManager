@@ -1182,6 +1182,7 @@ export default {
             type: 'success'
           })
           this.getVideo()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,

@@ -29,6 +29,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <div style="padding: 20px 0">
+      <nle-pagination :pageParams="page_params"></nle-pagination>
+    </div>
     <el-dialog :visible.sync="showCode" :title="$t('新增兑换码')" append-to-body @close="clearCode">
       <el-form :model="form" label-position="right" label-width="150px">
         <el-form-item :label="$t('最大可领取量')">
@@ -50,6 +53,8 @@
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -63,6 +68,10 @@ export default {
       showCode: false
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   methods: {
     init() {
       if (this.id) {
@@ -70,11 +79,18 @@ export default {
       }
     },
     getList() {
-      this.$request.couponCodeList(this.id).then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-        }
-      })
+      this.$request
+        .couponCodeList(this.id, {
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     onAddCode() {
       this.showCode = true

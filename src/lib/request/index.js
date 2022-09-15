@@ -4781,6 +4781,6 @@ exports.cancelCouponCode = id => {
 }
 
 // 优惠券兑换码列表
-exports.couponCodeList = id => {
-  return $form.get(`coupons/${id}/codes`)
+exports.couponCodeList = (id, params) => {
+  return $form.get(`coupons/${id}/codes`, { params })
 }
