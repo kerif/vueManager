@@ -1181,9 +1181,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          if (this.activeName === '1') {
-            this.getVideo()
-          }
+          this.getVideo()
           this.getList()
         } else {
           this.$message({
