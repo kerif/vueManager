@@ -15,8 +15,12 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('兑换码备注')" prop="remark"></el-table-column>
-      <el-table-column :label="$t('可领取量')" prop="received_count"></el-table-column>
-      <el-table-column :label="$t('使用/领取')" prop="used_count"></el-table-column>
+      <el-table-column :label="$t('可领取量')" prop="total_count"></el-table-column>
+      <el-table-column :label="$t('使用/领取')" prop="used_count,received_count">
+        <template slot-scope="scope">
+          <span>{{ scope.row.used_count }} / {{ scope.row.received_count }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('状态')" prop="status">
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{ $t('进行中') }}</span>
@@ -25,7 +29,9 @@
       </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="onValid(scope.row.id)">{{ $t('作废') }}</el-button>
+          <el-button @click="onValid(scope.row.id)" class="btn-light-red">{{
+            $t('作废')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,14 +40,14 @@
     </div>
     <el-dialog :visible.sync="showCode" :title="$t('新增兑换码')" append-to-body @close="clearCode">
       <el-form :model="form" label-position="right" label-width="150px">
-        <el-form-item :label="$t('最大可领取量')">
+        <el-form-item :label="$t('兑换码')">
           <el-input v-model="form.code" style="width: 50%"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('最大可领取量')">
+          <el-input v-model="form.total_count" style="width: 50%"></el-input>
         </el-form-item>
         <el-form-item :label="$t('兑换码备注')">
           <el-input type="textarea" v-model="form.remark" style="width: 50%"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('以上兑换码生成数量')">
-          <el-input-number v-model="form.total_count" :min="1" :max="10"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -63,7 +69,7 @@ export default {
       form: {
         code: '',
         remark: '',
-        total_count: 1
+        total_count: ''
       },
       showCode: false
     }
