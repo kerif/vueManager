@@ -41,7 +41,11 @@
     <el-dialog :visible.sync="showCode" :title="$t('新增兑换码')" append-to-body @close="clearCode">
       <el-form :model="form" label-position="right" label-width="150px">
         <el-form-item :label="$t('兑换码')">
-          <el-input v-model="form.code" style="width: 50%"></el-input>
+          <el-input
+            v-model="form.code"
+            style="width: 50%"
+            :placeholder="$t('不填写系统会随机生成')"
+          ></el-input>
         </el-form-item>
         <el-form-item :label="$t('最大可领取量')">
           <el-input v-model="form.total_count" style="width: 50%"></el-input>
