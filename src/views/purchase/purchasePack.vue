@@ -35,9 +35,6 @@
                 <span class="font-bold">#{{ item.sn }}</span>
                 <i class="el-icon-document" v-if="item.status === 3" @click="downFile(item.id)"></i>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
-                <!-- <el-button class="btn-main" @click="showData = true">{{
-                  $t('批量导入')
-                }}</el-button> -->
               </div>
             </div>
           </el-col>
@@ -102,6 +99,8 @@
                 <div class="weight-content">
                   <div class="flex-item title-list">
                     <div class="font-bold">{{ $t('装箱') }}</div>
+                    <!-- <el-button class="btn-main" @click="exportBoxData">{{ $t('导出') }}</el-button>
+                    <el-button class="btn-main" @click="onBatch">{{ $t('批量导入') }}</el-button> -->
                     <el-button type="primary" size="small" @click="onAddBox">{{
                       $t('添加箱子')
                     }}</el-button>
@@ -344,23 +343,35 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showData" @close="clear">
+    <el-dialog :title="$t('批量导入')" :visible.sync="showData" @close="clear">
       <el-form>
         <el-form-item :label="$t('第一步:下载模板 ')">
-          <el-button @click="exportBoxData(item.id)">{{ $t('下载模板') }}</el-button>
+          <el-button size="small" type="primary" plain @click="importBoxData">{{
+            $t('下载模板')
+          }}</el-button>
         </el-form-item>
         <el-form-item :label="$t('第二步:上传模板 ')">
-          <el-button>{{ $t('上传模板') }}</el-button>
+          <el-upload
+            class="upload-demo"
+            action=""
+            :limit="1"
+            :on-remove="onFileRemove"
+            :file-list="fileList"
+            :http-request="uploadTmp"
+          >
+            <el-button size="small" type="primary" plain>{{ $t('上传模板') }}</el-button>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="showData = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary">{{ $t('确认') }}</el-button>
+        <el-button type="primary" @click="onConfirm">{{ $t('确认') }}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
+import { downloadStreamFile } from '@/utils/index'
 export default {
   data() {
     return {
@@ -410,7 +421,11 @@ export default {
       boxNumber: '',
       sku: '',
       orderNumber: [],
-      showData: false
+      showData: false,
+      fileList: [],
+      param: '',
+      params: '',
+      orderId: ''
     }
   },
   created() {
@@ -554,6 +569,7 @@ export default {
       }, 0)
     },
     onOrder(item, index) {
+      this.orderId = item.id
       this.idx = index
       this.status = item.status
       this.order = this.orderList.filter(ele => ele.id === item.id)
@@ -676,33 +692,79 @@ export default {
       this.param.append(`file`, file)
       return this.$request.uploadFiles(this.params)
     },
-    importBoxData(id) {
-      console.log(id)
-      // this.$request.importPurchaseGoodsTmp().then(res => {
-      //   console.log(res)
-      // })
-      // let orderId = id
-      // this.$request.importPurchaseAnalysis(orderId).then(res => {
-      //   console.log(res)
-      // })
+    onBatch() {
+      this.showData = true
     },
-    // exportBoxData(id) {
-    //   let orderId = id
-    //   this.$request.exportPurchaseGoodsTmp(orderId).then(res => {
-    //     if (res.ret) {
-    //       this.$notify({
-    //         type: 'success',
-    //         title: this.$t('操作成功'),
-    //         message: res.msg
-    //       })
-    //     } else {
-    //       this.$message({
-    //         message: res.msg,
-    //         type: 'error'
-    //       })
-    //     }
-    //   })
-    // },
+    exportBoxData() {
+      this.$request.exportPurchaseGoodsTmp(this.orderId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          window.open(res.data)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    importBoxData() {
+      this.$request
+        .importPurchaseGoodsTmp()
+        .then(res => {
+          downloadStreamFile(res, 'file', 'xlsx')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    uploadTmp(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 文件删除
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    onConfirm() {
+      let file = this.param
+      this.$request.importPurchaseAnalysis(this.orderId, file).then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.tips,
+            type: 'success'
+          })
+          this.showData = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     clear() {},
     onPack(type) {
       if (!this.express_line_id) {

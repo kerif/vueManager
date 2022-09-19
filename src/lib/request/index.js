@@ -4727,12 +4727,12 @@ exports.uploadUserTagTmp = file => {
 
 // 采购 打包 导入模板
 exports.importPurchaseGoodsTmp = () => {
-  return $form.get(`purchase-picking-orders/order/box-goods-template`)
+  return $form.get('purchase-picking-orders/order/box-goods-template', { responseType: 'blob' })
 }
 
 // 采购 打包 导入解析
 exports.importPurchaseAnalysis = (orderId, file) => {
-  return $file.post(`purchase-picking-orders//order/${orderId}/box-goods-excel-parse`, file)
+  return $file.post(`purchase-picking-orders/order/${orderId}/box-goods-excel-parse`, file)
 }
 
 // 采购 导出

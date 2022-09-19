@@ -1220,7 +1220,11 @@ export default {
     getPackage() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
+        res.data.packages.forEach(item => {
+          item.order_sn = res.data.order_sn
+        })
         this.PackageData = res.data.packages
+        console.log(this.PackageData)
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
