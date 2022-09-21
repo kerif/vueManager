@@ -22,7 +22,7 @@
       </div>
       <div class="has-border">
         <el-row class="order-box" type="flex" v-show="orderList.length">
-          <el-col :span="6">
+          <el-col :span="5">
             <div class="font-bold left-title">{{ $t('请选择订单号') }}</div>
             <div class="order-list">
               <div
@@ -38,7 +38,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :span="18" class="right-box">
+          <el-col :span="19" class="right-box">
             <div class="top-box" v-if="order.length">
               <div class="right-item has-border">
                 <div class="font-bold right-tile">{{ $t('打包详细') }}</div>
@@ -97,13 +97,17 @@
               </div>
               <div class="right-item has-border">
                 <div class="weight-content">
-                  <div class="flex-item title-list">
+                  <div class="flex-item title-list flex-btn">
                     <div class="font-bold">{{ $t('装箱') }}</div>
-                    <!-- <el-button class="btn-main" @click="exportBoxData">{{ $t('导出') }}</el-button>
-                    <el-button class="btn-main" @click="onBatch">{{ $t('批量导入') }}</el-button> -->
-                    <el-button type="primary" size="small" @click="onAddBox">{{
-                      $t('添加箱子')
-                    }}</el-button>
+                    <div>
+                      <el-button class="btn-main" @click="exportBoxData">{{
+                        $t('导出')
+                      }}</el-button>
+                      <el-button class="btn-main" @click="onBatch">{{ $t('批量导入') }}</el-button>
+                      <el-button type="primary" size="small" @click="onAddBox">{{
+                        $t('添加箱子')
+                      }}</el-button>
+                    </div>
                   </div>
                   <div class="weight-box">
                     <el-row :gutter="10">
@@ -224,6 +228,9 @@
                     "
                   >
                     <el-row :gutter="10">
+                      <el-col :span="2"
+                        ><div>{{ $t('商品编号') }}</div></el-col
+                      >
                       <el-col :span="3"
                         ><div>{{ $t('状态') }}</div></el-col
                       >
@@ -242,7 +249,7 @@
                       <el-col :span="4"
                         ><div>{{ $t('总数') }}</div></el-col
                       >
-                      <el-col :span="3">
+                      <el-col :span="2">
                         <div>{{ $t('已装箱') }}</div>
                       </el-col>
                     </el-row>
@@ -256,6 +263,9 @@
                           all: sku === item.barcode
                         }"
                       >
+                        <el-col :span="2"
+                          ><div>{{ item.number }}</div></el-col
+                        >
                         <el-col :span="3"
                           ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
                         >
@@ -298,7 +308,7 @@
                             {{ item.quantity }}
                           </div></el-col
                         >
-                        <el-col :span="3" class="num-item">
+                        <el-col :span="2" class="num-item">
                           {{ item.scanQty }}
                         </el-col>
                       </el-row>
@@ -425,7 +435,8 @@ export default {
       fileList: [],
       param: '',
       params: '',
-      orderId: ''
+      orderId: '',
+      orderItem: ''
     }
   },
   created() {
@@ -570,6 +581,7 @@ export default {
     },
     onOrder(item, index) {
       this.orderId = item.id
+      this.orderItem = item
       this.idx = index
       this.status = item.status
       this.order = this.orderList.filter(ele => ele.id === item.id)
@@ -747,7 +759,6 @@ export default {
     onConfirm() {
       let file = this.param
       this.$request.importPurchaseAnalysis(this.orderId, file).then(res => {
-        console.log(res)
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
@@ -755,7 +766,21 @@ export default {
             type: 'success'
           })
           this.showData = false
-          this.getList()
+          this.fileList = []
+          this.box = this.box.concat(res.data.boxes)
+          this.box.forEach((item, index) => {
+            this.skuList.forEach(ele => {
+              res.data.goods.forEach(val => {
+                if (val.number === ele.number) {
+                  if (val.boxes[index]) {
+                    ele.packData = ele.packData.concat([
+                      { pack_quantity: val.boxes[index].quantity }
+                    ])
+                  }
+                }
+              })
+            })
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -783,7 +808,10 @@ export default {
           console.log(ele)
           boxItem.goods.push({
             picking_order_goods_id: ele.picking_order_goods_id,
-            pack_quantity: ele.packData[index].pack_quantity ? ele.packData[index].pack_quantity : 0
+            pack_quantity:
+              ele.packData[index] && ele.packData[index].pack_quantity
+                ? ele.packData[index] && ele.packData[index].pack_quantity
+                : 0
           })
         })
         boxList.push(boxItem)
@@ -1018,6 +1046,9 @@ export default {
   .flex-item {
     display: flex;
     align-items: center;
+  }
+  .flex-btn {
+    justify-content: space-between;
   }
   .order-box {
     background: #fff;

@@ -11,7 +11,7 @@
         }}</el-button>
       </div>
       <div>
-        <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('分拣码')" clearable>
+        <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('清关编码')" clearable>
           <el-option
             v-for="item in sortCode"
             :key="item.id"

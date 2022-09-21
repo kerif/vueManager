@@ -317,7 +317,8 @@ export default {
           { id: 'insurance_fee', name: this.$t('保险费用') },
           { id: 'tariff_fee', name: this.$t('关税费用') },
           { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
-          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') },
+          { id: 'freight_fee', name: this.$t('运费') }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
@@ -527,7 +528,8 @@ export default {
           { id: 'insurance_fee', name: this.$t('保险费用') },
           { id: 'tariff_fee', name: this.$t('关税费用') },
           { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
-          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') },
+          { id: 'freight_fee', name: this.$t('运费') }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
