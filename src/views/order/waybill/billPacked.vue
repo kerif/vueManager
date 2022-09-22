@@ -97,9 +97,18 @@
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
     <div class="add-sty" v-if="this.$route.params.activeName">
+      <el-button class="btn-light-red" @click="onBatchRemove">{{ $t('批量移除') }}</el-button>
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
-    <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
+    <el-table
+      :data="PackageData"
+      v-loading="tableLoading"
+      @selection-change="onSelectChange"
+      class="data-list"
+      border
+      stripe
+    >
+      <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
       <!-- 包裹编码 -->
@@ -780,6 +789,7 @@ export default {
       unit: '',
       currency: '',
       status: '',
+      selectIDs: [],
       declareType: [
         {
           id: 1,
@@ -873,6 +883,36 @@ export default {
     // 包裹清单 详情
     packageDetails(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    onSelectChange(selection) {
+      this.selectIDs = selection.map(item => item.id)
+    },
+    onBatchRemove() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('是否确认批量删除'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.batchRemove(this.$route.params.id, { ids: this.selectIDs }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getPackage()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     // 移除 包裹清单
     removePackage(id, expressNum, orderSn) {

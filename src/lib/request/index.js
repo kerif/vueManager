@@ -4784,3 +4784,8 @@ exports.cancelCouponCode = id => {
 exports.couponCodeList = (id, params) => {
   return $form.get(`coupons/${id}/codes`, { params })
 }
+
+// 批量移除
+exports.batchRemove = (id, params) => {
+  return $form.post(`orders/${id}/packages/batch-remove`, params)
+}
