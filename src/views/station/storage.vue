@@ -189,6 +189,7 @@
                     v-model="user.express_company_id"
                     clearable
                     :placeholder="$t('请选择')"
+                    @change="handleExpressSelect"
                   >
                     <el-option
                       v-for="item in expressData"
@@ -695,6 +696,9 @@ export default {
     },
     changeShip(e) {
       this.$set(this.user, 'country_id', e)
+    },
+    handleExpressSelect() {
+      this.$forceUpdate()
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData() {

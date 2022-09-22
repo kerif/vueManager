@@ -842,6 +842,8 @@ export default {
                   name: 'transshipmentBill'
                 })
               }
+            } else {
+              this.getCloudDetail(this.orderList[i].sn)
             }
           }
         } else {
