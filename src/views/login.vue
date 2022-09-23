@@ -29,7 +29,9 @@
                 ><strong>{{ $t('欢迎使用') }}</strong></span
               >
               <div class="go-sty">
-                <span @click="changeWelcome(3)">{{ $t('去注册') }}</span>
+                <span @click="changeWelcome(3)" v-if="this.$route.query.register">{{
+                  $t('去注册')
+                }}</span>
               </div>
             </div>
             <el-form>

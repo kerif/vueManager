@@ -53,6 +53,7 @@
           <el-form-item prop="express_line_id">
             <el-select
               v-model="searchFieldData.express_line_id"
+              filterable
               clearable
               :placeholder="$t('线路名称')"
               @change="changeVal"

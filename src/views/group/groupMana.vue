@@ -40,6 +40,12 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('拼团订单号')" prop="sn"></el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse_name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.warehouse_name">{{ scope.row.warehouse_name }}</span>
+          <span v-else>{{ $t('无') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
           <span v-if="scope.row.is_public === 1">{{ $t('公开') }}</span>
