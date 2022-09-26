@@ -889,6 +889,16 @@ export default {
         if (res.ret) {
           res.data.forEach(items => {
             items.is_finished = !!items.is_finished
+            if (items.type_id === 2) {
+              items.route = 'config/line'
+            } else if (items.type_id === 3) {
+              items.route = 'config/configuration-more?activeName=4&secondTab4=2'
+            } else if (items.type_id === 4) {
+              items.route = 'config/configuration-more?activeName=1&secondTab4=2&secondTab1=3'
+            } else if (items.type_id === 5) {
+              items.route =
+                'config/configuration-more?activeName=2&secondTab4=5&secondTab1=7&secondTab3=1&secondTab2=4'
+            }
           })
           this.updateProp = res.data
         }
