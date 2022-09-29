@@ -155,6 +155,7 @@
               @click="share(scope.row.id)"
               >{{ $t('分享') }}</el-button
             >
+            <!-- <el-button size="small" class="btn-main">{{ $t('详情') }}</el-button> -->
           </template>
         </el-table-column>
       </el-table>

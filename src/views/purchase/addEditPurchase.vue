@@ -247,7 +247,6 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods[index] = data
           this.$set(this.ruleForm.goods, index, data)
         }
@@ -283,12 +282,10 @@ export default {
       )
     },
     onSave() {
-      console.log(this.ruleForm.logitics_company_code)
       let params = {
         ...this.ruleForm,
         is_approved: 0
       }
-      console.log(this.ruleForm.goods)
       this.ruleForm.goods = this.ruleForm.goods.map(item => {
         console.log(item)
         return {
@@ -296,7 +293,6 @@ export default {
           image: item.image
         }
       })
-      console.log(this.ruleForm.goods)
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
           if (res.ret) {
@@ -384,7 +380,6 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods.push({ ...data })
         }
       )

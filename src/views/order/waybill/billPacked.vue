@@ -891,11 +891,17 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认批量删除'), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        this.$t(
+          '该操作无法撤回，移除后的包裹将回到已入库状态。注：若该订单只有一个包裹，则该包裹移除后订单自动作废'
+        ),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.$request.batchRemove(this.$route.params.id, { ids: this.selectIDs }).then(res => {
           if (res.ret) {
             this.$notify({

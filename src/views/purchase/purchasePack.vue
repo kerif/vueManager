@@ -767,20 +767,31 @@ export default {
           })
           this.showData = false
           this.fileList = []
-          this.box = this.box.concat(res.data.boxes)
-          this.box.forEach((item, index) => {
-            this.skuList.forEach(ele => {
-              res.data.goods.forEach(val => {
-                if (val.number === ele.number) {
-                  if (val.boxes[index]) {
-                    ele.packData = ele.packData.concat([
-                      { pack_quantity: val.boxes[index].quantity }
-                    ])
-                  }
+          let boxArr = res.data.boxes
+          for (let i = 0; i < boxArr.length; i++) {
+            let num = this.box.findIndex((item, idx) => {
+              return idx + 1 === +boxArr[i].box_number
+            })
+            if (num < 0) {
+              this.box = this.box.concat([boxArr[i]])
+              return this.skuList.forEach(ele => {
+                const arr = res.data.goods.find(item => item.number === ele.number)
+                ele.packData.push({
+                  pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
+                })
+              })
+            } else {
+              this.box.splice(num, 1, boxArr[i])
+              this.skuList.forEach(ele => {
+                if (res.data.goods) {
+                  const arr = res.data.goods.find(item => item.number === ele.number)
+                  ele.packData.splice(i, 1, {
+                    pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
+                  })
                 }
               })
-            })
-          })
+            }
+          }
         } else {
           this.$notify({
             title: this.$t('操作失败'),
