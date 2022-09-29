@@ -370,6 +370,7 @@
             :http-request="uploadTmp"
           >
             <el-button size="small" type="primary" plain>{{ $t('上传模板') }}</el-button>
+            <span style="color: red; margin-left: 10px">{{ $t('导入的数据将会进行覆盖') }}</span>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -774,20 +775,22 @@ export default {
             })
             if (num < 0) {
               this.box = this.box.concat([boxArr[i]])
-              return this.skuList.forEach(ele => {
+              return this.skuList.forEach((ele, index) => {
                 const arr = res.data.goods.find(item => item.number === ele.number)
                 ele.packData.push({
                   pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
                 })
+                this.checkOut(ele, index)
               })
             } else {
               this.box.splice(num, 1, boxArr[i])
-              this.skuList.forEach(ele => {
+              this.skuList.forEach((ele, index) => {
                 if (res.data.goods) {
                   const arr = res.data.goods.find(item => item.number === ele.number)
                   ele.packData.splice(i, 1, {
                     pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
                   })
+                  this.checkOut(ele, index)
                 }
               })
             }
