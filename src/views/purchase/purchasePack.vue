@@ -773,9 +773,10 @@ export default {
             let num = this.box.findIndex((item, idx) => {
               return idx + 1 === +boxArr[i].box_number
             })
+            console.log(num)
             if (num < 0) {
               this.box = this.box.concat([boxArr[i]])
-              return this.skuList.forEach((ele, index) => {
+              this.skuList.forEach((ele, index) => {
                 const arr = res.data.goods.find(item => item.number === ele.number)
                 ele.packData.push({
                   pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
