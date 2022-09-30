@@ -470,8 +470,8 @@
                   <template slot-scope="scope">
                     <div>
                       <span
-                        v-for="pic in scope.row.package_pictures"
-                        :key="pic.id"
+                        v-for="(pic, index) in scope.row.package_pictures"
+                        :key="index"
                         style="cursor: pointer"
                         @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + pic), (imgVisible = true)"
                       >
