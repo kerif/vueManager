@@ -62,6 +62,9 @@
           @click="onInvild(selectIDs)"
           >{{ $t('作废') }}</el-button
         >
+        <el-button v-if="activeName === '4'" class="btn-light-red" @click="onBack(selectIDs)">{{
+          $t('批量回退')
+        }}</el-button>
       </div>
       <div class="header-search">
         <div class="searchGroup">
@@ -360,6 +363,32 @@ export default {
     },
     getRow(row) {
       console.log(row)
+    },
+    onBack(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$confirm(this.$t('您确定要撤销吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        let params = {}
+        params.ids = ids
+        this.$request.batchBack(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
     },
     onInvild(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))

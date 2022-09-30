@@ -4789,3 +4789,8 @@ exports.couponCodeList = (id, params) => {
 exports.batchRemove = (id, params) => {
   return $form.post(`orders/${id}/packages/batch-remove`, params)
 }
+
+// 批量撤销
+exports.batchBack = params => {
+  return $form.put('purchase-orders/revoke', params)
+}
