@@ -366,7 +366,7 @@ export default {
     },
     onBack(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))
-      this.$confirm(this.$t('您确定要撤销吗'), this.$t('提示'), {
+      this.$confirm(this.$t('您确定要回退吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
