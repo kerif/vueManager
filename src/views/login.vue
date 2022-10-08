@@ -3,7 +3,7 @@
     <div class="login-header">
       <img
         v-if="!this.hostname.includes('haiouoms')"
-        style="width: 46px; height: 46px"
+        class="img-sty img-logo"
         :src="$baseUrl.IMAGE_URL + customData.login_logo"
         alt=""
       />
@@ -886,6 +886,10 @@ export default {
   .img-sty {
     vertical-align: middle;
     padding-right: 5px;
+  }
+  .img-logo {
+    width: 46px;
+    height: 46px;
   }
   .main {
     background-color: #efefef !important;
