@@ -85,7 +85,9 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading" @click="confirm('ruleForm')">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
