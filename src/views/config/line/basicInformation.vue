@@ -32,6 +32,14 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <div>{{ $t('编号') }}</div>
+        <el-row>
+          <el-col :span="10">
+            <el-input v-model="form.code" :placeholder="$t('请输入编号')"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
             <div>{{ $t('支持仓库') }}</div>
@@ -383,6 +391,7 @@ export default {
         prop_ids: [],
         is_great_value: 0,
         icon: '',
+        code: '',
         need_id_card: '',
         weight_rise: '',
         // multi_box_min_weight: '',
@@ -566,6 +575,7 @@ export default {
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
         this.form.label_ids = res.data.labels.map(item => item.id)
         this.form.tips = res.data.tips
+        this.form.code = res.data.code
       })
     },
     onSelectChange(e) {
