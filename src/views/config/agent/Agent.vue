@@ -67,6 +67,7 @@
           <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('联系人')" prop="contact_name"></el-table-column>
       <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
       <el-table-column :label="$t('下单数')">
         <template slot-scope="scope">
