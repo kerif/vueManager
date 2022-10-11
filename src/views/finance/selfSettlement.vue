@@ -1,25 +1,42 @@
 <template>
   <div class="self-settlement-container">
-    <el-popover placement="right" width="400" v-model="visible">
-      <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM"
-        value-format="yyyy-MM"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('开始日期')"
-        :end-placeholder="$t('结束日期')"
-      >
-      </el-date-picker>
-      <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
-        $t('导出清单')
-      }}</el-button>
-    </el-popover>
-    <div class="searchGroup">
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <!-- <el-date-picker
+    <div class="flex-box">
+      <div>
+        <el-popover placement="right" width="400" v-model="visible">
+          <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM"
+            value-format="yyyy-MM"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始日期')"
+            :end-placeholder="$t('结束日期')"
+          >
+          </el-date-picker>
+          <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
+            $t('导出清单')
+          }}</el-button>
+        </el-popover>
+      </div>
+      <div class="flex-right">
+        <el-select
+          v-model="record_status"
+          @change="changeRecordStatus"
+          clearable
+          :placeholder="$t('请选择')"
+        >
+          <el-option
+            v-for="item in recordList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          ></el-option>
+        </el-select>
+        <div>
+          <search-group v-model="page_params.keyword" @search="goSearch">
+            <!-- <el-date-picker
           class="timeStyle"
           v-model="timeList"
           type="daterange"
@@ -30,8 +47,8 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
        </el-date-picker> -->
-        <!-- 充值方式 -->
-        <!-- <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
+            <!-- 充值方式 -->
+            <!-- <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -39,8 +56,8 @@
           :label="item.name">
         </el-option>
        </el-select> -->
-        <!-- 状态 -->
-        <!-- <div class="chooseStatus">
+            <!-- 状态 -->
+            <!-- <div class="chooseStatus">
         <el-select v-model="status" @change="onShipStatus" clearable
         :placeholder="$t('请选择')">
           <el-option
@@ -51,9 +68,11 @@
           </el-option>
         </el-select>
     </div> -->
-      </search-group>
+          </search-group>
+        </div>
+        <div class="clear"></div>
+      </div>
     </div>
-    <div class="clear"></div>
     <!-- <div class="select-box">
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div> -->
@@ -99,6 +118,8 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('待提交')" prop="verify_count"> </el-table-column>
+        <el-table-column :label="$t('待审核')" prop="applies_count"></el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
@@ -137,6 +158,17 @@ export default {
       voucherChange: [],
       visible: false,
       status: '',
+      record_status: '',
+      recordList: [
+        {
+          id: 1,
+          name: this.$t('待提交')
+        },
+        {
+          id: 2,
+          name: this.$t('待审核')
+        }
+      ],
       statusList: [
         {
           id: 0,
@@ -168,7 +200,8 @@ export default {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        record_status: this.record_status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // this.begin_date && (params.begin_date = this.begin_date)
@@ -259,6 +292,10 @@ export default {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
+    changeRecordStatus() {
+      this.page_params.handleQueryChange('record_status', this.record_status)
+      this.getList()
+    },
     // 跳转到审核
     details(id, orderId, paymentType) {
       console.log(paymentType, 'paymentType')
@@ -300,9 +337,13 @@ export default {
 </script>
 <style lang="scss">
 .self-settlement-container {
-  .searchGroup {
-    width: 21.5%;
-    float: right;
+  .flex-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .flex-right {
+      display: flex;
+    }
   }
   .clear {
     clear: both;
