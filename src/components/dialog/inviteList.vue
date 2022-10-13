@@ -13,14 +13,13 @@
       </div>
     </div>
     <div v-else>
-      <el-button class="btn-light-red" @click="batchInvalid">{{ $t('批量作废') }}</el-button>
+      <el-button class="btn-light-red" @click="batchInvalid(ids)">{{ $t('批量作废') }}</el-button>
     </div>
     <el-table
       v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
       border
-      @selection-change="selectionChange"
       style="width: 100%"
     >
       <el-table-column type="index"> </el-table-column>
@@ -39,7 +38,14 @@
       </el-table-column>
     </el-table>
     <!-- 卡券包 -->
-    <el-table v-else class="data-list" :data="tableData" border style="width: 100%">
+    <el-table
+      v-else
+      class="data-list"
+      :data="tableData"
+      @selection-change="selectionChange"
+      border
+      style="width: 100%"
+    >
       <el-table-column type="selection"></el-table-column>
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="name" :label="$t('券名称')"> </el-table-column>
@@ -127,9 +133,10 @@ export default {
     },
     selectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      console.log(this.ids, 'ids')
     },
-    batchInvalid() {
-      if (!this.ids || !this.ids.length) {
+    batchInvalid(ids) {
+      if (!ids.length) {
         return this.$message.error(this.$t('请选择'))
       }
       this.$confirm(this.$t('确定要批量作废'), this.$t('提示'), {
@@ -138,7 +145,7 @@ export default {
         type: 'warning'
       }).then(() => {
         let params = {}
-        params.ids = this.ids
+        params.ids = ids
         this.$request.batchInvalidCard(params).then(res => {
           if (res.ret) {
             this.$notify({
