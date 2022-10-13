@@ -4794,3 +4794,8 @@ exports.batchRemove = (id, params) => {
 exports.batchBack = params => {
   return $form.put('purchase-orders/revoke', params)
 }
+
+// 批量作废
+exports.batchInvalidCard = params => {
+  return $form.put('users/coupons/disabled', params)
+}

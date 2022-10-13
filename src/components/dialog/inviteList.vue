@@ -12,11 +12,15 @@
         {{ $t('提示: 成为代理之前邀请的客户一键转为代理客户') }}
       </div>
     </div>
+    <div v-else>
+      <el-button class="btn-light-red" @click="batchInvalid">{{ $t('批量作废') }}</el-button>
+    </div>
     <el-table
       v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
       border
+      @selection-change="selectionChange"
       style="width: 100%"
     >
       <el-table-column type="index"> </el-table-column>
@@ -36,6 +40,7 @@
     </el-table>
     <!-- 卡券包 -->
     <el-table v-else class="data-list" :data="tableData" border style="width: 100%">
+      <el-table-column type="selection"></el-table-column>
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="name" :label="$t('券名称')"> </el-table-column>
       <el-table-column prop="code" :label="$t('券码')"> </el-table-column>
@@ -73,7 +78,8 @@ export default {
     return {
       tableData: [],
       state: '',
-      id: ''
+      id: '',
+      ids: []
     }
   },
   methods: {
@@ -118,6 +124,38 @@ export default {
     },
     init() {
       this.getList()
+    },
+    selectionChange(selection) {
+      this.ids = selection.map(item => item.id)
+    },
+    batchInvalid() {
+      if (!this.ids || !this.ids.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('确定要批量作废'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        let params = {}
+        params.ids = this.ids
+        this.$request.batchInvalidCard(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     clear() {
       this.page_params.page = 1
