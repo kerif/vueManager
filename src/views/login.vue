@@ -2,13 +2,13 @@
   <div class="login-container">
     <div class="login-header">
       <img
-        v-if="![('haiouoms', 'localhost')].includes(this.hostname)"
+        v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')"
         class="img-sty img-logo"
         :src="$baseUrl.IMAGE_URL + customData.login_logo"
         alt=""
       />
       <img v-else src="../assets/logo-top.png" class="img-sty" />
-      <span v-if="![('haiouoms', 'localhost')].includes(this.hostname)">{{
+      <span v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">{{
         customData.login_title
       }}</span>
       <span v-else>{{ $t('海鸥集运管理系统') }}</span>
@@ -17,7 +17,7 @@
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div v-if="![('haiouoms', 'localhost')].includes(this.hostname)">
+          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -92,7 +92,7 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div v-if="![('haiouoms', 'localhost')].includes(this.hostname)">
+          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
@@ -185,7 +185,7 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div v-if="![('haiouoms', 'localhost')].includes(this.hostname)">
+          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">
             <img
               :src="$baseUrl.IMAGE_URL + customData.login_image"
               style="width: 500px; height: 450px"
