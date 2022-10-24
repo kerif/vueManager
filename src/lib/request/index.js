@@ -4822,7 +4822,7 @@ exports.editPresetPack = (id, params) => {
 
 // 预设打包箱 删除
 exports.delPresetPack = params => {
-  return $form.put(`system-boxes/destory`, params)
+  return $form.put(`system-boxes/destroy`, params)
 }
 
 // 批量更新包裹归属信息
