@@ -32,9 +32,9 @@
                   <el-menu-item index="7">
                     {{ $t('合箱须知') }}
                   </el-menu-item>
-                  <!-- <el-menu-item index="8">
+                  <el-menu-item index="8">
                     {{ $t('预设打包箱') }}
-                  </el-menu-item> -->
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -66,9 +66,9 @@
               <box-configure></box-configure>
             </el-col>
             <!-- 预设打包箱 -->
-            <!-- <el-col :span="19" v-if="secondTab1 === '8'" class="main-right">
+            <el-col :span="19" v-if="secondTab1 === '8'" class="main-right">
               <preset-pack></preset-pack>
-            </el-col> -->
+            </el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -241,7 +241,7 @@ import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
-// import presetPack from './presetPack.vue'
+import presetPack from './presetPack.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -264,8 +264,8 @@ export default {
     CustomLabel,
     LoginConfigure,
     customizeBackgroundSystem,
-    boxConfigure
-    // presetPack
+    boxConfigure,
+    presetPack
     // GroupConfigure
   },
   mixins: [pagination],

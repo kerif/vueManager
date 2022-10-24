@@ -416,9 +416,9 @@
                 class="sizeLength"
                 :placeholder="$t('高') + this.localization.length_unit"
               ></el-input>
-              <!-- <el-button class="btn-main" style="margin-left: 5px" @click="selectBox('single')">{{
+              <el-button class="btn-main" style="margin-left: 5px" @click="selectBox('single')">{{
                 $t('选择箱子')
-              }}</el-button> -->
+              }}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -509,9 +509,9 @@
                       class="btn-light-red"
                       >{{ $t('移除') }}</el-button
                     >
-                    <!-- <el-button class="btn-main" @click="selectBox('multi', scope.$index)">{{
+                    <el-button class="btn-main" @click="selectBox('multi', scope.$index)">{{
                       $t('选择箱子')
-                    }}</el-button> -->
+                    }}</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -748,8 +748,8 @@ export default {
         pack_pictures: [], // 打包照片
         box: [],
         line_service_ids: [],
-        order_service_ids: []
-        // system_box_id: ''
+        order_service_ids: [],
+        system_box_id: ''
       },
       baseMode: 0,
       lineServices: [],
@@ -895,27 +895,27 @@ export default {
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
     },
-    // selectBox(type, index) {
-    //   dialog(
-    //     {
-    //       type: 'presetPackBox'
-    //     },
-    //     data => {
-    //       let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
-    //       this.boxId = id
-    //       if (type === 'single') {
-    //         this.user.length = length
-    //         this.user.width = width
-    //         this.user.height = height
-    //       } else {
-    //         this.user.box[index].weight = weight
-    //         this.user.box[index].length = length
-    //         this.user.box[index].width = width
-    //         this.user.box[index].height = height
-    //       }
-    //     }
-    //   )
-    // },
+    selectBox(type, index) {
+      dialog(
+        {
+          type: 'presetPackBox'
+        },
+        data => {
+          let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
+          this.boxId = id
+          if (type === 'single') {
+            this.user.length = length
+            this.user.width = width
+            this.user.height = height
+          } else {
+            this.user.box[index].weight = weight
+            this.user.box[index].length = length
+            this.user.box[index].width = width
+            this.user.box[index].height = height
+          }
+        }
+      )
+    },
     onBatchRemove() {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
@@ -1110,7 +1110,7 @@ export default {
             price: item.price
           }
         })
-      // this.user.system_box_id = this.boxId
+      this.user.system_box_id = this.boxId
       this.user.in_warehouse_pictures = this.goodsImgList
       this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
