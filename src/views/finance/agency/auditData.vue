@@ -48,10 +48,6 @@
           {{ $t('待结算') }}
           <i class="count">{{ totalSettlement }}</i>
         </el-button>
-        <!-- 导出清单 -->
-        <el-button class="btn-main" style="margin-left: 10px" @click="exportAgentList">{{
-          $t('导出清单')
-        }}</el-button>
       </div>
       <!-- 关键字搜索 -->
       <div class="head-search">
@@ -208,28 +204,6 @@ export default {
         console.log(res)
         this.typeData = res.data.type_list
       })
-    },
-    exportAgentList() {
-      this.$request
-        .exportAgentCommission({
-          ...this.page_params
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.$parent.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
     }
   }
 }

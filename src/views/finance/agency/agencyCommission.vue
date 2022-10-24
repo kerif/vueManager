@@ -48,6 +48,10 @@
           {{ $t('一键结算') }}
         </el-button>
         <el-button class="btn-light-red" @click="orderSettle">{{ $t('预约结算') }}</el-button>
+        <!-- 导出清单 -->
+        <el-button class="btn-main" style="margin-left: 10px" @click="exportAgentList">{{
+          $t('导出清单')
+        }}</el-button>
       </div>
       <div class="head-search">
         <el-input
@@ -308,6 +312,34 @@ export default {
     },
     cancel() {
       this.show = false
+    },
+    exportAgentList() {
+      this.$request
+        .exportAgentCommission({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          user_id: this.page_params.user_id,
+          status: this.page_params.status,
+          begin_date: this.timeList[0],
+          end_date: this.timeList[1]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            // this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     }
   }
 }
