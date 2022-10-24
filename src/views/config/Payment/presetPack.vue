@@ -169,7 +169,7 @@ export default {
       let params = {
         name: row.name,
         length: row.length,
-        width: row.length,
+        width: row.width,
         height: row.height,
         weight: row.weight,
         cost_amount: row.cost_amount
