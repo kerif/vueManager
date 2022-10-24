@@ -121,6 +121,13 @@
           @click="uploadListData"
           >{{ $t('导出清单') }}</el-button
         >
+        <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="activeName === '2'"
+          @click="batchChangePackage"
+          >{{ $t('批量包裹变更') }}</el-button
+        >
       </div>
       <div class="header-search">
         <el-input
@@ -621,6 +628,20 @@ export default {
     },
     passVal() {
       this.showBatch = false
+    },
+    batchChangePackage() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'packageChange',
+          packageData: this.packageData
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     goMatch() {
       this.page_params.page = 1

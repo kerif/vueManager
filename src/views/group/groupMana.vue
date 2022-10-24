@@ -5,21 +5,22 @@
         <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
         <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
       </el-tabs>
-      <div class="addUser">
-        <div class="searchGroup">
-          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-        </div>
-        <!-- <search-select
+    </div>
+    <div class="addUser">
+      <div>
+        <!-- <el-button class="btn-main" @click="addGroup">{{ $t('新增拼团') }}</el-button> -->
+      </div>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      </div>
+      <!-- <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
           @search="onGroupChange"
         >
         </search-select> -->
-        <!-- <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn> -->
-      </div>
+      <!-- <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn> -->
     </div>
-    <!-- <div class="select-box">
-    </div> -->
     <el-table
       class="data-list"
       border
@@ -137,6 +138,9 @@
               <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
                 <span>{{ $t('延长拼团时间') }}</span>
               </el-dropdown-item>
+              <!-- <el-dropdown-item class="item-sty" @click.native="joinGroupDetail">
+                {{ $t('拼团详细') }}
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -233,7 +237,6 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-// import AddBtn from '@/components/addBtn'
 export default {
   name: 'grouplist',
   data() {
@@ -321,6 +324,11 @@ export default {
         this.getList()
       })
     },
+    addGroup() {
+      dialog({
+        type: 'onAddGroup'
+      })
+    },
     proLong(id) {
       this.proId = id
       this.dialogDays = true
@@ -338,6 +346,11 @@ export default {
     goSearch() {
       this.page_params.page = 1
       this.getList()
+    },
+    joinGroupDetail() {
+      dialog({
+        type: 'groupDetail'
+      })
     },
     // 延长拼团时间
     submitTimes() {
@@ -371,7 +384,6 @@ export default {
       this.$request.uploadUserExcel().then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
@@ -540,10 +552,8 @@ export default {
     }
   },
   components: {
-    // SearchSelect,
     SearchGroup,
     NlePagination
-    // AddBtn
   }
 }
 </script>
@@ -570,16 +580,14 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
-    // text-align: right;
   }
   .addUser {
     display: flex;
     justify-content: flex-end;
-    flex: 1;
+    align-items: center;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
-      margin-right: 10px;
+      width: 20%;
+      margin: 0 10px;
     }
   }
   .addUser > .add-btn-container {
@@ -587,12 +595,7 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
-    float: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 }
 </style>

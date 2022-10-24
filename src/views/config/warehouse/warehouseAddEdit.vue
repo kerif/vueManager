@@ -70,6 +70,20 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('城市')" prop="city">
+        <el-row>
+          <el-col :span="10">
+            <el-input :placeholder="$t('请输入')" v-model="ruleForm.city"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item :label="$t('省')" prop="province">
+        <el-row>
+          <el-col :span="10">
+            <el-input :placeholder="$t('请输入')" v-model="ruleForm.province"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item :label="$t('地址')" prop="address">
         <el-row>
           <el-col :span="10">
@@ -201,7 +215,9 @@ export default {
         free_store_days: 0,
         ignore_lon_lat: 1,
         support_countries: [],
-        is_stg: 0
+        is_stg: 0,
+        city: '',
+        province: ''
       },
       all: [
         {

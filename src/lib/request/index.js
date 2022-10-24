@@ -4799,3 +4799,63 @@ exports.batchBack = params => {
 exports.batchInvalidCard = params => {
   return $form.put('users/coupons/disabled', params)
 }
+
+// 预设打包箱列表
+exports.presetPackList = () => {
+  return $form.get('system-boxes')
+}
+
+// 预设打包箱 获取详情
+exports.presetPackDetail = id => {
+  return $form.get(`system-boxes/${id}`)
+}
+
+// 预设打包箱 新增
+exports.addPresetPack = params => {
+  return $form.post('system-boxes', params)
+}
+
+// 预设打包箱 修改
+exports.editPresetPack = (id, params) => {
+  return $form.put(`system-boxes/${id}`, params)
+}
+
+// 预设打包箱 删除
+exports.delPresetPack = params => {
+  return $form.post(`system-boxes`, params)
+}
+
+// 批量更新包裹归属信息
+exports.batchAffilication = params => {
+  return $form.put(`packages/batch-affiliation`, params)
+}
+
+// 财务概览 交易金额统计
+exports.transAmountStatistisc = params => {
+  return $form.get(`transaction-overviews/amount-count`, { params })
+}
+
+// 财务概览 交易额按日分类统计-表格
+exports.transDailyCountTable = () => {
+  return $form.get(`transaction-overviews/daily-count`)
+}
+
+// 财务概览 交易额按日统计-柱状图
+exports.transDailyCount = () => {
+  return $form.get(`transaction-overviews/trade-count`)
+}
+
+// 财务概览 对比数据
+exports.transCountCompare = params => {
+  return $form.get(`transaction-overviews/compare-data`, { params })
+}
+
+// 财务概览 圆饼状图统计
+exports.pieCountStatistisc = params => {
+  return $form.get(`transaction-overviews/countries-data`, { params })
+}
+
+// 代理佣金结算 导出清单
+exports.exportAgentCommission = params => {
+  return $form.get(`agents/export-deal-orders`, { params })
+}

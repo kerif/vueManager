@@ -165,6 +165,10 @@ import batchTag from './batchTag.vue'
 import tracking from './tracking.vue'
 import addGroupAddress from './addGroupAddress.vue'
 import addExchangeCode from './addExchangeCode.vue'
+import presetPackBox from './presetPackBox.vue'
+import packageChange from './packageChange.vue'
+import onAddGroup from './onAddGroup.vue'
+import groupDetail from './groupDetail.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -329,6 +333,10 @@ const batchTagController = Vue.extend(batchTag)
 const trackingController = Vue.extend(tracking)
 const addGroupAddressController = Vue.extend(addGroupAddress)
 const addExchangeCodeController = Vue.extend(addExchangeCode)
+const presetPackBoxController = Vue.extend(presetPackBox)
+const packageChangeController = Vue.extend(packageChange)
+const onAddGroupController = Vue.extend(onAddGroup)
+const groupDetailController = Vue.extend(groupDetail)
 
 const mixin = {
   data() {
@@ -674,6 +682,34 @@ function initInstance(type) {
     // 兑换码
     case 'addExchangeCode':
       instance = new addExchangeCodeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 预设打包箱
+    case 'presetPackBox':
+      instance = new presetPackBoxController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量包裹变更
+    case 'packageChange':
+      instance = new packageChangeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 拼团
+    case 'onAddGroup':
+      instance = new onAddGroupController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 拼团详细
+    case 'groupDetail':
+      instance = new groupDetailController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
