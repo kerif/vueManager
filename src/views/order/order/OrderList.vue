@@ -124,7 +124,7 @@
         <el-button
           class="btn-light-red"
           size="small"
-          v-if="activeName === '2'"
+          v-if="['1', '2'].includes(activeName)"
           @click="batchChangePackage"
           >{{ $t('批量包裹变更') }}</el-button
         >
