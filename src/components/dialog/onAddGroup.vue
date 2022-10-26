@@ -30,7 +30,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('收货地址')">
-            <div class="select-box">
+            <div class="select-boxs">
               <div class="flex-item">
                 <div
                   v-if="ruleForm.user_id"
@@ -55,14 +55,14 @@
             </div>
           </el-form-item>
           <el-form-item :label="$t('拼团渠道')">
-            <div class="select-box">
+            <div class="select-boxs">
               <div class="flex-item">
                 <div style="width: 80px; margin-right: 20px"></div>
                 <div>
                   <div class="font-bold black-text">
                     {{ ruleForm.express_line && ruleForm.express_line.name }}
                   </div>
-                  <div>{{ ruleForm.props }}</div>
+                  <div>{{ ruleForm.express_line && ruleForm.express_line.props }}</div>
                 </div>
                 <el-button class="btn-light-green" @click="selectLine">{{
                   $t('选择渠道')
@@ -75,7 +75,7 @@
               <el-radio :label="0">{{ $t('送货上门') }}</el-radio>
               <el-radio :label="1">{{ $t('自提点收货') }}</el-radio>
             </el-radio-group>
-            <div class="select-box" v-if="ruleForm.is_delivery === 1">
+            <div class="select-boxs" v-if="ruleForm.is_delivery === 1">
               <div class="flex-item">
                 <div style="width: 80px; background-color: #000; margin-right: 20px"></div>
                 <div>
@@ -100,8 +100,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item :label="$t('拼团截止')">
-            <el-date-picker v-model="ruleForm.days" type="datetime" placeholder="选择日期时间">
-            </el-date-picker>
+            <el-input v-model="ruleForm.days" :placeholder="$t('选择日期时间')"> </el-input>
           </el-form-item>
           <el-form-item :label="$t('是否为公开拼团')">
             <el-switch
@@ -125,16 +124,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="4" :offset="1">
-          <span class="img-item" v-for="(item, index) in ruleForm.images" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="img-item" v-if="ruleForm.images[0]" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + ruleForm.images[0]" alt="" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              <i class="el-icon-zoom-in" @click="onPreview(ruleForm.images[0])"></i>
+              <i class="el-icon-delete" @click="onDeleteImg"></i>
             </span>
           </span>
           <el-upload
-            v-show="ruleForm.images.length < 1"
+            v-show="!ruleForm.images[0]"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -252,12 +251,12 @@ export default {
         express_line_id: '',
         days: '',
         is_public: 0,
+        region_id: '',
         images: [],
         country: '',
         remark: '',
         address: {},
-        express_line: {},
-        props: ''
+        express_line: {}
       },
       innerVisible: false,
       showLine: false,
@@ -296,7 +295,9 @@ export default {
     getDetails(id) {
       this.$request.groupDetails(id).then(res => {
         if (res.ret) {
-          console.log(res)
+          this.ruleForm = res.data
+          this.ruleForm.express_line.props = res.data.express_line.props.map(item => item).join(',')
+          this.ruleForm.user_id = res.data.members[0].id + '---' + res.data.members[0].name
         }
       })
     },
@@ -372,8 +373,8 @@ export default {
       })
     },
     // 删除图片
-    onDeleteImg(index) {
-      this.ruleForm.images.splice(index, 1)
+    onDeleteImg() {
+      this.ruleForm.images = []
     },
     onRowChange(row) {
       console.log(row)
@@ -404,33 +405,58 @@ export default {
       this.innerVisible = false
     },
     confirm() {
-      this.$request
-        .createGroup({
-          ...this.ruleForm
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.show = false
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      if (this.id) {
+        this.$request
+          .editGroupInfo(this.id, {
+            ...this.ruleForm
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .createGroup({
+            ...this.ruleForm
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     activeFun(item) {
       this.ind = item.id
       this.activeId = item.id
       this.ruleForm.express_line.id = item.id
       this.ruleForm.express_line.name = item.name
-      this.ruleForm.props = item.props
-      console.log(item)
+      this.ruleForm.express_line.props = item.props
+      this.ruleForm.region_id = item.region && item.region.id
+      this.ruleForm.express_line_id = item.id
     },
     onSaveLine() {
       this.showLine = false
@@ -466,7 +492,7 @@ export default {
 </script>
 
 <style>
-.select-box {
+.select-boxs {
   padding: 35px;
   border-radius: 5px;
   border: 1px dashed #000;

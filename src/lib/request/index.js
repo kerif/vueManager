@@ -4874,3 +4874,8 @@ exports.groupLineList = () => {
 exports.groupbuyAddress = userId => {
   return $form.get(`group-buying/user/${userId}/addresses`)
 }
+
+// 拼团 修改拼团
+exports.editGroupInfo = (id, params) => {
+  return $form.put(`group-buying/${id}`, params)
+}
