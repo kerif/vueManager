@@ -77,9 +77,9 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // this.ruleForm.express_num = this.packageData.map(item => item.express_num).join(',')
-          this.ruleForm.user_id = this.ruleForm.user_id.substring(0, 6)
           let params = {
-            ...this.ruleForm,
+            user_id: this.ruleForm.user_id.substring(0, 6),
+            warehouse_id: this.ruleForm.warehouse_id,
             ids: this.packageData.map(item => item.id)
           }
           this.$request.batchAffilication(params).then(res => {
@@ -105,6 +105,7 @@ export default {
       })
     },
     clear() {
+      this.ruleForm.express_num = ''
       this.ruleForm.user_id = ''
       this.ruleForm.warehouse_id = ''
     }

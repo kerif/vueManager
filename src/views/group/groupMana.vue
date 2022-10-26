@@ -138,7 +138,7 @@
               <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
                 <span>{{ $t('延长拼团时间') }}</span>
               </el-dropdown-item>
-              <!-- <el-dropdown-item class="item-sty" @click.native="joinGroupDetail">
+              <!-- <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
                 {{ $t('拼团详细') }}
               </el-dropdown-item> -->
             </el-dropdown-menu>
@@ -325,9 +325,14 @@ export default {
       })
     },
     addGroup() {
-      dialog({
-        type: 'onAddGroup'
-      })
+      dialog(
+        {
+          type: 'onAddGroup'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     proLong(id) {
       this.proId = id
@@ -347,9 +352,10 @@ export default {
       this.page_params.page = 1
       this.getList()
     },
-    joinGroupDetail() {
+    joinGroupDetail(id) {
       dialog({
-        type: 'groupDetail'
+        type: 'groupDetail',
+        id
       })
     },
     // 延长拼团时间

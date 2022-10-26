@@ -4859,3 +4859,18 @@ exports.pieCountStatistisc = params => {
 exports.exportAgentCommission = params => {
   return $form.get(`agents/export-deal-orders`, { params })
 }
+
+// 拼团 创建拼团
+exports.createGroup = params => {
+  return $form.post('group-buying', params)
+}
+
+// 拼团 拼图线路列表
+exports.groupLineList = () => {
+  return $form.post('group-buying/express-lines')
+}
+
+// 拼团 可用地址
+exports.groupbuyAddress = userId => {
+  return $form.get(`group-buying/user/${userId}/addresses`)
+}
