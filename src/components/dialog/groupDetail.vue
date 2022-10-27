@@ -53,13 +53,11 @@
       </div>
       <div class="spacing">
         <div style="display: flex">
-          <div v-for="item in detailsList" :key="item.id" style="width: 100px">
-            <div class="circle" v-if="item.is_group_leader === 1">
+          <div v-for="item in groupLeader" :key="item.id" style="width: 100px">
+            <div class="circle">
               <img :src="item.avatar" class="icon-img" />
             </div>
-            <div style="margin-top: 10px" v-if="item.is_group_leader === 1">
-              {{ item.id }} --- {{ item.name }}
-            </div>
+            <div style="margin-top: 10px">{{ item.id }} --- {{ item.name }}</div>
           </div>
           <div style="margin-left: 80px">
             <div class="font-bold black-text">{{ $t('团长有话说') }}</div>
@@ -85,10 +83,13 @@
                 v-if="groupDetail.express_line && groupDetail.express_line.icon"
                 class="detail-icon"
               >
-                <img :src="$baseUrl.IMAGE_URL + groupDetail.express_line.icon.icon" />
+                <img
+                  :src="$baseUrl.IMAGE_URL + groupDetail.express_line.icon.icon"
+                  style="width: 50px"
+                />
               </div>
               <div>
-                <div class="font-bold black-text detail-item">
+                <div class="font-bold black-text detail-item font-size">
                   {{ groupDetail.express_line && groupDetail.express_line.name }}
                 </div>
                 <div class="detail-item">
@@ -101,7 +102,7 @@
                 <img src="../../assets/receive.png" />
               </div>
               <div v-if="groupDetail.address">
-                <div class="font-bold black-text detail-item">
+                <div class="font-bold black-text detail-item font-size">
                   {{ groupDetail.address.country && groupDetail.address.country.name }}
                 </div>
                 <div class="detail-item">
@@ -206,14 +207,14 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="flex-item" style="width: 50%; justify-content: flex-end">
+        <div class="flex-item">
           <div>{{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</div>
           <div>
-            {{ $t('重量') }}{{ packageWeight }}
+            {{ $t('重量') }}:{{ packageWeight }}
             {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}
           </div>
           <div>
-            {{ $t('体积重量') }}{{ volumeWeight }}
+            {{ $t('体积重量') }}:{{ volumeWeight }}
             {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}
           </div>
         </div>
@@ -352,6 +353,7 @@ export default {
       packageData: [],
       userInfo: {},
       ids: [],
+      groupLeader: [],
       form: {
         userId: ''
       }
@@ -392,6 +394,7 @@ export default {
           this.groupDetail.express_line.props =
             res.data.express_line && res.data.express_line.props.map(item => item).join(',')
           this.detailsList = res.data.members
+          this.groupLeader = res.data.members.filter(item => item.is_group_leader === 1)
           this.volumeWeight = res.data.package_volume_weight
           this.packageWeight = res.data.package_weight
           this.packagesCount = res.data.packages_count
@@ -688,7 +691,7 @@ export default {
 }
 .detail-icon {
   width: 50px;
-  margin-right: 20px;
+  margin-right: 30px;
 }
 .circle {
   width: 80px;
