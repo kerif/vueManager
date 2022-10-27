@@ -31,42 +31,60 @@
           </el-form-item>
           <el-form-item :label="$t('收货地址')">
             <div class="select-boxs">
-              <div class="flex-item">
-                <div
-                  v-if="ruleForm.user_id"
-                  style="width: 80px; background-color: #000; margin-right: 20px"
-                ></div>
-                <div v-if="ruleForm.address">
-                  <div class="font-bold black-text">
-                    {{ ruleForm.address.country_name }}
+              <div class="flex-box">
+                <div class="flex-item" v-if="ruleForm.user_id !== '' && ruleForm.address_id">
+                  <div style="width: 80px; margin-right: 20px">
+                    <img src="../../assets/receive.png" />
                   </div>
-                  <div>{{ ruleForm.address.receiver_name }}&nbsp;{{ ruleForm.address.phone }}</div>
-                  <div>
-                    {{ ruleForm.address.country_name }}&nbsp;{{ ruleForm.address.city }}&nbsp;{{
-                      ruleForm.address.province
-                    }}&nbsp;{{ ruleForm.address.street }}&nbsp;{{ ruleForm.address.address }}
+                  <div v-if="ruleForm.address">
+                    <div class="font-bold black-text">
+                      {{ ruleForm.address.country_name }}
+                    </div>
+                    <div>
+                      {{ ruleForm.address && ruleForm.address.receiver_name }}&nbsp;{{
+                        ruleForm.address.phone
+                      }}
+                    </div>
+                    <div>
+                      {{ ruleForm.address.country_name }}&nbsp;{{ ruleForm.address.city }}&nbsp;{{
+                        ruleForm.address.province
+                      }}&nbsp;{{ ruleForm.address.street }}&nbsp;{{ ruleForm.address.address }}
+                    </div>
                   </div>
                 </div>
-                <el-button class="btn-light-green" @click="changeAddress('address')">{{
-                  $t('选择地址')
-                }}</el-button>
-                <el-button class="btn-main" @click="onAddAddress">{{ $t('新增地址') }}</el-button>
+                <div>
+                  <el-button
+                    class="btn-light-green"
+                    :disabled="!ruleForm.user_id"
+                    @click="changeAddress('address')"
+                    >{{ $t('选择地址') }}</el-button
+                  >
+                  <el-button class="btn-main" :disabled="!ruleForm.user_id" @click="onAddAddress">{{
+                    $t('新增地址')
+                  }}</el-button>
+                </div>
               </div>
             </div>
           </el-form-item>
           <el-form-item :label="$t('拼团渠道')">
             <div class="select-boxs">
-              <div class="flex-item">
-                <div style="width: 80px; margin-right: 20px"></div>
-                <div>
-                  <div class="font-bold black-text">
-                    {{ ruleForm.express_line && ruleForm.express_line.name }}
+              <div class="flex-box">
+                <div class="flex-item" v-if="ruleForm.express_line_id">
+                  <div style="width: 80px; margin-right: 20px" v-if="icon !== ''">
+                    <img :src="$baseUrl.IMAGE_URL + icon" />
                   </div>
-                  <div>{{ ruleForm.express_line && ruleForm.express_line.props }}</div>
+                  <div>
+                    <div class="font-bold black-text">
+                      {{ ruleForm.express_line && ruleForm.express_line.name }}
+                    </div>
+                    <div>{{ ruleForm.express_line && ruleForm.express_line.props }}</div>
+                  </div>
                 </div>
-                <el-button class="btn-light-green" @click="selectLine">{{
-                  $t('选择渠道')
-                }}</el-button>
+                <div>
+                  <el-button class="btn-light-green" @click="selectLine">{{
+                    $t('选择渠道')
+                  }}</el-button>
+                </div>
               </div>
             </div>
           </el-form-item>
@@ -76,20 +94,29 @@
               <el-radio :label="1">{{ $t('自提点收货') }}</el-radio>
             </el-radio-group>
             <div class="select-boxs" v-if="ruleForm.is_delivery === 1">
-              <div class="flex-item">
-                <div style="width: 80px; background-color: #000; margin-right: 20px"></div>
-                <div>
-                  <div class="font-bold black-text">
-                    {{ $t('荷兰某某自提点A') }}
+              <div class="flex-box">
+                <div class="flex-item">
+                  <div style="width: 80px; margin-right: 20px">
+                    <img src="../../assets/station.png" />
                   </div>
-                  <div>{{ $t('0031-650207241') }}</div>
                   <div>
-                    {{ $t('1336ZG  Almere  Mickey Mousestraat 79') }}
+                    <div class="font-bold black-text">
+                      {{ $t('荷兰某某自提点A') }}
+                    </div>
+                    <div>{{ $t('0031-650207241') }}</div>
+                    <div>
+                      {{ $t('1336ZG  Almere  Mickey Mousestraat 79') }}
+                    </div>
                   </div>
                 </div>
-                <el-button class="btn-light-green" @click="changeAddress('pickup')">{{
-                  $t('选择自提点')
-                }}</el-button>
+                <div>
+                  <el-button
+                    class="btn-light-green"
+                    :disabled="!ruleForm.user_id"
+                    @click="changeAddress('pickup')"
+                    >{{ $t('选择自提点') }}</el-button
+                  >
+                </div>
               </div>
             </div>
           </el-form-item>
@@ -124,16 +151,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="4" :offset="1">
-          <span class="img-item" v-if="ruleForm.images[0]" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + ruleForm.images[0]" alt="" class="goods-img" />
+          <span class="img-item" v-for="(item, index) in ruleForm.images" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(ruleForm.images[0])"></i>
-              <i class="el-icon-delete" @click="onDeleteImg"></i>
+              <i class="el-icon-zoom-in" @click="onPreview(item.path)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
           </span>
           <el-upload
-            v-show="!ruleForm.images[0]"
+            v-show="ruleForm.images.length < 1"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -147,7 +174,9 @@
       </el-form>
     </el-row>
     <div slot="footer">
-      <el-button type="primary" @click="confirm">{{ $t('保存') }}</el-button>
+      <el-button type="primary" @click="confirm" :loading="$store.state.btnLoading">{{
+        $t('保存')
+      }}</el-button>
     </div>
     <div class="pagination-box" v-if="this.state === 'edit'">
       <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -207,7 +236,9 @@
       </el-table>
       <div slot="footer">
         <el-button @click="innerVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submitChoose">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="submitChoose">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="showLine" :title="$t('渠道')" append-to-body @close="clearShowLine">
@@ -229,7 +260,9 @@
         </div>
       </div>
       <div slot="footer">
-        <el-button type="primary" @click="onSaveLine">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="onSaveLine">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
   </el-dialog>
@@ -269,7 +302,8 @@ export default {
       id: '',
       ind: 0,
       activeId: '',
-      lineList: []
+      lineList: [],
+      icon: ''
     }
   },
   methods: {
@@ -298,6 +332,7 @@ export default {
           this.ruleForm = res.data
           this.ruleForm.express_line.props = res.data.express_line.props.map(item => item).join(',')
           this.ruleForm.user_id = res.data.members[0].id + '---' + res.data.members[0].name
+          this.ruleForm.address_id = res.data.address && res.data.address.id
         }
       })
     },
@@ -335,15 +370,15 @@ export default {
     changeAddress(status) {
       this.status = status
       this.innerVisible = true
+      let userId = this.ruleForm.user_id.substring(0, 6)
       if (status === 'address') {
-        let userId = this.ruleForm.user_id.substring(0, 6)
         this.$request.groupbuyAddress(userId).then(res => {
           if (res.ret) {
             this.addressData = res.data
           }
         })
       } else {
-        this.$request.buyingStation(this.id).then(res => {
+        this.$request.groupStation(userId).then(res => {
           if (res.ret) {
             this.addressData = res.data
           }
@@ -355,7 +390,7 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          this.ruleForm.images = res.data[0].path
+          this.ruleForm.images = res.data.map(item => item.path)
         }
       })
     },
@@ -373,8 +408,9 @@ export default {
       })
     },
     // 删除图片
-    onDeleteImg() {
-      this.ruleForm.images = []
+    onDeleteImg(index) {
+      console.log(index)
+      this.ruleForm.images.splice(index, 1)
     },
     onRowChange(row) {
       console.log(row)
@@ -405,58 +441,57 @@ export default {
       this.innerVisible = false
     },
     confirm() {
+      delete this.ruleForm.address
+      let params = {
+        ...this.ruleForm
+      }
       if (this.id) {
-        this.$request
-          .editGroupInfo(this.id, {
-            ...this.ruleForm
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+        this.$request.editGroupInfo(this.id, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       } else {
-        this.$request
-          .createGroup({
-            ...this.ruleForm
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+        this.$request.createGroup(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       }
     },
     activeFun(item) {
       this.ind = item.id
       this.activeId = item.id
-      this.ruleForm.express_line.id = item.id
-      this.ruleForm.express_line.name = item.name
-      this.ruleForm.express_line.props = item.props
-      this.ruleForm.region_id = item.region && item.region.id
-      this.ruleForm.express_line_id = item.id
+      if (this.ruleForm.express_line) {
+        this.ruleForm.express_line.id = item.id
+        this.ruleForm.express_line.name = item.name
+        this.ruleForm.express_line.props = item.props
+        this.ruleForm.region_id = item.region && item.region.id
+        this.ruleForm.express_line_id = item.id
+        this.icon = item.icon && item.icon.icon
+      }
     },
     onSaveLine() {
       this.showLine = false
@@ -501,12 +536,17 @@ export default {
   display: flex;
   align-items: center;
 }
+.flex-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .upload-img {
   margin-top: 10px;
   text-align: center;
 }
 .dashed-line {
-  border: 2px dashed #000;
+  border: 2px dashed #3540a5;
   padding: 30px;
   width: 600px;
   border-radius: 5px;

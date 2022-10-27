@@ -4879,3 +4879,33 @@ exports.groupbuyAddress = userId => {
 exports.editGroupInfo = (id, params) => {
   return $form.put(`group-buying/${id}`, params)
 }
+
+//拼团 添加拼团成员
+exports.addGroupMember = (id, userId) => {
+  return $form.put(`group-buying/${id}/add-member/${userId}`)
+}
+
+// 拼团 获取自提点
+exports.groupStation = expressLineId => {
+  return $form.get(`group-buying/stations/line/${expressLineId}`)
+}
+
+// 拼团 结束拼团
+exports.endGroup = id => {
+  return $form.put(`group-buying/${id}/end`)
+}
+
+// 拼团 用户已加入拼团包裹列表
+exports.joinGroupPackageList = (id, userId) => {
+  return $form.get(`group-buying/${id}/user/${userId}/packages`)
+}
+
+// 拼团 用户可加入拼图包裹列表
+exports.toJoinGroupPackageList = (id, userId) => {
+  return $form.get(`group-buying/${id}/user/${userId}/addable-packages`)
+}
+
+// 拼团 将用户包裹加入拼团
+exports.addPackageToGroup = (id, params) => {
+  return $form.post(`group-buying/${id}/packages`, params)
+}

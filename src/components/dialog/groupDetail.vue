@@ -12,18 +12,22 @@
         <div>
           <div class="margin-bottom">
             <span style="width: 200px">{{ groupDetail.name }}</span>
-            <span class="margin-left" v-if="groupDetail.status === 0">{{ $t('拼团中') }}</span>
-            <span class="margin-left" v-else-if="groupDetail.status === 1">{{
+            <span class="margin-left font-size font-bold" v-if="groupDetail.status === 0">{{
+              $t('拼团中')
+            }}</span>
+            <span class="margin-left font-size" v-else-if="groupDetail.status === 1">{{
               $t('拼团结束')
             }}</span>
             <span class="margin-left" v-else>{{ $t('取消拼团') }}</span>
           </div>
           <div class="margin-bottom" v-if="this.groupDetail.end_until > 0">
-            {{ $t('拼团时间剩余') }} <span class="red-text">{{ count }}</span>
+            {{ $t('拼团时间剩余') }} <span class="red-text font-bold">{{ count }}</span>
           </div>
           <div class="margin-bottom red-text" v-else>{{ $t('拼团时间已结束') }}</div>
           <div class="margin-bottom">
-            {{ $t('已有2人参与，共10kg') }}
+            {{
+              $t(`已有${detailsList.length}人参与，体积重量:${volumeWeight}，重量:${packageWeight}`)
+            }}
           </div>
           <div class="margin-bottom">
             <span v-if="groupDetail.mode === 0">{{ $t('团员自付') }}</span>
@@ -35,12 +39,12 @@
           </div>
         </div>
         <div>
-          <div>
-            <el-button class="btn-main">{{ $t('提交拼团') }}</el-button>
+          <div class="detail-item">
+            <el-button class="btn-main" @click="submitGroup">{{ $t('提交拼团') }}</el-button>
             <el-button class="btn-light-red" @click="cancelGroup">{{ $t('取消拼团') }}</el-button>
             <el-button class="btn-light-green" @click="editGroup">{{ $t('修改拼团') }}</el-button>
           </div>
-          <div style="margin-top: 10px">
+          <div>
             <el-button class="btn-deep-purple" @click="dialogDays = true">{{
               $t('延长时间')
             }}</el-button>
@@ -50,52 +54,60 @@
       <div class="spacing">
         <div style="display: flex">
           <div v-for="item in detailsList" :key="item.id" style="width: 100px">
-            <div style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #000">
-              <img :src="$baseUrl.IMAGE_URL + item" />
+            <div class="circle" v-if="item.is_group_leader === 1">
+              <img :src="item.avatar" class="icon-img" />
             </div>
-            <div style="margin-top: 10px">{{ item.id }} --- {{ item.name }}</div>
+            <div style="margin-top: 10px" v-if="item.is_group_leader === 1">
+              {{ item.id }} --- {{ item.name }}
+            </div>
           </div>
           <div style="margin-left: 80px">
-            <div>{{ $t('团长有话说') }}</div>
+            <div class="font-bold black-text">{{ $t('团长有话说') }}</div>
             <div class="solid-line">
               {{ groupDetail.remark }}
             </div>
           </div>
         </div>
         <div class="flex-item spacing">
-          <div style="margin-top: -80px">
-            <div
-              style="width: 100px; height: 50px; backgroud-color: grey; border: 1px solid #000"
-            ></div>
-            <div style="border-left: 1px solid #000; height: 100px" class="center"></div>
-            <div
-              style="width: 100px; height: 50px; backgroud-color: grey; border: 1px solid #000"
-            ></div>
+          <div>
+            <div class="flex-item font-bold font-size black-text send-text">
+              <div>{{ $t('寄') }}</div>
+              <img src="../../assets/address.png" />
+            </div>
+            <div class="flex-item font-bold font-size black-text send-text">
+              <div>{{ $t('收') }}</div>
+              <img src="../../assets/send.png" />
+            </div>
           </div>
           <div style="margin-left: 80px">
             <div class="flex-item dashed-line">
               <div
-                style="width: 50px; height: 50px; border: 1px solid #000; margin-right: 20px"
-              ></div>
+                v-if="groupDetail.express_line && groupDetail.express_line.icon"
+                class="detail-icon"
+              >
+                <img :src="$baseUrl.IMAGE_URL + groupDetail.express_line.icon.icon" />
+              </div>
               <div>
-                <div style="margin-bottom: 10px" class="font-bold black-text">
+                <div class="font-bold black-text detail-item">
                   {{ groupDetail.express_line && groupDetail.express_line.name }}
                 </div>
-                <div style="margin-bottom: 10px">{{ $t('普货，敏感货') }}</div>
+                <div class="detail-item">
+                  {{ groupDetail.express_line && groupDetail.express_line.props }}
+                </div>
               </div>
             </div>
             <div class="flex-item dashed-line">
-              <div
-                style="width: 50px; height: 50px; border: 1px solid #000; margin-right: 20px"
-              ></div>
+              <div class="detail-icon">
+                <img src="../../assets/receive.png" />
+              </div>
               <div v-if="groupDetail.address">
-                <div style="margin-bottom: 10px" class="font-bold black-text">
+                <div class="font-bold black-text detail-item">
                   {{ groupDetail.address.country && groupDetail.address.country.name }}
                 </div>
-                <div style="margin-bottom: 10px">
+                <div class="detail-item">
                   {{ groupDetail.address.receiver_name }}&nbsp;{{ groupDetail.address.phone }}
                 </div>
-                <div style="margin-bottom: 10px">
+                <div class="detail-item">
                   {{ groupDetail.address.city }}&nbsp;{{ groupDetail.address.province }}&nbsp;{{
                     groupDetail.address.street
                   }}&nbsp;{{ groupDetail.address.address }}
@@ -103,14 +115,14 @@
               </div>
             </div>
             <div class="flex-item dashed-line" v-if="groupDetail.is_delivery === 1">
-              <div
-                style="width: 50px; height: 50px; background-color: #000; margin-right: 20px"
-              ></div>
+              <div class="detail-icon">
+                <img src="../../assets/station.png" />
+              </div>
               <div>
-                <div style="margin-bottom: 10px" class="font-bold black-text">
+                <div class="font-bold black-text detail-item">
                   {{ groupDetail.station && groupDetail.station.name }}
                 </div>
-                <div style="margin-bottom: 10px">
+                <div class="detail-item">
                   {{ groupDetail.station && groupDetail.station.address }}
                 </div>
               </div>
@@ -120,24 +132,22 @@
       </div>
       <div style="margin-top: 50px">
         <div class="flex">
-          <div class="flex-1 font-bold" style="font-size: 16px; color: #000">
+          <div class="flex-1 font-bold font-size black-text">
             {{ $t('拼团成员') }} ({{ detailsList.length }})
           </div>
-          <div class="flex-1">
-            <el-input style="width: 70%"></el-input>
+          <div>
             <el-button class="btn-main" style="margin-left: 10px" @click="addGroupMember">{{
               $t('添加拼团成员')
             }}</el-button>
           </div>
         </div>
         <el-table
-          class="data-list"
+          class="data-list spacing"
           border
           stripe
           ref="table"
           v-loading="tableLoading"
           :data="detailsList"
-          style="margin-top: 20px"
         >
           <el-table-column label="#" type="index"></el-table-column>
           <el-table-column prop="is_group_leader" :label="$t('身份')">
@@ -177,20 +187,26 @@
               $t('提交体积重量') + `${localization.weight_unit ? localization.weight_unit : ''}`
             "
             prop="package_volume_weight"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.package_volume_weight }}</span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('操作')" width="200" fixed="right">
             <template slot-scope="scope">
               <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
                 $t('移除拼团')
               }}</el-button>
-              <el-button class="btn-main" @click="managePackage">{{ $t('管理包裹') }}</el-button>
+              <el-button class="btn-main" @click="managePackage(scope.row)">{{
+                $t('管理包裹')
+              }}</el-button>
               <el-button class="btn-light-red" v-if="groupDetail.end_until <= 0">{{
                 $t('详细')
               }}</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="flex-item" style="justify-content: space-between">
+        <div class="flex-item" style="width: 50%; justify-content: flex-end">
           <div>{{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</div>
           <div>
             {{ $t('重量') }}{{ packageWeight }}
@@ -207,28 +223,22 @@
       append-to-body
       :visible.sync="showManagePackage"
       :title="$t('管理包裹')"
-      width="40%"
+      width="50%"
       @close="clearInner"
     >
       <div style="padding: 20px">
         <div class="flex">
           <div class="flex-box">
-            <div
-              style="
-                width: 80px;
-                height: 80px;
-                background-color: #000;
-                border: 1px solid #000;
-                border-radius: 50%;
-              "
-            ></div>
+            <div class="circle">
+              <img :src="userInfo.avatar" class="icon-img" />
+            </div>
             <div class="margin-left">
-              <div style="margin-bottom: 15px">
-                {{ $t('爱心拼团007') }}
+              <div style="margin-bottom: 15px" class="font-size">
+                {{ groupDetail.name }}
               </div>
               <div>
-                <span>{{ $t('胡大仙') }}</span>
-                <span style="margin-left: 15px">{{ $t('001') }}</span>
+                <span>{{ userInfo.name }}</span>
+                <span style="margin-left: 15px">{{ userInfo.id }}</span>
               </div>
             </div>
           </div>
@@ -242,15 +252,17 @@
         <div class="show-text">
           {{ $t('已加入拼团包裹') }}
         </div>
-        <el-table :data="tableData" border style="margin-top: 20px">
+        <el-table :data="packageData" border class="spacing">
           <el-table-column label="#" type="index"></el-table-column>
           <el-table-column prop="" :label="$t('包裹号')"></el-table-column>
-          <el-table-column prop="" :label="$t('入库时间')"></el-table-column>
-          <el-table-column prop="" :label="$t('货位')"></el-table-column>
-          <el-table-column prop="" :label="$t('入库重量')"></el-table-column>
+          <el-table-column prop="in_storage_at" :label="$t('入库时间')"></el-table-column>
+          <el-table-column prop="location" :label="$t('货位')"></el-table-column>
+          <el-table-column prop="package_weight" :label="$t('入库重量')"></el-table-column>
           <el-table-column :label="$t('操作')">
-            <template>
-              <el-button class="btn-light-red">{{ $t('移除拼团') }}</el-button>
+            <template slot-scope="scope">
+              <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
+                $t('移除拼团')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -262,16 +274,18 @@
       :title="$t('添加包裹')"
       @close="clearAddPackage"
     >
-      <div>*{{ $t('仅显示可添加的包裹') }}</div>
-      <el-table :data="tableData" border>
+      <div class="red-text">*{{ $t('仅显示可添加的包裹') }}</div>
+      <el-table :data="tableData" border class="spacing" @selection-change="handleSelectionChange">
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="" :label="$t('包裹号')"></el-table-column>
-        <el-table-column prop="" :label="$t('入库时间')"></el-table-column>
-        <el-table-column prop="" :label="$t('货位')"></el-table-column>
-        <el-table-column prop="" :label="$t('入库重量')"></el-table-column>
+        <el-table-column prop="in_storage_at" :label="$t('入库时间')"></el-table-column>
+        <el-table-column prop="location" :label="$t('货位')"></el-table-column>
+        <el-table-column prop="package_weight" :label="$t('入库重量')"></el-table-column>
       </el-table>
       <div slot="footer">
-        <el-button class="btn-main">{{ $t('提交') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="onSubmit">{{
+          $t('提交')
+        }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="$t('延长拼团时间')" :visible.sync="dialogDays" append-to-body>
@@ -285,7 +299,31 @@
       {{ $t('天') }}
       <div slot="footer">
         <el-button @click="dialogDays = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submitTimes">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="submitTimes">{{
+          $t('确定')
+        }}</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="showMember"
+      :title="$t('添加拼团成员')"
+      append-to-body
+      @close="clearShowMember"
+    >
+      <el-form :model="form" label-width="120px">
+        <el-form-item :label="$t('拼团成员')">
+          <el-autocomplete
+            :fetch-suggestions="queryCNSearch"
+            :placeholder="$t('请输入客户ID')"
+            v-model="form.userId"
+          >
+          </el-autocomplete>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="onConfirm">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
   </el-dialog>
@@ -309,7 +347,14 @@ export default {
       volumeWeight: '',
       packageWeight: '',
       packagesCount: '',
-      count: ''
+      count: '',
+      showMember: false,
+      packageData: [],
+      userInfo: {},
+      ids: [],
+      form: {
+        userId: ''
+      }
     }
   },
   mounted() {
@@ -344,6 +389,8 @@ export default {
       this.$request.groupDetails(id).then(res => {
         if (res.ret) {
           this.groupDetail = res.data
+          this.groupDetail.express_line.props =
+            res.data.express_line && res.data.express_line.props.map(item => item).join(',')
           this.detailsList = res.data.members
           this.volumeWeight = res.data.package_volume_weight
           this.packageWeight = res.data.package_weight
@@ -437,7 +484,62 @@ export default {
           }
         })
     },
-    addGroupMember() {},
+    submitGroup() {
+      this.$request.endGroup(this.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getDetails(this.id)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    addGroupMember() {
+      this.showMember = true
+    },
+    // 客户id
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      this.$request
+        .Automatic({
+          keyword: this.form.userId.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback && callback(list)
+        })
+    },
+    onConfirm() {
+      let userId = this.form.userId.substring(0, 6)
+      this.$request.addGroupMember(this.id, userId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.showMember = false
+          this.getDetails(this.id)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     editGroup() {
       this.show = false
       dialog({
@@ -445,11 +547,47 @@ export default {
         id: this.id
       })
     },
-    managePackage() {
+    managePackage(row) {
+      this.userInfo = row
       this.showManagePackage = true
+      this.$request.joinGroupPackageList(this.id, this.userInfo.id).then(res => {
+        if (res.ret) {
+          this.packageData = res.data
+        }
+      })
+    },
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id)
     },
     addPackage() {
       this.showAddPackage = true
+      this.$request.toJoinGroupPackageList(this.id, this.userInfo.id).then(res => {
+        if (res.ret) {
+          console.log(res)
+        }
+      })
+    },
+    onSubmit() {
+      this.$request
+        .addPackageToGroup(this.userId.id, {
+          ids: this.ids
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.showAddPackage = false
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     clearInner() {
       this.showManagePackage = false
@@ -459,15 +597,19 @@ export default {
     },
     clear() {
       this.show = false
+    },
+    clearShowMember() {
+      this.showMember = false
+      this.form.userId = ''
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .flex {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 .flex-item {
@@ -506,7 +648,7 @@ export default {
   text-align: center;
 }
 .dashed-line {
-  border: 1px dashed #000;
+  border: 2px dashed #3540a5;
   padding: 20px;
   width: 600px;
   border-radius: 5px;
@@ -533,5 +675,29 @@ export default {
 }
 .black-text {
   color: #000;
+}
+.detail-item {
+  margin-bottom: 10px;
+}
+.font-size {
+  font-size: 16px;
+}
+.send-text {
+  width: 100px;
+  height: 100px;
+}
+.detail-icon {
+  width: 50px;
+  margin-right: 20px;
+}
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  .icon-img {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
