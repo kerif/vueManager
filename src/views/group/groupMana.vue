@@ -8,7 +8,7 @@
     </div>
     <div class="addUser">
       <div>
-        <!-- <el-button class="btn-main" @click="addGroup">{{ $t('新增拼团') }}</el-button> -->
+        <el-button class="btn-main" @click="addGroup">{{ $t('新增拼团') }}</el-button>
       </div>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -110,10 +110,10 @@
               {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty" @click.native="detailsGroup(scope.row.id)">
+              <!-- <el-dropdown-item class="item-sty" @click.native="detailsGroup(scope.row.id)">
                 <span>{{ $t('参团详情') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item
                 class="item-sty"
                 @click.native="
                   submitGroup(
@@ -124,23 +124,23 @@
                 "
               >
                 <span>{{ $t('提交拼团') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="cancelGroup(scope.row.id)">
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item class="item-sty" @click.native="cancelGroup(scope.row.id)">
                 <span>{{ $t('取消拼团') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item
                 class="item-sty"
                 @click.native="changeMsg(scope.row.id, scope.row.leader)"
               >
                 <span>{{ $t('修改团单信息') }}</span>
-              </el-dropdown-item>
-              <!-- 操作日志 -->
-              <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
-                <span>{{ $t('延长拼团时间') }}</span>
-              </el-dropdown-item>
-              <!-- <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
-                {{ $t('参团详情') }}
               </el-dropdown-item> -->
+              <!-- 操作日志 -->
+              <!-- <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
+                <span>{{ $t('延长拼团时间') }}</span>
+              </el-dropdown-item> -->
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>

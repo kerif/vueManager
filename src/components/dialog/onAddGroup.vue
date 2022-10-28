@@ -20,7 +20,11 @@
             <el-input v-model="ruleForm.name" :placeholder="$t('请输入拼团名称')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('拼团仓库')">
-            <el-select v-model="ruleForm.warehouse_id" :placeholder="$t('请选择')">
+            <el-select
+              v-model="ruleForm.warehouse_id"
+              @change="changeWarehouse"
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in warehouseData"
                 :key="item.id"
@@ -242,23 +246,28 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="showLine" :title="$t('渠道')" append-to-body @close="clearShowLine">
-      <div
-        class="flex-item dashed-line"
-        v-for="item in lineList"
-        :key="item.id"
-        :class="['template-item', { active: ind === item.id }]"
-        @click="activeFun(item)"
-      >
-        <div v-if="item.icon" style="margin-right: 60px">
-          <img :src="$baseUrl.IMAGE_URL + item.icon.icon" class="icon-size" />
-        </div>
-        <div>
-          <div style="margin-bottom: 10px" class="font-bold black-text">{{ item.name }}</div>
-          <div style="margin-bottom: 10px">
-            <span>{{ item.props }}</span>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div
+            class="flex-item dashed-line"
+            v-for="item in lineList"
+            :key="item.id"
+            :class="['template-item', { active: ind === item.id }]"
+            @click="activeFun(item)"
+          >
+            <div v-if="item.icon" style="margin-right: 60px">
+              <img :src="$baseUrl.IMAGE_URL + item.icon.icon" class="icon-size" />
+            </div>
+            <div>
+              <div style="margin-bottom: 10px" class="font-bold black-text">{{ item.name }}</div>
+              <div style="margin-bottom: 10px">
+                <span>{{ item.props }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </el-col>
+      </el-row>
+
       <div slot="footer">
         <el-button type="primary" :loading="$store.state.btnLoading" @click="onSaveLine">{{
           $t('确定')
@@ -270,6 +279,7 @@
 
 <script>
 import dialog from '@/components/dialog'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -306,6 +316,7 @@ export default {
       icon: ''
     }
   },
+  mixins: [pagination],
   methods: {
     init() {
       this.getWarehouse()
@@ -314,17 +325,21 @@ export default {
       }
     },
     getGroupLine() {
-      this.$request.groupLineList().then(res => {
-        if (res.ret) {
-          this.lineList = res.data.map(item => {
-            const props = item.props.map(ele => ele.name).join(',')
-            return {
-              ...item,
-              props
-            }
-          })
-        }
-      })
+      this.$request
+        .groupLineList({
+          warehouse_id: this.ruleForm.warehouse_id
+        })
+        .then(res => {
+          if (res.ret) {
+            this.lineList = res.data.map(item => {
+              const props = item.props.map(ele => ele.name).join(',')
+              return {
+                ...item,
+                props
+              }
+            })
+          }
+        })
     },
     getDetails(id) {
       this.$request.groupDetails(id).then(res => {
@@ -347,6 +362,10 @@ export default {
           name: this.ruleForm.user_id.split('---')[1]
         }
       })
+    },
+    changeWarehouse() {
+      this.page_params.handleQueryChange('ruleForm.warehouse_id', this.ruleForm.warehouse_id)
+      this.getGroupLine()
     },
     // 客户id
     queryCNSearch(queryString, callback) {
@@ -564,7 +583,6 @@ export default {
 .template-item {
   cursor: pointer;
   transition: all 0.4s;
-  border: 1px solid red;
   border-radius: 5px;
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.04);
   background: #fff;

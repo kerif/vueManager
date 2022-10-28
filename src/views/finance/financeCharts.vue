@@ -2,7 +2,7 @@
   <div class="finance-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
-        <!-- <el-select
+        <el-select
           v-model="country_id"
           @change="changeCountry"
           :placeholder="$t('请选择市场')"
@@ -14,13 +14,13 @@
             :label="item.name"
             :value="item.id"
           ></el-option>
-        </el-select> -->
+        </el-select>
         <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
           <el-option :value="1" :label="$t('今天')"></el-option>
           <el-option :value="7" :label="$t('近7天')"></el-option>
           <el-option :value="30" :label="$t('近30天')"></el-option>
-          <!-- <el-option :value="90" :label="$t('近三个月')"></el-option>
-          <el-option :value="180" :label="$t('近半年')"></el-option> -->
+          <el-option :value="90" :label="$t('近三个月')"></el-option>
+          <el-option :value="180" :label="$t('近半年')"></el-option>
         </el-select>
         <el-date-picker
           class="timeStyle"
@@ -354,60 +354,60 @@ export default {
         }
       })
     },
-    // changeCountry(val) {
-    //   this.options.forEach(item => {
-    //     if (item.id === val) {
-    //       this.getCountryData()
-    //     }
-    //   })
-    // },
-    // getCountryData() {
-    //   this.$request
-    //     .pieCountStatistisc({
-    //       begin: this.pickingList[0],
-    //       end: this.pickingList[1]
-    //     })
-    //     .then(res => {
-    //       let pieData = res.data.map(item => {
-    //         return {
-    //           value: item.amount,
-    //           name: item.country ? item.country.name : ''
-    //         }
-    //       })
-    //       this.countryOption.legend = {
-    //         orient: 'vertical',
-    //         left: 10
-    //       }
-    //       this.countryOption.series = [
-    //         {
-    //           name: this.$t('营业额'),
-    //           type: 'pie',
-    //           radius: ['50%', '70%'],
-    //           label: {
-    //             formatter: ' {d}% '
-    //           },
-    //           emphasis: {
-    //             label: {
-    //               show: true,
-    //               fontSize: '30',
-    //               fontWeight: 'bold'
-    //             }
-    //           },
-    //           labelLine: {
-    //             show: true
-    //           },
-    //           data: pieData
-    //         }
-    //       ]
-    //       this.countryChart && this.countryChart.setOption(this.countryOption)
-    //     })
-    // },
-    // getCountry() {
-    //   this.$request.getEnabledCountry().then(res => {
-    //     this.options = res.data
-    //     this.options.unshift({ id: -1, name: this.$t('全部市场') })
-    //   })
-    // },
+    changeCountry(val) {
+      this.options.forEach(item => {
+        if (item.id === val) {
+          this.getCountryData()
+        }
+      })
+    },
+    getCountryData() {
+      this.$request
+        .pieCountStatistisc({
+          begin: this.pickingList[0],
+          end: this.pickingList[1]
+        })
+        .then(res => {
+          let pieData = res.data.map(item => {
+            return {
+              value: item.amount,
+              name: item.country ? item.country.name : ''
+            }
+          })
+          this.countryOption.legend = {
+            orient: 'vertical',
+            left: 10
+          }
+          this.countryOption.series = [
+            {
+              name: this.$t('营业额'),
+              type: 'pie',
+              radius: ['50%', '70%'],
+              label: {
+                formatter: ' {d}% '
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: true
+              },
+              data: pieData
+            }
+          ]
+          this.countryChart && this.countryChart.setOption(this.countryOption)
+        })
+    },
+    getCountry() {
+      this.$request.getEnabledCountry().then(res => {
+        this.options = res.data
+        this.options.unshift({ id: -1, name: this.$t('全部市场') })
+      })
+    },
     fun_date(data) {
       var date1 = new Date()
       date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate() // time1表示当前时间
@@ -418,32 +418,32 @@ export default {
     },
     // 天数
     getDatas() {
-      // if (this.days === 1) {
-      //   this.pickingList[0] = this.fun_date(0)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 7) {
-      //   this.pickingList[0] = this.fun_date(-7)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 30) {
-      //   this.pickingList[0] = this.fun_date(-30)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 90) {
-      //   this.pickingList[0] = this.fun_date(-90)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 180) {
-      //   this.pickingList[0] = this.fun_date(-180)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // }
+      if (this.days === 1) {
+        this.pickingList[0] = this.fun_date(0)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 7) {
+        this.pickingList[0] = this.fun_date(-7)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 30) {
+        this.pickingList[0] = this.fun_date(-30)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 90) {
+        this.pickingList[0] = this.fun_date(-90)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 180) {
+        this.pickingList[0] = this.fun_date(-180)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      }
       this.page_params.handleQueryChange('days', this.days)
       this.getColumnar()
       this.packageList()

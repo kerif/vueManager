@@ -4866,8 +4866,8 @@ exports.createGroup = params => {
 }
 
 // 拼团 拼图线路列表
-exports.groupLineList = () => {
-  return $form.post('group-buying/express-lines')
+exports.groupLineList = params => {
+  return $form.post('group-buying/express-lines', params)
 }
 
 // 拼团 可用地址
