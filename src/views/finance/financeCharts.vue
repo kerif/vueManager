@@ -2,12 +2,25 @@
   <div class="finance-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
+        <!-- <el-select
+          v-model="country_id"
+          @change="changeCountry"
+          :placeholder="$t('请选择市场')"
+          class="select-sty"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select> -->
         <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
           <el-option :value="1" :label="$t('今天')"></el-option>
           <el-option :value="7" :label="$t('近7天')"></el-option>
           <el-option :value="30" :label="$t('近30天')"></el-option>
-          <el-option :value="90" :label="$t('近三个月')"></el-option>
-          <el-option :value="180" :label="$t('近半年')"></el-option>
+          <!-- <el-option :value="90" :label="$t('近三个月')"></el-option>
+          <el-option :value="180" :label="$t('近半年')"></el-option> -->
         </el-select>
         <el-date-picker
           class="timeStyle"
@@ -72,6 +85,9 @@
       <div class="charts-content">
         <div class="charts-right" id="chartsSecond"></div>
       </div>
+      <!-- <div class="charts-content">
+        <div class="charts-right" ref="pieCharts" id="pieCharts"></div>
+      </div> -->
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
@@ -149,13 +165,18 @@ export default {
       packageData: [],
       unShow: false,
       localization: {},
-      growthData: ''
+      country_id: '',
+      growthData: '',
+      countryChart: '',
+      countryOption: {},
+      options: []
     }
   },
   created() {
     this.getColumnar() // 包裹柱状数据
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
+    // this.getCountry()
   },
   mounted() {
     // 树状图
@@ -178,6 +199,21 @@ export default {
         top: 'bottom'
       }
     }
+
+    // 饼图
+    // let pie = this.$refs.pieCharts
+    // if (pie) {
+    //   this.countryChart = echarts.init(pie)
+    //   window.onresize = this.countryChart.resize
+    //   this.countryOption = {
+    //     backgroundColor: '#ffffff',
+    //     color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+    //     tooltip: {
+    //       trigger: 'item',
+    //       formatter: '{a} <br/>{b}: {c} ({d}%)'
+    //     }
+    //   }
+    // }
   },
   methods: {
     // 包裹树状图
@@ -191,8 +227,6 @@ export default {
       this.end && (params.end = this.end)
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
-          console.log(res.data)
-          console.log(res.data.total)
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
           let rechargeData = res.data.recharge.map(item => item.amounts)
@@ -320,6 +354,60 @@ export default {
         }
       })
     },
+    // changeCountry(val) {
+    //   this.options.forEach(item => {
+    //     if (item.id === val) {
+    //       this.getCountryData()
+    //     }
+    //   })
+    // },
+    // getCountryData() {
+    //   this.$request
+    //     .pieCountStatistisc({
+    //       begin: this.pickingList[0],
+    //       end: this.pickingList[1]
+    //     })
+    //     .then(res => {
+    //       let pieData = res.data.map(item => {
+    //         return {
+    //           value: item.amount,
+    //           name: item.country ? item.country.name : ''
+    //         }
+    //       })
+    //       this.countryOption.legend = {
+    //         orient: 'vertical',
+    //         left: 10
+    //       }
+    //       this.countryOption.series = [
+    //         {
+    //           name: this.$t('营业额'),
+    //           type: 'pie',
+    //           radius: ['50%', '70%'],
+    //           label: {
+    //             formatter: ' {d}% '
+    //           },
+    //           emphasis: {
+    //             label: {
+    //               show: true,
+    //               fontSize: '30',
+    //               fontWeight: 'bold'
+    //             }
+    //           },
+    //           labelLine: {
+    //             show: true
+    //           },
+    //           data: pieData
+    //         }
+    //       ]
+    //       this.countryChart && this.countryChart.setOption(this.countryOption)
+    //     })
+    // },
+    // getCountry() {
+    //   this.$request.getEnabledCountry().then(res => {
+    //     this.options = res.data
+    //     this.options.unshift({ id: -1, name: this.$t('全部市场') })
+    //   })
+    // },
     fun_date(data) {
       var date1 = new Date()
       date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate() // time1表示当前时间
@@ -330,32 +418,32 @@ export default {
     },
     // 天数
     getDatas() {
-      if (this.days === 1) {
-        this.pickingList[0] = this.fun_date(0)
-        this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
-        this.$set(this.pickingList, 1, this.pickingList[1])
-      } else if (this.days === 7) {
-        this.pickingList[0] = this.fun_date(-7)
-        this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
-        this.$set(this.pickingList, 1, this.pickingList[1])
-      } else if (this.days === 30) {
-        this.pickingList[0] = this.fun_date(-30)
-        this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
-        this.$set(this.pickingList, 1, this.pickingList[1])
-      } else if (this.days === 90) {
-        this.pickingList[0] = this.fun_date(-90)
-        this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
-        this.$set(this.pickingList, 1, this.pickingList[1])
-      } else if (this.days === 180) {
-        this.pickingList[0] = this.fun_date(-180)
-        this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
-        this.$set(this.pickingList, 1, this.pickingList[1])
-      }
+      // if (this.days === 1) {
+      //   this.pickingList[0] = this.fun_date(0)
+      //   this.$set(this.pickingList, 0, this.pickingList[0])
+      //   this.pickingList[1] = this.fun_date(0)
+      //   this.$set(this.pickingList, 1, this.pickingList[1])
+      // } else if (this.days === 7) {
+      //   this.pickingList[0] = this.fun_date(-7)
+      //   this.$set(this.pickingList, 0, this.pickingList[0])
+      //   this.pickingList[1] = this.fun_date(0)
+      //   this.$set(this.pickingList, 1, this.pickingList[1])
+      // } else if (this.days === 30) {
+      //   this.pickingList[0] = this.fun_date(-30)
+      //   this.$set(this.pickingList, 0, this.pickingList[0])
+      //   this.pickingList[1] = this.fun_date(0)
+      //   this.$set(this.pickingList, 1, this.pickingList[1])
+      // } else if (this.days === 90) {
+      //   this.pickingList[0] = this.fun_date(-90)
+      //   this.$set(this.pickingList, 0, this.pickingList[0])
+      //   this.pickingList[1] = this.fun_date(0)
+      //   this.$set(this.pickingList, 1, this.pickingList[1])
+      // } else if (this.days === 180) {
+      //   this.pickingList[0] = this.fun_date(-180)
+      //   this.$set(this.pickingList, 0, this.pickingList[0])
+      //   this.pickingList[1] = this.fun_date(0)
+      //   this.$set(this.pickingList, 1, this.pickingList[1])
+      // }
       this.page_params.handleQueryChange('days', this.days)
       this.getColumnar()
       this.packageList()
