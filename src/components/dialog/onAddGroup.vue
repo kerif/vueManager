@@ -130,8 +130,8 @@
               <el-radio :label="1">{{ $t('团长代付') }}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item :label="$t('拼团截止')">
-            <el-input v-model="ruleForm.days" :placeholder="$t('选择日期时间')"> </el-input>
+          <el-form-item :label="$t('拼团持续时间')">
+            <el-input v-model="ruleForm.days" :placeholder="$t('填写天数')"> </el-input>
           </el-form-item>
           <el-form-item :label="$t('是否为公开拼团')">
             <el-switch
@@ -327,7 +327,8 @@ export default {
     getGroupLine() {
       this.$request
         .groupLineList({
-          warehouse_id: this.ruleForm.warehouse_id
+          warehouse_id: this.ruleForm.warehouse_id,
+          address_id: this.ruleForm.address_id
         })
         .then(res => {
           if (res.ret) {

@@ -83,11 +83,16 @@
         </ul>
       </div>
       <div class="charts-content">
-        <div class="charts-right" id="chartsSecond"></div>
+        <div class="charts-left" id="chartsSecond"></div>
       </div>
-      <!-- <div class="charts-content">
-        <div class="charts-right" ref="pieCharts" id="pieCharts"></div>
-      </div> -->
+      <div :class="['charts-content', countryVal === -1 ? '' : 'hide']">
+        <div
+          class="charts-right"
+          ref="pieCharts"
+          style="width: 100%; heigth: 400px"
+          id="pieCharts"
+        ></div>
+      </div>
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
@@ -169,14 +174,15 @@ export default {
       growthData: '',
       countryChart: '',
       countryOption: {},
-      options: []
+      options: [],
+      countryVal: ''
     }
   },
   created() {
     this.getColumnar() // 包裹柱状数据
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
-    // this.getCountry()
+    this.getCountry()
   },
   mounted() {
     // 树状图
@@ -201,19 +207,21 @@ export default {
     }
 
     // 饼图
-    // let pie = this.$refs.pieCharts
-    // if (pie) {
-    //   this.countryChart = echarts.init(pie)
-    //   window.onresize = this.countryChart.resize
-    //   this.countryOption = {
-    //     backgroundColor: '#ffffff',
-    //     color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
-    //     tooltip: {
-    //       trigger: 'item',
-    //       formatter: '{a} <br/>{b}: {c} ({d}%)'
-    //     }
-    //   }
-    // }
+    let pie = this.$refs.pieCharts
+    if (pie) {
+      this.countryChart = echarts.init(pie)
+      window.addEventListener('resize', () => {
+        this.countryChart.resize()
+      })
+      this.countryOption = {
+        backgroundColor: '#ffffff',
+        color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        }
+      }
+    }
   },
   methods: {
     // 包裹树状图
@@ -355,17 +363,16 @@ export default {
       })
     },
     changeCountry(val) {
-      this.options.forEach(item => {
-        if (item.id === val) {
-          this.getCountryData()
-        }
-      })
+      this.countryVal = val
+      if (this.countryVal === -1) {
+        this.getCountryData()
+      }
     },
     getCountryData() {
       this.$request
         .pieCountStatistisc({
-          begin: this.pickingList[0],
-          end: this.pickingList[1]
+          begin: this.begin,
+          end: this.end
         })
         .then(res => {
           let pieData = res.data.map(item => {
@@ -586,14 +593,15 @@ export default {
     font-weight: 700;
   }
   .charts-left {
-    display: inline-block;
-    width: 45%;
-    height: 300px;
-  }
-  .charts-right {
-    // display: inline-block;
     width: 100%;
     height: 400px;
+  }
+  .charts-right {
+    width: 100%;
+    height: 400px;
+  }
+  .hide {
+    display: none;
   }
   .charts-content {
     text-align: center;
