@@ -330,6 +330,9 @@ export default {
       this.$request.groupDetails(id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
+          this.ruleForm.express_line_id = res.data.express_line && res.data.express_line.id
+          this.icon =
+            res.data.express_line && res.data.express_line.icon && res.data.express_line.icon.icon
           this.ruleForm.express_line.props = res.data.express_line.props.map(item => item).join(',')
           this.ruleForm.user_id = res.data.members[0].id + '---' + res.data.members[0].name
           this.ruleForm.address_id = res.data.address && res.data.address.id

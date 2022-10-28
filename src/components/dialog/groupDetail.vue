@@ -1,9 +1,9 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('拼图详细')" width="60%" @close="clear">
-    <div style="padding: 10px 20px">
+    <div class="container">
       <div class="flex-box">
-        <div style="width: 120px; height: 100px; border: 1px dashed #000">
-          <img :src="$baseUrl.IMAGE_URL + groupDetail.images[0]" />
+        <div v-for="(item, index) in groupDetail.images" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" style="width: 120px" />
         </div>
         <div style="margin: 5px 0px">
           <span class="show-text" v-if="groupDetail.is_public === 1">{{ $t('公开') }}</span>
@@ -207,16 +207,16 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="flex-item">
-          <div>{{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</div>
-          <div>
+        <div style="text-align: right">
+          <span>{{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</span>
+          <span class="margin-left">
             {{ $t('重量') }}:{{ packageWeight }}
             {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}
-          </div>
-          <div>
+          </span>
+          <span class="margin-left">
             {{ $t('体积重量') }}:{{ volumeWeight }}
             {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}
-          </div>
+          </span>
         </div>
       </div>
     </div>
@@ -610,6 +610,9 @@ export default {
 </script>
 
 <style lang="scss">
+.container {
+  padding: 10px 20px;
+}
 .flex {
   display: flex;
   justify-content: space-between;

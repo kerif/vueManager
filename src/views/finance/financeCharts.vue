@@ -6,8 +6,8 @@
           <el-option :value="1" :label="$t('今天')"></el-option>
           <el-option :value="7" :label="$t('近7天')"></el-option>
           <el-option :value="30" :label="$t('近30天')"></el-option>
-          <!-- <el-option :value="90" :label="$t('近三个月')"></el-option>
-          <el-option :value="180" :label="$t('近半年')"></el-option> -->
+          <el-option :value="90" :label="$t('近三个月')"></el-option>
+          <el-option :value="180" :label="$t('近半年')"></el-option>
         </el-select>
         <el-date-picker
           class="timeStyle"
@@ -148,7 +148,8 @@ export default {
       tableLoading: false,
       packageData: [],
       unShow: false,
-      localization: {}
+      localization: {},
+      growthData: ''
     }
   },
   created() {
@@ -190,6 +191,7 @@ export default {
       this.end && (params.end = this.end)
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
+          console.log(res.data)
           console.log(res.data.total)
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
@@ -299,48 +301,61 @@ export default {
                   }
                 }
               }
+            },
+            {
+              name: this.$t('营业额增长率'),
+              type: 'line',
+              data: this.growthData,
+              itemStyle: {
+                normal: {
+                  color: '#EC6B68',
+                  lineStyle: {
+                    color: '#EC6B68'
+                  }
+                }
+              }
             }
           ]
           this.packageChart.setOption(this.packageOption)
         }
       })
     },
-    fun_date(aa) {
+    fun_date(data) {
       var date1 = new Date()
       date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate() // time1表示当前时间
       var date2 = new Date(date1)
-      date2.setDate(date1.getDate() + aa)
+      date2.setDate(date1.getDate() + data)
       var time2 = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate()
       return time2
     },
     // 天数
     getDatas() {
-      // if (this.days === 1) {
-      //   this.pickingList[0] = this.fun_date(0)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 7) {
-      //   this.pickingList[0] = this.fun_date(-7)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 30) {
-      //   this.pickingList[0] = this.fun_date(-30)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 90) {
-      //   this.pickingList[0] = this.fun_date(-90)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 180) {
-      //   this.pickingList[0] = this.fun_date(-180)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // }
+      if (this.days === 1) {
+        this.pickingList[0] = this.fun_date(0)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 7) {
+        this.pickingList[0] = this.fun_date(-7)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 30) {
+        this.pickingList[0] = this.fun_date(-30)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 90) {
+        this.pickingList[0] = this.fun_date(-90)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 180) {
+        this.pickingList[0] = this.fun_date(-180)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      }
       this.page_params.handleQueryChange('days', this.days)
       this.getColumnar()
       this.packageList()
