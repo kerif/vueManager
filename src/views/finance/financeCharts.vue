@@ -175,7 +175,8 @@ export default {
       countryChart: '',
       countryOption: {},
       options: [],
-      countryVal: ''
+      countryVal: '',
+      rechargeList: []
     }
   },
   created() {
@@ -235,6 +236,19 @@ export default {
       this.end && (params.end = this.end)
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
+          this.rechargeList = res.data.recharge
+          console.log(this.rechargeList, this.rechargeList.length)
+          for (let i = 0; i < this.rechargeList.length; i++) {
+            if (this.rechargeList) {
+              console.log(this.rechargeList[i + 1] && this.rechargeList[i + 1].amounts)
+              console.log(
+                this.rechargeList[i + 1] &&
+                  this.rechargeList[i + 1].amounts - this.rechargeList[i] &&
+                  this.rechargeList[i].amounts / this.rechargeList[i] &&
+                  this.rechargeList[i].amounts * 100
+              )
+            }
+          }
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
           let rechargeData = res.data.recharge.map(item => item.amounts)
@@ -367,6 +381,7 @@ export default {
       if (this.countryVal === -1) {
         this.getCountryData()
       }
+      this.financeAmount()
     },
     getCountryData() {
       this.$request
@@ -459,7 +474,8 @@ export default {
     // 获取金额统计
     financeAmount() {
       let params = {
-        days: this.days
+        days: this.days,
+        country_id: this.country_id
       }
       this.begin && (params.begin = this.begin)
       this.end && (params.end = this.end)
@@ -521,7 +537,8 @@ export default {
     // 对比数据
     getCompare() {
       let params = {
-        days: this.days
+        days: this.days,
+        country_id: this.country_id
       }
       this.begin && (params.begin = this.begin)
       this.end && (params.end = this.end)
