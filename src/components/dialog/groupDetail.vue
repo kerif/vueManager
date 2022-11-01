@@ -601,7 +601,7 @@ export default {
       })
     },
     onSubmit() {
-      let id = this.userInfo ? this.userInfo.id : ''
+      let id = this.id
       this.$request
         .addPackageToGroup(id, {
           ids: this.ids
