@@ -255,14 +255,14 @@
         </div>
         <el-table :data="packageData" border class="spacing">
           <el-table-column label="#" type="index"></el-table-column>
-          <el-table-column prop="" :label="$t('包裹号')"></el-table-column>
+          <el-table-column prop="express_num" :label="$t('包裹号')"></el-table-column>
           <el-table-column prop="in_storage_at" :label="$t('入库时间')"></el-table-column>
           <el-table-column prop="location" :label="$t('货位')"></el-table-column>
           <el-table-column prop="package_weight" :label="$t('入库重量')"></el-table-column>
           <el-table-column :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
-                $t('移除拼团')
+              <el-button class="btn-light-red" @click="removePackage(scope.row.id)">{{
+                $t('移除包裹')
               }}</el-button>
             </template>
           </el-table-column>
@@ -278,7 +278,7 @@
       <div class="red-text">*{{ $t('仅显示可添加的包裹') }}</div>
       <el-table :data="tableData" border class="spacing" @selection-change="handleSelectionChange">
         <el-table-column type="selection"></el-table-column>
-        <el-table-column prop="" :label="$t('包裹号')"></el-table-column>
+        <el-table-column prop="express_num" :label="$t('包裹号')"></el-table-column>
         <el-table-column prop="in_storage_at" :label="$t('入库时间')"></el-table-column>
         <el-table-column prop="location" :label="$t('货位')"></el-table-column>
         <el-table-column prop="package_weight" :label="$t('入库重量')"></el-table-column>
@@ -460,6 +460,33 @@ export default {
         })
       })
     },
+    removePackage(id) {
+      let params = {
+        ids: [id]
+      }
+      this.$confirm(this.$t('您确认移除包裹'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.removeGroupPackage(this.id, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getPackageList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     // 延长拼团时间
     submitTimes() {
       if (this.days < 0) {
@@ -553,6 +580,9 @@ export default {
     managePackage(row) {
       this.userInfo = row
       this.showManagePackage = true
+      this.getPackageList()
+    },
+    getPackageList() {
       this.$request.joinGroupPackageList(this.id, this.userInfo.id).then(res => {
         if (res.ret) {
           this.packageData = res.data
@@ -566,7 +596,7 @@ export default {
       this.showAddPackage = true
       this.$request.toJoinGroupPackageList(this.id, this.userInfo.id).then(res => {
         if (res.ret) {
-          console.log(res)
+          this.tableData = res.data
         }
       })
     },

@@ -4919,3 +4919,8 @@ exports.telPermission = (id, params) => {
 exports.useLineStation = expressLineId => {
   return $form.get(`group-buying/stations/line/${expressLineId}`)
 }
+
+// 拼团 将用户包裹移出拼团
+exports.removeGroupPackage = (id, params) => {
+  return $form.put(`group-buying/${id}/packages/remove`, params)
+}

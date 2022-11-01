@@ -71,7 +71,7 @@
             <el-button
               class="btn-light-red"
               v-if="dataPermission.enabled === 1"
-              @click="editTelPermission(scope.row.id, scope.rwo.hide_phone)"
+              @click="editTelPermission(scope.row.id, scope.row.hide_phone)"
               >{{ $t('数据权限') }}</el-button
             >
           </template>
