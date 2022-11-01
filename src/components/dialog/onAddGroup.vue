@@ -484,6 +484,7 @@ export default {
     },
     confirm() {
       delete this.ruleForm.address
+      this.ruleForm.user_id = this.ruleForm.user_id.substring(0, 6)
       let params = {
         ...this.ruleForm
       }

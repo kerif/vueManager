@@ -171,7 +171,7 @@ export default {
       unShow: false,
       localization: {},
       country_id: '',
-      growthData: '',
+      growthData: [],
       countryChart: '',
       countryOption: {},
       options: [],
@@ -237,17 +237,12 @@ export default {
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
           this.rechargeList = res.data.recharge
-          console.log(this.rechargeList, this.rechargeList.length)
           for (let i = 0; i < this.rechargeList.length; i++) {
-            if (this.rechargeList) {
-              console.log(this.rechargeList[i + 1] && this.rechargeList[i + 1].amounts)
-              console.log(
-                this.rechargeList[i + 1] &&
-                  this.rechargeList[i + 1].amounts - this.rechargeList[i] &&
-                  this.rechargeList[i].amounts / this.rechargeList[i] &&
-                  this.rechargeList[i].amounts * 100
-              )
-            }
+            this.growthData.push(
+              Number(this.rechargeList[i] && this.rechargeList[i].amounts) -
+                Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts) /
+                  Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)
+            ) * 100
           }
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
