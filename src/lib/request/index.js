@@ -4909,3 +4909,13 @@ exports.toJoinGroupPackageList = (id, userId) => {
 exports.addPackageToGroup = (id, params) => {
   return $form.post(`group-buying/${id}/packages`, params)
 }
+
+// 员工组列表 数据权限
+exports.telPermission = (id, params) => {
+  return $form.put(`admin-groups/${id}/data-permissions`, params)
+}
+
+// 拼团 线路可用自提点
+exports.useLineStation = expressLineId => {
+  return $form.get(`group-buying/stations/line/${expressLineId}`)
+}

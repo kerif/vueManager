@@ -33,7 +33,7 @@
         <el-table-column prop="warehouses" :label="$t('所属仓库')" :formatter="fileData">
         </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')" width="450">
+        <el-table-column :label="$t('操作')" width="500">
           <template slot-scope="scope">
             <!-- 编辑 -->
             <el-button
@@ -68,6 +68,12 @@
               @click="pickPiont(scope.row.id)"
               >{{ $t('自提点权限') }}</el-button
             >
+            <el-button
+              class="btn-light-red"
+              v-if="dataPermission.enabled === 1"
+              @click="editTelPermission(scope.row.id, scope.rwo.hide_phone)"
+              >{{ $t('数据权限') }}</el-button
+            >
           </template>
         </el-table-column>
         <!-- <template slot="append">
@@ -97,11 +103,15 @@ export default {
     return {
       staff_group_list: [],
       tableLoading: false,
-      normal: 1
+      normal: 1,
+      dataPermission: {}
     }
   },
   mounted() {
     this.getList()
+  },
+  created() {
+    this.getConfig()
   },
   methods: {
     getList() {
@@ -217,6 +227,33 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
+    },
+    editTelPermission(id, hide_phone) {
+      let params = {}
+      params.hide_phone = hide_phone
+      this.$request.telPermission(id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        if (res.ret) {
+          this.dataPermission = res.data[2]
+          console.log(this.dataPermission)
+        }
+      })
     }
   },
   watch: {

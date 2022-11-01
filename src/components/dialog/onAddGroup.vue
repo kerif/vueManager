@@ -102,18 +102,16 @@
             </el-radio-group>
             <div class="select-boxs" v-if="ruleForm.is_delivery === 1">
               <div class="flex-box">
-                <div class="flex-item">
+                <div class="flex-item" v-if="ruleForm.station_id">
                   <div style="width: 80px; margin-right: 20px">
                     <img src="../../assets/station.png" />
                   </div>
                   <div>
                     <div class="font-bold black-text">
-                      {{ $t('荷兰某某自提点A') }}
+                      {{ stationName }}
                     </div>
-                    <div>{{ $t('0031-650207241') }}</div>
-                    <div>
-                      {{ $t('1336ZG  Almere  Mickey Mousestraat 79') }}
-                    </div>
+                    <div>{{ contact_info }}</div>
+                    <div>{{ country_name }} &nbsp; {{ address }}</div>
                   </div>
                 </div>
                 <div>
@@ -324,7 +322,11 @@ export default {
       activeId: '',
       lineList: [],
       icon: '',
-      lineInfo: {}
+      lineInfo: {},
+      stationName: '',
+      contact_info: '',
+      country_name: '',
+      address: ''
     }
   },
   mixins: [pagination],
@@ -415,7 +417,8 @@ export default {
           }
         })
       } else {
-        this.$request.groupStation(userId).then(res => {
+        let express_line_id = this.ruleForm.express_line_id
+        this.$request.useLineStation(express_line_id).then(res => {
           if (res.ret) {
             this.addressData = res.data
           }
@@ -478,6 +481,9 @@ export default {
         this.ruleForm.address.sub_area_id = this.group && this.group.sub_area_id
       } else {
         this.stationName = this.group && this.group.name
+        this.contact_info = this.group && this.group.contact_info
+        this.country_name = this.group && this.group.country && this.group.country.name
+        this.address = this.group && this.group.address
         this.ruleForm.station_id = this.group.id
       }
       this.innerVisible = false
