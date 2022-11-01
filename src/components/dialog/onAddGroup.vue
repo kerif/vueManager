@@ -157,10 +157,10 @@
         </el-col>
         <el-col :span="4" :offset="1">
           <span class="img-item" v-for="(item, index) in ruleForm.images" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" class="goods-img" />
+            <img :src="item" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(item.path)"></i>
+              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
               <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
           </span>
@@ -368,6 +368,10 @@ export default {
           this.ruleForm.express_line.props = res.data.express_line.props.map(item => item).join(',')
           this.ruleForm.user_id = res.data.members[0].id + '---' + res.data.members[0].name
           this.ruleForm.address_id = res.data.address && res.data.address.id
+          this.stationName = res.data.station && res.data.station.name
+          this.contact_info = res.data.station && res.data.station.contact_info
+          this.address = res.data.station && res.data.station.address
+          this.ruleForm.station_id = res.data.station && res.data.station.id
         }
       })
     },

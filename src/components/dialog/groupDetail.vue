@@ -3,7 +3,7 @@
     <div class="container">
       <div class="flex-box">
         <div v-for="(item, index) in groupDetail.images" :key="index">
-          <img :src="$baseUrl.IMAGE_URL + item" style="width: 120px" />
+          <img :src="item" style="width: 120px" />
         </div>
         <div style="margin: 5px 0px">
           <span class="show-text" v-if="groupDetail.is_public === 1">{{ $t('公开') }}</span>
