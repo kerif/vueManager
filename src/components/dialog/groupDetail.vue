@@ -594,6 +594,9 @@ export default {
     },
     addPackage() {
       this.showAddPackage = true
+      this.toJoinGroup()
+    },
+    toJoinGroup() {
       this.$request.toJoinGroupPackageList(this.id, this.userInfo.id).then(res => {
         if (res.ret) {
           this.tableData = res.data
@@ -614,6 +617,7 @@ export default {
               type: 'success'
             })
             this.showAddPackage = false
+            this.getPackageList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
