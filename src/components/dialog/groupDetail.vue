@@ -205,15 +205,21 @@
               <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
                 $t('移除拼团')
               }}</el-button>
-              <el-button class="btn-main" @click="managePackage(scope.row)">{{
-                $t('管理包裹')
-              }}</el-button>
+              <el-button
+                class="btn-main"
+                v-if="scope.row.is_submitted === 0"
+                @click="managePackage(scope.row)"
+                >{{ $t('管理包裹') }}</el-button
+              >
               <el-button class="btn-light-red" v-if="groupDetail.end_until <= 0">{{
                 $t('详细')
               }}</el-button>
-              <el-button class="btn-light-red" @click="submitGroupOrder(scope.row.id)">{{
-                $t('提交拼团订单')
-              }}</el-button>
+              <el-button
+                class="btn-light-red"
+                v-if="scope.row.is_submitted === 0"
+                @click="submitGroupOrder(scope.row.id)"
+                >{{ $t('提交拼团订单') }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
