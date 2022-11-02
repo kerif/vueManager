@@ -147,11 +147,21 @@
       </el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '1'">
         <template slot-scope="scope">
-          <el-button
-            class="btn-deep-purple"
-            @click="goDetail(scope.row.sn, scope.row.order_status)"
-            >{{ $t('详情') }}</el-button
-          >
+          <el-dropdown>
+            <el-button type="primary" plain>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="goDetail(scope.row.sn, scope.row.order_status)"
+                >{{ $t('详情') }}</el-dropdown-item
+              >
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>

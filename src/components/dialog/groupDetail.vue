@@ -42,12 +42,12 @@
           </div>
         </div>
         <div>
-          <div class="detail-item">
+          <div class="detail-item" v-if="status === 0">
             <el-button class="btn-main" @click="submitGroup">{{ $t('提交拼团') }}</el-button>
             <el-button class="btn-light-red" @click="cancelGroup">{{ $t('取消拼团') }}</el-button>
             <el-button class="btn-light-green" @click="editGroup">{{ $t('修改拼团') }}</el-button>
           </div>
-          <div>
+          <div v-if="status === 0">
             <el-button class="btn-deep-purple" @click="dialogDays = true">{{
               $t('延长时间')
             }}</el-button>
@@ -140,9 +140,13 @@
             {{ $t('拼团成员') }} ({{ detailsList.length }})
           </div>
           <div>
-            <el-button class="btn-main" style="margin-left: 10px" @click="addGroupMember">{{
-              $t('添加拼团成员')
-            }}</el-button>
+            <el-button
+              class="btn-main"
+              v-if="status === 0"
+              style="margin-left: 10px"
+              @click="addGroupMember"
+              >{{ $t('添加拼团成员') }}</el-button
+            >
           </div>
         </div>
         <el-table
@@ -196,7 +200,7 @@
               <span>{{ scope.row.package_volume_weight }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('操作')" width="300" fixed="right">
+          <el-table-column :label="$t('操作')" v-if="status === 0" width="300" fixed="right">
             <template slot-scope="scope">
               <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
                 $t('移除拼团')
@@ -362,7 +366,8 @@ export default {
       groupLeader: [],
       form: {
         userId: ''
-      }
+      },
+      status: ''
     }
   },
   mounted() {
@@ -405,6 +410,7 @@ export default {
           this.packageWeight = res.data.package_weight
           this.packagesCount = res.data.packages_count
           this.localization = res.localization
+          this.status = res.data.status
         }
       })
     },
@@ -483,6 +489,7 @@ export default {
               type: 'success'
             })
             this.getPackageList()
+            this.getDetails(this.id)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -648,6 +655,7 @@ export default {
             })
             this.showAddPackage = false
             this.getPackageList()
+            this.getDetails(this.id)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
