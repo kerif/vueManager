@@ -344,7 +344,8 @@ export default {
           area_id: this.ruleForm.address && this.ruleForm.address.area_id,
           sub_area_id: this.ruleForm.address && this.ruleForm.address.sub_area_id,
           warehouse_id: this.ruleForm.warehouse_id,
-          address_id: this.ruleForm.address_id
+          address_id: this.ruleForm.address_id,
+          is_group: 1
         })
         .then(res => {
           if (res.ret) {
@@ -471,18 +472,20 @@ export default {
       }
       if (this.status === 'address') {
         console.log(this.group)
-        this.ruleForm.address.receiver_name = this.group && this.group.receiver_name
-        this.ruleForm.address.phone = this.group && this.group.phone
-        this.ruleForm.address.country_name =
-          this.group && this.group.country && this.group.country.name
-        this.ruleForm.address.city = this.group && this.group.city
-        this.ruleForm.address.street = this.group && this.group.street
-        this.ruleForm.address.province = this.group && this.group.province
-        this.ruleForm.address.address = this.group && this.group.address
+        if (this.ruleForm.address) {
+          this.ruleForm.address.receiver_name = this.group && this.group.receiver_name
+          this.ruleForm.address.phone = this.group && this.group.phone
+          this.ruleForm.address.country_name =
+            this.group && this.group.country && this.group.country.name
+          this.ruleForm.address.city = this.group && this.group.city
+          this.ruleForm.address.street = this.group && this.group.street
+          this.ruleForm.address.province = this.group && this.group.province
+          this.ruleForm.address.address = this.group && this.group.address
+          this.ruleForm.address.country_id = this.group.country && this.group.country.id
+          this.ruleForm.address.area_id = this.group && this.group.area_id
+          this.ruleForm.address.sub_area_id = this.group && this.group.sub_area_id
+        }
         this.ruleForm.address_id = this.group && this.group.id
-        this.ruleForm.address.country_id = this.group.country && this.group.country.id
-        this.ruleForm.address.area_id = this.group && this.group.area_id
-        this.ruleForm.address.sub_area_id = this.group && this.group.sub_area_id
       } else {
         this.stationName = this.group && this.group.name
         this.contact_info = this.group && this.group.contact_info
