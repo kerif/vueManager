@@ -2,7 +2,7 @@
   <el-dialog :visible.sync="show" :title="$t('拼图详细')" width="60%" @close="clear">
     <div class="container">
       <div class="flex-box">
-        <div v-if="groupDetail.images.length">
+        <div v-if="groupDetail.images">
           <img :src="groupDetail.images[0]" style="width: 120px" />
         </div>
         <div v-else style="width: 120px" class="font-bold font-size black-text">
@@ -200,23 +200,29 @@
               <span>{{ scope.row.package_volume_weight }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('操作')" v-if="status === 0" width="300" fixed="right">
+          <el-table-column :label="$t('操作')" width="300" fixed="right">
             <template slot-scope="scope">
-              <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
-                $t('移除拼团')
-              }}</el-button>
+              <el-button
+                class="btn-light-red"
+                v-if="status === 0"
+                @click="removeGroup(scope.row.id)"
+                >{{ $t('移除拼团') }}</el-button
+              >
               <el-button
                 class="btn-main"
-                v-if="scope.row.is_submitted === 0"
+                v-if="scope.row.is_submitted === 0 && status === 0"
                 @click="managePackage(scope.row)"
                 >{{ $t('管理包裹') }}</el-button
               >
-              <el-button class="btn-light-red" v-if="groupDetail.end_until <= 0">{{
-                $t('详细')
-              }}</el-button>
+              <el-button
+                class="btn-deep-purple"
+                @click="goOrderDetail(scope.row.order_id)"
+                v-if="status === 1"
+                >{{ $t('详细') }}</el-button
+              >
               <el-button
                 class="btn-light-red"
-                v-if="scope.row.is_submitted === 0"
+                v-if="scope.row.is_submitted === 0 && status === 0"
                 @click="submitGroupOrder(scope.row.id)"
                 >{{ $t('提交拼团订单') }}</el-button
               >
@@ -417,6 +423,15 @@ export default {
           this.packagesCount = res.data.packages_count
           this.localization = res.localization
           this.status = res.data.status
+        }
+      })
+    },
+    goOrderDetail(id) {
+      this.show = false
+      this.$router.push({
+        name: 'billDetails',
+        params: {
+          id
         }
       })
     },

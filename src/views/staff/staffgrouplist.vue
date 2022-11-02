@@ -83,6 +83,28 @@
       </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :title="$t('数据权限')" :visible.sync="show" @close="clear">
+      <el-form>
+        <el-form-item :label="$t('隐藏手机号')">
+          <el-switch
+            v-model="hide_phone"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button :loading="$store.state.btnLoading" type="primary" @click="onConfirm">{{
+          $t('确定')
+        }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -104,7 +126,9 @@ export default {
       staff_group_list: [],
       tableLoading: false,
       normal: 1,
-      dataPermission: {}
+      dataPermission: {},
+      show: false,
+      hide_phone: 0
     }
   },
   mounted() {
@@ -229,15 +253,21 @@ export default {
       this.deleteNum = selection.map(item => item.id)
     },
     editTelPermission(id, hide_phone) {
+      this.show = true
+      this.id = id
+      this.hide_phone = hide_phone
+    },
+    onConfirm() {
       let params = {}
-      params.hide_phone = hide_phone
-      this.$request.telPermission(id, params).then(res => {
+      params.hide_phone = this.hide_phone
+      this.$request.telPermission(this.id, params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
+          this.show = false
           this.getList()
         } else {
           this.$message({
@@ -254,7 +284,8 @@ export default {
           console.log(this.dataPermission)
         }
       })
-    }
+    },
+    clear() {}
   },
   watch: {
     // 监听已选择的行
