@@ -157,7 +157,7 @@
         </el-col>
         <el-col :span="4" :offset="1">
           <span class="img-item" v-for="(item, index) in ruleForm.images" :key="index">
-            <img :src="item" class="goods-img" />
+            <img :src="$baseUrl.IMAGE_URL + item" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
               <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
@@ -496,7 +496,7 @@ export default {
       this.innerVisible = false
     },
     confirm() {
-      delete this.ruleForm.address
+      // delete this.ruleForm.address
       this.ruleForm.user_id = this.ruleForm.user_id.substring(0, 6)
       let params = {
         ...this.ruleForm
