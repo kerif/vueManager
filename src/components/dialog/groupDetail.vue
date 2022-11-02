@@ -217,7 +217,7 @@
               <el-button
                 class="btn-deep-purple"
                 @click="goOrderDetail(scope.row.order_id)"
-                v-if="status === 1"
+                v-if="status === 1 && scope.row.is_submitted === 1"
                 >{{ $t('详细') }}</el-button
               >
               <el-button
