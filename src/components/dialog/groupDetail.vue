@@ -2,8 +2,11 @@
   <el-dialog :visible.sync="show" :title="$t('拼图详细')" width="60%" @close="clear">
     <div class="container">
       <div class="flex-box">
-        <div v-for="(item, index) in groupDetail.images" :key="index">
-          <img :src="item" style="width: 120px" />
+        <div v-if="groupDetail.images.length">
+          <img :src="groupDetail.images[0]" style="width: 120px" />
+        </div>
+        <div v-else style="width: 120px" class="font-bold font-size black-text">
+          {{ $t('暂无此图') }}
         </div>
         <div style="margin: 5px 0px">
           <span class="show-text" v-if="groupDetail.is_public === 1">{{ $t('公开') }}</span>
@@ -120,7 +123,7 @@
                 <img src="../../assets/station.png" />
               </div>
               <div>
-                <div class="font-bold black-text detail-item">
+                <div class="font-bold font-size black-text detail-item">
                   {{ groupDetail.station && groupDetail.station.name }}
                 </div>
                 <div class="detail-item">
@@ -193,7 +196,7 @@
               <span>{{ scope.row.package_volume_weight }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('操作')" width="200" fixed="right">
+          <el-table-column :label="$t('操作')" width="300" fixed="right">
             <template slot-scope="scope">
               <el-button class="btn-light-red" @click="removeGroup(scope.row.id)">{{
                 $t('移除拼团')
@@ -203,6 +206,9 @@
               }}</el-button>
               <el-button class="btn-light-red" v-if="groupDetail.end_until <= 0">{{
                 $t('详细')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="submitGroupOrder(scope.row.id)">{{
+                $t('提交拼团订单')
               }}</el-button>
             </template>
           </el-table-column>
@@ -534,6 +540,30 @@ export default {
     },
     addGroupMember() {
       this.showMember = true
+    },
+    submitGroupOrder(userId) {
+      this.$confirm(this.$t('确认提交用户拼团订单'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.submitUserGroupOrder(this.id, userId).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getDetails(this.id)
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     // 客户id
     queryCNSearch(queryString, callback) {

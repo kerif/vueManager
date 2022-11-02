@@ -4924,3 +4924,8 @@ exports.useLineStation = expressLineId => {
 exports.removeGroupPackage = (id, params) => {
   return $form.put(`group-buying/${id}/packages/remove`, params)
 }
+
+// 拼团 提交用户拼团订单
+exports.submitUserGroupOrder = (id, userId) => {
+  return $form.post(`group-buying/${id}/user/${userId}/order`)
+}
