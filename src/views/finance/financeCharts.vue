@@ -83,17 +83,24 @@
           </li>
         </ul>
       </div>
-      <div class="charts-content">
-        <div class="charts-left" id="chartsSecond"></div>
-      </div>
-      <div :class="['charts-content', countryVal === -1 ? '' : 'hide']">
-        <div
-          class="charts-right"
-          ref="pieCharts"
-          style="width: 100%; heigth: 400px"
-          id="pieCharts"
-        ></div>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <div class="charts-content">
+            <div class="charts-left" id="chartsSecond"></div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="charts-content">
+            <div
+              class="charts-right"
+              ref="pieCharts"
+              v-show="countryVal === 0"
+              id="pieCharts"
+              style="width: 100%; height: 400px"
+            ></div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
@@ -256,8 +263,6 @@ export default {
               100
 
             let beforeCount = Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)
-            console.log(count, 'count')
-            console.log(beforeCount, 'beforeCount')
             if (count == 0 && beforeCount !== 0) {
               number = 0
             } else if (beforeCount == 0 && count !== 0) {
@@ -268,7 +273,6 @@ export default {
               number = count / beforeCount
             }
             this.growthData.push(number)
-            console.log(this.growthData)
           }
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
@@ -399,7 +403,7 @@ export default {
     },
     changeCountry(val) {
       this.countryVal = val
-      if (this.countryVal === '') {
+      if (this.countryVal === 0) {
         this.getCountryData()
       }
       this.financeAmount()
@@ -448,7 +452,7 @@ export default {
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
         this.options = res.data
-        this.options.unshift({ id: '', name: this.$t('全部市场') })
+        this.options.unshift({ id: 0, name: this.$t('全部市场') })
       })
     },
     fun_date(data) {
@@ -502,7 +506,7 @@ export default {
       let params = {
         days: this.days
       }
-      if (this.country_id !== '') {
+      if (this.country_id !== 0) {
         params.country_id = this.country_id
       }
       this.begin && (params.begin = this.begin)
@@ -649,7 +653,6 @@ export default {
     display: none;
   }
   .charts-content {
-    text-align: center;
     margin-top: 60px;
   }
   ul {
