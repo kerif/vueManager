@@ -2,7 +2,7 @@
   <div class="finance-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
-        <!-- <el-select
+        <el-select
           v-model="country_id"
           @change="changeCountry"
           :placeholder="$t('请选择市场')"
@@ -14,14 +14,14 @@
             :label="item.name"
             :value="item.id"
           ></el-option>
-        </el-select> -->
+        </el-select>
         <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
           <el-option :value="1" :label="$t('今天')"></el-option>
           <el-option :value="7" :label="$t('近7天')"></el-option>
           <el-option :value="30" :label="$t('近30天')"></el-option>
-          <!-- <el-option :value="90" :label="$t('近三个月')"></el-option>
+          <el-option :value="90" :label="$t('近三个月')"></el-option>
           <el-option :value="180" :label="$t('近半年')"></el-option>
-          <el-option :value="360" :label="$t('近一年')"></el-option> -->
+          <el-option :value="360" :label="$t('近一年')"></el-option>
         </el-select>
         <el-date-picker
           class="timeStyle"
@@ -86,14 +86,14 @@
       <div class="charts-content">
         <div class="charts-left" id="chartsSecond"></div>
       </div>
-      <!-- <div :class="['charts-content', countryVal === -1 ? '' : 'hide']">
+      <div :class="['charts-content', countryVal === -1 ? '' : 'hide']">
         <div
           class="charts-right"
           ref="pieCharts"
           style="width: 100%; heigth: 400px"
           id="pieCharts"
         ></div>
-      </div> -->
+      </div>
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
@@ -184,7 +184,7 @@ export default {
     this.getColumnar() // 包裹柱状数据
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
-    // this.getCountry()
+    this.getCountry()
   },
   mounted() {
     // 树状图
@@ -199,17 +199,17 @@ export default {
           crossStyle: {
             color: '#999'
           }
+        },
+        formatter: function (params) {
+          console.log(params, 'p')
+          let tmp = ''
+          for (let i = 0; i < params.length; i++) {
+            tmp += `${i == 0 ? params[0].name : ''}<br/> ${params[i].seriesName}:${
+              i !== params.length - 1 ? params[i].value : params[i].value + '%'
+            }`
+          }
+          return tmp
         }
-        // formatter: function (params) {
-        //   console.log(params, 'p')
-        //   let tmp = ''
-        //   for (let i = 0; i < params.length; i++) {
-        //     tmp += `${i == 0 ? params[0].name : ''}<br/> ${params[i].seriesName}:${
-        //       i !== params.length - 1 ? params[i].value : params[i].value + '%'
-        //     }`
-        //   }
-        //   return tmp
-        // }
       },
       legend: {
         data: [this.$t('总收入'), this.$t('充值收入'), this.$t('营业额')],
@@ -219,21 +219,21 @@ export default {
     }
 
     // 饼图
-    // let pie = this.$refs.pieCharts
-    // if (pie) {
-    //   this.countryChart = echarts.init(pie)
-    //   window.addEventListener('resize', () => {
-    //     this.countryChart.resize()
-    //   })
-    //   this.countryOption = {
-    //     backgroundColor: '#ffffff',
-    //     color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
-    //     tooltip: {
-    //       trigger: 'item',
-    //       formatter: '{a} <br/>{b}: {c} ({d}%)'
-    //     }
-    //   }
-    // }
+    let pie = this.$refs.pieCharts
+    if (pie) {
+      this.countryChart = echarts.init(pie)
+      window.addEventListener('resize', () => {
+        this.countryChart.resize()
+      })
+      this.countryOption = {
+        backgroundColor: '#ffffff',
+        color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        }
+      }
+    }
   },
   methods: {
     // 包裹树状图
@@ -248,28 +248,28 @@ export default {
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
           this.rechargeList = res.data.recharge
-          // for (let i = 1; i < this.rechargeList.length; i++) {
-          //   let number = 0
-          //   let count =
-          //     (Number(this.rechargeList[i] && this.rechargeList[i].amounts) -
-          //       Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)) *
-          //     100
+          for (let i = 1; i < this.rechargeList.length; i++) {
+            let number = 0
+            let count =
+              (Number(this.rechargeList[i] && this.rechargeList[i].amounts) -
+                Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)) *
+              100
 
-          //   let beforeCount = Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)
-          //   console.log(count, 'count')
-          //   console.log(beforeCount, 'beforeCount')
-          //   if (count == 0 && beforeCount !== 0) {
-          //     number = 0
-          //   } else if (beforeCount == 0 && count !== 0) {
-          //     number = 100
-          //   } else if (count == 0 && beforeCount == 0) {
-          //     number = 0
-          //   } else if (beforeCount !== 0) {
-          //     number = count / beforeCount
-          //   }
-          //   this.growthData.push(number)
-          //   console.log(this.growthData)
-          // }
+            let beforeCount = Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)
+            console.log(count, 'count')
+            console.log(beforeCount, 'beforeCount')
+            if (count == 0 && beforeCount !== 0) {
+              number = 0
+            } else if (beforeCount == 0 && count !== 0) {
+              number = 100
+            } else if (count == 0 && beforeCount == 0) {
+              number = 0
+            } else if (beforeCount !== 0) {
+              number = count / beforeCount
+            }
+            this.growthData.push(number)
+            console.log(this.growthData)
+          }
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
           let rechargeData = res.data.recharge.map(item => item.amounts)
@@ -378,79 +378,79 @@ export default {
                   }
                 }
               }
+            },
+            {
+              name: this.$t('营业额增长率'),
+              type: 'line',
+              data: this.growthData,
+              itemStyle: {
+                normal: {
+                  color: '#EC6B68',
+                  lineStyle: {
+                    color: '#EC6B68'
+                  }
+                }
+              }
             }
-            // {
-            //   name: this.$t('营业额增长率'),
-            //   type: 'line',
-            //   data: this.growthData,
-            //   itemStyle: {
-            //     normal: {
-            //       color: '#EC6B68',
-            //       lineStyle: {
-            //         color: '#EC6B68'
-            //       }
-            //     }
-            //   }
-            // }
           ]
           this.packageChart.setOption(this.packageOption)
         }
       })
     },
-    // changeCountry(val) {
-    //   this.countryVal = val
-    //   if (this.countryVal === -1) {
-    //     this.getCountryData()
-    //   }
-    //   this.financeAmount()
-    // },
-    // getCountryData() {
-    //   this.$request
-    //     .pieCountStatistisc({
-    //       begin: this.begin,
-    //       end: this.end
-    //     })
-    //     .then(res => {
-    //       let pieData = res.data.map(item => {
-    //         return {
-    //           value: item.amount,
-    //           name: item.country ? item.country.name : ''
-    //         }
-    //       })
-    //       this.countryOption.legend = {
-    //         orient: 'vertical',
-    //         left: 10
-    //       }
-    //       this.countryOption.series = [
-    //         {
-    //           name: this.$t('营业额'),
-    //           type: 'pie',
-    //           radius: ['50%', '70%'],
-    //           label: {
-    //             formatter: ' {d}% '
-    //           },
-    //           emphasis: {
-    //             label: {
-    //               show: true,
-    //               fontSize: '30',
-    //               fontWeight: 'bold'
-    //             }
-    //           },
-    //           labelLine: {
-    //             show: true
-    //           },
-    //           data: pieData
-    //         }
-    //       ]
-    //       this.countryChart && this.countryChart.setOption(this.countryOption)
-    //     })
-    // },
-    // getCountry() {
-    //   this.$request.getEnabledCountry().then(res => {
-    //     this.options = res.data
-    //     this.options.unshift({ id: -1, name: this.$t('全部市场') })
-    //   })
-    // },
+    changeCountry(val) {
+      this.countryVal = val
+      if (this.countryVal === -1) {
+        this.getCountryData()
+      }
+      this.financeAmount()
+    },
+    getCountryData() {
+      this.$request
+        .pieCountStatistisc({
+          begin: this.begin,
+          end: this.end
+        })
+        .then(res => {
+          let pieData = res.data.map(item => {
+            return {
+              value: item.amount,
+              name: item.country ? item.country.name : ''
+            }
+          })
+          this.countryOption.legend = {
+            orient: 'vertical',
+            left: 10
+          }
+          this.countryOption.series = [
+            {
+              name: this.$t('营业额'),
+              type: 'pie',
+              radius: ['50%', '70%'],
+              label: {
+                formatter: ' {d}% '
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: true
+              },
+              data: pieData
+            }
+          ]
+          this.countryChart && this.countryChart.setOption(this.countryOption)
+        })
+    },
+    getCountry() {
+      this.$request.getEnabledCountry().then(res => {
+        this.options = res.data
+        this.options.unshift({ id: -1, name: this.$t('全部市场') })
+      })
+    },
     fun_date(data) {
       var date1 = new Date()
       date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate() // time1表示当前时间
@@ -461,37 +461,37 @@ export default {
     },
     // 天数
     getDatas() {
-      // if (this.days === 1) {
-      //   this.pickingList[0] = this.fun_date(0)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 7) {
-      //   this.pickingList[0] = this.fun_date(-7)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 30) {
-      //   this.pickingList[0] = this.fun_date(-30)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 90) {
-      //   this.pickingList[0] = this.fun_date(-90)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 180) {
-      //   this.pickingList[0] = this.fun_date(-180)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // } else if (this.days === 360) {
-      //   this.pickingList[0] = this.fun_date(-360)
-      //   this.$set(this.pickingList, 0, this.pickingList[0])
-      //   this.pickingList[1] = this.fun_date(0)
-      //   this.$set(this.pickingList, 1, this.pickingList[1])
-      // }
+      if (this.days === 1) {
+        this.pickingList[0] = this.fun_date(0)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 7) {
+        this.pickingList[0] = this.fun_date(-7)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 30) {
+        this.pickingList[0] = this.fun_date(-30)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 90) {
+        this.pickingList[0] = this.fun_date(-90)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 180) {
+        this.pickingList[0] = this.fun_date(-180)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      } else if (this.days === 360) {
+        this.pickingList[0] = this.fun_date(-360)
+        this.$set(this.pickingList, 0, this.pickingList[0])
+        this.pickingList[1] = this.fun_date(0)
+        this.$set(this.pickingList, 1, this.pickingList[1])
+      }
       this.page_params.handleQueryChange('days', this.days)
       this.getColumnar()
       this.packageList()
