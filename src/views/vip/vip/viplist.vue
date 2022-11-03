@@ -138,6 +138,17 @@
         ></el-date-picker>
       </div>
       <div class="search-item">
+        <div>{{ $t('渠道来源') }}</div>
+        <el-select v-model="searchParams.channel_id" clearable>
+          <el-option
+            v-for="item in channelData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
       </div>
@@ -319,6 +330,11 @@
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
       <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
+      <el-table-column :label="$t('渠道来源')" prop="channel">
+        <template slot-scope="scope">
+          <span>{{ scope.row.channel && scope.row.channel.channel_name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('注册时间')" prop="created_at" width="155"></el-table-column>
       <el-table-column
         :label="$t('最后登录时间')"
@@ -570,7 +586,8 @@ export default {
         min_point: '',
         max_order_count: '',
         min_order_count: '',
-        user_source: ''
+        user_source: '',
+        channel_id: ''
       },
       searchTime: [],
       loginTime: [],
@@ -584,13 +601,15 @@ export default {
       clientSourceList: [],
       inviteLoading: false,
       hasFilterCondition: false,
-      showLabel: false
+      showLabel: false,
+      channelData: []
     }
   },
   mixins: [pagination],
   created() {
     this.getCategory()
     this.getUserSource()
+    this.getChannel()
     if (this.$route.query.group) {
       this.page_params.group = Number(this.$route.query.group)
     }
@@ -635,7 +654,8 @@ export default {
           begin_date: this.searchTime[0],
           end_date: this.searchTime[1],
           last_begin_date: this.loginTime[0],
-          last_end_date: this.loginTime[1]
+          last_end_date: this.loginTime[1],
+          channel_id: this.searchParams.channel_id
         })
         .then(res => {
           this.tableLoading = false
@@ -672,6 +692,7 @@ export default {
       this.searchParams.min_order_count = ''
       this.searchParams.max_order_count = ''
       this.searchParams.user_source = ''
+      this.searchParams.channel_id = ''
       this.searchTime = []
       this.loginTime = []
       this.getList()
@@ -1151,6 +1172,13 @@ export default {
             id: -1,
             name: this.$t('未选销售')
           })
+        }
+      })
+    },
+    getChannel() {
+      this.$request.categorySearch().then(res => {
+        if (res.ret) {
+          this.channelData = res.data
         }
       })
     }

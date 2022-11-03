@@ -399,7 +399,7 @@ export default {
     },
     changeCountry(val) {
       this.countryVal = val
-      if (this.countryVal === -1) {
+      if (this.countryVal === '') {
         this.getCountryData()
       }
       this.financeAmount()
@@ -448,7 +448,7 @@ export default {
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
         this.options = res.data
-        this.options.unshift({ id: -1, name: this.$t('全部市场') })
+        this.options.unshift({ id: '', name: this.$t('全部市场') })
       })
     },
     fun_date(data) {
@@ -500,8 +500,10 @@ export default {
     // 获取金额统计
     financeAmount() {
       let params = {
-        days: this.days,
-        country_id: this.country_id
+        days: this.days
+      }
+      if (this.country_id !== '') {
+        params.country_id = this.country_id
       }
       this.begin && (params.begin = this.begin)
       this.end && (params.end = this.end)

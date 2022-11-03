@@ -555,6 +555,7 @@ export default {
     },
     clear() {
       this.show = false
+      this.id = ''
       this.ruleForm = {
         name: '',
         is_delivery: 0,
