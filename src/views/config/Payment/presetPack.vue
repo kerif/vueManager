@@ -5,7 +5,7 @@
     </div>
     <el-table :data="tableData" border class="content-top">
       <el-table-column type="index" label="#"></el-table-column>
-      <el-table-column prop="name" :label="$t('箱子名称')">
+      <el-table-column prop="name" :label="$t('耗材名称')">
         <template slot-scope="scope">
           <el-input
             v-if="scope.row.editStatus"
