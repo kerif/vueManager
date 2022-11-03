@@ -157,7 +157,7 @@
         </el-col>
         <el-col :span="4" :offset="1">
           <span class="img-item" v-for="(item, index) in ruleForm.images" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" class="goods-img" />
+            <img :src="imageUrl(item)" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
               <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
@@ -579,6 +579,13 @@ export default {
     clearShowLine() {
       this.showLine = false
       this.lineList = []
+    },
+    imageUrl(url) {
+      let str = RegExp('https')
+      let newUrl
+      //通过三元运算符进行判断该图片是否含有http域名，没有就拼接上去
+      str.test(url) ? (newUrl = url) : (newUrl = this.$baseUrl.IMAGE_URL + url)
+      return newUrl
     }
   }
 }

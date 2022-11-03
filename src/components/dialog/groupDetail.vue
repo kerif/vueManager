@@ -3,7 +3,7 @@
     <div class="container">
       <div class="flex-box">
         <div v-if="groupDetail.images">
-          <img :src="groupDetail.images[0]" style="width: 120px" />
+          <img :src="imageUrl(groupDetail.images[0])" style="width: 120px" />
         </div>
         <div v-else style="width: 120px" class="font-bold font-size black-text">
           {{ $t('暂无此图') }}
@@ -704,6 +704,13 @@ export default {
     clearShowMember() {
       this.showMember = false
       this.form.userId = ''
+    },
+    imageUrl(url) {
+      let str = RegExp('https')
+      let newUrl
+      //通过三元运算符进行判断该图片是否含有http域名，没有就拼接上去
+      str.test(url) ? (newUrl = url) : (newUrl = this.$baseUrl.IMAGE_URL + url)
+      return newUrl
     }
   }
 }
