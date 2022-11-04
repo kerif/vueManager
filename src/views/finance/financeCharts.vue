@@ -84,12 +84,14 @@
         </ul>
       </div>
       <el-row :gutter="20">
-        <el-col :span="16">
+        <el-col :span="24">
           <div class="charts-content">
             <div class="charts-left" id="chartsSecond"></div>
           </div>
         </el-col>
-        <el-col :span="8">
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
           <div class="charts-content">
             <div
               class="charts-right"
@@ -208,7 +210,6 @@ export default {
           }
         },
         formatter: function (params) {
-          console.log(params, 'p')
           let tmp = ''
           for (let i = 0; i < params.length; i++) {
             tmp += `${i == 0 ? params[0].name : ''}<br/> ${params[i].seriesName}:${
@@ -246,8 +247,6 @@ export default {
     // 包裹树状图
     getColumnar() {
       let params = {
-        // page: this.page_params.page,
-        // size: this.page_params.size,
         days: this.days
       }
       this.begin && (params.begin = this.begin)
@@ -401,8 +400,11 @@ export default {
         }
       })
     },
-    changeCountry() {
+    changeCountry(val) {
       this.financeAmount()
+      if (val === 0) {
+        this.getCountryData()
+      }
       this.$nextTick(function () {
         var myEvent = new Event('resize') // 创建一个支持冒泡且不能被取消的resize事件
         window.dispatchEvent(myEvent) // 事件可以在任何元素触发
@@ -466,9 +468,9 @@ export default {
     // 天数
     getDatas() {
       if (this.days === 1) {
-        this.pickingList[0] = this.fun_date(0)
+        this.pickingList[0] = this.fun_date(0) || ''
         this.$set(this.pickingList, 0, this.pickingList[0])
-        this.pickingList[1] = this.fun_date(0)
+        this.pickingList[1] = this.fun_date(0) || ''
         this.$set(this.pickingList, 1, this.pickingList[1])
       } else if (this.days === 7) {
         this.pickingList[0] = this.fun_date(-7)
@@ -500,6 +502,7 @@ export default {
       this.getColumnar()
       this.packageList()
       this.financeAmount()
+      this.getCountryData()
     },
     // 获取金额统计
     financeAmount() {
@@ -557,6 +560,7 @@ export default {
       this.getColumnar()
       this.packageList()
       this.financeAmount()
+      this.getCountryData()
     },
     // 对比
     onCompare(val) {
@@ -565,6 +569,7 @@ export default {
       // this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.compare_begin} ${this.compare_end}`)
       this.getCompare()
+      this.getCountryData()
     },
     // 对比数据
     getCompare() {
@@ -588,8 +593,6 @@ export default {
     // 包裹列表
     packageList() {
       let params = {
-        // page: this.page_params.page,
-        // size: this.page_params.size,
         days: this.days
       }
       this.begin && (params.begin = this.begin)
@@ -597,8 +600,6 @@ export default {
       this.$request.financeData(params).then(res => {
         if (res.ret) {
           this.packageData = res.data
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         } else {
           this.$message({
             message: res.msg,
