@@ -39,6 +39,7 @@
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('国家地区')" prop="country.name"></el-table-column>
+      <el-table-column :label="$t('省')" prop="province"></el-table-column>
       <el-table-column :label="$t('区域')" prop="sub_area.name"></el-table-column>
       <el-table-column :label="$t('城市')" prop="city"></el-table-column>
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
