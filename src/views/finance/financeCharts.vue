@@ -181,7 +181,7 @@ export default {
       unShow: false,
       localization: {},
       country_id: 0,
-      growthData: [0],
+      growthData: [],
       countryChart: '',
       countryOption: {},
       options: [],
@@ -193,7 +193,13 @@ export default {
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
     this.getCountry()
-    this.getCountryData()
+    if (this.days === 7) {
+      this.pickingList[0] = this.fun_date(-7)
+      this.$set(this.pickingList, 0, this.pickingList[0])
+      this.pickingList[1] = this.fun_date(0)
+      this.$set(this.pickingList, 1, this.pickingList[1])
+      this.getCountryData(this.pickingList[0], this.pickingList[1])
+    }
   },
   mounted() {
     // 树状图
