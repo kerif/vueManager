@@ -181,11 +181,11 @@ export default {
       unShow: false,
       localization: {},
       country_id: 0,
-      growthData: [],
+      growthData: [0],
       countryChart: '',
       countryOption: {},
       options: [],
-      rechargeList: []
+      paymentList: []
     }
   },
   created() {
@@ -259,15 +259,15 @@ export default {
       this.end && (params.end = this.end)
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
-          this.rechargeList = res.data.recharge
-          for (let i = 1; i < this.rechargeList.length; i++) {
+          this.paymentList = res.data.payment
+          for (let i = 1; i < this.paymentList.length; i++) {
             let number = 0
             let count =
-              (Number(this.rechargeList[i] && this.rechargeList[i].amounts) -
-                Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)) *
+              (Number(this.paymentList[i] && this.paymentList[i].amounts) -
+                Number(this.paymentList[i - 1] && this.paymentList[i - 1].amounts)) *
               100
 
-            let beforeCount = Number(this.rechargeList[i - 1] && this.rechargeList[i - 1].amounts)
+            let beforeCount = Number(this.paymentList[i - 1] && this.paymentList[i - 1].amounts)
             if (count == 0 && beforeCount !== 0) {
               number = 0
             } else if (beforeCount == 0 && count !== 0) {
