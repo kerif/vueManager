@@ -18,7 +18,7 @@
         <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
           <el-option :value="1" :label="$t('今天')"></el-option>
           <el-option :value="7" :label="$t('近7天')"></el-option>
-          <el-option :value="30" :label="$t('近30天')"></el-option>
+          <el-option :value="30" :label="$t('近一个月')"></el-option>
           <el-option :value="90" :label="$t('近三个月')"></el-option>
           <el-option :value="180" :label="$t('近半年')"></el-option>
           <el-option :value="360" :label="$t('近一年')"></el-option>
@@ -411,45 +411,44 @@ export default {
       })
     },
     getCountryData() {
-      this.$request
-        .pieCountStatistisc({
-          begin: this.begin,
-          end: this.end
-        })
-        .then(res => {
-          let pieData = res.data.map(item => {
-            return {
-              value: item.amount,
-              name: item.country ? item.country.name : ''
-            }
-          })
-          this.countryOption.legend = {
-            orient: 'vertical',
-            left: 10
+      let params = {
+        begin: this.pickingList[0],
+        end: this.pickingList[1]
+      }
+      this.$request.pieCountStatistisc(params).then(res => {
+        let pieData = res.data.map(item => {
+          return {
+            value: item.amount,
+            name: item.country ? item.country.name : ''
           }
-          this.countryOption.series = [
-            {
-              name: this.$t('营业额'),
-              type: 'pie',
-              radius: ['50%', '70%'],
-              label: {
-                formatter: ' {d}% '
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: true
-              },
-              data: pieData
-            }
-          ]
-          this.countryChart && this.countryChart.setOption(this.countryOption)
         })
+        this.countryOption.legend = {
+          orient: 'vertical',
+          left: 10
+        }
+        this.countryOption.series = [
+          {
+            name: this.$t('营业额'),
+            type: 'pie',
+            radius: ['50%', '70%'],
+            label: {
+              formatter: ' {d}% '
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '30',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: true
+            },
+            data: pieData
+          }
+        ]
+        this.countryChart && this.countryChart.setOption(this.countryOption)
+      })
     },
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
