@@ -257,6 +257,9 @@ export default {
         begin: this.pickingList[0],
         end: this.pickingList[1]
       }
+      if (this.country_id !== 0) {
+        params.country_id = this.country_id
+      }
       this.growthData = [0]
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
@@ -298,6 +301,10 @@ export default {
             {
               type: 'category',
               boundaryGap: true
+            },
+            {
+              type: 'category',
+              boundaryGap: true
             }
           ]
           this.packageOption.yAxis = [
@@ -306,6 +313,21 @@ export default {
               scale: true,
               name: '总收入(元)',
               min: 0,
+              axisLine: {
+                // y轴
+                show: false
+              },
+              axisTick: {
+                // y轴刻度线
+                show: false
+              },
+              splitLine: {
+                // 网格线
+                show: true
+              }
+            },
+            {
+              type: 'value',
               axisLine: {
                 // y轴
                 show: false

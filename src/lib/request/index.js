@@ -4801,8 +4801,8 @@ exports.batchInvalidCard = params => {
 }
 
 // 预设打包箱列表
-exports.presetPackList = () => {
-  return $form.get('system-boxes')
+exports.presetPackList = params => {
+  return $form.get('system-boxes', { params })
 }
 
 // 预设打包箱 获取详情

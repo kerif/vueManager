@@ -94,10 +94,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <div style="padding: 20px 0">
+      <nle-pagination :pageParams="page_params"></nle-pagination>
+    </div>
   </div>
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -107,24 +112,35 @@ export default {
   created() {
     this.getList()
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   methods: {
     getList() {
-      this.$request.presetPackList().then(res => {
-        if (res.ret) {
-          this.tableData = res.data.map(item => {
-            return {
-              ...item,
-              editStatus: false
-            }
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .presetPackList({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data.map(item => {
+              return {
+                ...item,
+                editStatus: false
+              }
+            })
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     addPresetBox() {
       this.tableData.push({

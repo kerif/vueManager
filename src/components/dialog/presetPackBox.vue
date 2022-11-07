@@ -16,32 +16,48 @@
         </template>
       </el-table-column>
     </el-table>
+    <div style="padding: 20px 0">
+      <nle-pagination :pageParams="page_params"></nle-pagination>
+    </div>
   </el-dialog>
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
       tableData: []
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   methods: {
     init() {
       this.getList()
     },
     getList() {
-      this.$request.presetPackList().then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .presetPackList({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     goManage() {
       this.show = false
