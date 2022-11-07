@@ -176,6 +176,11 @@
     <div v-if="this.state === 'edit' && location.type === 1" class="add-btn">
       <el-button class="btn-main" @click="addLocationCode">{{ $t('添加') }}</el-button>
     </div>
+    <div class="head-search">
+      <el-input v-model="page_params.keyword" style="width: 30%" @keyup.enter.native="onSearch">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="onSearch"></i>
+      </el-input>
+    </div>
     <el-table
       :data="tableData"
       border
@@ -368,7 +373,8 @@ export default {
       this.$request
         .getLocationList(this.id, this.areaId, {
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          keyword: this.page_params.keyword
         })
         .then(res => {
           if (res.ret) {
@@ -584,6 +590,9 @@ export default {
         this.getList() // 列表数据
       }
     },
+    onSearch() {
+      this.getList()
+    },
     clear() {
       this.id = ''
       this.location.type = 0
@@ -597,6 +606,7 @@ export default {
       this.location.locationCustom.max_count = ''
       this.location.locationCustom.number = ''
       this.location.locationCustom.reusable = ''
+      this.page_params.page = 1
     }
   }
 }
@@ -654,6 +664,11 @@ export default {
     left: -15px;
     color: #74b34f;
     font-size: 18px;
+  }
+  .head-search {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
   }
 }
 .billing-select {

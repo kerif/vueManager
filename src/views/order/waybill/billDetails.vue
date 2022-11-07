@@ -248,6 +248,10 @@
                     <td>{{ $t('邮箱') }}</td>
                     <th>{{ form.address.email }}</th>
                   </tr>
+                  <tr class="one-line">
+                    <td>{{ $t('备用电话') }}</td>
+                    <th colspan="3">{{ form.address.spare_phone }}</th>
+                  </tr>
 
                   <tr class="one-line" v-if="form.address.wechat_id">
                     <td>{{ $t('微信号') }}</td>
@@ -1061,6 +1065,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('备用电话')" class="label-sty">
+              <el-input class="input-sty" v-model="address.spare_phone"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="dialogInfo = false">{{ $t('取消') }}</el-button>
@@ -1756,7 +1767,8 @@ export default {
           sub_area_id: this.countryList[2] || '',
           province: this.address.province,
           district: this.address.district,
-          email: this.address.email
+          email: this.address.email,
+          spare_phone: this.address.spare_phone
         })
         .then(res => {
           if (res.ret) {
