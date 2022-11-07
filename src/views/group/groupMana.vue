@@ -4,6 +4,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
         <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
+        <el-tab-pane :label="$t('已取消')" name="2"></el-tab-pane>
       </el-tabs>
     </div>
     <div class="addUser">
@@ -157,6 +158,20 @@
                 @click.native="goDetail(scope.row.sn, scope.row.order_status)"
                 >{{ $t('详情') }}</el-dropdown-item
               >
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <el-dropdown>
+            <el-button type="primary" plain>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
                 {{ $t('参团详情') }}
               </el-dropdown-item>
