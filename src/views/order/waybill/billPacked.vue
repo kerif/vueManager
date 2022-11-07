@@ -902,16 +902,18 @@ export default {
         },
         data => {
           let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
-          this.boxId = id
           if (type === 'single') {
             this.user.length = length
             this.user.width = width
             this.user.height = height
+            this.boxId = id
           } else {
             this.user.box[index].weight = weight
             this.user.box[index].length = length
             this.user.box[index].width = width
             this.user.box[index].height = height
+            this.user.box[index].system_box_id = id
+            console.log(this.user.box[index].system_box_id, '111')
           }
         }
       )
@@ -1110,7 +1112,9 @@ export default {
             price: item.price
           }
         })
-      this.user.system_box_id = this.boxId
+      if (this.user.box_type === 1) {
+        this.user.system_box_id = this.boxId
+      }
       this.user.in_warehouse_pictures = this.goodsImgList
       this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {

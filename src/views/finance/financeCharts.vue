@@ -189,7 +189,6 @@ export default {
     }
   },
   created() {
-    this.getColumnar() // 包裹柱状数据
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
     this.getCountry()
@@ -199,6 +198,7 @@ export default {
       this.pickingList[1] = this.fun_date(0)
       this.$set(this.pickingList, 1, this.pickingList[1])
       this.getCountryData(this.pickingList[0], this.pickingList[1])
+      this.getColumnar(this.pickingList[0], this.pickingList[1]) // 包裹柱状数据
     }
   },
   mounted() {
@@ -218,7 +218,6 @@ export default {
         formatter: function (params) {
           let tmp = ''
           for (let i = 0; i < params.length; i++) {
-            console.log(params, 'aaa')
             tmp += `${i == 0 ? params[0].name : ''}<br/> ${params[i].seriesName}:${
               i !== params.length - 1 ? params[i].value : params[i].value + '%'
             }`
@@ -254,25 +253,23 @@ export default {
     // 包裹树状图
     getColumnar() {
       let params = {
-        days: this.days
+        days: this.days,
+        begin: this.pickingList[0],
+        end: this.pickingList[1]
       }
-      this.begin && (params.begin = this.begin)
-      this.end && (params.end = this.end)
       this.growthData = [0]
       this.$request.financeColumnar(params).then(res => {
         if (res.ret) {
           this.paymentList = res.data.payment
-          console.log(this.paymentList, 'hhh')
           for (let i = 1; i < this.paymentList.length; i++) {
             let number = 0
             let count =
               (Number(this.paymentList[i] && this.paymentList[i].amounts) -
                 Number(this.paymentList[i - 1] && this.paymentList[i - 1].amounts)) *
               100
-            console.log(count, 'count')
 
             let beforeCount = Number(this.paymentList[i - 1] && this.paymentList[i - 1].amounts)
-            console.log(beforeCount, 'beforeCount')
+
             if (count == 0 && beforeCount !== 0) {
               number = 0
             } else if (beforeCount == 0 && count !== 0) {
@@ -284,7 +281,6 @@ export default {
             }
             this.growthData.push(number)
           }
-          console.log(this.growthData, 'ggg')
           let xData = res.data.total.map(item => item.days)
           let paymentData = res.data.payment.map(item => item.amounts)
           let rechargeData = res.data.recharge.map(item => item.amounts)
@@ -414,6 +410,7 @@ export default {
     },
     changeCountry(val) {
       this.financeAmount()
+      this.getColumnar()
       if (val === 0) {
         this.getCountryData()
       }
