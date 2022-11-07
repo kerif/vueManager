@@ -23,10 +23,21 @@
             }}</span>
             <span class="margin-left" v-else>{{ $t('取消拼团') }}</span>
           </div>
-          <div class="margin-bottom" v-if="this.groupDetail.end_until > 0">
+          <div class="margin-bottom" v-if="groupDetail.end_until > 0 && groupDetail.status === 0">
             {{ $t('拼团时间剩余') }} <span class="red-text font-bold">{{ count }}</span>
           </div>
-          <div class="margin-bottom red-text" v-else>{{ $t('拼团时间已结束') }}</div>
+          <div
+            class="margin-bottom red-text"
+            v-else-if="groupDetail.end_until <= 0 && groupDetail.status === 0"
+          >
+            {{ $t('拼团时间已结束') }}
+          </div>
+          <div
+            class="margin-bottom red-text"
+            v-if="groupDetail.status === 1 || groupDetail.status === 2"
+          >
+            {{ $t('拼团时间已结束') }}
+          </div>
           <div class="margin-bottom">
             {{
               $t(`已有${detailsList.length}人参与，体积重量:${volumeWeight}，重量:${packageWeight}`)

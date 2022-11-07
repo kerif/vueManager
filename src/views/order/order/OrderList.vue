@@ -359,6 +359,13 @@
           v-if="activeName === '2' || activeName === '3'"
         ></el-table-column>
         <el-table-column
+          :label="$t('签收时间')"
+          width="155"
+          prop="received_at"
+          key="received_at"
+          v-if="['0', '1', '2'].includes(activeName)"
+        ></el-table-column>
+        <el-table-column
           :label="$t('提交时间')"
           prop="created_at"
           v-if="activeName !== '7'"
@@ -500,6 +507,7 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('签收时间')" prop="received_at"></el-table-column>
         <el-table-column :label="$t('操作')" width="220" fixed="right">
           <template slot-scope="scope">
             <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
