@@ -183,12 +183,16 @@ export default {
       this.begin_date = this.timeList[0]
       this.end_date = this.timeList[1]
     }
-  },
-  mounted() {
     this.getList()
     this.getTypes()
     this.getRecord()
     this.getLines()
+  },
+  mounted() {
+    // this.getList()
+    // this.getTypes()
+    // this.getRecord()
+    // this.getLines()
   },
   methods: {
     getList() {

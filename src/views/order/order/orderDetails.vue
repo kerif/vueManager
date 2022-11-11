@@ -378,7 +378,7 @@
       </el-row>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
+      <div class="img_box" @click="openImg(imgSrc)">
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
@@ -673,6 +673,9 @@ export default {
           }
         })
       })
+    },
+    openImg(imgSrc) {
+      window.open(imgSrc)
     }
   }
 }

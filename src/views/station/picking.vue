@@ -197,9 +197,11 @@
         </el-table-column>
         <el-table-column
           :label="$t('拣货包裹')"
+          :formatter="fileData"
           prop="packages"
           v-if="activeName === '2'"
-        ></el-table-column>
+        >
+        </el-table-column>
         <el-table-column :label="$t('操作')" v-if="activeName === '4'">
           <template slot-scope="scope">
             <el-button class="btn-main" @click="onExport(scope.row.id)">{{
@@ -536,6 +538,13 @@ export default {
     changeVal() {
       this.page_params.handleQueryChange('type', this.type)
       this.getOrder()
+    },
+    fileData(row) {
+      if (row.packages) {
+        return row.packages.join(',')
+      } else {
+        return ''
+      }
     }
   },
   created() {
