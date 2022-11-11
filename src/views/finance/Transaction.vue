@@ -175,6 +175,10 @@ export default {
     NlePagination
   },
   created() {
+    this.getList()
+    this.getTypes()
+    this.getRecord()
+    this.getLines()
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
@@ -183,10 +187,6 @@ export default {
       this.begin_date = this.timeList[0]
       this.end_date = this.timeList[1]
     }
-    this.getList()
-    this.getTypes()
-    this.getRecord()
-    this.getLines()
   },
   mounted() {
     // this.getList()
