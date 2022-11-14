@@ -9,6 +9,9 @@
         <el-button class="btn-light-red" @click="uploadList" size="mini">{{
           $t('导出清单')
         }}</el-button>
+        <el-button class="btn-light-red" @click="onDelAddress(selectIDs)">{{
+          $t('批量删除')
+        }}</el-button>
       </div>
       <div>
         <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('清关编码')" clearable>
@@ -32,6 +35,7 @@
       :data="addressList"
       class="data-list"
       v-loading="tableLoading"
+      @selection-change="handleSelectionChange"
       height="calc(100vh - 275px)"
     >
       <el-table-column type="index" :index="1"></el-table-column>
@@ -45,10 +49,13 @@
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="150">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{
             $t('修改')
+          }}</el-button>
+          <el-button class="btn-light-red" @click="onDelAddress([scope.row.id])">{{
+            $t('删除')
           }}</el-button>
         </template>
       </el-table-column>
@@ -77,7 +84,8 @@ export default {
           id: 1,
           name: this.$t('已设置')
         }
-      ]
+      ],
+      selectIDs: []
     }
   },
   components: {
@@ -161,6 +169,31 @@ export default {
     changeVal() {
       this.page_params.handleQueryChange('sort_code', this.sort_code)
       this.getList()
+    },
+    handleSelectionChange(val) {
+      this.selectIDs = val.map(item => item.id)
+    },
+    onDelAddress(id) {
+      if (!id.length) return this.$message.error(this.$t('请选择'))
+      let params = {
+        ids: id
+      }
+      this.$request.batchDelAddress(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }

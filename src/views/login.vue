@@ -7,11 +7,26 @@
         :src="$baseUrl.IMAGE_URL + customData.login_logo"
         alt=""
       />
-      <img v-else src="../assets/logo-top.png" class="img-sty" />
+      <img
+        v-else-if="
+          this.hostname.includes('haiouoms') ||
+          this.hostname.includes('localhost') ||
+          !customData.login_logo
+        "
+        src="../assets/logo-top.png"
+        class="img-sty"
+      />
       <span v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">{{
         customData.login_title
       }}</span>
-      <span v-else>{{ $t('海鸥集运管理系统') }}</span>
+      <span
+        v-else-if="
+          this.hostname.includes('haiouoms') ||
+          this.hostname.includes('localhost') ||
+          !customData.login_title
+        "
+        >{{ $t('海鸥集运管理系统') }}</span
+      >
     </div>
     <div class="main">
       <!-- 登陆页面 -->
@@ -24,7 +39,14 @@
               alt=""
             />
           </div>
-          <div v-else class="login-logo"></div>
+          <div
+            v-else-if="
+              this.hostname.includes('haiouoms') ||
+              this.hostname.includes('localhost') ||
+              !customData.login_image
+            "
+            class="login-logo"
+          ></div>
           <div class="info-box">
             <div class="info-title">
               <span class="welcome-sty"
@@ -99,7 +121,14 @@
               alt=""
             />
           </div>
-          <div v-else class="login-logo"></div>
+          <div
+            v-else-if="
+              this.hostname.includes('haiouoms') ||
+              this.hostname.includes('localhost') ||
+              !customData.login_image
+            "
+            class="login-logo"
+          ></div>
           <div class="info-box">
             <div class="step-box">
               <span :class="['step-item', { select: forgetStep <= 3 }]">{{ $t('验证身份') }}</span>
@@ -192,7 +221,14 @@
               alt=""
             />
           </div>
-          <div v-else class="login-logo"></div>
+          <div
+            v-else-if="
+              this.hostname.includes('haiouoms') ||
+              this.hostname.includes('localhost') ||
+              !customData.login_image
+            "
+            class="login-logo"
+          ></div>
           <div class="info-box">
             <!-- <p class="info-title">{{$t('注册')}}</p> -->
             <div class="info-title">

@@ -4929,3 +4929,13 @@ exports.removeGroupPackage = (id, params) => {
 exports.submitUserGroupOrder = (id, userId) => {
   return $form.post(`group-buying/${id}/user/${userId}/order`)
 }
+
+// 批量删除地址
+exports.batchDelAddress = params => {
+  return $form.put(`user-addresses/batch-destroy`, params)
+}
+
+// 删除回复
+exports.delReply = (id, replyId) => {
+  return $form.delete(`order-comments/${id}/reply/${replyId}`)
+}
