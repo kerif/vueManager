@@ -147,6 +147,9 @@
             <div class="panel-bg">
               <h4 style="font-size: 16px; color: blue">
                 {{ form.status_name }}
+                <span v-if="form.status === 1 && form.payment_status === 1">
+                  {{ $t('待支付') }}</span
+                >
                 <span v-if="form.status === 1 && form.payment_status === 2">
                   {{ $t('已支付') }}</span
                 >
