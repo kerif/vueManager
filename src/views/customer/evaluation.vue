@@ -175,6 +175,11 @@
                   <span v-if="ele.user.id === -1" class="red-text">{{ ele.user.name }}：</span>
                   <span v-else>{{ ele.user.name }}：</span>
                   {{ ele.content }}
+                  <span
+                    style="color: red; margin-left: 30px; cursor: pointer"
+                    @click="onDeleteReply(item.id, ele.id)"
+                    >{{ $t('删除') }}</span
+                  >
                 </div>
               </div>
             </div>
