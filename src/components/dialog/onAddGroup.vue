@@ -75,7 +75,7 @@
               <div class="flex-box">
                 <div class="flex-item" v-if="ruleForm.express_line_id">
                   <div style="width: 80px; margin-right: 20px" v-if="icon !== ''">
-                    <img :src="$baseUrl.IMAGE_URL + icon" />
+                    <img :src="$baseUrl.IMAGE_URL + icon" style="width: 100px" />
                   </div>
                   <div>
                     <div class="font-bold black-text">

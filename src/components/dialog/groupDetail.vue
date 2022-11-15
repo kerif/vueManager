@@ -2,11 +2,11 @@
   <el-dialog :visible.sync="show" :title="$t('拼图详细')" width="60%" @close="clear">
     <div class="container">
       <div class="flex-box">
-        <div v-if="groupDetail.images">
-          <img :src="imageUrl(groupDetail.images[0])" style="width: 120px" />
+        <div v-if="!groupDetail.images.length">
+          <img src="../../assets/pitera.png" style="width: 120px" />
         </div>
-        <div v-else style="width: 120px" class="font-bold font-size black-text">
-          {{ $t('暂无此图') }}
+        <div v-else>
+          <img :src="imageUrl(groupDetail.images[0])" style="width: 120px" />
         </div>
         <div style="margin: 5px 0px">
           <span class="show-text" v-if="groupDetail.is_public === 1">{{ $t('公开') }}</span>
