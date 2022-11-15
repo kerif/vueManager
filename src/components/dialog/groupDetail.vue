@@ -18,10 +18,10 @@
             <span class="margin-left font-size font-bold" v-if="groupDetail.status === 0">{{
               $t('拼团中')
             }}</span>
-            <span class="margin-left font-size" v-else-if="groupDetail.status === 1">{{
+            <span class="margin-left font-size font-bold" v-else-if="groupDetail.status === 1">{{
               $t('拼团结束')
             }}</span>
-            <span class="margin-left" v-else>{{ $t('取消拼团') }}</span>
+            <span class="margin-left font-size font-bold" v-else>{{ $t('取消拼团') }}</span>
           </div>
           <div class="margin-bottom" v-if="groupDetail.end_until > 0 && groupDetail.status === 0">
             {{ $t('拼团时间剩余') }} <span class="red-text font-bold">{{ count }}</span>
