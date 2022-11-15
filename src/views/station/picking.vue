@@ -325,6 +325,7 @@ export default {
     },
     // 入库日志
     getList() {
+      this.oderData = []
       if (this.activeName === '1') {
         this.getOrder()
       } else if (this.activeName === '2') {
