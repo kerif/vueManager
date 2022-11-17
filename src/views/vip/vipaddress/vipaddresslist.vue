@@ -58,7 +58,8 @@
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('状态')" prop="status">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-else-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
           <span v-else>{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>

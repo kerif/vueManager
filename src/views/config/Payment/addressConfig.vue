@@ -28,7 +28,7 @@
           {{ $t('开启后,下单用户收件地址需要后台管理人员审核后才会显示出来') }}
         </div>
       </el-form-item>
-      <el-form-item :label="$t('中文提示信息')" v-if="form.audit_required === 1">
+      <el-form-item :label="$t('提示信息')" v-if="form.audit_required === 1">
         <el-input
           v-model="form.audit_message"
           type="textarea"
@@ -37,24 +37,28 @@
         ></el-input>
       </el-form-item>
       <div style="display: flex" v-if="form.audit_required === 1">
-        <div style="color: red; font-size: 20px; margin: 15px">{{ $t('待审核提示') }}</div>
-        <el-table :data="form.tableData" border style="width: 45%">
-          <el-table-column
-            :label="item.name"
-            v-for="item in formatLangData"
-            :key="item.id"
-            align="center"
-          >
-            <template slot-scope="scope">
-              <span
-                v-if="scope.row['trans_' + item.language_code]"
-                class="el-icon-check icon-sty"
-                @click="onLang(scope.row, item)"
-              ></span>
-              <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <div style="color: red; font-size: 20px; margin: 15px 15px 0 90px">
+          {{ $t('待审核提示') }}
+        </div>
+        <div style="width: 40%">
+          <el-table :data="form.tableData" border>
+            <el-table-column
+              :label="item.name"
+              v-for="item in formatLangData"
+              :key="item.id"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <span
+                  v-if="scope.row['trans_' + item.language_code]"
+                  class="el-icon-check icon-sty"
+                  @click="onLang(scope.row, item)"
+                ></span>
+                <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
       <el-form-item style="margin-top: 20px">
         <el-button type="primary" size="small" @click="onSubmit">{{ $t('确定') }}</el-button>
@@ -124,7 +128,7 @@ export default {
         })
     },
     onSubmit() {
-      if (!this.form.audit_message) {
+      if (this.form.audit_required === 1 && !this.form.audit_message) {
         return this.$message.error(this.$t('请填写提示信息'))
       }
       let params = {
