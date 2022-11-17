@@ -169,6 +169,7 @@ import presetPackBox from './presetPackBox.vue'
 import packageChange from './packageChange.vue'
 import onAddGroup from './onAddGroup.vue'
 import groupDetail from './groupDetail.vue'
+import addressAudit from './addressAudit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -337,6 +338,7 @@ const presetPackBoxController = Vue.extend(presetPackBox)
 const packageChangeController = Vue.extend(packageChange)
 const onAddGroupController = Vue.extend(onAddGroup)
 const groupDetailController = Vue.extend(groupDetail)
+const addressAuditController = Vue.extend(addressAudit)
 
 const mixin = {
   data() {
@@ -710,6 +712,13 @@ function initInstance(type) {
     // 拼团详细
     case 'groupDetail':
       instance = new groupDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 地址审核
+    case 'addressAudit':
+      instance = new addressAuditController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

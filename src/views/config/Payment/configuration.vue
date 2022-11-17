@@ -35,6 +35,9 @@
                   <el-menu-item index="8">
                     {{ $t('预设打包箱') }}
                   </el-menu-item>
+                  <el-menu-item index="9">
+                    {{ $t('收件地址配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -68,6 +71,10 @@
             <!-- 预设打包箱 -->
             <el-col :span="19" v-if="secondTab1 === '8'" class="main-right">
               <preset-pack></preset-pack>
+            </el-col>
+            <!-- 收件地址配置 -->
+            <el-col :span="19" v-if="secondTab1 === '9'" class="main-right">
+              <address-config></address-config>
             </el-col>
           </el-row>
         </div>
@@ -242,6 +249,7 @@ import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
 import presetPack from './presetPack.vue'
+import addressConfig from './addressConfig.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -265,7 +273,8 @@ export default {
     LoginConfigure,
     customizeBackgroundSystem,
     boxConfigure,
-    presetPack
+    presetPack,
+    addressConfig
     // GroupConfigure
   },
   mixins: [pagination],

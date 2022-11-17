@@ -14,6 +14,19 @@
         }}</el-button>
       </div>
       <div>
+        <el-select
+          v-model="status"
+          @change="changeAddressStatus"
+          :placeholder="$t('地址状态')"
+          clearable
+        >
+          <el-option
+            v-for="item in processData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
         <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('清关编码')" clearable>
           <el-option
             v-for="item in sortCode"
@@ -40,6 +53,12 @@
     >
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('状态')" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-else>{{ $t('审核拒绝') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('国家地区')" prop="country.name"></el-table-column>
@@ -49,11 +68,17 @@
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-      <el-table-column :label="$t('操作')" width="150">
+      <el-table-column :label="$t('操作')" width="280">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{
             $t('修改')
           }}</el-button>
+          <el-button
+            class="btn-light-red"
+            v-if="scope.row.status === 1"
+            @click="onProcess(scope.row.id, 1)"
+            >{{ $t('审核') }}</el-button
+          >
           <el-button class="btn-light-red" @click="onDelAddress([scope.row.id])">{{
             $t('删除')
           }}</el-button>
@@ -85,7 +110,18 @@ export default {
           name: this.$t('已设置')
         }
       ],
-      selectIDs: []
+      selectIDs: [],
+      processData: [
+        {
+          id: 1,
+          name: this.$t('审核通过')
+        },
+        {
+          id: 2,
+          name: this.$t('审核拒绝')
+        }
+      ],
+      status: ''
     }
   },
   components: {
@@ -107,7 +143,8 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          sort_code: this.sort_code
+          sort_code: this.sort_code,
+          status: this.status
         })
         .then(res => {
           this.tableLoading = false
@@ -194,6 +231,22 @@ export default {
           })
         }
       })
+    },
+    onProcess(id, status) {
+      dialog(
+        {
+          type: 'addressAudit',
+          id,
+          address_status: status
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    changeAddressStatus() {
+      this.page_params.handleQueryChange('status', this.status)
+      this.getList()
     }
   }
 }

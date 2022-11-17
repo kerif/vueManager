@@ -4939,3 +4939,23 @@ exports.batchDelAddress = params => {
 exports.delReply = (id, replyId) => {
   return $form.delete(`order-comments/${id}/reply/${replyId}`)
 }
+
+// 地址审核
+exports.addressAudit = (id, params) => {
+  return $form.put(`user-addresses/${id}/review`, params)
+}
+
+// 更新翻译
+exports.updateAddressTranslate = params => {
+  return $form.put(`setting/address/translate-data`, params)
+}
+
+// 更新配置
+exports.updateAddressConfig = params => {
+  return $form.put(`setting/address`, params)
+}
+
+// 获取配置
+exports.getAddressConfig = params => {
+  return $form.get(`setting/address`, { params })
+}
