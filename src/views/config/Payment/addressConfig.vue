@@ -10,7 +10,6 @@
           :inactive-text="$t('关')"
           active-color="#13ce66"
           inactive-color="gray"
-          @change="onUpdateConfig"
         >
         </el-switch>
       </el-form-item>
@@ -23,16 +22,26 @@
           :inactive-text="$t('关')"
           active-color="#13ce66"
           inactive-color="gray"
-          @change="onUpdateConfig"
         >
         </el-switch>
-        <div class="red-warn">
+        <div class="red-warn" v-if="form.audit_required === 1">
           {{ $t('开启后,下单用户收件地址需要后台管理人员审核后才会显示出来') }}
         </div>
-        <el-table :data="form.tableData" border v-if="form.audit_required === 1" style="width: 60%">
+      </el-form-item>
+      <el-form-item :label="$t('中文提示信息')" v-if="form.audit_required === 1">
+        <el-input
+          v-model="form.audit_message"
+          type="textarea"
+          style="width: 35%"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+      <div style="display: flex" v-if="form.audit_required === 1">
+        <div style="color: red; font-size: 20px; margin: 15px">{{ $t('待审核提示') }}</div>
+        <el-table :data="form.tableData" border style="width: 45%">
           <el-table-column
             :label="item.name"
-            v-for="item in languageData"
+            v-for="item in formatLangData"
             :key="item.id"
             align="center"
           >
@@ -46,6 +55,9 @@
             </template>
           </el-table-column>
         </el-table>
+      </div>
+      <el-form-item style="margin-top: 20px">
+        <el-button type="primary" size="small" @click="onSubmit">{{ $t('确定') }}</el-button>
       </el-form-item>
     </el-form>
     <el-dialog :title="$t('翻译')" :visible.sync="showLang" @close="clear">
@@ -73,6 +85,7 @@ export default {
       form: {
         allow_delete: 0,
         audit_required: 0,
+        audit_message: '',
         tableData: []
       },
       languageData: [],
@@ -85,6 +98,11 @@ export default {
   created() {
     this.getList()
     this.getLanguageList()
+  },
+  computed: {
+    formatLangData() {
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    }
   },
   methods: {
     getList() {
@@ -105,10 +123,13 @@ export default {
           this.audit_message = res.data.audit_message
         })
     },
-    onUpdateConfig() {
+    onSubmit() {
+      if (!this.form.audit_message) {
+        return this.$message.error(this.$t('请填写提示信息'))
+      }
       let params = {
         audit_required: this.form.audit_required,
-        audit_message: this.audit_message,
+        audit_message: this.form.audit_message,
         allow_delete: this.form.allow_delete
       }
       this.$request.updateAddressConfig(params).then(res => {

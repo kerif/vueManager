@@ -9,9 +9,12 @@
         <el-button class="btn-light-red" @click="uploadList" size="mini">{{
           $t('导出清单')
         }}</el-button>
-        <el-button class="btn-light-red" @click="onDelAddress(selectIDs)">{{
-          $t('批量删除')
-        }}</el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="allow_delete === 1"
+          @click="onDelAddress(selectIDs)"
+          >{{ $t('批量删除') }}</el-button
+        >
       </div>
       <div>
         <el-select
@@ -75,17 +78,24 @@
           }}</el-button>
           <el-button
             class="btn-light-red"
-            v-if="scope.row.status === 2"
+            v-if="scope.row.status === 2 && audit_required === 1"
             @click="onProcess(scope.row.id, 1)"
           >
             {{ $t('重新审核') }}
           </el-button>
-          <el-button class="btn-light-red" v-else @click="onProcess(scope.row.id, 1)">
+          <el-button
+            class="btn-light-red"
+            v-if="scope.row.status === 1 && audit_required === 1"
+            @click="onProcess(scope.row.id, 1)"
+          >
             {{ $t('审核') }}
           </el-button>
-          <el-button class="btn-light-red" @click="onDelAddress([scope.row.id])">{{
-            $t('删除')
-          }}</el-button>
+          <el-button
+            class="btn-light-red"
+            v-if="allow_delete === 1"
+            @click="onDelAddress([scope.row.id])"
+            >{{ $t('删除') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -125,7 +135,9 @@ export default {
           name: this.$t('审核拒绝')
         }
       ],
-      status: ''
+      status: '',
+      allow_delete: '',
+      audit_required: ''
     }
   },
   components: {
@@ -135,6 +147,7 @@ export default {
   mixins: [pagination],
   activated() {
     this.getList()
+    this.getConfig()
   },
   mounted() {
     this.getList()
@@ -251,6 +264,14 @@ export default {
     changeAddressStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
+    },
+    getConfig() {
+      this.$request.getAddressConfig().then(res => {
+        if (res.ret) {
+          this.allow_delete = res.data.allow_delete
+          this.audit_required = res.data.audit_required
+        }
+      })
     }
   }
 }
