@@ -75,10 +75,14 @@
           }}</el-button>
           <el-button
             class="btn-light-red"
-            v-if="scope.row.status === 1"
+            v-if="scope.row.status === 2"
             @click="onProcess(scope.row.id, 1)"
-            >{{ $t('审核') }}</el-button
           >
+            {{ $t('重新审核') }}
+          </el-button>
+          <el-button class="btn-light-red" v-else @click="onProcess(scope.row.id, 1)">
+            {{ $t('审核') }}
+          </el-button>
           <el-button class="btn-light-red" @click="onDelAddress([scope.row.id])">{{
             $t('删除')
           }}</el-button>

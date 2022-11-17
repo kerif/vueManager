@@ -11,7 +11,7 @@
         <span>{{ userInfo.sub_area && userInfo.sub_area.name }}</span>
       </el-form-item>
       <el-form-item :label="$t('城市')">
-        <span>{{ userInfo.area && userInfo.area.city }}</span>
+        <span>{{ userInfo.city }}</span>
       </el-form-item>
       <el-form-item :label="$t('街道')"
         ><span>{{ userInfo.street }}</span></el-form-item
@@ -36,7 +36,7 @@
           :placeholder="$t('请输入拒绝原因')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('用户分组')" v-if="status === 2">
+      <el-form-item :label="$t('用户分组')">
         <el-select v-model="group_id" :placeholder="$t('请选择用户分组')">
           <el-option
             v-for="item in userGroupList"

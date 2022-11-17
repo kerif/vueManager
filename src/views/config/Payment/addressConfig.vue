@@ -32,7 +32,7 @@
         <el-table :data="form.tableData" border v-if="form.audit_required === 1" style="width: 60%">
           <el-table-column
             :label="item.name"
-            v-for="item in formatLangData"
+            v-for="item in languageData"
             :key="item.id"
             align="center"
           >
@@ -85,11 +85,6 @@ export default {
   created() {
     this.getList()
     this.getLanguageList()
-  },
-  computed: {
-    formatLangData() {
-      return this.languageData.filter(item => item.language_code !== 'zh_CN')
-    }
   },
   methods: {
     getList() {
