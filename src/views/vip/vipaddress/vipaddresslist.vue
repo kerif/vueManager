@@ -128,6 +128,10 @@ export default {
       selectIDs: [],
       processData: [
         {
+          id: 0,
+          name: this.$t('待审核')
+        },
+        {
           id: 1,
           name: this.$t('审核通过')
         },
