@@ -35,12 +35,7 @@
           style="width: 35%"
           :placeholder="$t('请输入')"
         ></el-input>
-      </el-form-item>
-      <div style="display: flex" v-if="form.audit_required === 1">
-        <div style="color: red; font-size: 20px; margin: 15px 15px 0 90px">
-          {{ $t('待审核提示') }}
-        </div>
-        <div style="width: 40%">
+        <div style="width: 40%; margin-top: 20px" v-if="form.audit_required === 1">
           <el-table :data="form.tableData" border>
             <el-table-column
               :label="item.name"
@@ -59,7 +54,7 @@
             </el-table-column>
           </el-table>
         </div>
-      </div>
+      </el-form-item>
       <el-form-item style="margin-top: 20px">
         <el-button type="primary" size="small" @click="onSubmit">{{ $t('确定') }}</el-button>
       </el-form-item>
