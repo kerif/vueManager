@@ -86,7 +86,7 @@
           </el-button>
           <el-button
             class="btn-light-red"
-            v-if="scope.row.status === 1 && audit_required === 1"
+            v-if="scope.row.status === 0 && audit_required === 1"
             @click="onProcess(scope.row.id, 1)"
           >
             {{ $t('审核') }}
@@ -152,6 +152,7 @@ export default {
   },
   mounted() {
     this.getList()
+    this.getConfig()
   },
   methods: {
     getList() {
