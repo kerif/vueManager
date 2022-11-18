@@ -225,7 +225,8 @@ export default {
           { id: 'user_customer', name: this.$t('所属客服') },
           { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
-          { id: 'personal_code', name: this.$t('个人通关码') }
+          { id: 'personal_code', name: this.$t('个人通关码') },
+          { id: 'group_buying_status', name: this.$t('拼团状态') }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: this.$t('收货人') },
@@ -439,7 +440,8 @@ export default {
           { id: 'user_customer', name: this.$t('所属客服') },
           { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
-          { id: 'personal_code', name: this.$t('个人通关码') }
+          { id: 'personal_code', name: this.$t('个人通关码') },
+          { id: 'group_buying_status', name: this.$t('拼团状态') }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: this.$t('收货人') },
