@@ -1,9 +1,9 @@
 <template>
   <el-drawer
-    :title="this.state === 'add' ? $t('新增默认模板') : $t('编辑默认模板')"
-    class="inner-container"
+    :title="$t('编辑默认模板')"
+    class="purchase-container"
     :size="size"
-    :visible.sync="editTmpDrawer"
+    :visible.sync="editOrderTmpDrawer"
     :append-to-body="true"
     :before-close="close"
     @opened="open()"
@@ -57,16 +57,6 @@
             <el-checkbox v-for="item in warehouseSum" :key="item.id" :label="item.id">{{
               item.name
             }}</el-checkbox>
-          </el-checkbox-group>
-          <div>{{ $t('分箱') }}</div>
-          <el-checkbox-group v-model="info.warehouseinfo">
-            <el-checkbox
-              v-for="item in warehouseInfo"
-              :disabled="info.outboundinfo.length ? true : false"
-              :key="item.id"
-              :label="item.id"
-              >{{ item.name }}</el-checkbox
-            >
           </el-checkbox-group>
         </el-collapse-item>
         <el-collapse-item :title="$t('出库信息')" name="4">
@@ -124,7 +114,6 @@
       </el-collapse>
       <el-form-item style="margin-left: 20px" :label="$t('同时导出附表')">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox :label="$t('用户汇总数据')" disabled></el-checkbox>
           <el-checkbox :label="$t('商品明细')" disabled></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
@@ -162,33 +151,28 @@ export default {
       code: '',
       activeNames: ['1'],
       order: '',
-      checkList: ['用户汇总数据', '商品明细'],
+      checkList: ['商品明细'],
       orderInfo: [],
       receiveInfo: [],
-      warehouseInfo: [], //入库信息
       warehouseSum: [],
       outboundInfo: [], //出库信息
       outboundSum: [],
       payInfo: [],
       shipInfo: [],
+      feeInfo: [],
       operationInfo: [],
       customerInfo: [],
-      feeInfo: [],
       tmpsData: [],
       headerData: [],
       localization: {}
     }
   },
   props: {
-    editTmpDrawer: {
+    editOrderTmpDrawer: {
       type: Boolean,
       default: false
     },
     tmpCode: {
-      type: String,
-      required: true
-    },
-    state: {
       type: String,
       required: true
     },
@@ -202,11 +186,11 @@ export default {
   },
   methods: {
     close() {
-      this.$emit('receiveInner', false)
+      this.$emit('orderInner', false)
     },
     open() {
       this.getTmpData()
-      if (this.state === 'edit') {
+      if (this.ids) {
         this.getList()
       }
     },
@@ -235,8 +219,6 @@ export default {
           { id: 'province', name: this.$t('省份') },
           { id: 'city', name: this.$t('城市') },
           { id: 'postcode', name: this.$t('邮编') },
-          { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'street_door_no', name: this.$t('街道/门牌号') },
           { id: 'street', name: this.$t('街道') },
           { id: 'door_no', name: this.$t('门牌号') },
@@ -246,21 +228,9 @@ export default {
           { id: 'station_address', name: this.$t('自提点地址') },
           { id: 'address', name: this.$t('附加地址') },
           { id: 'remark', name: this.$t('备注') },
-          { id: 'address_type', name: this.$t('收货方式') }
-        ]
-        // 入库信息
-        this.warehouseInfo = [
-          { id: 'express_num', name: this.$t('包裹单号') },
-          { id: 'package_name', name: this.$t('包裹物品名称') },
-          { id: 'package_props_name', name: this.$t('包裹物品属性') },
-          { id: 'package_categories_name', name: this.$t('包裹物品类型') },
-          { id: 'package_qty', name: this.$t('包裹物品数量') },
-          { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
-          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
-          { id: 'package_value', name: this.$t('包裹申报价值') },
-          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') },
-          { id: 'location', name: this.$t('包裹货位') }
+          { id: 'address_type', name: this.$t('收货方式') },
+          { id: 'address_email', name: this.$t('地址邮箱') },
+          { id: 'address_wechat_id', name: this.$t('地址微信号') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -277,22 +247,7 @@ export default {
           { id: 'package_number', name: this.$t('包裹总件数') }
         ]
         // 出库信息
-        this.outboundInfo = [
-          { id: 'box_count', name: this.$t('分箱箱数') },
-          { id: 'box_sn', name: this.$t('分箱箱号') },
-          { id: 'box_packages', name: this.$t('分箱所含包裹') },
-          { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
-          { id: 'box_length', name: `长(${this.localization.length_unit})` },
-          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
-          { id: 'box_height', name: `高(${this.localization.length_unit})` },
-          { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
-          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
-          { id: 'box_package_number', name: this.$t('分箱货品数量') },
-          { id: 'box_package_names', name: this.$t('分箱包裹名称') },
-          { id: 'box_package_props', name: this.$t('分箱包裹属性') },
-          { id: 'box_package_categories', name: this.$t('分箱包裹类型') },
-          { id: 'box_items', name: this.$t('分箱申报品名') }
-        ]
+        this.outboundInfo = [{ id: 'box_count', name: this.$t('分箱箱数') }]
         // 出库信息总计
         this.outboundSum = [
           { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
@@ -335,11 +290,10 @@ export default {
           { id: 'signed_at', name: this.$t('签收时间') }
         ]
         this.customerInfo = [
-          { id: 'username', name: this.$t('用户名') },
           { id: 'email', name: this.$t('邮箱') },
           { id: 'user_profile_address', name: this.$t('个人信息地址') },
-          { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
+          { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'id_card', name: this.$t('身份证号') }
         ]
       })
@@ -386,44 +340,22 @@ export default {
         remark: this.ruleForm.remark,
         header: this.tmpsData
       }
-      if (this.state === 'add') {
-        param.code = this.tmpCode
-      }
-      if (this.state === 'add') {
-        //新增
-        this.$request.addTemplate(param).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('成功'),
-              message: res.msg
-            })
-            this.$emit('receiveInner', false)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      } else {
-        //编辑
-        this.$request.editTemplate(this.ids, param).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('成功'),
-              message: res.msg
-            })
-            this.$emit('receiveInner', false)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      }
+      //编辑
+      this.$request.editTemplate(this.ids, param).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.$emit('purchaseInner', false)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     getList() {
       this.$request.listDetail(this.ids).then(res => {
@@ -450,8 +382,6 @@ export default {
           { id: 'province', name: this.$t('省份') },
           { id: 'city', name: this.$t('城市') },
           { id: 'postcode', name: this.$t('邮编') },
-          { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'street_door_no', name: this.$t('街道/门牌号') },
           { id: 'street', name: this.$t('街道') },
           { id: 'door_no', name: this.$t('门牌号') },
@@ -461,21 +391,9 @@ export default {
           { id: 'station_address', name: this.$t('自提点地址') },
           { id: 'address', name: this.$t('附加地址') },
           { id: 'remark', name: this.$t('备注') },
-          { id: 'address_type', name: this.$t('收货方式') }
-        ]
-        // 入库信息
-        this.warehouseInfo = [
-          { id: 'express_num', name: this.$t('包裹单号') },
-          { id: 'package_name', name: this.$t('包裹物品名称') },
-          { id: 'package_props_name', name: this.$t('包裹物品属性') },
-          { id: 'package_categories_name', name: this.$t('包裹物品类型') },
-          { id: 'package_qty', name: this.$t('包裹物品数量') },
-          { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
-          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
-          { id: 'package_value', name: this.$t('包裹申报价值') },
-          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') },
-          { id: 'location', name: this.$t('包裹货位') }
+          { id: 'address_type', name: this.$t('收货方式') },
+          { id: 'address_email', name: this.$t('地址邮箱') },
+          { id: 'address_wechat_id', name: this.$t('地址微信号') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -492,22 +410,7 @@ export default {
           { id: 'package_number', name: this.$t('包裹总件数') }
         ]
         // 出库信息
-        this.outboundInfo = [
-          { id: 'box_count', name: this.$t('分箱箱数') },
-          { id: 'box_sn', name: this.$t('分箱箱号') },
-          { id: 'box_packages', name: this.$t('分箱所含包裹') },
-          { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
-          { id: 'box_length', name: `长(${this.localization.length_unit})` },
-          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
-          { id: 'box_height', name: `高(${this.localization.length_unit})` },
-          { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
-          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
-          { id: 'box_package_number', name: this.$t('分箱货品数量') },
-          { id: 'box_package_names', name: this.$t('分箱包裹名称') },
-          { id: 'box_package_props', name: this.$t('分箱包裹属性') },
-          { id: 'box_package_categories', name: this.$t('分箱包裹类型') },
-          { id: 'box_items', name: this.$t('分箱申报品名') }
-        ]
+        this.outboundInfo = [{ id: 'box_count', name: this.$t('分箱箱数') }]
         // 出库信息总计
         this.outboundSum = [
           { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
@@ -550,11 +453,10 @@ export default {
           { id: 'signed_at', name: this.$t('签收时间') }
         ]
         this.customerInfo = [
-          { id: 'username', name: this.$t('用户名') },
           { id: 'email', name: this.$t('邮箱') },
           { id: 'user_profile_address', name: this.$t('个人信息地址') },
-          { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
+          { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'id_card', name: this.$t('身份证号') }
         ]
         this.headerData.forEach(item => {
@@ -572,11 +474,6 @@ export default {
             this.warehouseSum.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.warehouse.push(item.id)
-              }
-            })
-            this.warehouseInfo.forEach(ele => {
-              if (ele.id === item.id) {
-                this.info.warehouseinfo.push(item.id)
               }
             })
             this.outboundSum.forEach(ele => {
@@ -638,7 +535,7 @@ export default {
 </script>
 
 <style lang="scss">
-.inner-container {
+.purchase-container {
   font-size: 14px;
   .el-drawer.rtl {
     overflow: auto;
