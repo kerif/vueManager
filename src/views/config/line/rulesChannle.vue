@@ -153,7 +153,7 @@
                 <template slot-scope="scope">
                   <el-select
                     v-if="scope.row.param === 16"
-                    v-model="scope.row.address_tags"
+                    v-model="scope.row.tag_ids"
                     :disabled="!item.state"
                     multiple
                   >
@@ -328,7 +328,7 @@ export default {
           name: this.$t('等于')
         },
         {
-          id: '',
+          id: 'contains',
           name: this.$t('包含')
         }
       ],
@@ -374,7 +374,7 @@ export default {
               comparison: '',
               value: '',
               contains: '',
-              address_tags: ''
+              tag_ids: ''
             }
           ]
         }

@@ -18,6 +18,14 @@
         <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button>
       </div>
       <div>
+        <el-select v-model="tag_ids" @change="changeTag" :placeholder="$t('标签')" clearable>
+          <el-option
+            v-for="item in tagList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
         <el-select
           v-model="status"
           @change="changeAddressStatus"
@@ -66,7 +74,13 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
-      <el-table-column :label="$t('标签')"></el-table-column>
+      <el-table-column :label="$t('标签')" prop="tags" width="120">
+        <template slot-scope="scope">
+          <el-tag v-for="item in scope.row.tags" :key="item.id" style="margin: 5px">
+            {{ item.name }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('国家地区')" prop="country.name"></el-table-column>
       <el-table-column :label="$t('省')" prop="province"></el-table-column>
@@ -152,7 +166,9 @@ export default {
       ],
       status: '',
       allow_delete: '',
-      audit_required: ''
+      audit_required: '',
+      tagList: [],
+      tag_ids: ''
     }
   },
   components: {
@@ -167,6 +183,7 @@ export default {
   mounted() {
     this.getList()
     this.getConfig()
+    this.getTagList()
   },
   methods: {
     getList() {
@@ -177,7 +194,8 @@ export default {
           page: this.page_params.page,
           size: this.page_params.size,
           sort_code: this.sort_code,
-          status: this.status
+          status: this.status,
+          tag_ids: this.tag_ids
         })
         .then(res => {
           this.tableLoading = false
@@ -281,6 +299,10 @@ export default {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
+    changeTag() {
+      this.page_params.handleQueryChange('tag_ids', this.tag_ids)
+      this.getList()
+    },
     getConfig() {
       this.$request.getAddressConfig().then(res => {
         if (res.ret) {
@@ -290,9 +312,15 @@ export default {
       })
     },
     tagManage() {
-      dialog({
-        type: 'tagManage'
-      })
+      dialog(
+        {
+          type: 'tagManage'
+        },
+        () => {
+          this.getList()
+          this.getTagList()
+        }
+      )
     },
     onBatch() {
       if (!this.selectIDs || !this.selectIDs.length) {
@@ -307,6 +335,13 @@ export default {
           this.getList()
         }
       )
+    },
+    getTagList() {
+      this.$request.addressTagList().then(res => {
+        if (res.ret) {
+          this.tagList = res.data
+        }
+      })
     }
   }
 }

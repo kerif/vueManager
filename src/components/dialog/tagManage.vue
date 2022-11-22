@@ -22,7 +22,7 @@
             <el-button
               class="btn-light-red"
               v-if="!scope.row.editState"
-              @click="onDelete(scope.row.id)"
+              @click="onDelete(scope.row)"
               >{{ $t('删除') }}</el-button
             >
           </template>
@@ -64,7 +64,11 @@ export default {
     onEdit(row) {
       row.editState = true
     },
-    onDelete(id) {
+    onDelete(row) {
+      let id = row.id
+      if (row.addresses_count > 1) {
+        return this.$message.error(this.$t('不能删除引用次数大于1的标签'))
+      }
       this.$request.delAddressTag(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -91,6 +95,7 @@ export default {
               message: res.msg
             })
             this.getList()
+            this.success()
           } else {
             this.$message({
               message: res.msg,
@@ -108,6 +113,7 @@ export default {
               message: res.msg
             })
             this.getList()
+            this.success()
           } else {
             this.$message({
               message: res.msg,

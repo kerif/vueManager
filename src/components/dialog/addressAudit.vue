@@ -134,9 +134,15 @@ export default {
       this.tag_ids = ''
     },
     onManage() {
-      dialog({
-        type: 'tagManage'
-      })
+      dialog(
+        {
+          type: 'tagManage'
+        },
+        () => {
+          this.getList()
+          this.getTagList()
+        }
+      )
     },
     getTagList() {
       this.$request.addressTagList().then(res => {
