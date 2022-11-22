@@ -4959,3 +4959,28 @@ exports.updateAddressConfig = params => {
 exports.getAddressConfig = params => {
   return $form.get(`setting/address`, { params })
 }
+
+// 新增标签
+exports.addAddressTag = params => {
+  return $form.post(`user-addresses/tags`, params)
+}
+
+// 修改标签
+exports.editAddressTag = (id, params) => {
+  return $form.put(`user-addresses/tags/${id}`, params)
+}
+
+// 删除标签
+exports.delAddressTag = id => {
+  return $form.delete(`user-addresses/tags/${id}`)
+}
+
+// 标签列表
+exports.addressTagList = () => {
+  return $form.get(`user-addresses/tags`)
+}
+
+// 地址 批量审核
+exports.addressBatchAudit = params => {
+  return $form.put(`user-addresses/batch-review`, params)
+}

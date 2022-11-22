@@ -36,7 +36,7 @@
           :placeholder="$t('请输入拒绝原因')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('用户分组')">
+      <!-- <el-form-item :label="$t('用户分组')">
         <el-select v-model="group_id" :placeholder="$t('请选择用户分组')">
           <el-option
             v-for="item in userGroupList"
@@ -45,6 +45,17 @@
             :value="item.id"
           ></el-option>
         </el-select>
+      </el-form-item> -->
+      <el-form-item :label="$t('用户地址标签')">
+        <el-select v-model="tag_ids" multiple :placeholder="$t('请选择用户地址标签')">
+          <el-option
+            v-for="item in tagList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-button style="margin-left: 10px" @click="onManage">{{ $t('标签管理') }}</el-button>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -55,6 +66,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -64,13 +76,16 @@ export default {
       address_status: '',
       remark: '',
       userGroupList: [],
-      userInfo: {}
+      userInfo: {},
+      tagList: [],
+      tag_ids: ''
     }
   },
   methods: {
     init() {
       this.getList()
       this.getUserGroup()
+      this.getTagList()
     },
     getList() {
       this.$request.singleAddress(this.id).then(res => {
@@ -93,7 +108,7 @@ export default {
       let params = {
         status: this.status,
         remark: this.remark,
-        group_id: this.group_id
+        tag_ids: this.tag_ids
       }
       this.$request.addressAudit(this.id, params).then(res => {
         if (res.ret) {
@@ -116,7 +131,19 @@ export default {
     clear() {
       this.id = ''
       this.status = 1
-      this.group_id = ''
+      this.tag_ids = ''
+    },
+    onManage() {
+      dialog({
+        type: 'tagManage'
+      })
+    },
+    getTagList() {
+      this.$request.addressTagList().then(res => {
+        if (res.ret) {
+          this.tagList = res.data
+        }
+      })
     }
   }
 }

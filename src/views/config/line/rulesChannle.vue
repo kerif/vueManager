@@ -119,6 +119,21 @@
               <el-table-column :label="$t('比较符')">
                 <template slot-scope="scope">
                   <el-select
+                    v-if="scope.row.param === 16"
+                    v-model="scope.row.contains"
+                    :disabled="!item.state"
+                    :placeholder="$t('请选择')"
+                    clearable
+                  >
+                    <el-option
+                      v-for="item in conditionOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    ></el-option>
+                  </el-select>
+                  <el-select
+                    v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
                     :placeholder="$t('请选择')"
@@ -136,7 +151,20 @@
               </el-table-column>
               <el-table-column :label="$t('值')">
                 <template slot-scope="scope">
-                  <el-input :disabled="!item.state" v-model="scope.row.value"></el-input>
+                  <el-select
+                    v-if="scope.row.param === 16"
+                    v-model="scope.row.address_tags"
+                    :disabled="!item.state"
+                    multiple
+                  >
+                    <el-option
+                      v-for="item in tagList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    ></el-option>
+                  </el-select>
+                  <el-input v-else :disabled="!item.state" v-model="scope.row.value"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('操作')" v-if="item.state">
@@ -278,6 +306,32 @@ export default {
           name: this.$t('等于')
         }
       ],
+      conditionOption: [
+        {
+          id: '>',
+          name: this.$t('大于')
+        },
+        {
+          id: '>=',
+          name: this.$t('大于等于')
+        },
+        {
+          id: '<',
+          name: this.$t('小于')
+        },
+        {
+          id: '<=',
+          name: this.$t('小于等于')
+        },
+        {
+          id: '=',
+          name: this.$t('等于')
+        },
+        {
+          id: '',
+          name: this.$t('包含')
+        }
+      ],
       typeData: [
         {
           id: 1,
@@ -318,12 +372,15 @@ export default {
             {
               param: '',
               comparison: '',
-              value: ''
+              value: '',
+              contains: '',
+              address_tags: ''
             }
           ]
         }
       ],
-      editData: {}
+      editData: {},
+      tagList: []
     }
   },
   created() {
@@ -333,6 +390,7 @@ export default {
     this.getString()
     this.getPartition()
     this.getRulesData()
+    this.getTagList()
   },
   methods: {
     getRulesData() {
@@ -537,6 +595,13 @@ export default {
             }
           })
       }
+    },
+    getTagList() {
+      this.$request.addressTagList().then(res => {
+        if (res.ret) {
+          this.tagList = res.data
+        }
+      })
     }
   }
 }

@@ -170,6 +170,8 @@ import packageChange from './packageChange.vue'
 import onAddGroup from './onAddGroup.vue'
 import groupDetail from './groupDetail.vue'
 import addressAudit from './addressAudit.vue'
+import tagManage from './tagManage.vue'
+import batchReplaceTag from './batchReplaceTag.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -339,6 +341,8 @@ const packageChangeController = Vue.extend(packageChange)
 const onAddGroupController = Vue.extend(onAddGroup)
 const groupDetailController = Vue.extend(groupDetail)
 const addressAuditController = Vue.extend(addressAudit)
+const tagManageController = Vue.extend(tagManage)
+const batchReplaceTagController = Vue.extend(batchReplaceTag)
 
 const mixin = {
   data() {
@@ -719,6 +723,20 @@ function initInstance(type) {
     // 地址审核
     case 'addressAudit':
       instance = new addressAuditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签管理
+    case 'tagManage':
+      instance = new tagManageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量替换标签
+    case 'batchReplaceTag':
+      instance = new batchReplaceTagController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

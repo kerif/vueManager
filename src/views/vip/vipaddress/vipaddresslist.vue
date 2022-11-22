@@ -15,6 +15,7 @@
           @click="onDelAddress(selectIDs)"
           >{{ $t('批量删除') }}</el-button
         >
+        <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button>
       </div>
       <div>
         <el-select
@@ -54,6 +55,7 @@
       @selection-change="handleSelectionChange"
       height="calc(100vh - 275px)"
     >
+      <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('状态')" prop="status">
@@ -64,6 +66,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
+      <el-table-column :label="$t('标签')"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('国家地区')" prop="country.name"></el-table-column>
       <el-table-column :label="$t('省')" prop="province"></el-table-column>
@@ -72,7 +75,7 @@
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-      <el-table-column :label="$t('操作')" width="280">
+      <el-table-column :label="$t('操作')" width="280" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{
             $t('修改')
@@ -100,7 +103,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div class="flex-btn">
+      <div class="flex-left">
+        <el-button class="btn-light-red" @click="onBatch">{{ $t('批量审核') }}</el-button>
+      </div>
+      <div class="flex-right">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -278,15 +288,44 @@ export default {
           this.audit_required = res.data.audit_required
         }
       })
+    },
+    tagManage() {
+      dialog({
+        type: 'tagManage'
+      })
+    },
+    onBatch() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'batchReplaceTag',
+          ids: this.selectIDs
+        },
+        () => {
+          this.getList()
+        }
+      )
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .searchGroup {
   float: right;
 }
 .clear {
   clear: both;
+}
+.flex-btn {
+  display: flex;
+  align-items: center;
+  .flex-left {
+    flex: 1;
+  }
+  .flex-right {
+    flex: auto;
+  }
 }
 </style>
