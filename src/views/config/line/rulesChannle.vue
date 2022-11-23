@@ -104,6 +104,7 @@
                     :disabled="!item.state"
                     v-model="scope.row.param"
                     :placeholder="$t('请选择')"
+                    @change="changeParam($event)"
                     clearable
                   >
                     <el-option
@@ -119,21 +120,6 @@
               <el-table-column :label="$t('比较符')">
                 <template slot-scope="scope">
                   <el-select
-                    v-if="scope.row.param === 16"
-                    v-model="scope.row.contains"
-                    :disabled="!item.state"
-                    :placeholder="$t('请选择')"
-                    clearable
-                  >
-                    <el-option
-                      v-for="item in conditionOption"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id"
-                    ></el-option>
-                  </el-select>
-                  <el-select
-                    v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
                     :placeholder="$t('请选择')"
@@ -306,32 +292,6 @@ export default {
           name: this.$t('等于')
         }
       ],
-      conditionOption: [
-        {
-          id: '>',
-          name: this.$t('大于')
-        },
-        {
-          id: '>=',
-          name: this.$t('大于等于')
-        },
-        {
-          id: '<',
-          name: this.$t('小于')
-        },
-        {
-          id: '<=',
-          name: this.$t('小于等于')
-        },
-        {
-          id: '=',
-          name: this.$t('等于')
-        },
-        {
-          id: 'contains',
-          name: this.$t('包含')
-        }
-      ],
       typeData: [
         {
           id: 1,
@@ -373,7 +333,6 @@ export default {
               param: '',
               comparison: '',
               value: '',
-              contains: '',
               tag_ids: ''
             }
           ]
@@ -396,6 +355,11 @@ export default {
     getRulesData() {
       this.$request.getNewRules(this.$route.params.id).then(res => {
         if (res.ret) {
+          res.data.forEach(item => {
+            item.conditions.forEach(ele => {
+              ele.tag_ids = ele.address_tags
+            })
+          })
           this.channel = res.data.map(item => {
             return {
               ...item,
@@ -541,7 +505,8 @@ export default {
       item.push({
         param: '',
         comparison: '',
-        value: ''
+        value: '' || 0,
+        tag_ids: ''
       })
     },
     saveChannles(item) {
@@ -602,6 +567,37 @@ export default {
           this.tagList = res.data
         }
       })
+    },
+    changeParam(value) {
+      if (value === 16) {
+        this.conditionOptions.push({
+          id: 'contains',
+          name: this.$t('包含')
+        })
+      } else {
+        this.conditionOptions = [
+          {
+            id: '>',
+            name: this.$t('大于')
+          },
+          {
+            id: '>=',
+            name: this.$t('大于等于')
+          },
+          {
+            id: '<',
+            name: this.$t('小于')
+          },
+          {
+            id: '<=',
+            name: this.$t('小于等于')
+          },
+          {
+            id: '=',
+            name: this.$t('等于')
+          }
+        ]
+      }
     }
   }
 }
