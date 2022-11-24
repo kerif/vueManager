@@ -15,17 +15,17 @@
           @click="onDelAddress(selectIDs)"
           >{{ $t('批量删除') }}</el-button
         >
-        <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button>
+        <!-- <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button> -->
       </div>
       <div>
-        <el-select v-model="tag_ids" @change="changeTag" :placeholder="$t('标签')" clearable>
+        <!-- <el-select v-model="tag_ids" @change="changeTag" :placeholder="$t('标签')" clearable>
           <el-option
             v-for="item in tagList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
           ></el-option>
-        </el-select>
+        </el-select> -->
         <el-select
           v-model="status"
           @change="changeAddressStatus"
@@ -119,7 +119,7 @@
     </el-table>
     <div class="flex-btn">
       <div class="flex-left">
-        <el-button class="btn-light-red" @click="onBatch">{{ $t('批量审核') }}</el-button>
+        <!-- <el-button class="btn-light-red" @click="onBatch">{{ $t('批量审核') }}</el-button> -->
       </div>
       <div class="flex-right">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -183,7 +183,7 @@ export default {
   mounted() {
     this.getList()
     this.getConfig()
-    this.getTagList()
+    // this.getTagList()
   },
   methods: {
     getList() {
@@ -310,39 +310,39 @@ export default {
           this.audit_required = res.data.audit_required
         }
       })
-    },
-    tagManage() {
-      dialog(
-        {
-          type: 'tagManage'
-        },
-        () => {
-          this.getList()
-          this.getTagList()
-        }
-      )
-    },
-    onBatch() {
-      if (!this.selectIDs || !this.selectIDs.length) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      dialog(
-        {
-          type: 'batchReplaceTag',
-          ids: this.selectIDs
-        },
-        () => {
-          this.getList()
-        }
-      )
-    },
-    getTagList() {
-      this.$request.addressTagList().then(res => {
-        if (res.ret) {
-          this.tagList = res.data
-        }
-      })
     }
+    // tagManage() {
+    //   dialog(
+    //     {
+    //       type: 'tagManage'
+    //     },
+    //     () => {
+    //       this.getList()
+    //       this.getTagList()
+    //     }
+    //   )
+    // },
+    // onBatch() {
+    //   if (!this.selectIDs || !this.selectIDs.length) {
+    //     return this.$message.error(this.$t('请选择'))
+    //   }
+    //   dialog(
+    //     {
+    //       type: 'batchReplaceTag',
+    //       ids: this.selectIDs
+    //     },
+    //     () => {
+    //       this.getList()
+    //     }
+    //   )
+    // }
+    // getTagList() {
+    //   this.$request.addressTagList().then(res => {
+    //     if (res.ret) {
+    //       this.tagList = res.data
+    //     }
+    //   })
+    // }
   }
 }
 </script>

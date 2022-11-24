@@ -119,7 +119,7 @@
               </el-table-column>
               <el-table-column :label="$t('比较符')">
                 <template slot-scope="scope">
-                  <el-select
+                  <!-- <el-select
                     :disabled="!item.state"
                     v-if="scope.row.param === 16"
                     v-model="scope.row.comparison"
@@ -133,9 +133,8 @@
                       :value="item.id"
                     >
                     </el-option>
-                  </el-select>
+                  </el-select> -->
                   <el-select
-                    v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
                     :placeholder="$t('请选择')"
@@ -153,7 +152,7 @@
               </el-table-column>
               <el-table-column :label="$t('值')">
                 <template slot-scope="scope">
-                  <el-select
+                  <!-- <el-select
                     v-if="scope.row.param === 16"
                     v-model="scope.row.tag_ids"
                     :disabled="!item.state"
@@ -165,8 +164,8 @@
                       :label="item.name"
                       :value="item.id"
                     ></el-option>
-                  </el-select>
-                  <el-input v-else :disabled="!item.state" v-model="scope.row.value"></el-input>
+                  </el-select> -->
+                  <el-input :disabled="!item.state" v-model="scope.row.value"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('操作')" v-if="item.state">
@@ -374,8 +373,8 @@ export default {
             {
               param: '',
               comparison: '',
-              value: '',
-              tag_ids: []
+              value: ''
+              // tag_ids: []
             }
           ]
         }
@@ -397,11 +396,11 @@ export default {
     getRulesData() {
       this.$request.getNewRules(this.$route.params.id).then(res => {
         if (res.ret) {
-          res.data.forEach(item => {
-            item.conditions.forEach(ele => {
-              ele.tag_ids = ele.address_tags.map(val => val.id)
-            })
-          })
+          // res.data.forEach(item => {
+          //   item.conditions.forEach(ele => {
+          //     ele.tag_ids = ele.address_tags.map(val => val.id)
+          //   })
+          // })
           this.channel = res.data.map(item => {
             return {
               ...item,
@@ -547,16 +546,16 @@ export default {
       item.push({
         param: '',
         comparison: '',
-        value: '',
-        tag_ids: []
+        value: ''
+        // tag_ids: []
       })
     },
     saveChannles(item) {
-      item.conditions.forEach(ele => {
-        if (ele.tag_ids.length) {
-          ele.value = 0
-        }
-      })
+      // item.conditions.forEach(ele => {
+      //   if (ele.tag_ids.length) {
+      //     ele.value = 0
+      //   }
+      // })
       let translation = {}
       this.stringData.forEach(item => {
         translation[item.language_code] = item.value
@@ -609,18 +608,19 @@ export default {
       }
     },
     getTagList() {
-      this.$request.addressTagList().then(res => {
-        if (res.ret) {
-          this.tagList = res.data
-        }
-      })
+      // this.$request.addressTagList().then(res => {
+      //   if (res.ret) {
+      //     this.tagList = res.data
+      //   }
+      // })
     },
     changeParam(value, item) {
-      if (value !== 16) {
-        item.conditions.forEach(ele => {
-          ;(ele.comparison = ''), (ele.value = '')
-        })
-      }
+      console.log(value, item)
+      // if (value !== 16) {
+      //   item.conditions.forEach(ele => {
+      //     ;(ele.comparison = ''), (ele.value = '')
+      //   })
+      // }
     }
   }
 }

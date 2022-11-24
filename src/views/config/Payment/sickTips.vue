@@ -44,7 +44,7 @@ export default {
       this.$request.getRiskDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.params.risk_warning_title = res.data.risk_warning_title
-          this.params.risk_warning_content = res.data.risk_warning_content
+          this.params.content = res.data.risk_warning_content
           this.editor.txt.html(this.params.risk_warning_content)
         }
       })
@@ -54,7 +54,7 @@ export default {
       this.$emit('input', this.editor.txt.html())
     },
     saveNotice(data) {
-      this.params.content = data
+      this.params.risk_warning_content = data
       if (!this.$route.params.id) {
         // 如果是新增状态
         this.$request.saveNotice(this.params).then(res => {

@@ -5,11 +5,11 @@
       <span class="time-text text-right">xxxcxcxcxcxcxcxcxcxxxxxxxxxxxxx</span>
     </div>
     <div style="margin-top: 50px">
-      <div class="font-size font-bold" style="margin-bottom: 20px">
+      <div class="font-size font-bold spacing">
         <span class="time-text">Invoice To:</span>
         <span class="time-text text-left">收货人:</span>
       </div>
-      <div class="normal" style="margin-bottom: 20px">
+      <div class="normal spacing">
         <span class="time-text text-left">用户编号: {{ orderInfo.user_id }}</span>
         <span class="time-text text-left"
           >姓名/电话: {{ orderInfo.user_name }},{{
@@ -17,7 +17,7 @@
           }}</span
         >
       </div>
-      <div class="normal" style="margin-bottom: 20px">
+      <div class="normal spacing">
         <span class="time-text text-left"
           >邮箱: {{ orderInfo.address && orderInfo.address.email }}</span
         >
@@ -26,90 +26,81 @@
           {{ orderInfo.payment && orderInfo.payment.payment_type_name }} 送货上门</span
         >
       </div>
-      <div class="normal" style="margin-bottom: 20px">
+      <div class="normal spacing">
         <span class="time-text text-left"
           >联系电话: {{ orderInfo.address && orderInfo.address.timezone }} -
           {{ orderInfo.address && orderInfo.address.phone }}</span
         >
-        <span class="time-text text-left">收货地址: </span>
+        <span class="time-text text-left" v-if="orderInfo.address"
+          >收货地址: {{ orderInfo.address.country_name }} {{ orderInfo.address.province }}
+          {{ orderInfo.address.city }} {{ orderInfo.address.street }}
+          {{ orderInfo.address.door_no }}
+        </span>
       </div>
     </div>
     <div class="font-size font-bold" style="margin: 20px 0">Your Invoice</div>
     <div>
-      <div style="margin-bottom: 20px; padding: 10px 0; border-top: 1px solid #ccc">
-        <span style="display: inline-block; width: 5%; font-size: 16px; font-weight: bold"
-          >序号</span
-        >
-        <span style="display: inline-block; width: 13%; font-size: 16px; font-weight: bold"
-          >快递公司</span
-        >
-
-        <span style="display: inline-block; width: 12%; font-size: 16px; font-weight: bold"
+      <div style="margin-bottom: 20px; padding: 8px 0; border-top: 1px solid #ccc">
+        <span class="index">序号</span>
+        <span class="express-company font-bold">快递公司</span>
+        <span style="display: inline-block; width: 12%; font-size: 14px; font-weight: bold"
           >集包单号</span
         >
-
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >快递单号</span
-        >
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >货仓编号</span
-        >
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >入库时间</span
-        >
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >货物品名</span
-        >
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >体积重</span
-        >
-        <span style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          >实重</span
-        >
-        <span
-          style="display: inline-block; width: 10%; font-size: 16px; font-weight: bold"
-          class="font-bold"
-          >备注</span
-        >
+        <span class="data-space font-bold">快递单号</span>
+        <span class="data-space font-bold">货仓编号</span>
+        <span class="data-space font-bold">入库时间</span>
+        <span class="data-space font-bold">货物品名</span>
+        <span class="data-space font-bold">体积重</span>
+        <span class="data-space font-bold">实重</span>
+        <span class="data-space font-bold">备注</span>
+      </div>
+      <div
+        v-for="(ele, index) in orderInfo.packages"
+        :key="ele.id"
+        style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0"
+      >
+        <span class="index">{{ index + 1 }}</span>
+        <span class="express-company">{{ ele.express_company && ele.express_company.name }}</span>
+        <span style="display: inline-block; width: 12%; font-size: 14px"></span>
+        <span class="data-space">{{ ele.express_num }}</span>
+        <span class="data-space"></span>
+        <span class="data-space">{{ ele.in_storage_at }}</span>
+        <span class="data-space">{{ ele.brand_name }}</span>
+        <span class="data-space"></span>
+        <span class="data-space"></span>
+        <span class="data-space">{{ ele.remark }}</span>
       </div>
       <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0">
-        <span style="display: inline-block; width: 5%; font-size: 16px">序号</span>
-        <span style="display: inline-block; width: 13%; font-size: 16px">快递单号</span>
-        <span style="display: inline-block; width: 12%; font-size: 16px">快递单号</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">货仓编号</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">入库时间</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">货物品名</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">体积重</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">实重</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">备注</span>
-        <span style="display: inline-block; width: 10%; font-size: 16px">备注</span>
+        <span class="time-text">实际重量</span>
+        <span class="time-text text-right"></span>
       </div>
       <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0">
-        <span style="width: 50%; display: inline-block">实际重量</span>
-        <span style="width: 50%; display: inline-block; text-align: right"></span>
-      </div>
-      <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0">
-        <span style="width: 50%; display: inline-block">收费重量</span>
-        <span style="width: 50%; display: inline-block; text-align: right"></span>
+        <span class="time-text">收费重量</span>
+        <span class="time-text text-right"></span>
       </div>
     </div>
     <div class="font-size font-bold" style="margin: 20px 0">Totals:</div>
     <div class="spacing">
-      <span style="display: inline-block; width: 20%"
+      <span class="fee-info"
         >积分抵扣: {{ orderInfo.payment && orderInfo.payment.point_amount }}</span
-      ><span style="display: inline-block; width: 20%"
+      ><span class="fee-info"
         >抵用券减免: {{ orderInfo.payment && orderInfo.payment.coupon_amount }}</span
-      ><span style="display: inline-block; width: 20%"
-        >增值服务费: {{ orderInfo.payment && orderInfo.payment.value_added_amount }} </span
-      ><span style="display: inline-block; width: 20%">渠道服务费: </span
-      ><span style="display: inline-block; width: 20%">渠道规则费: </span>
+      ><span class="fee-info"
+        >渠道服务费: {{ orderInfo.payment && orderInfo.payment.line_service_fee }}</span
+      ><span class="fee-info"
+        >渠道规则费:{{ orderInfo.payment && orderInfo.payment.line_rule_fee }}
+      </span>
     </div>
     <div class="spacing">
-      <span style="display: inline-block; width: 20%"
-        >关税费用: {{ orderInfo.payment && orderInfo.payment.tariff_fee }}</span
-      ><span style="display: inline-block; width: 20%">保价金额: </span
-      ><span style="display: inline-block; width: 20%">保价手续费: </span
-      ><span style="display: inline-block; width: 20%">代收货款: </span>
+      <span class="fee-info"
+        >增值服务费: {{ orderInfo.payment && orderInfo.payment.value_added_amount }}
+      </span>
+      <span class="fee-info">关税费用: {{ orderInfo.payment && orderInfo.payment.tariff_fee }}</span
+      ><span class="fee-info"
+        >保险费用:{{ orderInfo.payment && orderInfo.payment.insurance_fee }} </span
+      ><span class="fee-info"
+        >包裹增值服务:{{ orderInfo.payment && orderInfo.payment.package_service_fee }}
+      </span>
     </div>
     <div style="margin-bottom: 20px; padding: 5px 0">
       <span class="time-text">订单运费</span>
@@ -129,7 +120,7 @@
         orderInfo.payment && orderInfo.payment.pay_amount
       }}</span>
     </div>
-    <div style="margin-bottom: 20px; text-align: right; margin-right: 120px">客户签收:</div>
+    <div class="spacing text-right" style="margin-right: 120px">客户签收:</div>
   </div>
 </template>
 
@@ -171,7 +162,6 @@ body {
   font-size: 15px;
   padding: 10px 20px;
   color: #333;
-  border: 1px solid #000;
 }
 .font-bold {
   font-weight: bold;
@@ -195,5 +185,25 @@ body {
 .time-text {
   width: 50%;
   display: inline-block;
+}
+.fee-info {
+  display: inline-block;
+  width: 25%;
+}
+.index {
+  display: inline-block;
+  width: 5%;
+  font-size: 14px;
+  font-weight: bold;
+}
+.express-company {
+  display: inline-block;
+  width: 13%;
+  font-size: 14px;
+}
+.data-space {
+  display: inline-block;
+  width: 10%;
+  font-size: 14px;
 }
 </style>
