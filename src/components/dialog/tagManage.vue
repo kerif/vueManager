@@ -21,7 +21,7 @@
             }}</el-button>
             <el-button
               class="btn-light-red"
-              v-if="!scope.row.editState"
+              v-if="!scope.row.editState && scope.row.addresses_count <= 1"
               @click="onDelete(scope.row)"
               >{{ $t('删除') }}</el-button
             >

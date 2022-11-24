@@ -88,9 +88,14 @@ export default {
       })
     },
     onManage() {
-      dialog({
-        type: 'tagManage'
-      })
+      dialog(
+        {
+          type: 'tagManage'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     clear() {
       this.ids = []
