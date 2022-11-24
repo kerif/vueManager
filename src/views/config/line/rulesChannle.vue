@@ -104,7 +104,7 @@
                     :disabled="!item.state"
                     v-model="scope.row.param"
                     :placeholder="$t('请选择')"
-                    @change="changeParam($event)"
+                    @change="changeParam($event, item)"
                     clearable
                   >
                     <el-option
@@ -120,6 +120,22 @@
               <el-table-column :label="$t('比较符')">
                 <template slot-scope="scope">
                   <el-select
+                    :disabled="!item.state"
+                    v-if="scope.row.param === 16"
+                    v-model="scope.row.comparison"
+                    :placeholder="$t('请选择')"
+                    clearable
+                  >
+                    <el-option
+                      v-for="item in conditionOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                  <el-select
+                    v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
                     :placeholder="$t('请选择')"
@@ -292,6 +308,32 @@ export default {
           name: this.$t('等于')
         }
       ],
+      conditionOption: [
+        {
+          id: '>',
+          name: this.$t('大于')
+        },
+        {
+          id: '>=',
+          name: this.$t('大于等于')
+        },
+        {
+          id: '<',
+          name: this.$t('小于')
+        },
+        {
+          id: '<=',
+          name: this.$t('小于等于')
+        },
+        {
+          id: '=',
+          name: this.$t('等于')
+        },
+        {
+          id: 'contains',
+          name: this.$t('包含')
+        }
+      ],
       typeData: [
         {
           id: 1,
@@ -333,7 +375,7 @@ export default {
               param: '',
               comparison: '',
               value: '',
-              tag_ids: ''
+              tag_ids: []
             }
           ]
         }
@@ -357,12 +399,6 @@ export default {
         if (res.ret) {
           res.data.forEach(item => {
             item.conditions.forEach(ele => {
-              if (ele.param === 16) {
-                this.conditionOptions.push({
-                  id: 'contains',
-                  name: this.$t('包含')
-                })
-              }
               ele.tag_ids = ele.address_tags.map(val => val.id)
             })
           })
@@ -511,11 +547,16 @@ export default {
       item.push({
         param: '',
         comparison: '',
-        value: '' || 0,
-        tag_ids: ''
+        value: '',
+        tag_ids: []
       })
     },
     saveChannles(item) {
+      item.conditions.forEach(ele => {
+        if (ele.tag_ids.length) {
+          ele.value = 0
+        }
+      })
       let translation = {}
       this.stringData.forEach(item => {
         translation[item.language_code] = item.value
@@ -574,35 +615,11 @@ export default {
         }
       })
     },
-    changeParam(value) {
-      if (value === 16) {
-        this.conditionOptions.push({
-          id: 'contains',
-          name: this.$t('包含')
+    changeParam(value, item) {
+      if (value !== 16) {
+        item.conditions.forEach(ele => {
+          ;(ele.comparison = ''), (ele.value = '')
         })
-      } else {
-        this.conditionOptions = [
-          {
-            id: '>',
-            name: this.$t('大于')
-          },
-          {
-            id: '>=',
-            name: this.$t('大于等于')
-          },
-          {
-            id: '<',
-            name: this.$t('小于')
-          },
-          {
-            id: '<=',
-            name: this.$t('小于等于')
-          },
-          {
-            id: '=',
-            name: this.$t('等于')
-          }
-        ]
       }
     }
   }
