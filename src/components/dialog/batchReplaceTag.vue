@@ -8,7 +8,7 @@
           <el-radio :label="2">{{ $t('拒绝') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('拒绝原因')">
+      <el-form-item :label="$t('拒绝原因')" v-if="form.status === 2">
         <el-input
           v-model="form.remark"
           style="width: 45%"
@@ -43,7 +43,7 @@ export default {
       form: {
         status: 1,
         remark: '',
-        tag_ids: ''
+        tag_ids: []
       },
       ids: [],
       tagList: [],
@@ -67,8 +67,7 @@ export default {
     onConfirm() {
       let params = {
         ...this.form,
-        ids: this.ids,
-        tag_ids: this.tag_ids
+        ids: this.ids
       }
       this.$request.addressBatchAudit(params).then(res => {
         if (res.ret) {
@@ -100,8 +99,8 @@ export default {
     clear() {
       this.ids = []
       this.form.status = 1
-      this.form.tag_ids = ''
-      this.form.status = ''
+      this.form.tag_ids = []
+      this.form.remark = ''
     }
   }
 }
