@@ -210,6 +210,7 @@
               v-model="searchFieldData.countryArr"
               ref="getCountryName"
               @change="changeVal"
+              filterable
               clearable
             ></el-cascader>
           </el-form-item>

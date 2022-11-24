@@ -36,6 +36,11 @@ const constantRouterMap = [
     component: Login
   },
   {
+    path: '/pdf/orderDetailPdf/:id',
+    name: 'orderDetailPdf',
+    component: () => import('@/views/pdf/orderDetailPdf.vue')
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFound

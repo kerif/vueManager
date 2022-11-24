@@ -357,7 +357,13 @@ export default {
         if (res.ret) {
           res.data.forEach(item => {
             item.conditions.forEach(ele => {
-              ele.tag_ids = ele.address_tags
+              if (ele.param === 16) {
+                this.conditionOptions.push({
+                  id: 'contains',
+                  name: this.$t('包含')
+                })
+              }
+              ele.tag_ids = ele.address_tags.map(val => val.id)
             })
           })
           this.channel = res.data.map(item => {
