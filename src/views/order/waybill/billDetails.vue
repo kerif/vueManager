@@ -98,7 +98,7 @@
             {{ $t('转运单号') }}：<span>{{ form.logistics_sn }}</span
             ><span>({{ form.logistics_company }})</span>
           </div>
-          <div @click="onPrint">{{ $t('打印') }}</div>
+          <!-- <div @click="onPrint">{{ $t('打印') }}</div> -->
         </div>
         <el-row :gutter="24">
           <el-col :span="6">
