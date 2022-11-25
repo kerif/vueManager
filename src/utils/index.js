@@ -118,3 +118,19 @@ export const changeFavicon = link => {
     document.head.appendChild($favicon)
   }
 }
+
+export const formatDate = date => {
+  date = date || new Date()
+  const year = date.getFullYear()
+  const month = padLeft(date.getMonth() + 1)
+  const day = padLeft(date.getDate())
+  const hour = padLeft(date.getHours())
+  const minute = padLeft(date.getMinutes())
+  const seconds = padLeft(date.getSeconds())
+  return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+}
+
+function padLeft(str, len = 2) {
+  const arr = new Array(len + 1)
+  return (arr.join('0') + str).slice(-len)
+}

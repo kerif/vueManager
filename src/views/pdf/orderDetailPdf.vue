@@ -1,10 +1,10 @@
 <template>
   <div class="pageA4">
     <div class="font-size font-bold">
-      <span class="time-text">2022/8/20 15:33</span>
-      <span class="time-text text-right">xxxcxcxcxcxcxcxcxcxxxxxxxxxxxxx</span>
+      <span class="time-text">{{ printTime }}</span>
+      <span class="time-text text-right"></span>
     </div>
-    <div style="margin-top: 50px">
+    <div class="order-info">
       <div class="font-size font-bold spacing">
         <span class="time-text">Invoice To:</span>
         <span class="time-text text-left">收货人:</span>
@@ -38,12 +38,12 @@
         </span>
       </div>
     </div>
-    <div class="font-size font-bold" style="margin: 20px 0">Your Invoice</div>
+    <div class="font-size font-bold title">Your Invoice</div>
     <div>
-      <div style="margin-bottom: 20px; padding: 8px 0; border-top: 1px solid #ccc">
+      <div class="table-text">
         <span class="index">序号</span>
         <span class="express-company font-bold">快递公司</span>
-        <span style="display: inline-block; width: 12%; font-size: 14px; font-weight: bold"
+        <span style="display: inline-block; width: 12%; font-size: 15px; font-weight: bold"
           >集包单号</span
         >
         <span class="data-space font-bold">快递单号</span>
@@ -54,14 +54,10 @@
         <span class="data-space font-bold">实重</span>
         <span class="data-space font-bold">备注</span>
       </div>
-      <div
-        v-for="(ele, index) in orderInfo.packages"
-        :key="ele.id"
-        style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0"
-      >
+      <div v-for="(ele, index) in orderInfo.packages" :key="ele.id" class="text-border">
         <span class="index">{{ index + 1 }}</span>
         <span class="express-company">{{ ele.express_company && ele.express_company.name }}</span>
-        <span style="display: inline-block; width: 12%; font-size: 14px"></span>
+        <span style="display: inline-block; width: 12%; font-size: 15px"></span>
         <span class="data-space">{{ ele.express_num }}</span>
         <span class="data-space"></span>
         <span class="data-space">{{ ele.in_storage_at }}</span>
@@ -70,76 +66,83 @@
         <span class="data-space"></span>
         <span class="data-space">{{ ele.remark }}</span>
       </div>
-      <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0">
+      <div class="text-border">
         <span class="time-text">实际重量</span>
         <span class="time-text text-right"></span>
       </div>
-      <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding: 5px 0">
+      <div class="text-border">
         <span class="time-text">收费重量</span>
         <span class="time-text text-right"></span>
       </div>
     </div>
-    <div class="font-size font-bold" style="margin: 20px 0">Totals:</div>
-    <div class="spacing">
+    <div class="font-size font-bold title">Totals:</div>
+    <div class="spacing" v-if="orderInfo.payment">
       <span class="fee-info"
-        >积分抵扣: {{ orderInfo.payment && orderInfo.payment.point_amount }}</span
+        >积分抵扣: {{ localization.currency_unit }}{{ orderInfo.payment.point_amount }}</span
       ><span class="fee-info"
-        >抵用券减免: {{ orderInfo.payment && orderInfo.payment.coupon_amount }}</span
+        >抵用券减免: {{ localization.currency_unit }}{{ orderInfo.payment.coupon_amount }}</span
       ><span class="fee-info"
-        >渠道服务费: {{ orderInfo.payment && orderInfo.payment.line_service_fee }}</span
+        >渠道服务费: {{ localization.currency_unit }}{{ orderInfo.payment.line_service_fee }}</span
       ><span class="fee-info"
-        >渠道规则费:{{ orderInfo.payment && orderInfo.payment.line_rule_fee }}
+        >渠道规则费:{{ localization.currency_unit }}{{ orderInfo.payment.line_rule_fee }}
       </span>
     </div>
-    <div class="spacing">
+    <div class="spacing" v-if="orderInfo.payment">
       <span class="fee-info"
-        >增值服务费: {{ orderInfo.payment && orderInfo.payment.value_added_amount }}
+        >增值服务费: {{ localization.currency_unit }}{{ orderInfo.payment.value_added_amount }}
       </span>
-      <span class="fee-info">关税费用: {{ orderInfo.payment && orderInfo.payment.tariff_fee }}</span
+      <span class="fee-info"
+        >关税费用: {{ localization.currency_unit }}{{ orderInfo.payment.tariff_fee }}</span
       ><span class="fee-info"
-        >保险费用:{{ orderInfo.payment && orderInfo.payment.insurance_fee }} </span
+        >保险费用:{{ localization.currency_unit }}{{ orderInfo.payment.insurance_fee }} </span
       ><span class="fee-info"
-        >包裹增值服务:{{ orderInfo.payment && orderInfo.payment.package_service_fee }}
+        >包裹增值服务:{{ localization.currency_unit }}{{ orderInfo.payment.package_service_fee }}
       </span>
     </div>
-    <div style="margin-bottom: 20px; padding: 5px 0">
+    <div class="fee-text">
       <span class="time-text">订单运费</span>
-      <span class="time-text text-right">{{
-        orderInfo.payment && orderInfo.payment.freight_amount
-      }}</span>
+      <span class="time-text text-right"
+        >{{ localization.currency_unit
+        }}{{ orderInfo.payment && orderInfo.payment.freight_amount }}</span
+      >
     </div>
-    <div style="margin-bottom: 20px; padding: 5px 0">
+    <div class="fee-text">
       <span class="time-text">费用总计</span>
-      <span class="time-text text-right">{{
-        orderInfo.payment && orderInfo.payment.order_amount
-      }}</span>
+      <span class="time-text text-right"
+        >{{ localization.currency_unit
+        }}{{ orderInfo.payment && orderInfo.payment.order_amount }}</span
+      >
     </div>
-    <div style="margin-bottom: 20px; padding: 5px 0">
+    <div class="fee-text">
       <span class="time-text">实付费用</span>
-      <span class="time-text text-right">{{
-        orderInfo.payment && orderInfo.payment.pay_amount
-      }}</span>
+      <span class="time-text text-right"
+        >{{ localization.currency_unit
+        }}{{ orderInfo.payment && orderInfo.payment.pay_amount }}</span
+      >
     </div>
     <div class="spacing text-right" style="margin-right: 120px">客户签收:</div>
   </div>
 </template>
 
 <script>
+import { formatDate } from '@/utils'
 export default {
   data() {
     return {
-      orderInfo: {}
+      orderInfo: {},
+      localization: {}
     }
   },
   created() {
+    this.printTime = formatDate()
     this.getList()
   },
   methods: {
     getList() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         if (res.ret) {
-          console.log(res.data, 136)
           this.orderInfo = res.data
+          this.localization = res.localization
         }
       })
     }
@@ -152,7 +155,6 @@ body {
   background-color: #fff !important;
 }
 .pageA4 {
-  position: relative;
   page-break-after: always;
   margin: 0 auto;
   padding: 5px 0;
@@ -193,17 +195,37 @@ body {
 .index {
   display: inline-block;
   width: 5%;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
 }
 .express-company {
   display: inline-block;
   width: 13%;
-  font-size: 14px;
+  font-size: 15px;
 }
 .data-space {
   display: inline-block;
   width: 10%;
-  font-size: 14px;
+  font-size: 15px;
+}
+.order-info {
+  margin-top: 50px;
+}
+.title {
+  margin: 20px 0;
+}
+.text-border {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+}
+.fee-text {
+  margin-bottom: 20px;
+  padding: 5px 0;
+}
+.table-text {
+  margin-bottom: 20px;
+  padding: 8px 0;
+  border-top: 1px solid #ccc;
 }
 </style>

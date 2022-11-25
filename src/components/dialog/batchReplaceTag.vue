@@ -47,13 +47,14 @@ export default {
       },
       ids: [],
       tagList: [],
-      selectId: ''
+      selectId: '',
+      userIds: []
     }
   },
   methods: {
     init() {
-      if (this.ids.length) {
-        this.selectId = this.ids.join(',')
+      if (this.userIds.length) {
+        this.selectId = this.userIds.join(',')
       }
       this.getList()
     },
@@ -77,6 +78,7 @@ export default {
             type: 'success'
           })
           this.show = false
+          this.success()
         } else {
           this.$notify({
             title: this.$t('操作失败'),

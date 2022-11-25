@@ -355,8 +355,8 @@ exports.submitTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
 // 模版列表
-exports.regionTemplates = id => {
-  return $form.get(`express-lines/region-templates/${id}/regions`)
+exports.regionTemplates = (id, params) => {
+  return $form.get(`express-lines/region-templates/${id}/regions`, { params })
 }
 // 模版 开启或关闭
 exports.presetRegionsEnabled = (id, regionsId, status) => {

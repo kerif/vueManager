@@ -193,8 +193,7 @@ export default {
       let page_params = {
         keyword: this.page_params.keyword,
         page: this.page_params.page,
-        size: this.page_params.size,
-        total: this.page_params.total
+        size: this.page_params.size
       }
       if (this.$route.params.id) {
         // 获取分区模板

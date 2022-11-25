@@ -168,7 +168,8 @@ export default {
       allow_delete: '',
       audit_required: '',
       tagList: [],
-      tag_ids: ''
+      tag_ids: '',
+      userIds: []
     }
   },
   components: {
@@ -259,6 +260,7 @@ export default {
       this.getList()
     },
     handleSelectionChange(val) {
+      this.userIds = val.map(item => item.user_id)
       this.selectIDs = val.map(item => item.id)
     },
     onDelAddress(id) {
@@ -329,7 +331,8 @@ export default {
       dialog(
         {
           type: 'batchReplaceTag',
-          ids: this.selectIDs
+          ids: this.selectIDs,
+          userIds: this.userIds
         },
         () => {
           this.getList()
