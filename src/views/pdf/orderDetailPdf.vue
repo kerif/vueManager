@@ -43,9 +43,7 @@
       <div class="table-text">
         <span class="index">序号</span>
         <span class="express-company font-bold">快递公司</span>
-        <span style="display: inline-block; width: 12%; font-size: 15px; font-weight: bold"
-          >集包单号</span
-        >
+        <span class="express-num font-bold">集包单号</span>
         <span class="data-space font-bold">快递单号</span>
         <span class="data-space font-bold">货仓编号</span>
         <span class="data-space font-bold">入库时间</span>
@@ -57,22 +55,26 @@
       <div v-for="(ele, index) in orderInfo.packages" :key="ele.id" class="text-border">
         <span class="index">{{ index + 1 }}</span>
         <span class="express-company">{{ ele.express_company && ele.express_company.name }}</span>
-        <span style="display: inline-block; width: 12%; font-size: 15px"></span>
+        <span class="express-num">{{ ele.num }}</span>
         <span class="data-space">{{ ele.express_num }}</span>
-        <span class="data-space"></span>
+        <span class="data-space">{{ ele.code }}</span>
         <span class="data-space">{{ ele.in_storage_at }}</span>
         <span class="data-space">{{ ele.brand_name }}</span>
-        <span class="data-space"></span>
-        <span class="data-space"></span>
+        <span class="data-space">{{ ele.package_weight }}</span>
+        <span class="data-space">{{ ele.volumn_wieght }}</span>
         <span class="data-space">{{ ele.remark }}</span>
       </div>
       <div class="text-border">
         <span class="time-text">实际重量</span>
-        <span class="time-text text-right"></span>
+        <span class="time-text text-right">{{
+          orderInfo.details && orderInfo.details.actual_weight
+        }}</span>
       </div>
       <div class="text-border">
         <span class="time-text">收费重量</span>
-        <span class="time-text text-right"></span>
+        <span class="time-text text-right">{{
+          orderInfo.details && orderInfo.details.payment_weight
+        }}</span>
       </div>
     </div>
     <div class="font-size font-bold title">Totals:</div>
@@ -227,5 +229,11 @@ body {
   margin-bottom: 20px;
   padding: 8px 0;
   border-top: 1px solid #ccc;
+}
+.express-num {
+  display: inline-block;
+  width: 12%;
+  font-size: 15px;
+  font-weight: bold;
 }
 </style>
