@@ -73,6 +73,12 @@
           <span v-else>{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('地址类型')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.station && scope.row.station.id">{{ $t('自提') }}</span>
+          <span v-else>{{ $t('派送') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
       <el-table-column :label="$t('标签')" prop="tags" width="120">
         <template slot-scope="scope">

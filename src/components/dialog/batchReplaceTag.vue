@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('批量替换标签')" @close="clear">
     <el-form :model="form" label-width="150px" label-position="left">
-      <el-form-item :label="$t('您当前选择了客户ID')">{{ selectId }}</el-form-item>
+      <div style="margin-bottom: 10px">{{ `当前选择了${this.userIds.length}个地址` }}</div>
       <el-form-item :label="$t('审核')">
         <el-radio-group v-model="form.status">
           <el-radio :label="1">{{ $t('通过') }}</el-radio>
