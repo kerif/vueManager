@@ -41,9 +41,13 @@
         class="data-list"
         height="calc(100vh - 270px)"
       >
-        <el-table-column type="index" :index="1"></el-table-column>
-        <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('分区类型')">
+        <el-table-column type="index" :index="1" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column
+          :label="$t('分区名称')"
+          prop="name"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column :label="$t('分区类型')" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('国家地区') }}</span>
             <span v-else>{{ $t('国家邮编') }}</span>
@@ -61,8 +65,12 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家地区总数量')" prop="areas_count"></el-table-column>
-        <el-table-column :label="$t('是否启用')" width="120">
+        <el-table-column
+          :label="$t('启用国家地区总数量')"
+          :show-overflow-tooltip="true"
+          prop="areas_count"
+        ></el-table-column>
+        <el-table-column :label="$t('是否启用')" width="120" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -82,6 +90,7 @@
           v-for="item in formatLangData"
           :key="item.id"
           align="center"
+          :show-overflow-tooltip="true"
         >
           <template slot-scope="scope">
             <span
@@ -92,7 +101,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" width="140">
+        <el-table-column :label="$t('操作')" width="140" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <el-button class="btn-green edit-sty" @click="editPartition(scope.row.id)">{{
               $t('编辑')
