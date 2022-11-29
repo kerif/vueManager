@@ -4984,3 +4984,8 @@ exports.addressTagList = () => {
 exports.addressBatchAudit = params => {
   return $form.put(`user-addresses/batch-review`, params)
 }
+
+// 订单详情 打印
+exports.printInfo = id => {
+  return $form.get(`orders/${id}/order-info/pdf`)
+}

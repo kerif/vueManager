@@ -82,6 +82,7 @@
 </template>
 <script>
 import TagsView from './components/tagsview'
+// import { resetRouter } from '@/router'
 export default {
   components: {
     TagsView
@@ -152,6 +153,10 @@ export default {
           }
         })
       })
+      // .catch(() => {})
+      // .finally(() => {
+      //   resetRouter()
+      // })
     },
     uploadManagenent() {
       this.getUpload()

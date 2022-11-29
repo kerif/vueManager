@@ -50,6 +50,16 @@ const constantRouterMap = [
 const router = new Router({
   routes: constantRouterMap
 })
+// const createRouter = () =>
+//   new Router({
+//     mode: 'history',
+//     routes: []
+//   })
+// const createNewRouter = createRouter()
+// export function resetRouter() {
+//   const newRouter = createRouter()
+//   createNewRouter.matcher = newRouter.matcher
+// }
 
 router.beforeEach(interception(router))
 
