@@ -82,7 +82,7 @@
         </template>
       </el-table>
     </div>
-    <div class="receiveMSg" v-if="form.status === 1 && wechatList.length">
+    <!-- <div class="receiveMSg" v-if="form.status === 1 && wechatList.length">
       <h4>{{ $t('微信提现明细') }}</h4>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="wechatList">
         <el-table-column type="index"></el-table-column>
@@ -90,7 +90,7 @@
         <el-table-column prop="created_at" :label="$t('时间')"></el-table-column>
         <el-table-column prop="status_name" :label="$t('状态')"></el-table-column>
       </el-table>
-    </div>
+    </div> -->
     <div class="footer-btn" v-if="this.$route.params.state === 'review'">
       <el-button type="danger" @click="reviewReject">{{ $t('审核拒绝') }}</el-button>
       <el-button type="primary" @click="reviewPass">{{ $t('审核通过') }}</el-button>

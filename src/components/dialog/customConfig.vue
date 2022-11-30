@@ -51,7 +51,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="warehouse" v-if="this.config.warehouse">
+      <!-- <el-form-item label="warehouse" v-if="this.config.warehouse">
         <el-select v-model="form.warehouse">
           <el-option
             v-for="item in warehouseData"
@@ -70,7 +70,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="sortCode">
         <el-input v-model="form.sortCode" class="input-sty"></el-input>
       </el-form-item>
@@ -96,16 +96,16 @@ export default {
       packageData: [],
       payData: [],
       shipData: [],
-      productData: [],
-      warehouseData: [],
+      // productData: [],
+      // warehouseData: [],
       form: {
         deliveryType: '',
         expressType: '',
         packageType: '',
         payType: '',
         shipType: '',
-        product: '',
-        warehouse: '',
+        // product: '',
+        // warehouse: '',
         sortCode: '',
         destinationSiteCode: ''
       }
@@ -173,27 +173,27 @@ export default {
             this.getSelectData()
           }
 
-          if (res.data.product && res.data.warehouse) {
-            console.log(11)
-            let product = res.data.product
-            let warehouse = res.data.warehouse
+          // if (res.data.product && res.data.warehouse) {
+          //   console.log(11)
+          //   let product = res.data.product
+          //   let warehouse = res.data.warehouse
 
-            this.productData = Object.keys(product).map(item => {
-              return {
-                value: item,
-                label: product[item]
-              }
-            })
-            console.log(Object.keys(warehouse))
-            this.warehouseData = Object.keys(warehouse).map(item => {
-              return {
-                value: item,
-                label: warehouse[item]
-              }
-            })
+          //   this.productData = Object.keys(product).map(item => {
+          //     return {
+          //       value: item,
+          //       label: product[item]
+          //     }
+          //   })
+          //   console.log(Object.keys(warehouse))
+          //   this.warehouseData = Object.keys(warehouse).map(item => {
+          //     return {
+          //       value: item,
+          //       label: warehouse[item]
+          //     }
+          //   })
 
-            this.getSelectData()
-          }
+          //   this.getSelectData()
+          // }
         } else {
           this.$notify({
             title: this.$t('操作失败'),
