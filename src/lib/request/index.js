@@ -4989,3 +4989,13 @@ exports.addressBatchAudit = params => {
 exports.printInfo = id => {
   return $form.get(`orders/${id}/order-info/pdf`)
 }
+
+// 打包改价配置 更新配置
+exports.updateChangePrice = params => {
+  return $form.put(`client-setting`, params)
+}
+
+// 打包改价配置 获取配置
+exports.getChangePrice = () => {
+  return $form.get(`client-setting`)
+}

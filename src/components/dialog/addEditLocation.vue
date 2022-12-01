@@ -173,19 +173,22 @@
         >
       </div>
     </el-form>
-    <div v-if="this.state === 'edit' && location.type === 1" class="add-btn">
-      <el-button class="btn-main" @click="addLocationCode">{{ $t('添加') }}</el-button>
-    </div>
-    <div class="head-search">
-      <el-input v-model="page_params.keyword" style="width: 30%" @keyup.enter.native="onSearch">
-        <i slot="suffix" class="el-input__icon el-icon-search" @click="onSearch"></i>
-      </el-input>
+    <div class="add-butn">
+      <div v-if="this.state === 'edit' && location.type === 1" style="margin-right: 10px">
+        <el-button class="btn-main" @click="addLocationCode">{{ $t('添加') }}</el-button>
+      </div>
+      <div>
+        <el-input v-model="page_params.keyword" @keyup.enter.native="onSearch">
+          <i slot="suffix" class="el-input__icon el-icon-search" @click="onSearch"></i>
+        </el-input>
+      </div>
     </div>
     <el-table
       :data="tableData"
       border
       style="width: 100%"
       v-if="this.state === 'edit' && location.type === 0"
+      :key="1"
     >
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="number" :label="$t('区域编号')"> </el-table-column>
@@ -240,6 +243,7 @@
       border
       style="width: 100%"
       v-if="this.state === 'edit' && location.type === 1"
+      :key="2"
     >
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="number" :label="$t('区域编号')"> </el-table-column>
@@ -369,7 +373,7 @@ export default {
   mixins: [pagination],
   methods: {
     // 获取列表数据
-    getList() {
+    getTableList() {
       this.$request
         .getLocationList(this.id, this.areaId, {
           page: this.page_params.page,
@@ -378,19 +382,33 @@ export default {
         })
         .then(res => {
           if (res.ret) {
-            if (this.location.type === 0) {
-              this.tableData = res.data
-              // this.locationData = []
-              this.page_params.page = res.meta.current_page
-              this.page_params.total = res.meta.total
-            } else {
-              // this.tableData = []
-              this.locationData = res.data
-              this.page_params.page = res.meta.current_page
-              this.page_params.total = res.meta.total
-            }
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
           }
         })
+    },
+    getLocationList() {
+      this.$request
+        .getLocationList(this.id, this.areaId, {
+          page: this.page_params.page,
+          size: this.page_params.size,
+          keyword: this.page_params.keyword
+        })
+        .then(res => {
+          if (res.ret) {
+            this.locationData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
+    },
+    getList() {
+      if (this.location.type === 0) {
+        this.getTableList()
+      } else {
+        this.getLocationList()
+      }
     },
     // 获得编辑区数据
     getDetails() {
@@ -400,9 +418,11 @@ export default {
             this.location.type = res.data.type
             this.location.locationRule = res.data
             this.qty = res.data.column * res.data.row
+            this.getTableList()
           } else {
             this.location.type = res.data.type
             this.location.locationCustom = res.data
+            this.getLocationList()
           }
         } else {
           return this.$message.error(res.msg)
@@ -587,7 +607,6 @@ export default {
     init() {
       if (this.state === 'edit') {
         this.getDetails() // 详细数据
-        this.getList() // 列表数据
       }
     },
     onSearch() {
@@ -648,9 +667,10 @@ export default {
   .click-sty {
     cursor: pointer;
   }
-  .add-btn {
+  .add-butn {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-bottom: 5px;
   }
   .custom-icon {
@@ -664,11 +684,6 @@ export default {
     left: -15px;
     color: #74b34f;
     font-size: 18px;
-  }
-  .head-search {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
   }
 }
 .billing-select {

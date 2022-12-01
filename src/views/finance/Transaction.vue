@@ -175,6 +175,7 @@ export default {
     NlePagination
   },
   created() {
+    this.onInit()
     this.getList()
     this.getTypes()
     this.getRecord()
@@ -202,9 +203,9 @@ export default {
         size: this.page_params.size,
         payment_type: this.type,
         express_line_id: this.line,
-        type: this.record
+        type: this.record,
+        keyword: this.page_params.keyword
       }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)
       this.$request.getTransaction(params).then(res => {
@@ -333,6 +334,12 @@ export default {
       this.onTime(this.timeList)
       this.onLineTypeChange()
       this.onVocherTypeChange()
+    },
+    onInit() {
+      // if (this.$route.query.id) {
+      //   this.page_params.keyword = this.$route.query.id
+      //   this.getList()
+      // }
     }
   }
 }
