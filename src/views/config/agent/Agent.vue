@@ -279,10 +279,15 @@ export default {
       this.onTime(this.timeList)
     },
     openAgent(data) {
-      this.imgSrc = data.qr_code
       this.imgVisible = true
       this.imgUser = data.user_id
       this.id = data.id
+      this.onAgentDetails(this.id)
+    },
+    onAgentDetails(id) {
+      this.$request.getEditAgent(id).then(res => {
+        this.imgSrc = res.data.qr_code
+      })
     },
     // 修改代理
     editAgent(id) {
