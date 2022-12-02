@@ -64,7 +64,7 @@
         <el-button @click="updateTracking" v-if="form.status === 4">{{
           $t('更新物流轨迹')
         }}</el-button>
-        <!-- <el-button @click="onPrint">{{ $t('打印') }}</el-button> -->
+        <el-button @click="onPrint">{{ $t('打印') }}</el-button>
       </div>
     </div>
 
@@ -1826,9 +1826,9 @@ export default {
       //   `${window.location.origin}/#/pdf/orderDetailPdf/${this.$route.params.id}`,
       //   '_blank'
       // )
-      // this.$request.printInfo(this.$route.params.id).then(res => {
-      //   window.open(res.data.url, '_blank')
-      // })
+      this.$request.printInfo(this.$route.params.id).then(res => {
+        window.open(res.data.url, '_blank')
+      })
     }
   }
 }
