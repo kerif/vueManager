@@ -38,9 +38,9 @@
                   <el-menu-item index="9">
                     {{ $t('收件地址配置') }}
                   </el-menu-item>
-                  <!-- <el-menu-item index="10">
+                  <el-menu-item index="10">
                     {{ $t('打包改价配置') }}
-                  </el-menu-item> -->
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -80,9 +80,9 @@
               <address-config></address-config>
             </el-col>
             <!-- 打包改价配置 -->
-            <!-- <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
+            <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
               <pack-price-change></pack-price-change>
-            </el-col> -->
+            </el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -257,7 +257,7 @@ import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
 import presetPack from './presetPack.vue'
 import addressConfig from './addressConfig.vue'
-// import packPriceChange from './packPriceChange.vue'
+import packPriceChange from './packPriceChange.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -282,8 +282,8 @@ export default {
     customizeBackgroundSystem,
     boxConfigure,
     presetPack,
-    addressConfig
-    // packPriceChange
+    addressConfig,
+    packPriceChange
     // GroupConfigure
   },
   mixins: [pagination],

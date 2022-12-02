@@ -72,26 +72,26 @@ export default {
   },
   methods: {
     getList() {
-      // this.$request.getChangePrice().then(res => {
-      //   this.form = res.data
-      // })
+      this.$request.getChangePrice().then(res => {
+        this.form = res.data
+      })
     },
     changeSwitch() {
-      // this.$request.updateChangePrice(this.form).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: this.$t('操作成功'),
-      //       message: res.msg
-      //     })
-      //     this.getList()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
+      this.$request.updateChangePrice(this.form).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }
