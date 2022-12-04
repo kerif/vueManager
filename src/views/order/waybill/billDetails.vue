@@ -30,13 +30,22 @@
       >
       </el-alert>
       <div class="tools">
-        <el-button
-          @click="downloadInvoice"
-          icon="el-icon-tickets"
-          mini
-          v-if="[3, 4, 5].includes(form.status)"
-          >{{ $t('发票') }}</el-button
-        >
+        <el-dropdown style="margin-right: 10px" v-if="[3, 4, 5].includes(form.status)">
+          <el-button icon="el-icon-tickets" mini>
+            {{ $t('发票') }}
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="downloadInvoice(1)">{{
+              $t('模板一')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="downloadInvoice(2)">{{
+              $t('模板二')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="downloadInvoice(3)">{{
+              $t('模板三')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button
           type="primary"
           @click="packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)"
@@ -55,6 +64,7 @@
         <el-button @click="updateTracking" v-if="form.status === 4">{{
           $t('更新物流轨迹')
         }}</el-button>
+        <el-button @click="onPrint">{{ $t('打印') }}</el-button>
       </div>
     </div>
 
@@ -75,6 +85,12 @@
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >
+          </div>
+          <div class="number-top">
+            <span>{{ $t('所属客服') }}: {{ form.user_customer_name }}</span>
+          </div>
+          <div class="number-top">
+            <span>{{ $t('所属专员') }}: {{ form.details && form.details.sale_name }}</span>
           </div>
           <div class="number-top">
             <span>{{ $t('会员等级') }}: --- {{ form.user_member_level }}</span>
@@ -132,6 +148,12 @@
             <div class="panel-bg">
               <h4 style="font-size: 16px; color: blue">
                 {{ form.status_name }}
+                <span v-if="form.status === 1 && form.payment_status === 1">
+                  {{ $t('待支付') }}</span
+                >
+                <span v-if="form.status === 1 && form.payment_status === 2">
+                  {{ $t('已支付') }}</span
+                >
                 <router-link
                   v-if="form.status === 11"
                   style="color: red; font-weight: bolder"
@@ -232,6 +254,10 @@
                     <th>{{ form.address.address }}</th>
                     <td>{{ $t('邮箱') }}</td>
                     <th>{{ form.address.email }}</th>
+                  </tr>
+                  <tr class="one-line">
+                    <td>{{ $t('备用电话') }}</td>
+                    <th colspan="3">{{ form.address.spare_phone }}</th>
                   </tr>
 
                   <tr class="one-line" v-if="form.address.wechat_id">
@@ -455,8 +481,8 @@
                   <template slot-scope="scope">
                     <div>
                       <span
-                        v-for="pic in scope.row.package_pictures"
-                        :key="pic.id"
+                        v-for="(pic, index) in scope.row.package_pictures"
+                        :key="index"
                         style="cursor: pointer"
                         @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + pic), (imgVisible = true)"
                       >
@@ -679,11 +705,17 @@
                   <span>{{ $t('打包视频') }}</span>
                   <div style="display: flex; flex-wrap: wrap">
                     <div
-                      style="margin: 10px 20px; width: 320px; height: 260px"
+                      style="margin: 10px 20px 10px 0; width: 30%"
                       v-for="item in videoUrl"
                       :key="item.id"
                     >
                       <video :src="item.url" controls autoplay width="80%"></video>
+                      <el-button
+                        class="btn-main"
+                        style="margin: 0 10px"
+                        @click="onDeleteVideo(item.id)"
+                        >{{ $t('删除') }}</el-button
+                      >
                     </div>
                   </div>
                 </div>
@@ -883,6 +915,8 @@
           <el-select
             v-model="logist.logistics_type_id"
             filterable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -896,10 +930,40 @@
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
+        <el-form-item
+          v-if="
+            this.logist.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
+        </el-form-item>
+        <el-form-item :label="$t('时间')">
+          <el-date-picker
+            v-model="created_at"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            :placeholder="$t('选择日期时间')"
+          >
+          </el-date-picker>
+          <span style="color: red; margin-left: 5px">{{ $t('不选则默认是当前时间') }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('备注')">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            :placeholder="$t('请输入内容')"
+            v-model="logisticsRemark"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="changeStatus">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- 编辑信息 -->
@@ -1008,6 +1072,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('备用电话')" class="label-sty">
+              <el-input class="input-sty" v-model="address.spare_phone"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="dialogInfo = false">{{ $t('取消') }}</el-button>
@@ -1086,10 +1157,17 @@ export default {
       countryList: [],
       declare: {},
       videoUrl: [],
-      picking_divide_order_id: ''
+      picking_divide_order_id: '',
+      is_member: false,
+      logisticsRemark: '',
+      created_at: ''
     }
   },
   created() {
+    console.log(this.$route.query.sn, this.$route.params.id)
+    // if (this.$route.query.sn) {
+    //   this.getPurchaseSn()
+    // }
     if (this.$route.params.id) {
       this.getList()
       this.getProduct()
@@ -1113,6 +1191,24 @@ export default {
       this.$request.packageVideo(this.$route.params.id).then(res => {
         if (res.data.length) {
           this.videoUrl = res.data
+        }
+      })
+    },
+    onDeleteVideo(id) {
+      this.$request.delVideo(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getVideo()
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -1176,9 +1272,8 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
-        if (res.data.picking_divide_order_id !== '') {
+        if (res.data.picking_divide_order_id) {
           this.picking_divide_order_id = res.data.picking_divide_order_id
-          console.log(this.picking_divide_order_id)
           this.getPurchaseDetail()
         }
         if (res.data.pre_declare) {
@@ -1240,7 +1335,9 @@ export default {
           {
             name: this.$t('包裹增值服务'),
             amount: +res.data.payment.package_service_fee,
-            remark: ''
+            remark: res.data.payment.package_services
+              .map(item => `${item.name}:${item.price}`)
+              .join('，')
           }
         ]
         this.TrackingData = [
@@ -1302,6 +1399,9 @@ export default {
           case 11:
             this.form.active = 2
             break
+          case 12:
+            this.form.active = 1
+            break
           case 19:
             this.form.active = 5
             break
@@ -1329,7 +1429,7 @@ export default {
       })
     },
     // 导出发票
-    downloadInvoice() {
+    downloadInvoice(type) {
       this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1337,7 +1437,8 @@ export default {
       }).then(() => {
         this.$request
           .uploadOrder({
-            ids: this.$route.params.id
+            ids: this.$route.params.id,
+            type
           })
           .then(res => {
             if (res.ret) {
@@ -1365,6 +1466,160 @@ export default {
           orderSn: this.form.order_sn
         }
       })
+    },
+    getPurchaseSn() {
+      // this.$request.purchaseSnDetail(this.$route.query.sn).then(res => {
+      //   this.tableLoading = false
+      //   this.form = res.data
+      //   this.address = res.data.address
+      //   this.baseMode = res.data.express_line.base_mode
+      //   this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
+      //   console.log(this.oderData, 'this.oderData')
+      //   this.PackageData = res.data.packages
+      //   this.services = res.data.services
+      //   this.localization = res.localization
+      //   if (res.data.picking_divide_order_id !== '') {
+      //     this.picking_divide_order_id = res.data.picking_divide_order_id
+      //     console.log(this.picking_divide_order_id)
+      //     this.getPurchaseDetail()
+      //   }
+      //   if (res.data.pre_declare) {
+      //     this.declare = res.data.pre_declare
+      //   }
+      //   let groupStatusName = ['进行中', '已结束', '已取消']
+      //   this.form.group_status_name = groupStatusName[this.form.group_status]
+      //   this.paymentData = [
+      //     {
+      //       name: this.$t('运费'),
+      //       amount: res.data.payment.freight_amount,
+      //       remark:
+      //         '首费:' +
+      //         res.data.payment.freights.first_freight_fee +
+      //         ', 续费' +
+      //         res.data.payment.freights.next_freight_fee +
+      //         ', 附加费用' +
+      //         res.data.payment.express_line_costs_amount
+      //     },
+      //     {
+      //       name: this.$t('增值服务费'),
+      //       amount: +res.data.payment.value_added_amount,
+      //       remark: res.data.services.map(item => `${item.name}: ${item.price}`).join('，')
+      //     },
+      //     {
+      //       name: this.$t('渠道服务费'),
+      //       amount: +res.data.payment.line_service_fee,
+      //       remark: res.data.payment.line_services
+      //         .map(item => `${item.name}: ${item.price}`)
+      //         .join('，')
+      //     },
+      //     {
+      //       name: this.$t('渠道规则费'),
+      //       amount: +res.data.payment.line_rule_fee,
+      //       remark: res.data.payment.line_rules
+      //         .map(item => `${item.name}: ${item.price}`)
+      //         .join('，')
+      //     },
+      //     {
+      //       name: this.$t('保险费用'),
+      //       amount: +res.data.payment.insurance_fee,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('关税费用'),
+      //       amount: +res.data.payment.tariff_fee,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('抵用券减免'),
+      //       amount: +res.data.payment.coupon_amount,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('积分抵扣'),
+      //       amount: +res.data.payment.point_amount,
+      //       remark: ''
+      //     },
+      //     {
+      //       name: this.$t('包裹增值服务'),
+      //       amount: +res.data.payment.package_service_fee,
+      //       remark: ''
+      //     }
+      //   ]
+      //   this.TrackingData = [
+      //     {
+      //       context: '签收时间',
+      //       ftime: res.data.signed_at
+      //     },
+      //     {
+      //       context: '发货时间',
+      //       ftime: res.data.shipped_at
+      //     },
+      //     {
+      //       context: '支付时间',
+      //       ftime: res.data.paid_at
+      //     },
+      //     {
+      //       context: '打包时间',
+      //       ftime: res.data.packed_at
+      //     },
+      //     {
+      //       context: '提交时间',
+      //       ftime: res.data.created_at
+      //     }
+      //   ]
+      //   this.boxData = res.data.box
+      //   this.userId = res.data.user_id
+      //   //如果是单箱出库
+      //   if (this.form.box_type === 1) {
+      //     this.boxData = [
+      //       {
+      //         id: 0,
+      //         length: res.data.details.length,
+      //         weight: res.data.details.actual_weight,
+      //         height: res.data.details.height,
+      //         width: res.data.details.width,
+      //         volume_weight: res.data.details.volume_weight,
+      //         logistics_sn: this.form.order_sn,
+      //         sn: this.form.order_sn,
+      //         packages: '全部一箱'
+      //       }
+      //     ]
+      //   }
+      //   //团购子订单
+      //   if (this.form.group_buying_status && this.form.group_buying_status === 1) {
+      //     this.form.status = 3
+      //     this.form.status_name = '已打包'
+      //   }
+      //   switch (this.form.status) {
+      //     case 1:
+      //     case 2:
+      //     case 3:
+      //     case 4:
+      //     case 5:
+      //       this.form.active = this.form.status - 1
+      //       break
+      //     case 6:
+      //       this.form.active = 4
+      //       break
+      //     case 11:
+      //       this.form.active = 2
+      //       break
+      //     case 19:
+      //       this.form.active = 5
+      //       break
+      //     default:
+      //       this.form.active = 0
+      //       break
+      //   }
+      //   if (
+      //     res.data.payment &&
+      //     (res.data.payment.value_added_service || res.data.payment.line_services)
+      //   ) {
+      //     this.addedData = res.data.payment.value_added_service
+      //     this.addedData.push(...res.data.payment.line_services)
+      //   }
+      //   if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
+      // })
     },
     // 获取收件人可选信息
     getAddress() {
@@ -1404,27 +1659,33 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeOrderStatus({
-          logistics_type_id: this.logist.logistics_type_id,
-          order_ids: this.$route.params.id
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        order_ids: this.$route.params.id,
+        is_member: Number(this.is_member),
+        reamrk: this.logisticsRemark,
+        created_at: this.created_at
+      }
+      if (this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)) {
+        params.logistics_type_id = this.logist.logistics_type_id
+      } else {
+        params.context = this.logist.logistics_type_id
+      }
+      this.$request.changeOrderStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 打包
     packed(id, order_sn, status, is_parent, line_id) {
@@ -1467,8 +1728,25 @@ export default {
       this.boxDialog = true
     },
     getPurchaseDetail() {
-      this.$request.transportGoodList(this.$route.params.id).then(res => {
-        console.log(res)
+      this.$request.transportGoodList(this.picking_divide_order_id).then(res => {
+        this.productData = res.data.map(item => {
+          const name = item.p_goods.cn_name
+          const qty = item.pack_quantity
+          const material = item.p_goods.material
+          const status_name = '无'
+          const images = [item.p_goods.image]
+          const unit_price = item.p_goods.purchase_price
+          const express_num = '无'
+          return {
+            name,
+            qty,
+            material,
+            status_name,
+            images,
+            unit_price,
+            express_num
+          }
+        })
       })
     },
     // 编辑
@@ -1496,7 +1774,8 @@ export default {
           sub_area_id: this.countryList[2] || '',
           province: this.address.province,
           district: this.address.district,
-          email: this.address.email
+          email: this.address.email,
+          spare_phone: this.address.spare_phone
         })
         .then(res => {
           if (res.ret) {
@@ -1540,6 +1819,15 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    onPrint() {
+      // window.open(
+      //   `${window.location.origin}/#/pdf/orderDetailPdf/${this.$route.params.id}`,
+      //   '_blank'
+      // )
+      this.$request.printInfo(this.$route.params.id).then(res => {
+        window.open(res.data.url, '_blank')
       })
     }
   }

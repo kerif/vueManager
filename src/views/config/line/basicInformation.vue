@@ -32,6 +32,14 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <div>{{ $t('编号') }}</div>
+        <el-row>
+          <el-col :span="10">
+            <el-input v-model="form.code" :placeholder="$t('请输入编号')"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
             <div>{{ $t('支持仓库') }}</div>
@@ -121,7 +129,7 @@
                 </el-tooltip>
               </el-radio>
               <el-radio :label="1"
-                >{{ $t('集包立即付款') }}
+                >{{ $t('集包立即付款(原箱出库)') }}
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -131,6 +139,7 @@
                   <span class="el-icon-question icon-info"></span>
                 </el-tooltip>
               </el-radio>
+              <el-radio :label="2">{{ $t('集包立即付款(合箱出库)') }}</el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
@@ -323,6 +332,19 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>{{ $t('提示') }}</div>
+            <el-input
+              v-model="form.tips"
+              :placeholder="$t('请输入提示')"
+              :rows="3"
+              type="textarea"
+            ></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
         <el-button
           type="primary"
           class="sava-btn"
@@ -369,6 +391,7 @@ export default {
         prop_ids: [],
         is_great_value: 0,
         icon: '',
+        code: '',
         need_id_card: '',
         weight_rise: '',
         // multi_box_min_weight: '',
@@ -383,7 +406,8 @@ export default {
         is_delivery: 0,
         label_ids: [],
         order_mode: 0,
-        require_size: 0
+        require_size: 0,
+        tips: ''
       },
       referenceTime: {
         minTime: '',
@@ -550,6 +574,8 @@ export default {
         this.form.require_size = res.data.require_size
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
         this.form.label_ids = res.data.labels.map(item => item.id)
+        this.form.tips = res.data.tips
+        this.form.code = res.data.code
       })
     },
     onSelectChange(e) {

@@ -30,9 +30,10 @@
         <!-- 成员数量 -->
         <el-table-column prop="admin_count" :label="$t('成员数量')" width="100"> </el-table-column>
         <!-- 所属仓库 -->
-        <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
+        <el-table-column prop="warehouses" :label="$t('所属仓库')" :formatter="fileData">
+        </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')" width="450">
+        <el-table-column :label="$t('操作')" width="500">
           <template slot-scope="scope">
             <!-- 编辑 -->
             <el-button
@@ -67,6 +68,12 @@
               @click="pickPiont(scope.row.id)"
               >{{ $t('自提点权限') }}</el-button
             >
+            <el-button
+              class="btn-light-red"
+              v-if="dataPermission.enabled === 1"
+              @click="editTelPermission(scope.row.id, scope.row.hide_phone)"
+              >{{ $t('数据权限') }}</el-button
+            >
           </template>
         </el-table-column>
         <!-- <template slot="append">
@@ -76,6 +83,28 @@
       </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :title="$t('数据权限')" :visible.sync="show" @close="clear">
+      <el-form>
+        <el-form-item :label="$t('隐藏手机号')">
+          <el-switch
+            v-model="hide_phone"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button :loading="$store.state.btnLoading" type="primary" @click="onConfirm">{{
+          $t('确定')
+        }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -96,11 +125,17 @@ export default {
     return {
       staff_group_list: [],
       tableLoading: false,
-      normal: 1
+      normal: 1,
+      dataPermission: {},
+      show: false,
+      hide_phone: 0
     }
   },
   mounted() {
     this.getList()
+  },
+  created() {
+    this.getConfig()
   },
   methods: {
     getList() {
@@ -156,6 +191,20 @@ export default {
         this.getList()
       })
     },
+    fileData(row) {
+      let arr = []
+      if (!row.warehouses.length) {
+        return (arr = ['全部仓库'])
+      } else {
+        row.warehouses.forEach((item, match) => {
+          if (match > 10) {
+            return
+          }
+          arr.push(item.warehouse_name)
+        })
+        return arr.join(',')
+      }
+    },
     // 成员
     member(id) {
       dialog({ type: 'staffGroup', id: id })
@@ -202,7 +251,41 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-    }
+    },
+    editTelPermission(id, hide_phone) {
+      this.show = true
+      this.id = id
+      this.hide_phone = hide_phone
+    },
+    onConfirm() {
+      let params = {}
+      params.hide_phone = this.hide_phone
+      this.$request.telPermission(this.id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        if (res.ret) {
+          this.dataPermission = res.data[2]
+          console.log(this.dataPermission)
+        }
+      })
+    },
+    clear() {}
   },
   watch: {
     // 监听已选择的行

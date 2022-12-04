@@ -72,7 +72,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     clear() {
@@ -86,8 +85,6 @@ export default {
       this.show = false
     },
     init() {
-      console.log(this.lang, 'lang')
-      console.log(this.line, 'line')
       this.ruleForm.language = this.lang.language_code
       if (this.transCode === 1) {
         this.getProps()

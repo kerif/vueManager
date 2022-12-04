@@ -56,11 +56,9 @@ export default {
         })
         .then(res => {
           this.ruleForm.name = res.data.name
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     confirm(formName) {
-      console.log(this.state, 'state')
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updateExpressLang(this.line.id, this.ruleForm).then(res => {
@@ -78,7 +76,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
         } else {
           return false
@@ -94,16 +91,7 @@ export default {
       this.show = false
     },
     init() {
-      // this.line = this.line
-      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      // this.transCode = this.transCode
-      // this.state = this.state
-      console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
-      console.log(this.state, 'state')
       if (this.transCode === 1) {
         this.getLang()
       }

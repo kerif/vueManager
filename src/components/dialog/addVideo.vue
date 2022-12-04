@@ -260,7 +260,6 @@ export default {
       return this.$request.uploadImg(params)
     },
     init() {
-      console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
         this.getList()
       }

@@ -25,7 +25,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="add-btn" @click="addPay">{{ $t('新增') }}</el-button>
+        <el-button type="primary" v-if="state === 'add'" class="add-btn" @click="addPay('add')">{{
+          $t('新增')
+        }}</el-button>
+        <el-button type="primary" v-else class="add-btn" @click="addPay('edit')">{{
+          $t('新增')
+        }}</el-button>
         <el-table :data="ruleForm.payment_setting_connection" border style="width: 100%">
           <el-table-column type="index" label="#"> </el-table-column>
           <el-table-column prop="name" :label="$t('提示名称')"> </el-table-column>
@@ -51,10 +56,24 @@
           </el-table-column>
           <el-table-column :label="$t('操作')" width="150">
             <template slot-scope="scope">
-              <el-button size="small" @click="editPay(scope.$index, scope.row.id)">{{
+              <el-button
+                size="small"
+                v-if="state === 'edit'"
+                @click="editPay('edit', scope.$index, scope.row.id)"
+                >{{ $t('编辑') }}</el-button
+              >
+              <el-button size="small" v-else @click="editPay('add', scope.$index, scope.row.id)">{{
                 $t('编辑')
               }}</el-button>
-              <el-button size="small" @click="deletePay(scope.row.id)">{{ $t('删除') }}</el-button>
+              <el-button size="small" v-if="state === 'edit'" @click="deletePay(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+              <el-button
+                size="small"
+                v-else
+                @click="onDeletePay(scope.$index, ruleForm.payment_setting_connection)"
+                >{{ $t('删除') }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -228,34 +247,45 @@ export default {
       })
     },
     //新增转账支付内容
-    addPay() {
+    addPay(status) {
       dialog(
         {
           type: 'addPay',
           title: this.$t('新增'),
-          id: this.id
+          id: this.id,
+          status
         },
         data => {
-          // this.getList()
-          this.ruleForm.payment_setting_connection.push(data)
+          if (status === 'add') {
+            if (data.name && data.content) {
+              this.ruleForm.payment_setting_connection.push(data)
+            }
+          } else {
+            this.getList()
+          }
         }
       )
     },
     //修改转账支付内容
-    editPay(index, payId) {
+    editPay(status, index, payId) {
       dialog(
         {
           type: 'editPay',
           title: this.$t('修改'),
           id: this.id,
+          status,
           payId,
           payData: {
             name: this.ruleForm.payment_setting_connection[index].name,
             content: this.ruleForm.payment_setting_connection[index].content
           }
         },
-        () => {
-          this.getList()
+        data => {
+          if (status === 'edit') {
+            this.getList()
+          } else {
+            this.$set(this.ruleForm.payment_setting_connection, index, data)
+          }
         }
       )
     },
@@ -275,6 +305,9 @@ export default {
           this.getList()
         }
       )
+    },
+    onDeletePay(index, rows) {
+      rows.splice(index, 1)
     },
     //删除转账支付内容
     deletePay(id) {
@@ -333,7 +366,6 @@ export default {
           account_content
         }
       })
-      console.log(this.ruleForm, 'this.ruleForm')
       if (this.state === 'add') {
         this.$request.addPayments(this.ruleForm).then(res => {
           if (res.ret) {
@@ -350,7 +382,6 @@ export default {
               type: 'error'
             })
           }
-          // this.show = false
         })
       } else {
         this.$request.updatePayments(this.id, this.ruleForm).then(res => {
@@ -368,7 +399,6 @@ export default {
               type: 'error'
             })
           }
-          // this.show = false
         })
       }
     },
@@ -429,9 +459,7 @@ export default {
       this.getRate()
       this.getCurrent()
       this.getLanguageList()
-      console.log(this.state, 'this.state')
       if (this.state === 'edit') {
-        console.log(this.id)
         this.getList()
       }
     }
@@ -527,8 +555,6 @@ export default {
   }
   .input-sty {
     width: 35% !important;
-    // .el-input {
-    // }
     display: inline-block;
     .el-input__inner {
       // width: 30%;

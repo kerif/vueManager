@@ -164,12 +164,22 @@
                   <span v-else>{{ ele.at_user.name }}</span>
                   ：
                   {{ ele.content }}
+                  <span
+                    style="color: red; margin-left: 30px; cursor: pointer"
+                    @click="onDeleteReply(item.id, ele.id)"
+                    >{{ $t('删除') }}</span
+                  >
                 </div>
 
                 <div style="padding: 10px 0" v-else>
                   <span v-if="ele.user.id === -1" class="red-text">{{ ele.user.name }}：</span>
                   <span v-else>{{ ele.user.name }}：</span>
                   {{ ele.content }}
+                  <span
+                    style="color: red; margin-left: 30px; cursor: pointer"
+                    @click="onDeleteReply(item.id, ele.id)"
+                    >{{ $t('删除') }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -656,6 +666,24 @@ export default {
             type: 'success'
           })
           this.showDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onDeleteReply(id, replyId) {
+      this.$request.delReply(id, replyId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
           this.getList()
         } else {
           this.$notify({

@@ -11,7 +11,7 @@
     <el-form label-width="120px" :model="ruleForm" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('PO单号')">
+          <el-form-item :label="$t('PO单号')" prop="sn">
             <el-input
               v-model="ruleForm.sn"
               maxlength="30"
@@ -128,15 +128,17 @@
             </template>
           </el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')"></el-table-column>
+          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
           <el-table-column prop="material" :label="$t('材质')"></el-table-column>
           <el-table-column prop="casing" :label="$t('包装')"></el-table-column>
           <el-table-column prop="color" :label="$t('颜色')"></el-table-column>
-          <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
+          <el-table-column prop="purchase_price" :label="$t('物品单价')">
+            <template slot-scope="scope"> {{ scope.row.purchase_price }}</template>
+          </el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
-          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img
@@ -155,9 +157,14 @@
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
         $t('保存')
       }}</el-button>
-      <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSubmit">{{
-        $t('保存并提交')
-      }}</el-button>
+      <el-button
+        type="primary"
+        size="small"
+        v-if="status !== 1"
+        :loading="$store.state.btnLoading"
+        @click="onSubmit"
+        >{{ $t('保存并提交') }}</el-button
+      >
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -187,6 +194,7 @@ export default {
       imgVisible: false,
       imgSrc: '',
       state: '',
+      status: '',
       rules: {
         sn: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
@@ -206,6 +214,7 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
+        this.status = res.data.status
       })
     },
     getCompany() {
@@ -238,7 +247,6 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods[index] = data
           this.$set(this.ruleForm.goods, index, data)
         }
@@ -253,30 +261,38 @@ export default {
           type: 'distributeScheme',
           mode
         },
-        goodsData => {
-          goodsData = goodsData.map(item => {
+        goodsList => {
+          let goodsData = goodsList.map(item => {
             return {
               ...item,
               image: item.image ? item.image.path : ''
             }
           })
-          this.ruleForm.goods.push(...goodsData)
+          for (let i = 0; i < goodsData.length; i++) {
+            let goods = this.ruleForm.goods.map(item => {
+              return item.barcode
+            })
+            if (!goods.includes(goodsData[i].barcode)) {
+              this.ruleForm.goods.push(goodsData[i])
+            } else {
+              this.ruleForm.goods.splice(i, 1, goodsData[i])
+            }
+          }
         }
       )
     },
     onSave() {
-      console.log(this.ruleForm.logitics_company_code)
       let params = {
         ...this.ruleForm,
         is_approved: 0
       }
       this.ruleForm.goods = this.ruleForm.goods.map(item => {
+        console.log(item)
         return {
           ...item,
-          image: item.image ? item.image.path : ''
+          image: item.image
         }
       })
-      console.log(this.ruleForm.goods)
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
           if (res.ret) {
@@ -318,7 +334,7 @@ export default {
       this.ruleForm.goods = this.ruleForm.goods.map(item => {
         return {
           ...item,
-          image: item.image ? item.image.path : ''
+          image: item.image
         }
       })
       if (!this.$route.params.id) {
@@ -364,7 +380,6 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods.push({ ...data })
         }
       )

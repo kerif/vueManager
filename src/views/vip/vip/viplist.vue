@@ -116,27 +116,51 @@
         </el-date-picker>
       </div>
       <div class="search-item">
+        <div>{{ $t('客户来源') }}</div>
+        <el-select v-model="searchParams.user_source" clearable :placeholder="$t('请选择客户来源')">
+          <el-option
+            v-for="item in sourceList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('最后登录时间') }}</div>
+        <el-date-picker
+          v-model="loginTime"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('渠道来源') }}</div>
+        <el-select v-model="searchParams.channel_id" clearable>
+          <el-option
+            v-for="item in channelData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
       </div>
     </div>
     <div class="bottom-sty">
       <div>
-        <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
-          $t('禁止登录')
-        }}</el-button>
-        <el-button class="btn-blue-green" size="small" @click="forbidLogin(1)">{{
-          $t('允许登录')
-        }}</el-button>
-        <el-button class="btn-light-red" size="small" @click="deleteData">{{
-          $t('删除')
-        }}</el-button>
-        <!-- <el-button class="btn-purple" size="small" @click="goServies('services')">{{
-          $t('分配客服')
-        }}</el-button>
-        <el-button class="btn-deep-blue" size="small" @click="goServies('sale')">{{
-          $t('分配销售')
-        }}</el-button> -->
+        <el-button-group style="margin: 0 0 0 10px">
+          <el-button class="btn-main" size="small" @click="onUserLabel">{{
+            $t('添加标签')
+          }}</el-button>
+          <el-button class="btn-main" size="small" @click="onBatchTag">...</el-button>
+        </el-button-group>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-purple" size="small" @click="goServies('services')">{{
             $t('分配客服')
@@ -168,6 +192,25 @@
         </div>
       </div>
       <div class="addUser">
+        <search-select
+          :selectArr="clientSourceList"
+          v-model="page_params.user_source"
+          @search="onSource"
+        >
+        </search-select>
+        <!-- <el-select
+          v-model="page_params.source"
+          :placeholder="$t('客户来源')"
+          clearable
+          @change="onSource"
+        >
+          <el-option
+            v-for="item in sourceList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select> -->
         <add-btn style="margin-right: 10px" size="small" plain @click.native="addUser">{{
           $t('添加客户')
         }}</add-btn>
@@ -267,20 +310,54 @@
         prop="member_level_name"
         align="center"
       ></el-table-column>
+      <el-table-column :label="$t('成长值')" align="center" prop="growth_value"></el-table-column>
       <el-table-column
         :label="$t('客户组')"
         prop="user_group.name_cn"
         align="center"
       ></el-table-column>
+      <el-table-column :label="$t('客户标签')" prop="tags" width="200">
+        <template slot-scope="scope">
+          <el-tag
+            v-for="item in scope.row.tags"
+            style="margin: 0 5px 10px 0"
+            :key="item.id"
+            type="warning"
+            >{{ item.name }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <!-- <el-table-column :label="$t('消费总额')" prop="consume_amount">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onPageTo(scope.row.id)">{{
+            scope.row.consume_amount
+          }}</el-button>
+        </template>
+      </el-table-column> -->
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
+      <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
+      <el-table-column :label="$t('渠道来源')" prop="channel">
+        <template slot-scope="scope">
+          <span>{{ scope.row.channel && scope.row.channel.channel_name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('注册时间')" prop="created_at" width="155"></el-table-column>
       <el-table-column
         :label="$t('最后登录时间')"
         prop="last_login_at"
         width="155"
       ></el-table-column>
-      <el-table-column :label="$t('邀请人')" prop="invitor"></el-table-column>
+      <el-table-column :label="$t('邀请人')" prop="invitor" width="120">
+        <template slot-scope="scope">
+          <div>
+            <span>{{ scope.row.invitor }}</span>
+            <span v-if="scope.row.is_agent_invite === 1">
+              <img class="group-sty" src="../../../assets/agent.png" />
+            </span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
@@ -326,7 +403,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div class="flex-btn">
+      <div class="flex-left">
+        <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
+          $t('禁止登录')
+        }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="forbidLogin(1)">{{
+          $t('允许登录')
+        }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
+      </div>
+      <div class="flex-right">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
+    </div>
     <el-dialog :title="$t('客户合并')" :visible.sync="dialogVisible" width="50%">
       <div>
         <p>{{ $t('当前客户ID') }}</p>
@@ -381,7 +473,7 @@
     >
       <div v-if="staffStatus === 'group'">
         <span>{{ $t('选择客户组') }}</span> &nbsp;&nbsp;
-        <el-select v-model="groupId" clearable :placeholder="$t('请选择')">
+        <el-select v-model="groupId" filterable clearable :placeholder="$t('请选择')">
           <el-option
             v-for="item in groupList"
             :key="item.id"
@@ -393,7 +485,7 @@
       <div v-else>
         <span>{{ $t('选择员工') }}</span
         >&nbsp;&nbsp;
-        <el-select v-model="saleId" clearable :placeholder="$t('请选择')">
+        <el-select v-model="saleId" filterable clearable :placeholder="$t('请选择')">
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -425,6 +517,12 @@
         <el-button type="primary" @click="pwdConfirm('ruleForm')">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <add-user-label
+      :showLabel="showLabel"
+      :deleteNum="deleteNum"
+      @passVal="passVal"
+      ref="label"
+    ></add-user-label>
   </div>
 </template>
 <script>
@@ -433,6 +531,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
+import addUserLabel from './addUserLabel.vue'
 export default {
   name: 'viplist',
   data() {
@@ -466,7 +565,8 @@ export default {
       localization: {},
       clientGroupList: [],
       page_params: {
-        group: ''
+        group: '',
+        user_source: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -492,22 +592,31 @@ export default {
         max_point: '',
         min_point: '',
         max_order_count: '',
-        min_order_count: ''
+        min_order_count: '',
+        user_source: '',
+        channel_id: ''
       },
       searchTime: [],
+      loginTime: [],
       gradeList: [],
       groupList: [],
       staffList: [],
       inviteList: [],
       customerList: [],
       saleList: [],
+      sourceList: [],
+      clientSourceList: [],
       inviteLoading: false,
-      hasFilterCondition: false
+      hasFilterCondition: false,
+      showLabel: false,
+      channelData: []
     }
   },
   mixins: [pagination],
   created() {
     this.getCategory()
+    this.getUserSource()
+    this.getChannel()
     if (this.$route.query.group) {
       this.page_params.group = Number(this.$route.query.group)
     }
@@ -517,6 +626,7 @@ export default {
     this.getGradeList()
     this.getUserGroup()
     this.getStaff()
+    this.getClientUser()
   },
   activated() {
     this.getList()
@@ -530,6 +640,9 @@ export default {
       if (!this.searchTime) {
         this.searchTime = []
       }
+      if (!this.loginTime) {
+        this.loginTime = []
+      }
       console.log(this.page_params.group)
       this.$request
         .getUsers({
@@ -540,10 +653,16 @@ export default {
           user_group_id: this.searchParams.user_group_id
             ? this.searchParams.user_group_id
             : this.page_params.group,
+          user_source: this.searchParams.user_source
+            ? this.searchParams.user_source
+            : this.page_params.user_source,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
-          end_date: this.searchTime[1]
+          end_date: this.searchTime[1],
+          last_begin_date: this.loginTime[0],
+          last_end_date: this.loginTime[1],
+          channel_id: this.searchParams.channel_id
         })
         .then(res => {
           this.tableLoading = false
@@ -579,7 +698,10 @@ export default {
       this.searchParams.max_point = ''
       this.searchParams.min_order_count = ''
       this.searchParams.max_order_count = ''
+      this.searchParams.user_source = ''
+      this.searchParams.channel_id = ''
       this.searchTime = []
+      this.loginTime = []
       this.getList()
     },
     // 搜索等级列表
@@ -601,6 +723,29 @@ export default {
         if (res.ret) {
           this.groupList = res.data
         }
+      })
+    },
+    getUserSource() {
+      this.$request.userSource().then(res => {
+        res.data.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        this.sourceList = res.data
+      })
+    },
+    getClientUser() {
+      this.$request.userSource().then(res => {
+        res.data.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        res.data.forEach(item => {
+          this.clientSourceList.push({
+            value: item.id,
+            label: item.name
+          })
+        })
       })
     },
     inviteMethod(keyword) {
@@ -634,6 +779,10 @@ export default {
     editPassword(id) {
       this.pwdId = id
       this.dialogPwd = true
+    },
+    onSource() {
+      this.page_params.handleQueryChange('user_source', this.page_params.user_source)
+      this.getList()
     },
     pwdConfirm(formName) {
       this.$refs[formName].validate(valid => {
@@ -825,9 +974,6 @@ export default {
     // 获取客户组
     getCategory() {
       this.$request.getSimple().then(res => {
-        // if (res.ret) {
-        //   this.clientGroupList = res.data
-        // }
         res.data.forEach(item => {
           this.clientGroupList.push({
             value: item.id,
@@ -854,12 +1000,13 @@ export default {
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
-          end_date: this.searchTime[1]
+          end_date: this.searchTime[1],
+          last_begin_date: this.loginTime[0],
+          last_end_date: this.loginTime[1]
         })
         .then(res => {
           if (res.ret) {
             this.urlExcel = res.data.url
-            // window.location.href = this.urlExcel
             window.open(this.urlExcel)
             this.$notify({
               title: this.$t('操作成功'),
@@ -900,7 +1047,6 @@ export default {
         })
         .then(res => {
           for (let i of res.data) {
-            // i.value = i.id
             i.value = i.id + '---' + i.name
           }
           list = res.data
@@ -932,7 +1078,6 @@ export default {
             message: res.msg,
             type: 'warning'
           })
-          this.dialogVisible = false
         }
       })
     },
@@ -942,6 +1087,25 @@ export default {
         this.getList()
       })
     },
+    onUserLabel() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择客户'))
+      }
+      this.showLabel = true
+    },
+    onBatchTag() {
+      dialog(
+        {
+          type: 'batchTag'
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    passVal() {
+      this.showLabel = false
+    },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
     },
@@ -950,7 +1114,6 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择客户'))
       }
-      console.log(type)
       if (type === 0) {
         this.$request
           .customerForbid({
@@ -1018,13 +1181,28 @@ export default {
           })
         }
       })
+    },
+    getChannel() {
+      this.$request.categorySearch().then(res => {
+        if (res.ret) {
+          this.channelData = res.data
+        }
+      })
+    },
+    onPageTo(id) {
+      console.log(id)
+      this.$router.push({
+        name: 'transaction',
+        query: id
+      })
     }
   },
   components: {
     SearchSelect,
     SearchGroup,
     NlePagination,
-    AddBtn
+    AddBtn,
+    addUserLabel
   }
 }
 </script>
@@ -1069,15 +1247,12 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
-    // text-align: right;
   }
   .addUser {
     display: flex;
     justify-content: flex-end;
     flex: 1;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
       margin-right: 10px;
     }
   }
@@ -1086,12 +1261,26 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
     float: left;
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .group-sty {
+    width: 18px;
+    margin-left: 3px;
+    vertical-align: middle;
+  }
+  .flex-btn {
+    display: flex;
+    align-items: center;
+    .flex-left {
+      flex: 1;
+    }
+    .flex-right {
+      flex: auto;
+    }
   }
 }
 </style>

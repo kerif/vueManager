@@ -104,6 +104,7 @@
                     :disabled="!item.state"
                     v-model="scope.row.param"
                     :placeholder="$t('请选择')"
+                    @change="changeParam($event, item)"
                     clearable
                   >
                     <el-option
@@ -120,7 +121,25 @@
                 <template slot-scope="scope">
                   <el-select
                     :disabled="!item.state"
+                    v-if="scope.row.param === 16"
                     v-model="scope.row.comparison"
+                    @change="changeComparison($event, item)"
+                    :placeholder="$t('请选择')"
+                    clearable
+                  >
+                    <el-option
+                      v-for="item in conditionOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                  <el-select
+                    v-else
+                    :disabled="!item.state"
+                    v-model="scope.row.comparison"
+                    @change="changeComparison($event, item)"
                     :placeholder="$t('请选择')"
                     clearable
                   >
@@ -136,7 +155,20 @@
               </el-table-column>
               <el-table-column :label="$t('值')">
                 <template slot-scope="scope">
-                  <el-input :disabled="!item.state" v-model="scope.row.value"></el-input>
+                  <el-select
+                    v-if="scope.row.param === 16"
+                    v-model="scope.row.tag_ids"
+                    :disabled="!item.state"
+                    multiple
+                  >
+                    <el-option
+                      v-for="item in tagList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    ></el-option>
+                  </el-select>
+                  <el-input v-else :disabled="!item.state" v-model="scope.row.value"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('操作')" v-if="item.state">
@@ -278,6 +310,32 @@ export default {
           name: this.$t('等于')
         }
       ],
+      conditionOption: [
+        {
+          id: '>',
+          name: this.$t('大于')
+        },
+        {
+          id: '>=',
+          name: this.$t('大于等于')
+        },
+        {
+          id: '<',
+          name: this.$t('小于')
+        },
+        {
+          id: '<=',
+          name: this.$t('小于等于')
+        },
+        {
+          id: '=',
+          name: this.$t('等于')
+        },
+        {
+          id: 'contains',
+          name: this.$t('包含')
+        }
+      ],
       typeData: [
         {
           id: 1,
@@ -318,12 +376,14 @@ export default {
             {
               param: '',
               comparison: '',
-              value: ''
+              value: '',
+              tag_ids: []
             }
           ]
         }
       ],
-      editData: {}
+      editData: {},
+      tagList: []
     }
   },
   created() {
@@ -333,11 +393,17 @@ export default {
     this.getString()
     this.getPartition()
     this.getRulesData()
+    this.getTagList()
   },
   methods: {
     getRulesData() {
       this.$request.getNewRules(this.$route.params.id).then(res => {
         if (res.ret) {
+          res.data.forEach(item => {
+            item.conditions.forEach(ele => {
+              ele.tag_ids = ele.address_tags.map(val => val.id)
+            })
+          })
           this.channel = res.data.map(item => {
             return {
               ...item,
@@ -483,10 +549,16 @@ export default {
       item.push({
         param: '',
         comparison: '',
-        value: ''
+        value: '',
+        tag_ids: []
       })
     },
     saveChannles(item) {
+      item.conditions.forEach(ele => {
+        if (ele.tag_ids.length) {
+          ele.value = 0
+        }
+      })
       let translation = {}
       this.stringData.forEach(item => {
         translation[item.language_code] = item.value
@@ -537,6 +609,31 @@ export default {
             }
           })
       }
+    },
+    getTagList() {
+      this.$request.addressTagList().then(res => {
+        if (res.ret) {
+          this.tagList = res.data
+        }
+      })
+    },
+    changeParam(value, item) {
+      item.conditions.forEach(ele => {
+        if (value !== 16 && ele.comparison === 'contains') {
+          ele.comparison = ''
+          ele.value = ''
+          ele.tag_ids = []
+        }
+      })
+    },
+    changeComparison(value, item) {
+      item.conditions.forEach(ele => {
+        if (value !== 'contains' && ele.param === 16) {
+          ele.param = ''
+          ele.value = ''
+          ele.tag_ids = []
+        }
+      })
     }
   }
 }

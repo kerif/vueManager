@@ -53,6 +53,7 @@
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index" label="#"> </el-table-column>
         <el-table-column prop="sn" :label="$t('分货号')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('分货方案名称')"></el-table-column>
         <el-table-column prop="status" :label="$t('状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">{{ $t('草稿') }}</span>
@@ -61,12 +62,29 @@
             <span v-else>{{ $t('已转运') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" :label="$t('包含采购单')"> </el-table-column>
-        <el-table-column prop="quantity" :label="$t('预计分货（商品数/订单）')"> </el-table-column>
-        <el-table-column prop="picking_quantity" :label="$t('实际拣货')"> </el-table-column>
+        <el-table-column :label="$t('打包进度')">
+          <template slot-scope="scope">
+            {{ scope.row.pack_orders_count }}/{{ scope.row.orders_count }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          :formatter="fileData"
+          :label="$t('包含采购单')"
+        ></el-table-column>
+        <el-table-column prop="quantity,orders_count" :label="$t('预计分货(商品数/订单)')">
+          <template slot-scope="scope">
+            {{ scope.row.quantity ? scope.row.quantity : 0 }}/{{ scope.row.orders_count }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="picking_quantity" :label="$t('实际拣货')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.picking_quantity ? scope.row.picking_quantity : 0 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"> </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')" width="220">
+        <el-table-column :label="$t('操作')" width="220" v-if="activeName !== 'all'">
           <template slot-scope="scope">
             <el-button
               class="btn-main"
@@ -100,7 +118,7 @@
             >
             <el-button
               class="btn-deep-blue"
-              v-if="['2'].includes(activeName)"
+              v-if="['2', '3'].includes(activeName)"
               @click="onPack(scope.row.sn)"
               >{{ $t('开始打包') }}</el-button
             >
@@ -154,7 +172,8 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: this.activeName === 'all' ? '' : this.activeName
+          status: this.activeName === 'all' ? '' : this.activeName,
+          ...this.searchData
         })
         .then(res => {
           if (res.ret) {
@@ -162,7 +181,6 @@ export default {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
-
             this.onCount()
           }
         })
@@ -208,6 +226,16 @@ export default {
         name: 'purchasePack',
         query: { sn }
       })
+    },
+    fileData(row) {
+      let arr = []
+      row.p_orders.forEach((item, match) => {
+        if (match > 20) {
+          return
+        }
+        arr.push(item.name)
+      })
+      return arr.join(',')
     },
     onDetail(id) {
       this.$router.push({

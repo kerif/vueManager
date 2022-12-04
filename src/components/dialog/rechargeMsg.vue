@@ -172,8 +172,6 @@ export default {
       this.ruleForm.customer_images = []
     },
     init() {
-      console.log(this.tranAmount, 'tranAmount')
-      console.log(this.state, 'state')
       this.ruleForm.pay_amount = this.tranAmount
       this.rechargeFee = this.tranAmount
       // this.currencyUnit = this.currencyUnit

@@ -54,7 +54,6 @@
         </div>
       </el-form-item>
       <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
-        <!-- <span></span> -->
         <el-input
           v-model="item.value"
           type="textarea"
@@ -104,7 +103,7 @@ export default {
       this.$request.getString().then(res => {
         if (res.ret) {
           this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
-          console.log(this.stringData, 'this.stringData')
+
           if (this.id) {
             this.getList()
           }
@@ -179,7 +178,6 @@ export default {
               }
             })
           }
-          console.log(this.stringData, 'this.stringData')
         }
       })
     },
@@ -217,7 +215,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       } else {
         this.$request
@@ -241,10 +238,9 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
-      console.log(translation, 'translation')
+
       // let method = this.state === 'add' ? 'newAreas' : 'updateString'
     },
     clear() {
@@ -264,7 +260,6 @@ export default {
     init() {
       this.getString()
       this.getCountry()
-      console.log(this.state, 'sate')
     }
   }
 }

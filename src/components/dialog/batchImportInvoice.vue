@@ -64,7 +64,6 @@ export default {
       })
     },
     uploadTmp(item) {
-      console.log(item)
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {

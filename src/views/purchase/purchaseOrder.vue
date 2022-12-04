@@ -62,6 +62,9 @@
           @click="onInvild(selectIDs)"
           >{{ $t('作废') }}</el-button
         >
+        <el-button v-if="activeName === '4'" class="btn-light-red" @click="onBack(selectIDs)">{{
+          $t('批量回退')
+        }}</el-button>
       </div>
       <div class="header-search">
         <div class="searchGroup">
@@ -100,8 +103,8 @@
           <template slot-scope="scope">
             <span
               >{{ scope.row.quantity }}
-              <span v-if="scope.row.quantity && scope.row.box_count">/</span>
-              {{ scope.row.box_count }}</span
+              /
+              {{ scope.row.box_count ? scope.row.box_count : 0 }}</span
             >
           </template>
         </el-table-column>
@@ -111,7 +114,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')" width="300" fixed="right">
+        <el-table-column :label="$t('操作')" width="300" v-if="activeName !== 'all'" fixed="right">
           <template slot-scope="scope">
             <el-button
               class="btn-purple"
@@ -277,7 +280,7 @@ export default {
       })
     },
     onDistribution(id) {
-      this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
+      this.$confirm(this.$t('您确认分货完成吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -360,6 +363,32 @@ export default {
     },
     getRow(row) {
       console.log(row)
+    },
+    onBack(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$confirm(this.$t('您确定要回退吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        let params = {}
+        params.ids = ids
+        this.$request.batchBack(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
     },
     onInvild(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))

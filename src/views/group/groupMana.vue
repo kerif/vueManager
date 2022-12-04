@@ -4,22 +4,24 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
         <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
+        <el-tab-pane :label="$t('已取消')" name="2"></el-tab-pane>
       </el-tabs>
-      <div class="addUser">
-        <div class="searchGroup">
-          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-        </div>
-        <!-- <search-select
+    </div>
+    <div class="addUser">
+      <div>
+        <el-button class="btn-main" @click="addGroup">{{ $t('新增拼团') }}</el-button>
+      </div>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      </div>
+      <!-- <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
           @search="onGroupChange"
         >
         </search-select> -->
-        <!-- <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn> -->
-      </div>
+      <!-- <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn> -->
     </div>
-    <!-- <div class="select-box">
-    </div> -->
     <el-table
       class="data-list"
       border
@@ -40,6 +42,12 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('拼团订单号')" prop="sn"></el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse_name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.warehouse_name">{{ scope.row.warehouse_name }}</span>
+          <span v-else>{{ $t('无') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
           <span v-if="scope.row.is_public === 1">{{ $t('公开') }}</span>
@@ -103,10 +111,10 @@
               {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty" @click.native="detailsGroup(scope.row.id)">
+              <!-- <el-dropdown-item class="item-sty" @click.native="detailsGroup(scope.row.id)">
                 <span>{{ $t('参团详情') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item
                 class="item-sty"
                 @click.native="
                   submitGroup(
@@ -117,16 +125,22 @@
                 "
               >
                 <span>{{ $t('提交拼团') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="cancelGroup(scope.row.id)">
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item class="item-sty" @click.native="cancelGroup(scope.row.id)">
                 <span>{{ $t('取消拼团') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="changeMsg(scope.row.id)">
+              </el-dropdown-item> -->
+              <!-- <el-dropdown-item
+                class="item-sty"
+                @click.native="changeMsg(scope.row.id, scope.row.leader)"
+              >
                 <span>{{ $t('修改团单信息') }}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <!-- 操作日志 -->
-              <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
+              <!-- <el-dropdown-item class="item-sty" @click.native="proLong(scope.row.id)">
                 <span>{{ $t('延长拼团时间') }}</span>
+              </el-dropdown-item> -->
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -134,11 +148,35 @@
       </el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '1'">
         <template slot-scope="scope">
-          <el-button
-            class="btn-deep-purple"
-            @click="goDetail(scope.row.sn, scope.row.order_status)"
-            >{{ $t('详情') }}</el-button
-          >
+          <el-dropdown>
+            <el-button type="primary" plain>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="goDetail(scope.row.sn, scope.row.order_status)"
+                >{{ $t('详情') }}</el-dropdown-item
+              >
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <el-dropdown>
+            <el-button type="primary" plain>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="item-sty" @click.native="joinGroupDetail(scope.row.id)">
+                {{ $t('参团详情') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -224,7 +262,6 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-// import AddBtn from '@/components/addBtn'
 export default {
   name: 'grouplist',
   data() {
@@ -307,10 +344,20 @@ export default {
     getLogs(id) {
       dialog({ type: 'vipLogs', id: id })
     },
-    changeMsg(id) {
-      dialog({ type: 'groupChange', id: id }, () => {
+    changeMsg(id, leader) {
+      dialog({ type: 'groupChange', id: id, leader }, () => {
         this.getList()
       })
+    },
+    addGroup() {
+      dialog(
+        {
+          type: 'onAddGroup'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     proLong(id) {
       this.proId = id
@@ -329,6 +376,12 @@ export default {
     goSearch() {
       this.page_params.page = 1
       this.getList()
+    },
+    joinGroupDetail(id) {
+      dialog({
+        type: 'groupDetail',
+        id
+      })
     },
     // 延长拼团时间
     submitTimes() {
@@ -362,7 +415,6 @@ export default {
       this.$request.uploadUserExcel().then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
@@ -531,10 +583,8 @@ export default {
     }
   },
   components: {
-    // SearchSelect,
     SearchGroup,
     NlePagination
-    // AddBtn
   }
 }
 </script>
@@ -561,16 +611,14 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
-    // text-align: right;
   }
   .addUser {
     display: flex;
     justify-content: flex-end;
-    flex: 1;
+    align-items: center;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
-      margin-right: 10px;
+      width: 20%;
+      margin: 0 10px;
     }
   }
   .addUser > .add-btn-container {
@@ -578,12 +626,7 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
-    float: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 }
 </style>

@@ -25,12 +25,12 @@
             <!-- 二级分类菜单类型 -->
             <el-table-column :label="$t('菜单类型')" prop="type">
               <template slot-scope="scope">
-                <span v-if="scope.row.type === 0">无</span>
-                <span v-if="scope.row.type === 1">文字消息</span>
-                <span v-if="scope.row.type === 2">图片消息</span>
-                <span v-if="scope.row.type === 3">跳转网页</span>
-                <span v-if="scope.row.type === 4">跳转小程序</span>
-                <span v-if="scope.row.type === 5">图文消息</span>
+                <span v-if="scope.row.type === 0">{{ $t('无') }}</span>
+                <span v-if="scope.row.type === 1">{{ $t('文字消息') }}</span>
+                <span v-if="scope.row.type === 2">{{ $t('图片消息') }}</span>
+                <span v-if="scope.row.type === 3">{{ $t('跳转网页') }}</span>
+                <span v-if="scope.row.type === 4">{{ $t('跳转小程序') }}</span>
+                <span v-if="scope.row.type === 5">{{ $t('图文消息') }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('操作')" width="300">

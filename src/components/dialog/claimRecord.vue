@@ -12,9 +12,6 @@
       </div>
       <div class="searchUser">
         <el-input :placeholder="$t('请输入内容')" v-model="keyword" @keyup.enter.native="getList">
-          <!-- <template slot="append">
-            <span @click="getList" class="search-btn">搜索</span>
-          </template> -->
           <el-button
             class="search-btn"
             slot="append"
@@ -38,10 +35,6 @@
     <div class="pagination-box">
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
-    <!-- <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
-    </div> -->
   </el-dialog>
 </template>
 <script>
@@ -94,7 +87,6 @@ export default {
         .then(res => {
           if (res.ret) {
             this.urlExcel = res.data.url
-            // window.location.href = this.urlExcel
             window.open(this.urlExcel)
             this.$notify({
               title: this.$t('操作成功'),

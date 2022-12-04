@@ -33,6 +33,7 @@ const vipListDetails = loadonDemand('vip/vip/vipListDetails')
 const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 // 客户 代理申请管理
 const application = loadonDemand('vip/application')
+
 // 沉睡提醒
 const sleepReminder = loadonDemand('vip/sleepReminder')
 // 客户 客户概览
@@ -121,8 +122,10 @@ const Withdrawal = loadonDemand('config/agent/withdrawal')
 const wdDetail = loadonDemand('config/agent/withdrawalDetail')
 // 修改、添加代理
 const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
-// 客户 计佣模版配置
+// 客户 计佣模版列表
 const agentTemplate = loadonDemand('config/agent/agentTemplate')
+// 客户 计佣模板配置
+const agentTemplateConfig = loadonDemand('config/agent/addEditAgentTemplate')
 // 成交记录
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
@@ -548,7 +551,7 @@ export default [
             meta: {
               level: 2,
               group: '客户',
-              name: '客户组'
+              name: '客户分类'
             }
           },
           {
@@ -617,6 +620,30 @@ export default [
               level: 3,
               group: '客户',
               name: '计佣模版配置',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/agent/template/add',
+            name: 'agentTemplateAdd',
+            component: agentTemplateConfig,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '添加计佣模版',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/agent/template/edit/:id',
+            name: 'agentTemplateEdit',
+            component: agentTemplateConfig,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '修改计佣模版',
               parent: '/vip/agent'
             }
           },

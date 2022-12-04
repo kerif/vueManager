@@ -49,12 +49,22 @@
             <span v-else>{{ $t('国家邮编') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家地区')" :show-overflow-tooltip="true" width="150">
+        <el-table-column :label="$t('启用国家地区')" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">
-              <span v-for="item in scope.row.areas" :key="item.id"
+              <!-- <span v-for="item in scope.row.areas" :key="item.id"
                 >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
-              >
+              > -->
+              <el-popover placement="top-start" width="200" trigger="hover">
+                <span v-for="item in scope.row.areas" :key="item.id">
+                  {{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}
+                </span>
+                <span slot="reference" class="show-data">
+                  <span v-for="item in scope.row.areas" :key="item.id">
+                    {{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}
+                  </span>
+                </span>
+              </el-popover>
             </span>
             <span v-else>
               {{ scope.row.country.name }}
@@ -193,8 +203,7 @@ export default {
       let page_params = {
         keyword: this.page_params.keyword,
         page: this.page_params.page,
-        size: this.page_params.size,
-        total: this.page_params.total
+        size: this.page_params.size
       }
       if (this.$route.params.id) {
         // 获取分区模板
@@ -484,6 +493,13 @@ export default {
   .options {
     display: block;
     margin-bottom: 10px;
+  }
+  .show-data {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 }
 </style>

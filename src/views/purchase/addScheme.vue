@@ -12,7 +12,7 @@
           <el-form-item :label="$t('方案备注')">
             <el-input
               type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4 }"
+              :autosize="{ minRows: 3, maxRows: 4 }"
               v-model="form.remark"
               style="width: 55%"
             ></el-input>
@@ -33,8 +33,15 @@
       style="margin-top: 15px; cursor: pointer"
     >
       <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
-      <el-col :span="5" :offset="5">{{ $t('更新于') }}{{ item.updated_at }}</el-col>
-      <el-col :span="6" :offset="1"><i class="el-icon-download" @click="downloadFile"></i></el-col>
+      <el-col :span="4" :offset="8">{{ $t('更新于') }}{{ item.updated_at }}</el-col>
+      <el-col :span="1" :offset="2"><i class="el-icon-download" @click="downloadFile"></i></el-col>
+      <el-col :span="1" :offset="1">
+        <i
+          class="el-icon-close"
+          style="font-size: 16px; font-weight: bold"
+          @click="onDelete(item.id)"
+        ></i>
+      </el-col>
     </el-row>
     <div>
       <h4 v-if="goodData.length">{{ $t('方案预览') }}</h4>
@@ -44,7 +51,7 @@
             ><div>#{{ item.number }}</div></el-col
           >
           <el-col :span="5"
-            ><div>{{ $t('客户') }}: {{ item.user_id }}</div></el-col
+            ><div>{{ $t('客户') }}: {{ item.user_id }} --- {{ item.user_name }}</div></el-col
           >
           <el-col :span="5"
             ><div>{{ $t('收货点') }}: {{ item.station_code }}</div></el-col
@@ -52,7 +59,7 @@
         </el-row>
         <el-table :data="item.goods" style="width: 80%" border class="space">
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column prop="number" :label="$t('商品ID')"> </el-table-column>
+          <el-table-column prop="number" :label="$t('商品编号')"> </el-table-column>
           <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
         </el-table>
@@ -72,7 +79,6 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      value: '',
       goodData: [],
       form: {
         remark: '',
@@ -89,10 +95,59 @@ export default {
           mode
         },
         goodsList => {
-          console.log(goodsList)
-          this.goodData = goodsList
+          let tableData = []
+          let data = this.goodData.map(item => item.number)
+          goodsList.forEach(item => {
+            if (data.includes(item.number)) {
+              this.goodData.forEach(ele => {
+                if (ele.number === item.number) {
+                  ele.user_id = item.user_id
+                  ele.user_name = item.user_name
+                  ele.station_code = item.station_code
+                  let list = []
+                  item.goods.forEach(goods1 => {
+                    let flag = false
+                    ele.goods.forEach(goods2 => {
+                      if (
+                        goods1.purchase_order_sn === goods2.purchase_order_sn &&
+                        goods1.number === goods2.number
+                      ) {
+                        goods2.quantity = goods1.quantity
+                        flag = true
+                      }
+                    })
+                    if (!flag) {
+                      list.push(goods1)
+                    }
+                  })
+                  ele.goods = ele.goods.concat(list)
+                }
+              })
+            } else {
+              tableData.push(item)
+            }
+          })
+          this.goodData = this.goodData.concat(tableData)
         }
       )
+    },
+    onDelete(recordId) {
+      this.$request.delUploadRecord(this.$route.params.id, recordId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+          this.goodData = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     onSubmit(isFinish) {
       let params = {}
@@ -119,9 +174,17 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
+            if (isFinish === 0) {
+              this.$router.push({
+                name: 'transshipmentBill',
+                query: { activeName: '0' }
+              })
+            } else {
+              this.$router.push({
+                name: 'transshipmentBill',
+                query: { activeName: '1' }
+              })
+            }
           } else {
             this.$message({
               message: res.msg,
@@ -155,7 +218,7 @@ export default {
   width: 80%;
 }
 .space {
-  margin-top: 20px;
+  margin: 20px 0 20px 0;
 }
 .flex-1 {
   flex: 1;

@@ -11,59 +11,43 @@
         <div>
           <div class="box-item">
             <div class="num">#1</div>
-            <div>{{ $t('装箱清单') }}</div>
-          </div>
-          <div class="box-wrap" v-for="item in packageData" :key="item.id">
-            <div>{{ item.name }}</div>
-            <div style="margin-top: 15px">x{{ item.qty }}</div>
+            <div>{{ $t('分货清单') }}</div>
           </div>
         </div>
       </div>
       <div class="distribution-right">
         <div class="info-item">
-          <div class="font">{{ $t('打包单号') }}</div>
-          <div style="font-weight: bold; font-size: 20px">{{ row.order_sn }}</div>
+          <div class="font">{{ $t('转运单号') }}</div>
+          <div style="font-weight: bold; font-size: 20px">{{ row.sn }}</div>
         </div>
         <div class="info-item">
           <div class="font">{{ $t('客户ID') }}</div>
-          <div>{{ row.user_id }} --- {{ row.user_name }}</div>
+          <div>{{ row.user ? row.user.id : '' }} --- {{ row.user ? row.user.name : '' }}</div>
         </div>
-        <div style="margin-bottom: 20px">
-          <div class="font">{{ $t('收货地址') }}</div>
-          <div class="border-item">
-            <span>{{ row.address && row.address.receiver_name }}</span
-            >&nbsp;
-            <span>{{ row.address && row.address.timezone }}</span>
-            <span v-if="row.address && row.address.timezone">-</span>
-            <span>{{ row.address && row.address.phone }}</span
-            >&nbsp; <span>{{ row.address && row.address.country_name }}</span
-            >&nbsp; <span>{{ row.address && row.address.postcode }}</span
-            >&nbsp; <span>{{ row.address && row.address.city }}</span
-            >&nbsp; <span>{{ row.address && row.address.street }}</span
-            >&nbsp;
-            <span>{{ row.address && row.address.door_no }}</span>
-          </div>
+        <div class="info-item">
+          <div class="font">{{ $t('转运状态') }}</div>
+          <div v-if="row.status === 2">{{ $t('待打包') }}</div>
+          <div v-if="row.status === 3">{{ $t('已完成') }}</div>
+        </div>
+        <div class="info-item">
+          <div class="font">{{ $t('分货数量') }}</div>
+          <div>{{ row.quantity }}</div>
+        </div>
+        <div class="info-item">
+          <div class="font">{{ $t('拣货数量') }}</div>
+          <div>{{ row.picking_quantity }}</div>
+        </div>
+        <div class="info-item">
+          <div class="font">{{ $t('打包数量') }}</div>
+          <div>{{ row.pack_quantity }}</div>
+        </div>
+        <div class="info-item">
+          <div class="font">{{ $t('目的地') }}</div>
+          <div>{{ row.country ? row.country.name : '' }}</div>
         </div>
         <div class="info-item">
           <div class="font">{{ $t('下单渠道') }}</div>
-          <div>{{ row.express_line && row.express_line.name }}</div>
-        </div>
-        <div>
-          <div>
-            <div class="font">{{ $t('增值服务') }}</div>
-            <div class="border-item">
-              <div style="margin-bottom: 10px" v-for="item in arrList" :key="item.id">
-                {{ item.name }} -- {{ item.price }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div style="font-weight: bold">{{ $t('付款方式') }}</div>
-          <div class="border-item">
-            <span class="payment-sty" v-if="row.payment_mode === 2">{{ $t('货到付款') }}</span>
-            <span v-else>{{ $t('预付') }}</span>
-          </div>
+          <div>{{ row.express_line ? row.express_line.name : '' }}</div>
         </div>
       </div>
     </div>
@@ -81,30 +65,7 @@ export default {
     }
   },
   methods: {
-    init() {
-      if (this.row.id) {
-        this.getGoodsDetail()
-      }
-      this.getService()
-    },
-    getService() {
-      this.$request.servicesPackage().then(res => {
-        if (res.ret) {
-          this.servicesData = res.data
-          let ids = this.row.add_service.map(item => Number(item))
-          this.servicesData.forEach(item => {
-            if (ids.includes(item.id)) {
-              this.arrList.push({ id: item.id, name: item.name, price: item.price })
-            }
-          })
-        }
-      })
-    },
-    getGoodsDetail() {
-      this.$request.packageDetails(this.row.id).then(res => {
-        this.packageData = res.data
-      })
-    },
+    init() {},
     clear() {}
   }
 }

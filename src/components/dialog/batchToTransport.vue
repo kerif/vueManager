@@ -126,7 +126,6 @@ export default {
         })
         .then(res => {
           if (res.ret) {
-            console.log(this.tableData)
             this.tableData = res.data
             this.localization = res.localization
           }
@@ -173,8 +172,6 @@ export default {
         })
     },
     handleSelect(item) {
-      console.log(item)
-      console.log(item.id)
       this.station_id = item.id
     },
     clear() {
@@ -185,7 +182,6 @@ export default {
       if (this.state === 'batch') {
         this.textarea2 = this.orderSnNum.join('\n')
         this.search()
-        console.log(this.orderSnNum, '1111')
       }
     }
   }

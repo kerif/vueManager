@@ -201,7 +201,6 @@ export default {
             type: 'error'
           })
         }
-        // this.show = false
       })
     },
     // 获取支持国家数据

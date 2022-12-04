@@ -6,7 +6,7 @@
     @close="clear"
   >
     <div>{{ $t('*所属仓库') }}</div>
-    <el-select v-model="warehouseId" :placeholder="$t('请选择')">
+    <el-select v-model="warehouseId" multiple :placeholder="$t('请选择')">
       <el-option
         v-for="item in allHouse"
         :key="item.id"
@@ -26,7 +26,7 @@
 export default {
   data() {
     return {
-      warehouseId: 0,
+      warehouseId: [],
       userList: [],
       allHouse: [],
       id: ''
@@ -37,7 +37,7 @@ export default {
     getList() {
       this.$request.getAffiliation(this.id).then(res => {
         if (res.ret) {
-          this.warehouseId = res.data.id || 0
+          this.warehouseId = res.data.length ? res.data.map(item => item.id) : [this.allHouse[0].id]
         }
       })
     },
@@ -56,12 +56,13 @@ export default {
               res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name }))
             )
           }
-          // this.allHouse = res.data
         }
       })
     },
     confirm() {
-      this.$request.editAffiliation(this.id, this.warehouseId).then(res => {
+      let allId = this.allHouse[0].id
+      let ids = this.warehouseId.includes(allId) ? [] : this.warehouseId
+      this.$request.editAffiliations(this.id, { ids }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -76,7 +77,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     },
     clear() {

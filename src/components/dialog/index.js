@@ -153,6 +153,25 @@ import cumulativeGrowth from './cumulativeGrowth.vue'
 import growthExplain from './growthExplain.vue'
 import distributeScheme from './distributeScheme.vue'
 import confirmReceive from './confirmReceive.vue'
+import classifiyManage from './classifiyManage.vue'
+import addEditAbutment from './addEditAbutment.vue'
+import addEditCategory from './addEditCategory.vue'
+import staffCode from './staffCode.vue'
+import recordLog from './recordLog.vue'
+import editGoodsInfo from './editGoodsInfo.vue'
+import editLabel from './editLabel.vue'
+import labelMember from './labelMember.vue'
+import batchTag from './batchTag.vue'
+import tracking from './tracking.vue'
+import addGroupAddress from './addGroupAddress.vue'
+import addExchangeCode from './addExchangeCode.vue'
+import presetPackBox from './presetPackBox.vue'
+import packageChange from './packageChange.vue'
+import onAddGroup from './onAddGroup.vue'
+import groupDetail from './groupDetail.vue'
+import addressAudit from './addressAudit.vue'
+import tagManage from './tagManage.vue'
+import batchReplaceTag from './batchReplaceTag.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -305,6 +324,25 @@ const cumulativeGrowthController = Vue.extend(cumulativeGrowth)
 const growthExplainController = Vue.extend(growthExplain)
 const distributeSchemeController = Vue.extend(distributeScheme)
 const confirmReceiveController = Vue.extend(confirmReceive)
+const classifiyManageController = Vue.extend(classifiyManage)
+const addEditAbutmentController = Vue.extend(addEditAbutment)
+const addEditCategoryController = Vue.extend(addEditCategory)
+const staffCodeController = Vue.extend(staffCode)
+const recordLogController = Vue.extend(recordLog)
+const editGoodsInfoController = Vue.extend(editGoodsInfo)
+const editLabelController = Vue.extend(editLabel)
+const labelMemberController = Vue.extend(labelMember)
+const batchTagController = Vue.extend(batchTag)
+const trackingController = Vue.extend(tracking)
+const addGroupAddressController = Vue.extend(addGroupAddress)
+const addExchangeCodeController = Vue.extend(addExchangeCode)
+const presetPackBoxController = Vue.extend(presetPackBox)
+const packageChangeController = Vue.extend(packageChange)
+const onAddGroupController = Vue.extend(onAddGroup)
+const groupDetailController = Vue.extend(groupDetail)
+const addressAuditController = Vue.extend(addressAudit)
+const tagManageController = Vue.extend(tagManage)
+const batchReplaceTagController = Vue.extend(batchReplaceTag)
 
 const mixin = {
   data() {
@@ -566,6 +604,139 @@ function initInstance(type) {
     // 确认收货
     case 'confirmReceive':
       instance = new confirmReceiveController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 分类管理
+    case 'classifiyManage':
+      instance = new classifiyManageController({
+        el: document.createElement('div'),
+        minxins: [mixin]
+      })
+      break
+    // 新增编辑对接方式
+    case 'addEditAbutment':
+      instance = new addEditAbutmentController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 分类管理
+    case 'addEditCategory':
+      instance = new addEditCategoryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 员工二维码
+    case 'staffCode':
+      instance = new staffCodeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 邀请记录
+    case 'recordLog':
+      instance = new recordLogController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 编辑商品信息
+    case 'editGoodsInfo':
+      instance = new editGoodsInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 编辑标签
+    case 'editLabel':
+      instance = new editLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签成员
+    case 'labelMember':
+      instance = new labelMemberController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签
+    case 'batchTag':
+      instance = new batchTagController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 轨迹
+    case 'tracking':
+      instance = new trackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加拼团地址
+    case 'addGroupAddress':
+      instance = new addGroupAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 兑换码
+    case 'addExchangeCode':
+      instance = new addExchangeCodeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 预设打包箱
+    case 'presetPackBox':
+      instance = new presetPackBoxController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量包裹变更
+    case 'packageChange':
+      instance = new packageChangeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 拼团
+    case 'onAddGroup':
+      instance = new onAddGroupController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 拼团详细
+    case 'groupDetail':
+      instance = new groupDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 地址审核
+    case 'addressAudit':
+      instance = new addressAuditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 标签管理
+    case 'tagManage':
+      instance = new tagManageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量替换标签
+    case 'batchReplaceTag':
+      instance = new batchReplaceTagController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

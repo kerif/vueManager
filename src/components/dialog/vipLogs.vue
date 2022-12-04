@@ -16,7 +16,6 @@
   </el-dialog>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   data() {
@@ -27,9 +26,7 @@ export default {
       localization: {}
     }
   },
-  // components: {
-  //   NlePagination
-  // },
+
   mixins: [pagination],
   methods: {
     getList() {
@@ -37,8 +34,6 @@ export default {
         if (res.ret) {
           this.operatorData = res.data
           this.localization = res.localization
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         }
       })
     },

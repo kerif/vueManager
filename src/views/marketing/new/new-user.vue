@@ -123,7 +123,6 @@ export default {
       })
     },
     changeOnline(type, val) {
-      console.log(type, 'type')
       const status = val === 0 ? 0 : 1
       this.$request.closeCoupons(type, status).then(res => {
         if (res.ret) {
@@ -143,9 +142,7 @@ export default {
     },
     // 开启或关闭 两券共享
     changeUnique(type) {
-      console.log(this.isUnique, 'val')
       const status = Number(this.isUnique) === 0 ? 0 : 1
-      console.log(status, 'status')
       this.$request.closeUnique(type, status).then(res => {
         if (res.ret) {
           this.$notify({
@@ -212,11 +209,9 @@ export default {
   .user-bottom {
     overflow: hidden;
     .bottom-left {
-      // display: inline-block;
       float: left;
     }
     .bottom-right {
-      // display: inline-block;
       float: right;
     }
     .switch-sty {
@@ -229,8 +224,6 @@ export default {
     font-size: 12px;
   }
   .coupon-sty {
-    // margin-top: 5px;
-    // display: inline-block;
     clear: both;
     .el-checkbox {
       margin-left: 0 !important;

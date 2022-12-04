@@ -117,7 +117,6 @@ export default {
       })
     },
     confirm() {
-      console.log(this.state, 'this.state')
       this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
         return this.$message.error(this.$t('请输入金额'))
@@ -130,7 +129,6 @@ export default {
       if (this.$route.params.id) {
         if (this.name === 'pay') {
           if (this.state === 'pass') {
-            console.log(this.state, 'state 111')
             this.$request.approvedPay(this.id, this.ruleForm).then(res => {
               if (res.ret) {
                 this.$notify({
@@ -146,10 +144,8 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else {
-            console.log(this.state, 'state 222')
             this.$request.refundPay(this.id, this.ruleForm).then(res => {
               if (res.ret) {
                 this.$notify({
@@ -165,13 +161,11 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {
           // 退款审核或拒绝
           if (this.state === 'pass') {
-            console.log(this.state, 'state 333')
             this.$request
               .approvedRefunds(this.id, {
                 ...this.ruleForm,
@@ -194,10 +188,8 @@ export default {
                     type: 'error'
                   })
                 }
-                this.show = false
               })
           } else {
-            console.log(this.state, 'state 444')
             this.$request
               .refundRefunds(this.id, {
                 refund_images: this.ruleForm.customer_images,
@@ -218,7 +210,6 @@ export default {
                     type: 'error'
                   })
                 }
-                this.show = false
               })
           }
         }
@@ -263,8 +254,6 @@ export default {
       this.ruleForm.customer_images = []
     },
     init() {
-      console.log(this.name, 'name')
-      console.log(this.state, 'state')
       if (this.state === 'pass' && this.$route.params.id) {
         this.ruleForm.pay_amount = this.tranAmount
       } else if (this.state === 'pass' && this.$route.params.id) {

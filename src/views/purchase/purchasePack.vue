@@ -12,10 +12,10 @@
       </div>
       <div class="has-border order-box programmes" v-if="pickingSN">
         <el-row :gutter="10">
-          <el-col :span="5">
+          <el-col :span="6">
             <div class="font-bold">{{ name }}</div>
           </el-col>
-          <el-col :span="19">
+          <el-col :span="18">
             <div>{{ remark }}</div>
           </el-col>
         </el-row>
@@ -28,11 +28,12 @@
               <div
                 class="order-item flex-item cursor-pointer"
                 :class="{ selected: item.id === ids }"
-                v-for="item in orderList"
+                v-for="(item, index) in orderList"
                 :key="item.id"
-                @click="onOrder(item)"
+                @click="onOrder(item, index)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
+                <i class="el-icon-document" v-if="item.status === 3" @click="downFile(item.id)"></i>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
               </div>
             </div>
@@ -49,11 +50,23 @@
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('收货点') }}：</span>
-                      <span class="font-bold">{{ item.station ? item.station.name : '' }}</span>
+                      <el-select v-model="station_id" @change="getChannel">
+                        <el-option
+                          v-for="item in pickList"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
+                      </el-select>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('客户编号') }}：</span>
-                      <span class="font-bold">{{ item.user_id }}</span>
+                      <el-autocomplete
+                        :fetch-suggestions="queryCNSearch"
+                        :placeholder="$t('请输入客户ID')"
+                        v-model="user_id"
+                      >
+                      </el-autocomplete>
                     </el-col>
                   </el-row>
                   <el-row class="row-item">
@@ -84,15 +97,21 @@
               </div>
               <div class="right-item has-border">
                 <div class="weight-content">
-                  <div class="flex-item title-list">
+                  <div class="flex-item title-list flex-btn">
                     <div class="font-bold">{{ $t('装箱') }}</div>
-                    <el-button type="primary" size="small" @click="onAddBox">{{
-                      $t('添加箱子')
-                    }}</el-button>
+                    <div>
+                      <el-button class="btn-main" @click="exportBoxData">{{
+                        $t('导出')
+                      }}</el-button>
+                      <el-button class="btn-main" @click="onBatch">{{ $t('批量导入') }}</el-button>
+                      <el-button type="primary" size="small" @click="onAddBox">{{
+                        $t('添加箱子')
+                      }}</el-button>
+                    </div>
                   </div>
                   <div class="weight-box">
                     <el-row :gutter="10">
-                      <el-col :offset="1" :span="4">
+                      <el-col :offset="2" :span="4">
                         <div>
                           <span class="red-text">*</span>
                           <span>{{ $t('重量') }}</span>
@@ -111,7 +130,7 @@
                       v-for="(item, index) in box"
                       :key="index"
                     >
-                      <el-col :span="1">
+                      <el-col :span="2">
                         <div class="index-label font-bold">#{{ index + 1 }}</div>
                       </el-col>
                       <el-col :span="4">
@@ -155,6 +174,48 @@
                       </el-col>
                     </el-row>
                   </div>
+                  <div class="scan-box">
+                    <el-row type="flex">
+                      <el-col :span="16">
+                        <div class="flex-item">
+                          <el-select
+                            :placeholder="$t('请选择箱号')"
+                            v-model="boxNumber"
+                            class="flex-1 check"
+                          >
+                            <el-option
+                              v-for="(item, index) in box"
+                              :key="index"
+                              :label="`# ${index + 1}`"
+                              :value="index"
+                            ></el-option>
+                          </el-select>
+                          <el-input
+                            :placeholder="$t('请输入或扫入条码')"
+                            class="flex-1"
+                            ref="sku"
+                            v-model="sku"
+                            @keyup.native.enter="onSku(sku)"
+                          ></el-input>
+                        </div>
+                        <div class="scan-tips align-center">! {{ $t('请输入或扫入条码') }}</div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="align-center">
+                          <div class="font-bold num-box">
+                            <span class="scan-num">{{ scanGoodsNum }}</span>
+                            <span>/{{ totalGoodsNum }}</span>
+                          </div>
+                          <div>{{ $t('已打包商品数量') }}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end">
+                    <el-button class="btn-main" v-if="this.status === 2" @click="onBox">{{
+                      $t('一键装箱')
+                    }}</el-button>
+                  </div>
                   <div
                     style="
                       padding: 20px 0px;
@@ -162,19 +223,24 @@
                       border: 1px solid #eff1f2;
                       border-radius: 5px;
                       text-align: center;
+                      overflow: auto;
+                      height: 500px;
                     "
                   >
                     <el-row :gutter="10">
+                      <el-col :span="2"
+                        ><div>{{ $t('商品编号') }}</div></el-col
+                      >
                       <el-col :span="3"
                         ><div>{{ $t('状态') }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><div>{{ $t('图片') }}</div></el-col
                       >
-                      <el-col :span="4"
+                      <el-col :span="3"
                         ><div>{{ $t('条码') }}</div></el-col
                       >
-                      <el-col :span="3"
+                      <el-col :span="4"
                         ><div>{{ $t('名称') }}</div></el-col
                       >
                       <el-col :span="3"
@@ -183,51 +249,83 @@
                       <el-col :span="4"
                         ><div>{{ $t('总数') }}</div></el-col
                       >
-                      <el-col :span="3"
-                        ><div>{{ $t('已装箱') }}</div></el-col
-                      >
+                      <el-col :span="2">
+                        <div>{{ $t('已装箱') }}</div>
+                      </el-col>
                     </el-row>
-                    <el-row
-                      :gutter="10"
-                      style="margin: 20px 0"
-                      v-for="(item, index) in skuList"
-                      :key="index"
-                    >
-                      <el-col :span="3"
-                        ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
+                    <div class="line"></div>
+                    <div v-for="(item, ind) in skuList" :key="ind" :id="item.barcode">
+                      <el-row
+                        :gutter="10"
+                        :span="24"
+                        style="margin: 20px 0"
+                        :class="{
+                          all: sku === item.barcode
+                        }"
                       >
-                      <el-col :span="4"
-                        ><span
-                          ><img
-                            style="width: 20%; cursor: pointer"
-                            :src="`${$baseUrl.IMAGE_URL}${item.image}`"
-                          /> </span
-                      ></el-col>
-                      <el-col :span="4"
-                        ><div>{{ item.barcode }}</div></el-col
-                      >
-                      <el-col :span="3"
-                        ><div>{{ item.cn_name }}</div></el-col
-                      >
-                      <el-col :span="3"
-                        ><div>{{ item.color }}</div></el-col
-                      >
-                      <el-col :span="4"
-                        ><div class="num-item">
-                          {{ item.quantity }}
-                        </div></el-col
-                      >
-                      <el-col :span="3">
+                        <el-col :span="2"
+                          ><div>{{ item.number }}</div></el-col
+                        >
+                        <el-col :span="3"
+                          ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
+                        >
+                        <el-col :span="3"
+                          ><span
+                            ><img
+                              style="width: 20%; cursor: pointer"
+                              :src="`${$baseUrl.IMAGE_URL}${item.image}`"
+                              @click="onPic(item.image)"
+                            /> </span
+                        ></el-col>
+                        <el-col
+                          :span="3"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
+                          ><div>{{ item.barcode }}</div></el-col
+                        >
+                        <el-col
+                          :span="4"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
+                          ><div>{{ item.cn_name }}</div></el-col
+                        >
+                        <el-col
+                          :span="3"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
+                          ><div v-if="item.color">{{ item.color }}</div>
+                          <div v-else>{{ $t('暂无') }}</div>
+                        </el-col>
+                        <el-col
+                          :span="4"
+                          :class="{
+                            all: sku === item.barcode
+                          }"
+                          ><div class="num-item">
+                            {{ item.quantity }}
+                          </div></el-col
+                        >
+                        <el-col :span="2" class="num-item">
+                          {{ item.scanQty }}
+                        </el-col>
+                      </el-row>
+                      <el-row class="box-item">
                         <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
-                          <span>#{{ index + 1 }}</span>
+                          <span class="box-number">#{{ index + 1 }}</span>
                           <el-input
                             type="number"
                             size="small"
+                            ref="number"
                             v-model="ele.pack_quantity"
-                            style="margin: 3px 0 0 10px"
-                          ></el-input></div
-                      ></el-col>
-                    </el-row>
+                            @blur="checkOut(item, ind)"
+                            style="width: 180px; padding: 10px"
+                          ></el-input>
+                        </div>
+                      </el-row>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -238,8 +336,8 @@
                 <el-button
                   type="primary"
                   size="small"
-                  :disabled="isBtns"
                   class="calc-btn"
+                  v-if="status === 2"
                   :loading="$store.state.btnLoading"
                   @click="onPack(1)"
                   >{{ $t('打包完成') }}</el-button
@@ -250,10 +348,41 @@
         </el-row>
       </div>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
+    <el-dialog :title="$t('批量导入')" :visible.sync="showData" @close="clear">
+      <el-form>
+        <el-form-item :label="$t('第一步:下载模板 ')">
+          <el-button size="small" type="primary" plain @click="importBoxData">{{
+            $t('下载模板')
+          }}</el-button>
+        </el-form-item>
+        <el-form-item :label="$t('第二步:上传模板 ')">
+          <el-upload
+            class="upload-demo"
+            action=""
+            :limit="1"
+            :on-remove="onFileRemove"
+            :file-list="fileList"
+            :http-request="uploadTmp"
+          >
+            <el-button size="small" type="primary" plain>{{ $t('上传模板') }}</el-button>
+            <span style="color: red; margin-left: 10px">{{ $t('导入的数据将会进行覆盖') }}</span>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showData = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="onConfirm">{{ $t('确认') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { Message } from 'element-ui'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   data() {
     return {
@@ -289,12 +418,32 @@ export default {
       boxedSum: '',
       orderData: [],
       pack: [],
-      num: ''
+      num: '',
+      sum: '',
+      status: '',
+      idx: '',
+      pickList: [],
+      station_id: '',
+      user_id: '',
+      customList: [],
+      imgVisible: false,
+      imgSrc: '',
+      className: '',
+      boxNumber: '',
+      sku: '',
+      orderNumber: [],
+      showData: false,
+      fileList: [],
+      param: '',
+      params: '',
+      orderId: '',
+      orderItem: ''
     }
   },
   created() {
     this.getPropList()
     this.getLineType()
+    this.getPackagePick()
     if (this.$route.query.sn) {
       this.pickingSN = this.$route.query.sn
       this.getCloudDetail()
@@ -316,7 +465,6 @@ export default {
         } else if (num < quantity) {
           return '部分装箱'
         } else if (num > quantity) {
-          Message.error('装箱数量大于总数')
           return '装箱数量大于总数'
         }
       }
@@ -363,17 +511,30 @@ export default {
         this.propList = res.data
       })
     },
+    // 扫入条码
+    onSku(sku) {
+      console.log(sku)
+      if (this.boxNumber === '') {
+        return this.$message.error(this.$t('请选择箱号'))
+      } else if (!this.sku.trim()) {
+        return this.$message.error(this.$t('请输入条码'))
+      }
+      let toElement = document.getElementById(sku)
+      toElement.scrollIntoView(true)
+      this.skuList.forEach(item => {
+        if (item.barcode === this.sku) {
+          item.scanQty++
+          item.packData[this.boxNumber].pack_quantity++
+        }
+      })
+      this.$refs.sku.select()
+    },
     onAddBox() {
       this.skuList.forEach(item => {
-        item.packData = []
-      })
-      for (let i = 0; i <= this.box.length; i++) {
-        this.skuList.forEach(item => {
-          item.packData.push({
-            pack_quantity: ''
-          })
+        item.packData.push({
+          pack_quantity: ''
         })
-      }
+      })
       this.box.push({ weight: '', length: '', height: '', width: '' })
     },
     onDelBox(index) {
@@ -382,9 +543,49 @@ export default {
         item.packData.splice(index, 1)
       })
     },
-    onOrder(item) {
-      console.log(item)
-      this.order = this.orderList.filter(ele => ele.sn === item.sn)
+    downFile(id) {
+      let params = {
+        type: 2
+      }
+      params.ids = [id]
+      this.$request.downloadNoodleSheet(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          window.open(res.data.url)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    onBox() {
+      this.box.forEach((item, index) => {
+        this.skuList.forEach(ele => {
+          if (index === 0) {
+            ele.packData[index].pack_quantity = ele.quantity
+          } else {
+            ele.packData[index].pack_quantity = 0
+          }
+        })
+      })
+    },
+    checkOut(item, index) {
+      item.scanQty = this.skuList[index].packData.reduce((pre, cur) => {
+        return pre + Number(cur.pack_quantity)
+      }, 0)
+    },
+    onOrder(item, index) {
+      this.orderId = item.id
+      this.orderItem = item
+      this.idx = index
+      this.status = item.status
+      this.order = this.orderList.filter(ele => ele.id === item.id)
       this.ids = this.order[0].id
       this.box = [
         {
@@ -400,48 +601,67 @@ export default {
           delete ele.p_goods.quantity
           this.skuList.push({
             ...ele.p_goods,
-            quantity: ele.quantity,
-            purchase_order_goods_id: ele.purchase_order_goods_id,
-            packData: [{ pack_quantity: '' }]
+            quantity: ele.picking_quantity,
+            picking_order_goods_id: ele.id,
+            packData: [{ pack_quantity: '' }],
+            scanQty: 0
           })
         })
       })
       this.stationId = item.station_id
-      this.getChannel(this.stationId)
       this.prop_ids = item.props.map(ele => ele.id)[0]
-      if (item.status === 3) {
-        this.express_line_id = this.order[0].express_line_id
-        this.prop_ids = this.order[0].props.map(ele => ele.id)[0]
-        this.order.forEach(item => {
-          this.box = item.boxes.map(val => {
-            return {
-              width: val.width,
-              height: val.height,
-              length: val.length,
-              weight: val.weight
-            }
-          })
-          this.skuList = []
-          const tempList = item.goods.map(ele => {
-            return {
-              ...ele.p_goods,
-              quantity: ele.quantity,
-              packData: []
-            }
-          })
-          item.boxes.forEach(box => {
-            box.goods.forEach(goods => {
-              tempList.forEach(ele => {
-                if (ele.id === goods.id) {
-                  ele.packData.push({
-                    pack_quantity: goods.pivot.quantity
-                  })
-                }
-              })
+      this.station_id = this.stationId
+      if (item.user) {
+        this.user_id = item.user.id + '---' + item.user.name
+      }
+      if (item.status === 3 || (item.status === 2 && item.boxes.length > 0)) {
+        this.express_line_id = this.orderList[index].express_line
+          ? this.orderList[index].express_line.id
+          : ''
+        this.station_id = this.orderList[index].station_id
+        if (this.orderList[index].user) {
+          this.user_id = this.orderList[index].user.id + '---' + this.orderList[index].user.name
+        }
+        this.prop_ids = this.orderList[index].props.map(ele => ele.id)[0]
+        this.box = []
+        const boxData = this.orderList[index].boxes.map(item => {
+          return {
+            width: item.width,
+            height: item.height,
+            length: item.length,
+            weight: item.weight
+          }
+        })
+        this.box = boxData
+        this.skuList = []
+        const tempList = this.orderList[index].goods.map(ele => {
+          return {
+            ...ele.p_goods,
+            picking_order_goods_id: ele.id,
+            quantity: ele.quantity,
+            packData: [],
+            scanQty: 0
+          }
+        })
+
+        tempList.forEach(ele => {
+          for (let i = 0; i < this.orderList[index].boxes.length; i++) {
+            ele.packData.push({
+              pack_quantity: 0
+            })
+          }
+        })
+        this.orderList[index].boxes.forEach((box, index) => {
+          box.goods.forEach(goods => {
+            tempList.forEach(ele => {
+              if (ele.picking_order_goods_id === goods.id) {
+                ele.packData[index].pack_quantity = goods.pivot.quantity
+                ele.scanQty += ele.packData[index].pack_quantity
+              }
             })
           })
-          this.skuList = tempList
         })
+        this.skuList = tempList
       }
     },
     getChannel() {
@@ -449,24 +669,164 @@ export default {
         this.express_line_id = res.data.map(item => item.id)[0]
       })
     },
+    onPic(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
     getLineType() {
       this.$request.lineType().then(res => {
         this.lineData = res.data
       })
     },
+    getPackagePick() {
+      this.$request.getPackagePick().then(res => {
+        if (res.ret) {
+          this.pickList = res.data
+        }
+      })
+    },
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      let params = {
+        keyword: this.user_id.toString()
+      }
+      this.$request.Automatic(params).then(res => {
+        for (let i of res.data) {
+          i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback && callback(list)
+      })
+    },
+    onUpload(file) {
+      this.params = new FormData()
+      this.params.append(`files[${0}][file]`, file)
+      this.param = new FormData()
+      this.param.append(`file`, file)
+      return this.$request.uploadFiles(this.params)
+    },
+    onBatch() {
+      this.showData = true
+    },
+    exportBoxData() {
+      this.$request.exportPurchaseGoodsTmp(this.orderId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          window.open(res.data)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    importBoxData() {
+      this.$request
+        .importPurchaseGoodsTmp()
+        .then(res => {
+          downloadStreamFile(res, 'file', 'xlsx')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    uploadTmp(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 文件删除
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    onConfirm() {
+      let file = this.param
+      this.$request.importPurchaseAnalysis(this.orderId, file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.tips,
+            type: 'success'
+          })
+          this.showData = false
+          this.fileList = []
+          let boxArr = res.data.boxes
+          for (let i = 0; i < boxArr.length; i++) {
+            let num = this.box.findIndex((item, idx) => {
+              return idx + 1 === +boxArr[i].box_number
+            })
+            console.log(num)
+            if (num < 0) {
+              this.box = this.box.concat([boxArr[i]])
+              this.skuList.forEach((ele, index) => {
+                const arr = res.data.goods.find(item => item.number === ele.number)
+                ele.packData.push({
+                  pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
+                })
+                this.checkOut(ele, index)
+              })
+            } else {
+              this.box.splice(num, 1, boxArr[i])
+              this.skuList.forEach((ele, index) => {
+                if (res.data.goods) {
+                  const arr = res.data.goods.find(item => item.number === ele.number)
+                  ele.packData.splice(i, 1, {
+                    pack_quantity: arr.boxes[i] ? arr.boxes[i].quantity : ''
+                  })
+                  this.checkOut(ele, index)
+                }
+              })
+            }
+          }
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    clear() {},
     onPack(type) {
       if (!this.express_line_id) {
         return this.$message.error(this.$t('请选择渠道'))
       } else if (!this.prop_ids) {
         return this.$message.error(this.$t('请选择属性'))
+      } else if (!this.station_id) {
+        return this.$message.error(this.$t('请选择收货点'))
+      } else if (!this.user_id) {
+        return this.$message.error(this.$t('请选择客户编号'))
       }
       let boxList = []
       this.box.forEach((item, index) => {
         const boxItem = { ...item, goods: [] }
         this.skuList.forEach(ele => {
+          console.log(ele)
           boxItem.goods.push({
-            purchase_order_goods_id: ele.purchase_order_goods_id,
-            pack_quantity: ele.packData[index].pack_quantity
+            picking_order_goods_id: ele.picking_order_goods_id,
+            pack_quantity:
+              ele.packData[index] && ele.packData[index].pack_quantity
+                ? ele.packData[index] && ele.packData[index].pack_quantity
+                : 0
           })
         })
         boxList.push(boxItem)
@@ -475,6 +835,8 @@ export default {
         is_pack_finish: type,
         express_line_id: this.express_line_id,
         prop_ids: [this.prop_ids],
+        station_id: this.station_id,
+        user_id: this.user_id.substring(0, 6),
         box: boxList
       }
       this.$request.purchasePack(this.ids, params).then(res => {
@@ -484,9 +846,21 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.$router.push({
-            name: 'transshipmentBill'
-          })
+          for (let i = 0; i < this.orderList.length; i++) {
+            if (this.orderList[i].status === 2) {
+              if (this.orderList.length - i != 1) {
+                this.onOrder(this.orderList[i], i)
+                this.getCloudDetail(this.orderList[i].sn)
+                break
+              } else {
+                this.$router.push({
+                  name: 'transshipmentBill'
+                })
+              }
+            } else {
+              this.getCloudDetail(this.orderList[i].sn)
+            }
+          }
         } else {
           this.$message({
             message: res.msg,
@@ -497,24 +871,15 @@ export default {
     }
   },
   computed: {
-    isBtns() {
-      let isBtn = false
-      this.skuList.forEach(item => {
-        if (item.packData) {
-          item.packData.forEach(ele => {
-            if (
-              !ele.pack_quantity ||
-              ele.pack_quantity > item.quantity ||
-              ele.pack_quantity < item.quantity
-            ) {
-              isBtn = true
-            }
-          })
-        } else {
-          isBtn = true
-        }
-      })
-      return isBtn
+    totalGoodsNum() {
+      return this.skuList.reduce((pre, cur) => {
+        return pre + cur.quantity
+      }, 0)
+    },
+    scanGoodsNum() {
+      return this.skuList.reduce((pre, cur) => {
+        return pre + (cur.scanQty || 0)
+      }, 0)
     }
   },
   components: {}
@@ -523,9 +888,6 @@ export default {
 <style lang="scss">
 .pack-container {
   font-size: 14px;
-  .content-box {
-    padding: 20px;
-  }
   .el-row {
     display: flex;
     flex-wrap: wrap;
@@ -640,9 +1002,6 @@ export default {
     min-width: 70px;
     margin-right: 10px;
   }
-  .label-tips {
-    font-size: 14px;
-  }
   .radio-item {
     margin-bottom: 20px;
   }
@@ -657,6 +1016,12 @@ export default {
     text-align: right;
     padding: 20px;
     border-top: 1px solid #eff1f2;
+  }
+  .box-number {
+    margin-left: 10px;
+    display: inline-block;
+    width: 20px;
+    font-weight: bold;
   }
   .total-value {
     font-size: 48px;
@@ -699,15 +1064,54 @@ export default {
     display: flex;
     align-items: center;
   }
+  .flex-btn {
+    justify-content: space-between;
+  }
   .order-box {
     background: #fff;
   }
   .has-border {
     border: 1px solid #eff1f2;
   }
+  .color-tip {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    border-radius: 50%;
+    margin-right: 15px;
+    &.color-green {
+      background-color: #3da969;
+    }
+    &.color-orange {
+      background-color: #ff9933;
+    }
+  }
+  .box-item {
+    background: #eff1f2;
+    border-radius: 5px;
+    margin: 0 10px;
+  }
   .btn-red {
     cursor: pointer;
     color: red;
   }
+  .line {
+    border-bottom: 2px solid #eee;
+    padding: 10px 0;
+    margin: 0 10px;
+  }
+  .all {
+    color: #3540a5;
+    font-weight: bold;
+  }
+  // .sku-item {
+  //   height: 30px;
+  //   line-height: 30px;
+  //   display: inline-block;
+  //   padding: 0 25px;
+  //   margin: 0 2px;
+  //   border: 1px solid #efefef;
+  // }
 }
 </style>

@@ -27,7 +27,19 @@
                     {{ $t('国家地区') }}
                   </el-menu-item>
                   <el-menu-item index="6">
-                    {{ $t('转运规则') }}
+                    {{ $t('转运须知') }}
+                  </el-menu-item>
+                  <el-menu-item index="7">
+                    {{ $t('合箱须知') }}
+                  </el-menu-item>
+                  <el-menu-item index="8">
+                    {{ $t('预设打包箱') }}
+                  </el-menu-item>
+                  <el-menu-item index="9">
+                    {{ $t('收件地址配置') }}
+                  </el-menu-item>
+                  <el-menu-item index="10">
+                    {{ $t('打包改价配置') }}
                   </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
@@ -55,6 +67,21 @@
             <!-- 转运规则 -->
             <el-col :span="19" v-if="secondTab1 === '6'" class="main-right">
               <transport-configure></transport-configure>
+            </el-col>
+            <el-col :span="19" v-if="secondTab1 === '7'" class="main-right">
+              <box-configure></box-configure>
+            </el-col>
+            <!-- 预设打包箱 -->
+            <el-col :span="19" v-if="secondTab1 === '8'" class="main-right">
+              <preset-pack></preset-pack>
+            </el-col>
+            <!-- 收件地址配置 -->
+            <el-col :span="19" v-if="secondTab1 === '9'" class="main-right">
+              <address-config></address-config>
+            </el-col>
+            <!-- 打包改价配置 -->
+            <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
+              <pack-price-change></pack-price-change>
             </el-col>
           </el-row>
         </div>
@@ -227,6 +254,10 @@ import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
+import boxConfigure from './boxConfigure'
+import presetPack from './presetPack.vue'
+import addressConfig from './addressConfig.vue'
+import packPriceChange from './packPriceChange.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -248,7 +279,11 @@ export default {
     CustomTrack,
     CustomLabel,
     LoginConfigure,
-    customizeBackgroundSystem
+    customizeBackgroundSystem,
+    boxConfigure,
+    presetPack,
+    addressConfig,
+    packPriceChange
     // GroupConfigure
   },
   mixins: [pagination],

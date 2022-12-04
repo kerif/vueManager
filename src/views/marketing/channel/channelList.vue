@@ -1,6 +1,17 @@
 <template>
   <div class="channel-container">
     <div class="select-box">
+      <el-select v-model="category_id" @change="changeCategory" clearable>
+        <el-option
+          v-for="item in tableData"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+      <div class="manage">
+        <el-button type="primary" size="small" @click="onManage">{{ $t('分类管理') }}</el-button>
+      </div>
       <add-btn router="addChannel">{{ $t('添加') }}</add-btn>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -20,6 +31,11 @@
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 渠道号 -->
         <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
+        <el-table-column :label="$t('分类')" prop="category">
+          <template slot-scope="scope">
+            <div>{{ scope.row.category ? scope.row.category.name : '' }}</div>
+          </template>
+        </el-table-column>
         <!-- 渠道中文名 -->
         <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
         <!-- 结算方式 -->
@@ -72,6 +88,44 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
+    <el-dialog :visible.sync="show" :title="$t('分类管理')" width="80%" @close="clear">
+      <div style="display: flex; justify-content: flex-end">
+        <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
+          $t('新增')
+        }}</el-button>
+      </div>
+      <el-table :data="categoryList" border stripe>
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column prop="name" :label="$t('分类')">
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.editState" v-model="scope.row.name"></el-input>
+            <span v-else>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-main" v-if="!scope.row.editState" @click="onEdit(scope.row)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-main" v-if="scope.row.editState" @click="onAddEdit(scope.row)">{{
+              $t('保存')
+            }}</el-button>
+            <el-button class="btn-light-red" v-if="scope.row.id" @click="onDelete(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-else
+              @click="onDeleteCategory(scope.$index, categoryList)"
+              >{{ $t('删除') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="padding: 10px 0">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -79,6 +133,8 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
+// import dialog from '@/components/dialog'
+// import { Dialog } from 'element-ui'
 export default {
   name: 'vipGroupList',
   components: {
@@ -92,11 +148,17 @@ export default {
       vipGroupList: [],
       localization: {},
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      value: '',
+      show: false,
+      tableData: [],
+      category_id: '',
+      categoryList: []
     }
   },
   created() {
     this.getList()
+    this.getCategory()
   },
   methods: {
     getList() {
@@ -105,7 +167,8 @@ export default {
         .getChannel({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          category_id: this.category_id
         })
         .then(res => {
           this.tableLoading = false
@@ -175,6 +238,102 @@ export default {
         }
       })
     },
+    changeCategory() {
+      this.page_params.handleQueryChange('category_id', this.category_id)
+      this.getList()
+    },
+    onManage() {
+      this.show = true
+      this.getCategory()
+    },
+    getCategory() {
+      this.$request.categorySearch().then(res => {
+        this.categoryList = res.data.map(item => {
+          return {
+            ...item,
+            editState: false
+          }
+        })
+        this.tableData = res.data
+        this.tableData.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
+      })
+    },
+    addCategory() {
+      this.categoryList.push({
+        name: '',
+        editState: true
+      })
+    },
+    onEdit(row) {
+      console.log(row)
+      row.editState = true
+      this.$set(row, 'editState', true)
+    },
+    onAddEdit(row) {
+      if (row.id) {
+        row.editState = true
+        this.$request.editChannelCategory(row.id, { name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.addChannelCategory({ name: row.name }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCategory()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
+    },
+    onDelete(id) {
+      this.$request.delChannelCategory(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getCategory()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onDeleteCategory(index, row) {
+      row.splice(index, 1)
+    },
+    clear() {},
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
@@ -225,6 +384,10 @@ export default {
   }
   .add-btn-container {
     margin-left: 10px;
+  }
+  .manage {
+    margin-left: 10px;
+    display: inline-block;
   }
 }
 </style>

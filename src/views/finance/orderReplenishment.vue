@@ -64,6 +64,11 @@
         }}</el-button>
         <el-button class="btn-main" @click="setSupplement">{{ $t('补款方式设置') }}</el-button>
       </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="uploadList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
       <div class="headr-r" style="display: flex">
         <div class="searchGroup">
           <search-group
@@ -189,27 +194,27 @@ export default {
       end_date: '',
       options: [
         {
-          id: 1,
+          id: 0,
           name: this.$t('待支付')
         },
         {
-          id: 2,
+          id: 1,
           name: this.$t('待审核')
         },
         {
-          id: 3,
+          id: 2,
           name: this.$t('审核失败')
         },
         {
-          id: 4,
+          id: 11,
           name: this.$t('已支付')
         },
         {
-          id: 5,
+          id: 12,
           name: this.$t('审核完成')
         },
         {
-          id: 6,
+          id: 99,
           name: this.$t('已作废')
         }
       ],
@@ -266,6 +271,33 @@ export default {
     getCounts() {
       this.$request.getReplenishCount().then(res => {
         this.statusList = res.data
+      })
+    },
+    uploadList() {
+      let params = {
+        state: this.formInline.state,
+        status: this.activeName === '-1' ? '' : this.activeName,
+        pay: this.formInline.pay,
+        keyword: this.page_params.keyword,
+        begin_date: this.begin_date,
+        end_date: this.end_date
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.exportAdditional(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     getPaymentType() {
@@ -333,16 +365,15 @@ export default {
     },
     onStatus() {
       this.page_params.handleQueryChange('state', this.state)
-      this.getList()
     },
     onPay() {
       this.page_params.handleQueryChange('pay', this.pay)
-      this.getList()
     },
     submitForm() {
       this.onTime(this.formInline.timeList)
       this.onStatus()
       this.onPay()
+      this.getList()
     },
     resetForm() {
       this.formInline.pay = ''
@@ -388,5 +419,10 @@ export default {
 .order-replenishment-search {
   background: #fff;
   padding-left: 10px;
+}
+.changeVou {
+  float: right;
+  margin-right: 7px;
+  margin-left: 5px;
 }
 </style>

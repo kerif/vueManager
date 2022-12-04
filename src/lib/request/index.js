@@ -355,8 +355,8 @@ exports.submitTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
 // 模版列表
-exports.regionTemplates = id => {
-  return $form.get(`express-lines/region-templates/${id}/regions`)
+exports.regionTemplates = (id, params) => {
+  return $form.get(`express-lines/region-templates/${id}/regions`, { params })
 }
 // 模版 开启或关闭
 exports.presetRegionsEnabled = (id, regionsId, status) => {
@@ -720,6 +720,10 @@ exports.saveCountries = id => {
 exports.getTransaction = params => {
   return $form.get('transaction-records', { params })
 }
+// 财务 订单补款 导出
+exports.exportAdditional = params => {
+  return $form.get('order-additional-fees/export', { params })
+}
 // 财务 订单财务审核 退款审核
 exports.financesData = params => {
   return $form.get('order-finances/refunds', { params })
@@ -940,6 +944,14 @@ exports.agentTemplate = params => {
 exports.deleteAgent = id => {
   return $form.delete(`agents/${id}`)
 }
+// 代理管理 导出清单
+exports.uploadAgent = params => {
+  return $form.post(`agents/agent-export`, params)
+}
+// 代理管理 导出订单
+exports.exportAgentOrder = params => {
+  return $form.post(`agents/order-agent-export`, params)
+}
 // 发票管理 全部
 exports.manageInvoice = params => {
   return $form.get('invoice', { params })
@@ -978,16 +990,24 @@ exports.commissionSet = id => {
 }
 // 计佣模版配置 获取表格详情
 exports.commissionData = (id, params) => {
-  return $form.get(`agents/commission-templates/${id}/lines`, { params })
+  return $form.get(`agents/commission-templates/configs/lines`, { params })
 }
 
 // 计佣模版配置 更新单条数据
-exports.commissionUpdate = (id, params) => {
-  return $form.put(`agents/commission-templates/${id}`, params)
+exports.commissionUpdate = (params, id) => {
+  return $json.put(`agents/commission-templates/${id}`, params)
 }
 // 计佣模版配置 新建单条数据
 exports.commissionAdd = params => {
-  return $form.post(`agents/commission-templates`, params)
+  return $json.post(`agents/commission-templates`, params)
+}
+// 计佣模板 每级配置
+exports.agentCommissionConfigs = (id, level) => {
+  return $json.get(`agents/commission-templates/${id}/configs/${level}`)
+}
+// 计佣模板 佣金试算
+exports.agentCommissionCounter = params => {
+  return $json.post('agents/commission-templates/counter', params)
 }
 // 计佣模版配置 删除单条数据
 exports.commissionDelete = id => {
@@ -3567,8 +3587,8 @@ exports.uploadExcel = (ids, params) => {
   return $form.post(`shipments/order-export-batch`, ids, params)
 }
 // 订单列表 导出发票
-exports.uploadOrder = ids => {
-  return $form.post('orders/invoices', ids)
+exports.uploadOrder = (ids, params) => {
+  return $form.post('orders/invoices', ids, params)
 }
 // 订单列表 导出清单
 exports.orderExport = params => {
@@ -3599,8 +3619,8 @@ exports.uploadShipmentLabel = (id, ids) => {
   return $form.post(`shipments/${id}/order-shipment-label`, ids)
 }
 // 发货单 获取弹窗里可使用的物流状态
-exports.getShipStatus = () => {
-  return $form.get('shipments/logistics-types')
+exports.getShipStatus = params => {
+  return $form.get('shipments/logistics-types', { params })
 }
 // 发货单 更改当前物流状态
 exports.changeShipStatus = params => {
@@ -4424,7 +4444,11 @@ exports.transshipmentList = params => {
 
 // 采购 分货方案 新增
 exports.addPickOrder = params => {
-  return $form.post('purchase-picking-orders', params)
+  return $json.post('purchase-picking-orders', params)
+}
+// 采购 分货方案 编辑
+exports.editPickOrder = (id, params) => {
+  return $json.put(`purchase-picking-orders/${id}`, params)
 }
 
 // 采购 分货方案 审核
@@ -4495,4 +4519,483 @@ exports.delPickOrder = id => {
 //采购 下载面单
 exports.downloadNoodleSheet = params => {
   return $form.post(`purchase-picking-orders/order/order-label-pdfs`, params)
+}
+
+// 客户来源
+exports.userSource = () => {
+  return $form.get('users/user-sources')
+}
+
+// 推广渠道 分类管理
+exports.categorySearch = () => {
+  return $form.get('channel-categories')
+}
+
+// 分类管理 获取详情
+exports.channelCategory = id => {
+  return $form.get(`channel-categories/${id}`)
+}
+
+// 分类管理 新增
+exports.addChannelCategory = params => {
+  return $form.post('channel-categories', params)
+}
+
+// 分类管理 修改
+exports.editChannelCategory = (id, params) => {
+  return $form.put(`channel-categories/${id}`, params)
+}
+
+// 分类管理 删除
+exports.delChannelCategory = id => {
+  return $form.delete(`channel-categories/${id}`)
+}
+
+// 采购 采购分货 删除上传记录
+exports.delUploadRecord = (id, recordId) => {
+  return $form.delete(`purchase-picking-orders/${id}/record/${recordId}`)
+}
+
+// 落地配置 新增
+exports.dockingMethod = params => {
+  return $form.post(`express-lines/third-party-multi-channel`, params)
+}
+
+// 落地配置 编辑
+exports.editDockingMethod = (id, params) => {
+  return $form.put(`express-lines/third-party-multi-channel/${id}`, params)
+}
+
+// 落地配置 列表
+exports.dockingList = params => {
+  return $form.get(`express-lines/third-party-multi-channel`, { params })
+}
+
+// 落地配置 详情
+exports.dockingDetail = id => {
+  return $form.get(`express-lines/third-party-multi-channel/${id}`)
+}
+
+// 落地配置 删除
+exports.delDocking = id => {
+  return $form.delete(`express-lines/third-party-multi-channel/${id}`)
+}
+
+// 盘点记录 列表
+exports.inventoryList = params => {
+  return $form.get(`inventory-warehouse`, { params })
+}
+
+// 盘点 盘点导出
+exports.exportInventory = id => {
+  return $form.get(`inventory-warehouse/${id}/export`)
+}
+
+// 合箱须知 多语合箱规则
+exports.multiBoxRule = () => {
+  return $form.get('mini-program/merge-box-rule')
+}
+// 合箱须知 小程序 语言切换
+exports.changeLangBoxRule = params => {
+  return $form.get('mini-program/merge-box-rule', { params })
+}
+
+// 合箱须知 多语更新合箱规则
+exports.updateMultiBoxRule = params => {
+  return $form.put('mini-program/merge-box-rule', params)
+}
+
+// 采购订单详情
+exports.purchaseSnDetail = sn => {
+  return $form.get(`orders/sn/${sn}`)
+}
+
+// 设置上架自定义货位
+exports.setCustomLocation = (warehouseId, status) => {
+  return $form.put(`warehouse-address/${warehouseId}/custom-locations/${status}`)
+}
+
+// 新增自定义货位
+exports.addCustomLocation = (areaId, params) => {
+  return $form.post(`warehouse-address/goods-allocation-areas/${areaId}/locations`, params)
+}
+
+// 删除货区
+exports.delLocation = id => {
+  return $form.delete(`warehouse-address/locations/${id}`)
+}
+
+// 获取员工邀请码
+exports.inviteCode = (id, config) => {
+  return $form.get(`admins/${id}/invite-code`, config)
+}
+
+// 更新员工邀请默认用户组
+exports.inviteUserGroup = (id, groupId) => {
+  return $form.put(`admins/${id}/invite-user-group/${groupId}`)
+}
+
+// 获取员工邀请记录
+exports.inviteRecord = id => {
+  return $form.get(`admins/${id}/invite-users`)
+}
+
+// 修改商品部分信息
+exports.editPartGoods = (id, params) => {
+  return $form.put(`purchase-orders/${id}/update-goods-part`, params)
+}
+
+// 采购 导出明细表
+exports.exportPartList = id => {
+  return $form.post(`purchase-orders/${id}/export-details`)
+}
+
+// 员工二维码
+exports.employeeCode = (id, config) => {
+  return $form.get(`admins/${id}/invite-code/data`, config)
+}
+
+// 客户标签
+exports.userTag = () => {
+  return $form.get(`user-tags`)
+}
+
+// 客户标签 详情
+exports.tagDetail = id => {
+  return $form.get(`user-tags/${id}`)
+}
+
+// 客户标签 新增
+exports.addTag = params => {
+  return $form.post(`user-tags`, params)
+}
+
+// 客户标签 编辑
+exports.editTag = (id, params) => {
+  return $form.put(`user-tags/${id}`, params)
+}
+
+// 客户标签 删除
+exports.deleteTag = params => {
+  return $form.delete('user-tags/batch-destroy', { params })
+}
+
+// 客户标签 打标签
+exports.printLabel = (id, params) => {
+  return $form.put(`user-tags/${id}/make`, params)
+}
+
+// 客户标签 移除标签
+exports.removeTag = (id, params) => {
+  return $form.put(`user-tags/${id}/remove`, params)
+}
+
+// 客户标签 打标签
+exports.makeTag = params => {
+  return $form.put(`users/make-tags`, params)
+}
+
+// 转为代理客户
+exports.agentCustomer = id => {
+  return $form.put(`users/${id}/invite-users-to-agent-invite`)
+}
+
+// 获取用户关联数据
+exports.userRelation = () => {
+  return $form.get(`coupons/user-relations`)
+}
+
+// 批量分发优惠券
+exports.launchCoupon = (id, params) => {
+  return $form.put(`coupons/${id}/launch`, params)
+}
+
+// 更新物流
+exports.rememberShip = params => {
+  return $form.put(`orders/logistics`, params)
+}
+
+// 下载客户标签模板
+exports.dowmLoadUserTagTmp = () => {
+  return $form.get('users/user-to-tag-template')
+}
+
+// 上传客户标签模板
+exports.uploadUserTagTmp = file => {
+  return $file.post('users/template-update-tag', file)
+}
+
+// 采购 打包 导入模板
+exports.importPurchaseGoodsTmp = () => {
+  return $form.get('purchase-picking-orders/order/box-goods-template', { responseType: 'blob' })
+}
+
+// 采购 打包 导入解析
+exports.importPurchaseAnalysis = (orderId, file) => {
+  return $file.post(`purchase-picking-orders/order/${orderId}/box-goods-excel-parse`, file)
+}
+
+// 采购 导出
+exports.exportPurchaseGoodsTmp = orderId => {
+  return $form.post(`purchase-picking-orders/order/${orderId}/box-goods-export`)
+}
+
+// 修改所属仓库
+exports.editAffiliations = (id, ids) => {
+  return $json.put(`admin-groups/${id}/warehouse-affiliation`, ids)
+}
+
+// 包裹日志导出
+exports.exportPackageLog = params => {
+  return $form.get('package-process-logs/export', { params })
+}
+
+// 入库日志导出
+exports.exportStorageLog = params => {
+  return $form.get('shipment-logs/in-storage-export', { params })
+}
+
+// 拣货日志导出
+exports.exportPickLog = params => {
+  return $form.get('shipment-logs/picking-export', { params })
+}
+
+// 已集包修改商品信息
+exports.editGoodInfo = (id, params) => {
+  return $form.put(`packages/${id}/product-info`, params)
+}
+
+// 删除视频
+exports.delVideo = id => {
+  return $form.delete(`orders/videos/${id}`)
+}
+
+// 新建优惠券兑换码
+exports.addCouponCode = (id, params) => {
+  return $form.post(`coupons/${id}/codes`, params)
+}
+
+// 作废优惠券码
+exports.cancelCouponCode = id => {
+  return $form.put(`coupons/codes/${id}/disabled`)
+}
+
+// 优惠券兑换码列表
+exports.couponCodeList = (id, params) => {
+  return $form.get(`coupons/${id}/codes`, { params })
+}
+
+// 批量移除
+exports.batchRemove = (id, params) => {
+  return $form.post(`orders/${id}/packages/batch-remove`, params)
+}
+
+// 批量撤销
+exports.batchBack = params => {
+  return $form.put('purchase-orders/revoke', params)
+}
+
+// 批量作废
+exports.batchInvalidCard = params => {
+  return $form.put('users/coupons/disabled', params)
+}
+
+// 预设打包箱列表
+exports.presetPackList = params => {
+  return $form.get('system-boxes', { params })
+}
+
+// 预设打包箱 获取详情
+exports.presetPackDetail = id => {
+  return $form.get(`system-boxes/${id}`)
+}
+
+// 预设打包箱 新增
+exports.addPresetPack = params => {
+  return $form.post('system-boxes', params)
+}
+
+// 预设打包箱 修改
+exports.editPresetPack = (id, params) => {
+  return $form.put(`system-boxes/${id}`, params)
+}
+
+// 预设打包箱 删除
+exports.delPresetPack = params => {
+  return $form.put(`system-boxes/destroy`, params)
+}
+
+// 批量更新包裹归属信息
+exports.batchAffilication = params => {
+  return $form.put(`packages/batch-affiliation`, params)
+}
+
+// 财务概览 交易金额统计
+exports.transAmountStatistisc = params => {
+  return $form.get(`transaction-overviews/amount-count`, { params })
+}
+
+// 财务概览 交易额按日分类统计-表格
+exports.transDailyCountTable = () => {
+  return $form.get(`transaction-overviews/daily-count`)
+}
+
+// 财务概览 交易额按日统计-柱状图
+exports.transDailyCount = () => {
+  return $form.get(`transaction-overviews/trade-count`)
+}
+
+// 财务概览 对比数据
+exports.transCountCompare = params => {
+  return $form.get(`transaction-overviews/compare-data`, { params })
+}
+
+// 财务概览 圆饼状图统计
+exports.pieCountStatistisc = params => {
+  return $form.get(`transaction-overviews/countries-data`, { params })
+}
+
+// 代理佣金结算 导出清单
+exports.exportAgentCommission = params => {
+  return $form.get(`agents/export-deal-orders`, { params })
+}
+
+// 拼团 创建拼团
+exports.createGroup = params => {
+  return $form.post('group-buying', params)
+}
+
+// 拼团 拼图线路列表
+exports.groupLineList = params => {
+  return $form.post('group-buying/express-lines', params)
+}
+
+// 拼团 可用地址
+exports.groupbuyAddress = userId => {
+  return $form.get(`group-buying/user/${userId}/addresses`)
+}
+
+// 拼团 修改拼团
+exports.editGroupInfo = (id, params) => {
+  return $form.put(`group-buying/${id}`, params)
+}
+
+//拼团 添加拼团成员
+exports.addGroupMember = (id, userId) => {
+  return $form.put(`group-buying/${id}/add-member/${userId}`)
+}
+
+// 拼团 获取自提点
+exports.groupStation = expressLineId => {
+  return $form.get(`group-buying/stations/line/${expressLineId}`)
+}
+
+// 拼团 结束拼团
+exports.endGroup = id => {
+  return $form.put(`group-buying/${id}/end`)
+}
+
+// 拼团 用户已加入拼团包裹列表
+exports.joinGroupPackageList = (id, userId) => {
+  return $form.get(`group-buying/${id}/user/${userId}/packages`)
+}
+
+// 拼团 用户可加入拼图包裹列表
+exports.toJoinGroupPackageList = (id, userId) => {
+  return $form.get(`group-buying/${id}/user/${userId}/addable-packages`)
+}
+
+// 拼团 将用户包裹加入拼团
+exports.addPackageToGroup = (id, params) => {
+  return $form.post(`group-buying/${id}/packages`, params)
+}
+
+// 员工组列表 数据权限
+exports.telPermission = (id, params) => {
+  return $form.put(`admin-groups/${id}/data-permissions`, params)
+}
+
+// 拼团 线路可用自提点
+exports.useLineStation = expressLineId => {
+  return $form.get(`group-buying/stations/line/${expressLineId}`)
+}
+
+// 拼团 将用户包裹移出拼团
+exports.removeGroupPackage = (id, params) => {
+  return $form.put(`group-buying/${id}/packages/remove`, params)
+}
+
+// 拼团 提交用户拼团订单
+exports.submitUserGroupOrder = (id, userId) => {
+  return $form.post(`group-buying/${id}/user/${userId}/order`)
+}
+
+// 批量删除地址
+exports.batchDelAddress = params => {
+  return $form.put(`user-addresses/batch-destroy`, params)
+}
+
+// 删除回复
+exports.delReply = (id, replyId) => {
+  return $form.delete(`order-comments/${id}/reply/${replyId}`)
+}
+
+// 地址审核
+exports.addressAudit = (id, params) => {
+  return $form.put(`user-addresses/${id}/review`, params)
+}
+
+// 更新翻译
+exports.updateAddressTranslate = params => {
+  return $form.put(`setting/address/translate-data`, params)
+}
+
+// 更新配置
+exports.updateAddressConfig = params => {
+  return $form.put(`setting/address`, params)
+}
+
+// 获取配置
+exports.getAddressConfig = params => {
+  return $form.get(`setting/address`, { params })
+}
+
+// 新增标签
+exports.addAddressTag = params => {
+  return $form.post(`user-addresses/tags`, params)
+}
+
+// 修改标签
+exports.editAddressTag = (id, params) => {
+  return $form.put(`user-addresses/tags/${id}`, params)
+}
+
+// 删除标签
+exports.delAddressTag = id => {
+  return $form.delete(`user-addresses/tags/${id}`)
+}
+
+// 标签列表
+exports.addressTagList = () => {
+  return $form.get(`user-addresses/tags`)
+}
+
+// 地址 批量审核
+exports.addressBatchAudit = params => {
+  return $form.put(`user-addresses/batch-review`, params)
+}
+
+// 订单详情 打印
+exports.printInfo = id => {
+  return $form.get(`orders/${id}/order-info/pdf`)
+}
+
+// 打包改价配置 更新配置
+exports.updateChangePrice = params => {
+  return $form.put(`client-setting`, params)
+}
+
+// 打包改价配置 获取配置
+exports.getChangePrice = () => {
+  return $form.get(`client-setting`)
 }

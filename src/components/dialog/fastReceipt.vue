@@ -125,7 +125,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.form.sn, 'sn: this.form.sn,')
       this.$request
         .getReceive({
           XStationId: this.id,
@@ -145,13 +144,10 @@ export default {
               type: 'error'
             })
           }
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      // console.log(this.deleteNum, 'this.deleteNum')
     },
     changeRadio() {
       this.tableData = []
@@ -180,10 +176,7 @@ export default {
       // })
       // console.log(tmap, 'tmap')
     },
-    selectable() {
-      // if (row.id === 1) {
-      // }
-    },
+    selectable() {},
     confirm() {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -191,7 +184,7 @@ export default {
       if (this.deleteNum.length !== this.tableData.length) {
         return this.$message.error(this.$t('需要全选才能确定收货'))
       }
-      console.log(this.deleteNum, 'this.deleteNum')
+
       this.$request
         .updateReceive({
           XStationId: this.id,
@@ -222,7 +215,6 @@ export default {
         this.getList()
         console.log(this.orderSnNum, '1111')
       }
-      // this.getList()
     },
     clear() {
       this.page_params.page = 1

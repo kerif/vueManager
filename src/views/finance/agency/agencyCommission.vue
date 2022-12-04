@@ -48,6 +48,10 @@
           {{ $t('一键结算') }}
         </el-button>
         <el-button class="btn-light-red" @click="orderSettle">{{ $t('预约结算') }}</el-button>
+        <!-- 导出清单 -->
+        <el-button class="btn-main" style="margin-left: 10px" @click="exportAgentList">{{
+          $t('导出清单')
+        }}</el-button>
       </div>
       <div class="head-search">
         <el-input
@@ -67,6 +71,8 @@
         <el-table-column prop="order_status" :label="$t('订单状态')" width="100"> </el-table-column>
         <el-table-column prop="order_amount" :label="$t('计佣金额')" width="100"> </el-table-column>
         <el-table-column prop="agent_name" :label="$t('代理')"> </el-table-column>
+        <el-table-column prop="agent_contact_name" :label="$t('代理联系人')"></el-table-column>
+        <el-table-column prop="level" :label="$t('代理级别')"></el-table-column>
         <el-table-column prop="commission_amount" :label="$t('可获佣金')" width="100">
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('成交时间')" width="100"> </el-table-column>
@@ -306,6 +312,34 @@ export default {
     },
     cancel() {
       this.show = false
+    },
+    exportAgentList() {
+      this.$request
+        .exportAgentCommission({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          user_id: this.page_params.user_id,
+          status: this.page_params.status,
+          begin_date: this.timeList[0],
+          end_date: this.timeList[1]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            // this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     }
   }
 }

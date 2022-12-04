@@ -71,7 +71,6 @@
     </p>
     <!-- <el-button class="created-btn" @click="goCreated">{{$t('创建发货单')}}</el-button> -->
     <div slot="footer">
-      <!-- <el-button @click="show = false">{{$t('取消')}}</el-button> -->
       <el-button type="primary" @click="confirmShip">{{ $t('确定出库') }}</el-button>
     </div>
   </el-dialog>
@@ -148,7 +147,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     deleteRow(index, rows) {
@@ -162,7 +160,6 @@ export default {
       if (this.state === 'batch') {
         this.textarea2 = this.orderSnNum.join('\n')
         this.search()
-        console.log(this.orderSnNum, '1111')
       }
     }
   }

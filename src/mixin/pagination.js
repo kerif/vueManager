@@ -16,7 +16,9 @@ export default {
     // 分页
     handleCurrentChange(pageId) {
       this.page_params.page = pageId
-      this.getList()
+      if (this.getList) {
+        this.getList()
+      }
     },
     // 分页size
     handleSizeChange(pageSize) {
@@ -24,7 +26,9 @@ export default {
       this.handleQueryChange('page', this.page_params.page)
       // localStorage.setItem('size', this.page_params.size)
       this.page_params.size = pageSize
-      this.getList()
+      if (this.getList) {
+        this.getList()
+      }
     },
     // 搜索
     goSearch(is) {
@@ -33,7 +37,9 @@ export default {
       this.handleQueryChange('page', this.page_params.page)
       this.handleQueryChange('size', this.page_params.size)
       this.handleQueryChange('keyword', this.page_params.keyword)
-      this.getList(is)
+      if (this.getList) {
+        this.getList(is)
+      }
     },
     handleQueryChange(key, value) {
       const { name, params, query } = this.$route

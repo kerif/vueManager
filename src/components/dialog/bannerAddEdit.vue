@@ -192,12 +192,9 @@ export default {
         if (this.state === 'edit') {
           this.getList()
         }
-        // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     getType() {
-      console.log(this.ruleForm.link_type, 'ruleForm.link_type')
-      console.log(this.ruleForm, 'ruleForm')
       this.linkPath = ''
       this.ruleForm.link_path = ''
     },
@@ -209,14 +206,11 @@ export default {
           this.linkPath = this.pathData.find(item => item.link_path === res.data.link_path)
             ? res.data.link_path
             : ''
-          console.log(this.link_)
-          console.log(this.ruleForm, 'this.ruleForm')
           res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
         }
       })
     },
     changePath() {
-      console.log(this.linkPath, 'ruleForm.link_path')
       this.ruleForm.link_path = this.linkPath
     },
     confirm() {
@@ -258,7 +252,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       } else {
         // 如果是添加状态
@@ -282,7 +275,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       }
     },

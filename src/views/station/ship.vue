@@ -258,18 +258,51 @@
           <el-select
             v-model="form.logistics_type_id"
             filterable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
+            @clear="onClear"
           >
             <el-option v-for="item in modeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
+        <el-form-item
+          v-if="
+            this.form.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
+        </el-form-item>
+        <el-form-item :label="$t('时间')">
+          <el-date-picker
+            v-model="created_at"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            :placeholder="$t('选择日期时间')"
+          >
+          </el-date-picker>
+          <span style="color: red; margin-left: 5px">{{ $t('不选则默认是当前时间') }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('备注')">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            :placeholder="$t('请输入内容')"
+            v-model="logisticsRemark"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="changeStatus">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- 轨迹 -->
@@ -413,7 +446,10 @@ export default {
       radio: '',
       type: 1,
       showTmpDrawer: false,
-      uploadType: 3
+      uploadType: 3,
+      is_member: false,
+      created_at: '',
+      logisticsRemark: ''
     }
   },
   created() {
@@ -437,6 +473,15 @@ export default {
   },
   mounted() {
     this.getList()
+  },
+  computed: {
+    // visibleBtn() {
+    //   let isBtn = false
+    //   if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+    //     isBtn = false
+    //   }
+    //   return isBtn
+    // }
   },
   methods: {
     initSize() {
@@ -483,6 +528,7 @@ export default {
         }
       })
     },
+    onClear() {},
     // 下载excel
     uploadList(type) {
       this.$request
@@ -493,7 +539,6 @@ export default {
         .then(res => {
           if (res.ret) {
             this.urlExcel = res.data.url
-            // window.location.href = this.urlExcel
             window.open(this.urlExcel)
             this.$notify({
               title: this.$t('操作成功'),
@@ -506,6 +551,22 @@ export default {
               message: res.msg,
               type: 'warning'
             })
+          }
+        })
+    },
+    querySearchLogistics(queryString, cb) {
+      var list = [{}]
+      this.$request
+        .getShipStatus({
+          keyword: this.form.logistics_type_id
+        })
+        .then(res => {
+          if (res.ret) {
+            for (let i of res.data) {
+              i.value = i.name
+            }
+            list = res.data
+            cb && cb(list)
           }
         })
     },
@@ -618,28 +679,34 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeShipStatus({
-          logistics_type_id: this.form.logistics_type_id,
-          shipment_ids: this.deleteNum
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-            this.deleteNum = []
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        shipment_ids: this.deleteNum,
+        is_member: Number(this.is_member),
+        remark: this.logisticsRemark,
+        created_at: this.created_at
+      }
+      if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+        params.logistics_type_id = this.form.logistics_type_id
+      } else {
+        params.context = this.form.logistics_type_id
+      }
+      this.$request.changeShipStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.deleteNum = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 导出清单
     // unloadShip (id) {
@@ -668,6 +735,8 @@ export default {
     },
     clear() {
       this.form.logistics_type_id = ''
+      this.logisticsRemark = ''
+      this.created_at = ''
     },
     clearSn() {
       this.tableSn = ''
@@ -686,7 +755,6 @@ export default {
     },
     // 导出清单
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -701,8 +769,6 @@ export default {
           })
           .then(res => {
             if (res.ret) {
-              // this.urlExcel = res.data.url
-              // window.open(this.urlExcel)
               this.$notify({
                 title: this.$t('操作成功'),
                 message: res.msg,
@@ -804,7 +870,6 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      // this.getList()
     },
     // 发货时间
     // 创建时间
@@ -816,7 +881,6 @@ export default {
         'times',
         `${this.shipped_begin_date} ${this.shipped_end_date}`
       )
-      // this.getList()
     },
     // 删除发货单
     deleteShip(id) {
@@ -845,7 +909,6 @@ export default {
     },
     // 跳转至订单 运单
     goOrder(orderSn, status) {
-      console.log(status, '我是传过去的ID')
       this.$router.push({
         name: 'wayBillList',
         query: { order_sn: orderSn, activeName: status.toString() }
@@ -911,7 +974,6 @@ export default {
     },
     // 提交表单
     submitForm() {
-      console.log('111')
       this.onTime(this.timeList)
       this.onShipment(this.shipmentList)
       this.onShipStatus()
@@ -924,7 +986,6 @@ export default {
         .sendingNotify({
           ids: this.deleteNum,
           type: command
-          // type: this.activeName === '2' ? 2 : 3
         })
         .then(res => {
           if (res.ret) {
@@ -941,7 +1002,6 @@ export default {
             })
           }
         })
-      // console.log(command)
     }
   }
 }

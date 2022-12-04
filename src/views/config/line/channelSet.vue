@@ -144,9 +144,9 @@ export default {
   .main-sty {
     background-color: #fff;
   }
-  .el-select {
-    width: 300px;
-  }
+  // .el-select {
+  //   width: 300px;
+  // }
   .landing-container {
     background-color: #fff !important;
     padding: 20px;

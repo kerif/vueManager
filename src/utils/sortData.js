@@ -158,5 +158,17 @@ export default [
     name: '出库箱数',
     width: '100',
     checked: true
+  },
+  {
+    id: 'third_tracking_status_name',
+    name: '物流状态',
+    width: '100',
+    checked: true
   }
+  // {
+  //   id: 'pack_status_name',
+  //   name: '打包状态',
+  //   width: '100',
+  //   checked: true
+  // }
 ]

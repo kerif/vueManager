@@ -59,10 +59,8 @@ export default {
     },
     handleSelect(item) {
       this.supplierId = item.id
-      console.log(this.supplierId, 'this.supplierId')
     },
     submit() {
-      console.log(this.supplierId, 'this.supplierId')
       this.$request
         .saveCountries({
           country_id: this.supplierId
@@ -82,7 +80,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     clear() {

@@ -121,6 +121,13 @@
           @click="uploadListData"
           >{{ $t('导出清单') }}</el-button
         >
+        <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="['1', '2'].includes(activeName)"
+          @click="batchChangePackage"
+          >{{ $t('批量包裹变更') }}</el-button
+        >
       </div>
       <div class="header-search">
         <el-input
@@ -238,6 +245,19 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="$t('物流状态')"
+          prop="third_tracking_status_name"
+          key="third_tracking_status_name"
+          v-if="activeName === '1'"
+          width="150"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" class="copy-number" @click="packageTrack(scope.row.id)">{{
+              scope.row.third_tracking_status_name
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="$t('物品名称')"
           prop="package_name"
           key="package_name"
@@ -337,6 +357,13 @@
           prop="in_storage_at"
           key="in_storage_at"
           v-if="activeName === '2' || activeName === '3'"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('签收时间')"
+          width="155"
+          prop="received_at"
+          key="received_at"
+          v-if="['0', '1', '2'].includes(activeName)"
         ></el-table-column>
         <el-table-column
           :label="$t('提交时间')"
@@ -480,6 +507,7 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('签收时间')" prop="received_at"></el-table-column>
         <el-table-column :label="$t('操作')" width="220" fixed="right">
           <template slot-scope="scope">
             <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
@@ -565,7 +593,8 @@ export default {
         member_level: ''
       },
       showBatch: false,
-      packageData: []
+      packageData: [],
+      trackId: ''
     }
   },
   activated() {
@@ -611,11 +640,31 @@ export default {
     passVal() {
       this.showBatch = false
     },
+    batchChangePackage() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'packageChange',
+          packageData: this.packageData
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
       this.getList()
       this.getCounts()
+    },
+    packageTrack(id) {
+      dialog({
+        type: 'tracking',
+        id
+      })
     },
     computedParams() {
       let params = {
@@ -756,7 +805,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .deleteNoOwner({
             DELETE: this.deleteNum
@@ -1018,7 +1066,6 @@ export default {
       this.$request.checkPackageLabel(id).then(res => {
         if (res.ret) {
           this.urlHtml = res.data.url
-          // this.urlImport = res.data.url
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -1073,7 +1120,6 @@ export default {
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

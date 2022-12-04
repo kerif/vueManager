@@ -425,7 +425,6 @@ export default {
   }
   .icon-sty {
     cursor: pointer;
-    // padding-left: 20px;
     font-weight: 700;
     color: black;
   }
@@ -433,7 +432,6 @@ export default {
     font-size: 28px;
   }
   .save-sort {
-    // margin-left: 10px;
     line-height: 40px;
   }
 }

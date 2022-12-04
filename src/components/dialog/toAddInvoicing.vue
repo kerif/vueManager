@@ -18,7 +18,6 @@
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
-      <!-- 作废申请 -->
       <!-- 备注 -->
       <el-form-item :label="$t('备注')" v-if="state === 'void'">
         <el-input
@@ -111,9 +110,7 @@ export default {
         }
       })
     },
-    init() {
-      console.log(this.state)
-    },
+    init() {},
     // 预览图片
     onPreview(image) {
       dialog({
@@ -152,7 +149,6 @@ export default {
             remarks
           })
           .then(res => {
-            console.log(res)
             if (res.ret) {
               this.$notify({
                 type: 'success',

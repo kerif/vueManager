@@ -54,7 +54,13 @@
             </el-form-item>
           </el-form>
           <div slot="footer">
-            <el-button type="primary" @click="submit" size="small">{{ $t('保存') }}</el-button>
+            <el-button
+              type="primary"
+              :loading="$store.state.btnLoading"
+              @click="submit"
+              size="small"
+              >{{ $t('保存') }}</el-button
+            >
           </div>
         </div>
       </el-col>

@@ -103,23 +103,23 @@
           @click="batchNotify"
           >{{ $t('批量发送通知') }}</el-button
         >
-        <el-button
-          class="btn-deep-purple"
-          v-if="['3', '4', '5'].includes(activeName)"
-          size="small"
-          @click="uploadInvoice(selectIDs)"
-        >
-          {{ $t('导出发票') }}
-        </el-button>
+        <el-dropdown v-if="['3', '4', '5'].includes(activeName)" style="margin-left: 10px">
+          <el-button class="btn-deep-purple" size="small">
+            {{ $t('导出发票') }}
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 1)">{{
+              $t('模板一')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 2)">{{
+              $t('模板二')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(selectIDs, 3)">{{
+              $t('模板三')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-      <!-- <div
-        style="margin-left: 5px"
-        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
-      >
-        <el-button @click="uploadList" size="small" type="success" plain>{{
-          $t('导出清单')
-        }}</el-button>
-      </div> -->
       <el-button
         style="margin-left: 5px"
         size="small"
@@ -333,6 +333,12 @@
                   {{ scope.row.shipment_sn }}
                 </span>
               </template>
+              <template v-else-if="item.id === 'third_tracking_status_name'">
+                <span>{{ scope.row.third_tracking_status_name }}</span>
+              </template>
+              <!-- <template v-else-if="item.id === 'pack_status_name'">
+                <span>{{ scope.row.pack_status_name }}</span>
+              </template> -->
               <template v-else-if="item.id === 'exceptional_at'">
                 <span>{{ scope.row.exceptional_at }}</span>
               </template>
@@ -404,6 +410,19 @@
                 >
                   {{ $t('打包') }}
                 </el-dropdown-item>
+                <!-- <el-dropdown-item
+                  v-if="activeName === '3' && scope.row.pack_status === 0"
+                  @click.native="
+                    packed(
+                      scope.row.id,
+                      scope.row.order_sn,
+                      scope.row.is_parent,
+                      activeName,
+                      scope.row.express_line.id
+                    )
+                  "
+                  >{{ $t('打包') }}</el-dropdown-item
+                > -->
                 <el-dropdown-item
                   v-if="activeName === '3'"
                   @click.native="addInvoice([scope.row.id])"
@@ -509,7 +528,12 @@
           v-if="activeName !== 0"
         >
           <template slot-scope="props">
-            <el-table :data="props.row.secondData" class="expand-table">
+            <el-table
+              :data="props.row.secondData"
+              class="expand-table"
+              @selection-change="onGroupSelectChange"
+            >
+              <el-table-column type="selection"></el-table-column>
               <!-- 客户ID -->
               <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
               <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
@@ -823,6 +847,8 @@
           <el-select
             v-model="form.logistics_type_id"
             filterable
+            allow-create
+            default-first-option
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -836,10 +862,40 @@
           </el-select>
           <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
         </el-form-item>
+        <el-form-item
+          v-if="
+            this.form.logistics_type_id &&
+            !this.modeData.map(item => item.id).includes(this.form.logistics_type_id)
+          "
+        >
+          <el-checkbox v-model="is_member">{{ $t('是否记住') }}</el-checkbox>
+        </el-form-item>
+        <el-form-item :label="$t('时间')">
+          <el-date-picker
+            v-model="created_at"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            :placeholder="$t('选择日期时间')"
+          >
+          </el-date-picker>
+          <span style="color: red; margin-left: 5px">{{ $t('不选则默认是当前时间') }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('备注')">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            :placeholder="$t('请输入内容')"
+            v-model="logisticsRemark"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="changeStatus">{{
+          $t('确定')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- 轨迹 -->
@@ -852,9 +908,12 @@
         <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              v-if="scope.row.id"
+              class="btn-light-red"
+              @click="deleteTable(scope.row.id)"
+              >{{ $t('删除') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -891,29 +950,6 @@
     <!-- 一键批量打包 -->
     <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" width="80%">
       <div class="add-box">
-        <!-- 一键将预计重量改成实际重量 -->
-        <!-- <el-tooltip
-          :content="
-            $t(
-              '一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量直接相加，数据误差较大时请手动更改'
-            )
-          "
-          placement="top"
-        >
-          <el-button @click="changeWeight">{{ $t('一键将预计重量改成实际重量') }}</el-button>
-        </el-tooltip> -->
-        <!-- <el-tooltip
-          :content="
-            $t(
-              '一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹体积重量相加，数据误差较大时请手动更改'
-            )
-          "
-          placement="top"
-        >
-          <el-button @click="changeVolume">{{
-            $t('一键将预计体积重量设为实际体积重量')
-          }}</el-button>
-        </el-tooltip> -->
         <el-button @click="goCreated">{{ $t('批量改支付方式') }}</el-button>
       </div>
       <el-table :data="boxDialogData" border style="width: 100%">
@@ -935,49 +971,6 @@
           prop="except_package_volume_weight"
           :label="$t('体积重量')"
         ></el-table-column>
-        <!-- <el-table-column prop="except_weight" :label="$t('预计重量') + localization.weight_unit">
-        </el-table-column>
-        <el-table-column :label="$t('实际重量') + localization.weight_unit">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.actual_weight"></el-input>
-          </template>
-        </el-table-column> -->
-        <!-- 实际体积重量 -->
-        <!-- <el-table-column>
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.volume_weight"></el-input>
-          </template>
-          <template slot="header">
-            <span>{{ $t('实际体积重量') }}{{ localization.weight_unit }}</span>
-            <el-tooltip placement="top">
-              <span slot="content">
-                <span>
-                  {{ $t('如有合箱操作请勿填写此项填入实际尺寸即可') }}
-                </span>
-              </span>
-              <i class="el-icon-question" style="font-size: 18px; color: '#35B85A'"></i>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('实际尺寸') + localization.length_unit" width="200px">
-          <template slot-scope="scope">
-            <el-input
-              class="dialog-input"
-              :placeholder="$t('长')"
-              v-model="scope.row.exceptLength"
-            ></el-input>
-            <el-input
-              class="dialog-input"
-              :placeholder="$t('宽')"
-              v-model="scope.row.exceptWidth"
-            ></el-input>
-            <el-input
-              class="dialog-input"
-              :placeholder="$t('高')"
-              v-model="scope.row.exceptHeight"
-            ></el-input>
-          </template>
-        </el-table-column> -->
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <el-button class="btn-light-red" @click="deleteTrack(scope.$index, boxDialogData)">{{
@@ -1270,7 +1263,9 @@ export default {
         keyword: '',
         status: '',
         order_type: '',
-        member_level: ''
+        member_level: '',
+        sale_id: '',
+        customer_id: ''
       },
       hasFilterCondition: false,
       page_params: {
@@ -1281,7 +1276,7 @@ export default {
       user_id: '',
       order_sn: '',
       actual_payment_fee: '',
-      orderInfo: '',
+      orderInfo: [],
       selectUserID: [],
       user_name: '',
       status: '',
@@ -1302,7 +1297,10 @@ export default {
       images: [],
       ruleForm: {
         textarea: ''
-      }
+      },
+      is_member: false,
+      logisticsRemark: '',
+      created_at: ''
     }
   },
   activated() {
@@ -1365,7 +1363,19 @@ export default {
         }
         switch (this.activeName) {
           case '0':
-            if ([...column].includes(item.id)) {
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if (
+              [
+                ...column,
+                'updated_at',
+                'packed_at',
+                'signed_at',
+                'exceptional_at',
+                'third_tracking_status_name'
+              ].includes(item.id)
+            ) {
               this.checkColumn.push(item)
             }
             break
@@ -1405,7 +1415,9 @@ export default {
                 'updated_at',
                 'packed_at',
                 'shipment_sn',
-                'boxes_count'
+                'boxes_count',
+                'third_tracking_status_name'
+                // 'pack_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1424,7 +1436,8 @@ export default {
                 'coupon_amount',
                 'updated_at',
                 'shipment_sn',
-                'boxes_count'
+                'boxes_count',
+                'third_tracking_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1759,31 +1772,39 @@ export default {
     },
     // 更改物流状态
     changeStatus() {
-      this.$request
-        .changeOrderStatus({
-          logistics_type_id: this.form.logistics_type_id,
-          order_ids: this.selectIDs
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.trackDialog = false
-            this.getList()
-            this.selectIDs = []
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {
+        order_ids: this.selectIDs,
+        is_member: Number(this.is_member),
+        remark: this.logisticsRemark,
+        created_at: this.created_at
+      }
+      if (this.modeData.map(item => item.id).includes(this.form.logistics_type_id)) {
+        params.logistics_type_id = this.form.logistics_type_id
+      } else {
+        params.context = this.form.logistics_type_id
+      }
+      this.$request.changeOrderStatus(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.selectIDs = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     clear() {
       this.form.logistics_type_id = ''
+      this.logisticsRemark = ''
+      this.created_at = ''
     },
     clearSn() {
       this.showDialog = false
@@ -2155,6 +2176,10 @@ export default {
       this.selectIDs = selection.map(item => item.id)
       this.orderInfo = selection
     },
+    onGroupSelectChange(selection) {
+      this.selectIDs = selection.map(item => item.id)
+      this.orderInfo = selection
+    },
     exChange(row, expandedRows) {
       this.expands = expandedRows.map(item => item.id)
     },
@@ -2215,7 +2240,7 @@ export default {
       )
     },
     // 导出发票
-    uploadInvoice(ids) {
+    uploadInvoice(ids, type) {
       if (!ids.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -2226,7 +2251,8 @@ export default {
       }).then(() => {
         this.$request
           .uploadOrder({
-            ids
+            ids,
+            type
           })
           .then(res => {
             if (res.ret) {

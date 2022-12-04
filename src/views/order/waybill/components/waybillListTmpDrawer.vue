@@ -33,6 +33,16 @@
             $t('删除')
           }}</el-button>
         </div>
+        <div v-else-if="item.custom_code === 'pp_order'">
+          <el-button @click="editPurchaseTmp(item.id)" class="btn-blue-green">{{
+            $t('编辑')
+          }}</el-button>
+        </div>
+        <div v-else-if="item.custom_code === 'order'">
+          <el-button @click="editOrderTmp(item.id)" class="btn-blue-green">{{
+            $t('编辑')
+          }}</el-button>
+        </div>
       </div>
       <div class="template-remark">{{ item.remark }}</div>
     </div>
@@ -46,18 +56,38 @@
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
     ></inner-drawer>
+    <purchase-drawer
+      :tmpCode="tmpCode"
+      :editPurchaseTmpDrawer="editPurchaseTmpDrawer"
+      @purchaseInner="purchaseInner"
+      ref="purchase"
+      :ids="ids"
+    ></purchase-drawer>
+    <order-drawer
+      :tmpCode="tmpCode"
+      :editOrderTmpDrawer="editOrderTmpDrawer"
+      @orderInner="orderInner"
+      ref="order"
+      :ids="ids"
+    ></order-drawer>
   </el-drawer>
 </template>
 
 <script>
 import InnerDrawer from './innerDrawer'
+import PurchaseDrawer from './purchaseDrawer.vue'
+import OrderDrawer from './orderDrawer.vue'
 export default {
   components: {
-    InnerDrawer
+    InnerDrawer,
+    PurchaseDrawer,
+    OrderDrawer
   },
   data() {
     return {
       editTmpDrawer: false,
+      editPurchaseTmpDrawer: false,
+      editOrderTmpDrawer: false,
       code: '',
       name: '',
       tmpName: '',
@@ -113,9 +143,27 @@ export default {
       this.ids = ids
       this.editTmpDrawer = true
     },
+    editPurchaseTmp(ids) {
+      this.ids = ids
+      this.editPurchaseTmpDrawer = true
+    },
+    editOrderTmp(ids) {
+      this.ids = ids
+      this.editOrderTmpDrawer = true
+    },
     receiveInner() {
       this.editTmpDrawer = false
       this.$refs.inner.clear()
+      this.getTmpList()
+    },
+    purchaseInner() {
+      this.editPurchaseTmpDrawer = false
+      this.$refs.purchase.clear()
+      this.getTmpList()
+    },
+    orderInner() {
+      this.editOrderTmpDrawer = false
+      this.$refs.order.clear()
       this.getTmpList()
     },
     activeFun(id) {

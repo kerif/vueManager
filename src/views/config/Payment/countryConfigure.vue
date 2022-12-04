@@ -474,8 +474,6 @@ export default {
       this.countryId = id
       this.cid = id
       this.countryName = name
-      // console.log(rgb, typeof rgb)
-      // console.log(Array.isArray(rgb))
       let bgCol = rgb
       if (Array.isArray(rgb)) {
         this.color = 'rgb(' + bgCol.join(',') + ')'
@@ -618,13 +616,10 @@ export default {
     },
     // 背景色
     updateBgColor() {
-      console.log(this.color, 'this.color')
       const bgColor = this.color.slice(4, -1).split(',')
-      console.log(bgColor, typeof bgColor)
       const arr = bgColor.map(item => {
         return +item
       })
-      console.log(arr)
       // const bgColor = this.color.slice(1)
       // const arr = [
       //   Number(`0x${bgColor.slice(0, 2)}`),

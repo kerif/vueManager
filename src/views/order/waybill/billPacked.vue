@@ -97,9 +97,18 @@
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
     <div class="add-sty" v-if="this.$route.params.activeName">
+      <el-button class="btn-light-red" @click="onBatchRemove">{{ $t('批量移除') }}</el-button>
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
-    <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
+    <el-table
+      :data="PackageData"
+      v-loading="tableLoading"
+      @selection-change="onSelectChange"
+      class="data-list"
+      border
+      stripe
+    >
+      <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
       <!-- 包裹编码 -->
@@ -390,7 +399,7 @@
             </el-form-item>
           </el-col>
           <!-- 尺寸 -->
-          <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
+          <el-col :span="11" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('尺寸')">
               <el-input
                 v-model="user.length"
@@ -407,6 +416,9 @@
                 class="sizeLength"
                 :placeholder="$t('高') + this.localization.length_unit"
               ></el-input>
+              <el-button class="btn-main" style="margin-left: 5px" @click="selectBox('single')">{{
+                $t('选择箱子')
+              }}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -451,7 +463,7 @@
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
-                <!-- <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button> -->
+                <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button>
                 <el-button class="btn-deep-purple" @click="batchAddRow">{{
                   $t('批量添加')
                 }}</el-button>
@@ -497,6 +509,9 @@
                       class="btn-light-red"
                       >{{ $t('移除') }}</el-button
                     >
+                    <el-button class="btn-main" @click="selectBox('multi', scope.$index)">{{
+                      $t('选择箱子')
+                    }}</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -733,7 +748,8 @@ export default {
         pack_pictures: [], // 打包照片
         box: [],
         line_service_ids: [],
-        order_service_ids: []
+        order_service_ids: [],
+        system_box_id: ''
       },
       baseMode: 0,
       lineServices: [],
@@ -779,6 +795,9 @@ export default {
       showDeclare: false,
       unit: '',
       currency: '',
+      status: '',
+      selectIDs: [],
+      boxId: '',
       declareType: [
         {
           id: 1,
@@ -872,6 +891,65 @@ export default {
     // 包裹清单 详情
     packageDetails(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    onSelectChange(selection) {
+      this.selectIDs = selection.map(item => item.id)
+    },
+    selectBox(type, index) {
+      dialog(
+        {
+          type: 'presetPackBox'
+        },
+        data => {
+          let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
+          if (type === 'single') {
+            this.user.length = length
+            this.user.width = width
+            this.user.height = height
+            this.boxId = id
+          } else {
+            this.user.box[index].weight = weight
+            this.user.box[index].length = length
+            this.user.box[index].width = width
+            this.user.box[index].height = height
+            this.user.box[index].system_box_id = id
+            console.log(this.user.box[index].system_box_id, '111')
+          }
+        }
+      )
+    },
+    onBatchRemove() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(
+        this.$t(
+          '该操作无法撤回，移除后的包裹将回到已入库状态。注：若该订单只有一个包裹，则该包裹移除后订单自动作废'
+        ),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
+        this.$request.batchRemove(this.$route.params.id, { ids: this.selectIDs }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getPackage()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     // 移除 包裹清单
     removePackage(id, expressNum, orderSn) {
@@ -1034,6 +1112,9 @@ export default {
             price: item.price
           }
         })
+      if (this.user.box_type === 1) {
+        this.user.system_box_id = this.boxId
+      }
       this.user.in_warehouse_pictures = this.goodsImgList
       this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
@@ -1118,6 +1199,8 @@ export default {
     },
     clearRow() {
       this.user.box = []
+      this.TotalWeight = ''
+      this.UnitTotalWeight = ''
     },
     batchAddRow() {
       dialog(
@@ -1217,7 +1300,11 @@ export default {
     getPackage() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
+        res.data.packages.forEach(item => {
+          item.order_sn = res.data.order_sn
+        })
         this.PackageData = res.data.packages
+        console.log(this.PackageData)
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
@@ -1247,6 +1334,7 @@ export default {
         this.localization = res.localization
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.baseMode = this.form.express_line.base_mode
+        this.status = res.data.status
         this.getExpressServes()
       })
     },
@@ -1397,7 +1485,7 @@ export default {
 <style lang="scss" scoped>
 .packed-container {
   .sizeLength {
-    width: 33% !important;
+    width: 28% !important;
   }
   .updateChe {
     // .el-form-item__content {

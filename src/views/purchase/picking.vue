@@ -6,20 +6,35 @@
           <div class="row-item">
             <el-input
               v-model="sn"
-              :placeholder="$t('请输入或扫码拣货单号,按Enter键结束')"
+              :placeholder="$t('请输入或扫入拣货单号,按Enter键结束')"
               class="ipt"
               @keyup.native.enter="onOrderSn"
             />
           </div>
           <div class="row-item">
+            <el-select
+              v-model="num"
+              style="width: 120px"
+              @change="changeVal"
+              :placeholder="$t('请选择箱号')"
+              clearable
+            >
+              <el-option
+                v-for="item in boxNumber"
+                :key="item.id"
+                :value="item.id"
+                :label="item.number"
+              >
+              </el-option>
+            </el-select>
             <el-input
-              :placeholder="$t('请输入或扫码条码')"
+              :placeholder="$t('请输入或扫入条码')"
               class="ipt"
               v-model="barcode"
               ref="barcode"
-              @keyup.native.enter="onSku"
+              @keyup.native.enter="onSku(barcode)"
             />
-            <el-button type="primary" size="small" class="confirm-btn" @click="onSku">{{
+            <el-button type="primary" size="small" class="confirm-btn" @click="onSku(barcode)">{{
               $t('确认')
             }}</el-button>
           </div>
@@ -37,46 +52,56 @@
               <span class="font-bold num">{{ waitScanNum }}</span>
             </span>
             <span>
-              <span>{{ $t('箱号') }}：</span>
+              <span>{{ $t('订单号') }}：</span>
               <span class="font-bold num">{{ orderList.length }}</span>
             </span>
           </div>
           <div>
             <div class="flex-item color-item">
               <div class="color-tip color-green"></div>
-              <div>{{ $t('绿色为出库数量下单数量') }}</div>
+              <div>{{ $t('绿色为拣货数量等于分货数量') }}</div>
             </div>
             <div class="flex-item color-item">
               <div class="color-tip color-orange"></div>
-              <div>{{ $t('黄色为出库数量下单数量') }}</div>
+              <div>{{ $t('黄色为拣货数量不等于分货数量') }}</div>
             </div>
             <div class="flex-item color-item">
               <div class="color-tip"></div>
-              <div>{{ $t('白色为出库数量下单数量') }}</div>
+              <div>{{ $t('白色为拣货数量为0') }}</div>
             </div>
           </div>
         </el-col>
       </el-row>
       <div class="order-list">
-        <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
-          <div class="index">
+        <div
+          class="order-item flex-item"
+          v-for="(item, index) in orderList"
+          :key="index"
+          :id="item.id"
+        >
+          <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
-            <div class="font-bold index-label">#{{ index + 1 }}</div>
+            <div class="font-bold index-label">#{{ item.number }}</div>
           </div>
           <div class="order-content flex-1">
             <el-row :gutter="30">
               <el-row class="sku-row">
-                <el-col :span="4" :offset="1">{{ $t('图片') }}</el-col>
-                <el-col :span="4">{{ $t('商品ID') }}</el-col>
+                <el-col :span="3" :offset="1">{{ $t('图片') }}</el-col>
+                <el-col :span="4">{{ $t('商品编号') }}</el-col>
                 <el-col :span="4">{{ $t('品名') }}</el-col>
-                <el-col :span="4">{{ $t('条码') }}</el-col>
+                <el-col :span="5">{{ $t('条码') }}</el-col>
                 <el-col :span="4" class="align-center">{{ $t('分货') }}</el-col>
                 <el-col :span="3" class="align-center">{{ $t('拣货') }}</el-col>
               </el-row>
             </el-row>
             <el-row :gutter="30">
-              <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
-                <el-col :span="4" :offset="1">
+              <el-row
+                class="sku-row"
+                v-for="ele in item.goods"
+                :key="ele.id"
+                :id="ele.p_goods.barcode"
+              >
+                <el-col :span="3" :offset="1">
                   <span v-if="ele.p_goods">
                     <img
                       class="img"
@@ -86,12 +111,46 @@
                   </span>
                 </el-col>
                 <el-col :span="4">
-                  <span class="sku-item">{{ item.sn }}</span>
+                  <span
+                    class="sku-item"
+                    :class="{
+                      all: ele.quantity === Number(ele.picking_quantity),
+                      pick: barcode === ele.p_goods.barcode,
+                      wait:
+                        (Number(ele.picking_quantity) < ele.quantity ||
+                          Number(ele.picking_quantity) > ele.quantity) &&
+                        Number(ele.picking_quantity) !== 0
+                    }"
+                    >{{ ele.p_goods.number }}</span
+                  >
                 </el-col>
                 <el-col :span="4">
-                  <span class="sku-item">{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span>
+                  <span
+                    class="sku-item"
+                    :class="{
+                      all: ele.quantity === Number(ele.picking_quantity),
+                      pick: barcode === ele.p_goods.barcode,
+                      wait:
+                        (Number(ele.picking_quantity) < ele.quantity ||
+                          Number(ele.picking_quantity) > ele.quantity) &&
+                        Number(ele.picking_quantity) !== 0
+                    }"
+                    >{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span
+                  >
                 </el-col>
-                <el-col :span="4">{{ ele.p_goods ? ele.p_goods.barcode : '' }}</el-col>
+                <el-col
+                  :span="5"
+                  class="sku-item"
+                  :class="{
+                    all: ele.quantity === Number(ele.picking_quantity),
+                    pick: barcode === ele.p_goods.barcode,
+                    wait:
+                      (Number(ele.picking_quantity) < ele.quantity ||
+                        Number(ele.picking_quantity) > ele.quantity) &&
+                      Number(ele.picking_quantity) !== 0
+                  }"
+                  >{{ ele.p_goods ? ele.p_goods.barcode : '' }}</el-col
+                >
                 <el-col :span="4" class="align-center font-bold num-item">{{
                   ele.quantity
                 }}</el-col>
@@ -109,11 +168,11 @@
         </div>
       </div>
       <div class="align-right" v-if="orderList.length">
-        <el-button @click="onSave(0)">{{ $t('保存') }}</el-button>
+        <el-button @click="onSave">{{ $t('保存') }}</el-button>
         <el-button
           class="save-btn"
           type="primary"
-          @click="onSave(1)"
+          @click="onSubmit"
           :loading="$store.state.btnLoading"
           >{{ $t('拣货完成') }}</el-button
         >
@@ -135,7 +194,11 @@ export default {
       orderId: '',
       orderList: [],
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      boxNumber: [],
+      num: '',
+      orderSn: '',
+      key: ''
     }
   },
   created() {
@@ -153,11 +216,37 @@ export default {
           }
           this.orderId = res.data ? res.data.id : ''
           this.orderList = res.data ? res.data.orders : []
+          this.orderSn = res.data.sn
+          this.boxNumber = this.orderList.map(item => {
+            return {
+              id: item.id,
+              number: '#' + item.number + '(' + item.sn + ')'
+            }
+          })
+          console.log(this.boxNumber)
         })
+      } else {
+        this.$message.error(this.$t('请确认数据是否保存'))
       }
     },
-    onSku() {
-      if (this.barcode) {
+    onSku(code) {
+      console.log(code)
+      if (this.num && this.barcode) {
+        let element = document.getElementById(code)
+        console.log(element)
+        element.scrollIntoView()
+        this.orderList.forEach(item => {
+          if (item.id === this.num) {
+            item.goods.forEach(ele => {
+              if (ele.p_goods) {
+                if (this.barcode === ele.p_goods.barcode) {
+                  ele.picking_quantity++
+                }
+              }
+            })
+          }
+        })
+      } else if (this.barcode) {
         this.$refs.barcode.select()
         for (let i = 0; i < this.orderList.length; i++) {
           let flag = true
@@ -176,22 +265,36 @@ export default {
             break
           }
         }
+      } else if (this.num) {
+        this.orderList.forEach(item => {
+          if (item.id === this.num) {
+            item.goods.forEach(ele => {
+              if (ele.picking_quantity < ele.quantity) {
+                ele.picking_quantity++
+              }
+            })
+          }
+        })
       }
     },
     onPic(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    onSave(type) {
+    changeVal(value) {
+      let toElement = document.getElementById(value)
+      toElement.scrollIntoView()
+    },
+    onSave() {
       let params = {
-        is_picking_finish: type,
+        is_picking_finish: 0,
         goods: []
       }
       this.orderList.forEach(item => {
         if (item.goods) {
           item.goods.forEach(ele => {
             params.goods.push({
-              picking_quantity: ele.picking_quantity,
+              picking_quantity: ele.picking_quantity ? ele.picking_quantity : 0,
               picking_divide_order_id: ele.picking_divide_order_id,
               purchase_order_goods_id: ele.purchase_order_goods_id
             })
@@ -206,17 +309,10 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          if (type === 0) {
-            this.$router.push({
-              name: 'transshipmentBill',
-              query: { activeName: '1' }
-            })
-          } else {
-            this.$router.push({
-              name: 'transshipmentBill',
-              query: { activeName: '2' }
-            })
-          }
+          this.$router.push({
+            name: 'transshipmentBill',
+            query: { activeName: '1' }
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -224,6 +320,49 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    onSubmit() {
+      let params = {
+        is_picking_finish: 1,
+        goods: []
+      }
+      this.orderList.forEach(item => {
+        if (item.goods) {
+          item.goods.forEach(ele => {
+            params.goods.push({
+              picking_quantity: ele.picking_quantity,
+              picking_divide_order_id: ele.picking_divide_order_id,
+              purchase_order_goods_id: ele.purchase_order_goods_id
+            })
+          })
+          return params.goods
+        }
+      })
+      this.$confirm(this.$t('您确认拣货完成吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.purchasePick(this.orderId, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.$router.push({
+              name: 'transshipmentBill',
+              query: { activeName: '2' }
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   },
@@ -331,6 +470,10 @@ export default {
     border-right: 1px solid #efefef;
     position: relative;
   }
+  .auto {
+    background: #3540a5;
+    color: #fff;
+  }
   .index-label {
     font-size: 40px;
     margin-top: 20px;
@@ -381,14 +524,18 @@ export default {
     padding: 0 25px;
     border: 1px solid #efefef;
     &.all {
-      border-color: #efefef;
-      background-color: #efefef;
+      border-color: #3da969;
+      background-color: #3da969;
       color: #fff;
     }
     &.wait {
       border-color: #ff9933;
       background-color: #ff9933;
     }
+  }
+  .pick {
+    font-weight: bold;
+    color: #3540a5;
   }
 }
 </style>

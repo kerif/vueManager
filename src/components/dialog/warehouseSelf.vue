@@ -63,9 +63,7 @@ export default {
       this.order = ''
       this.status = ''
     },
-    init() {
-      console.log(this.id, 'id')
-    }
+    init() {}
   }
 }
 </script>

@@ -108,7 +108,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       } else {
         this.$request.updateExpress(this.id, this.ruleForm).then(res => {
@@ -126,7 +125,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
       }
     },
@@ -174,7 +172,6 @@ export default {
       this.state = ''
     },
     init() {
-      console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
         this.getList()
       }

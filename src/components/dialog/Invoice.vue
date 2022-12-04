@@ -110,7 +110,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else {
             // 编辑
@@ -129,7 +128,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {

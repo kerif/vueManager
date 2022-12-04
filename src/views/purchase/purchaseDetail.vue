@@ -120,6 +120,9 @@
         </template>
       </purchase-info>
     </div>
+    <div class="export-btn">
+      <el-button class="btn-light-green" @click="exportTable">{{ $t('导出明细表') }}</el-button>
+    </div>
     <div style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
@@ -145,6 +148,9 @@
                 v-if="ruleForm.status === 0"
                 >{{ $t('编辑') }}</el-button
               >
+              <el-button class="btn-main" v-else @click="editGoodsInfo(scope.row)">{{
+                $t('编辑')
+              }}</el-button>
               <el-button
                 class="btn-deep-blue"
                 v-if="ruleForm.status !== 0"
@@ -154,6 +160,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="number" :label="$t('商品编号')"></el-table-column>
+          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
           <el-table-column prop="material" :label="$t('材质')"></el-table-column>
@@ -162,7 +169,18 @@
           <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
-          <el-table-column prop="barcode" label="barcode"></el-table-column>
+          <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
+          <el-table-column prop="pack_quantity" :label="$t('打包数量')"></el-table-column>
+          <el-table-column :label="$t('拣货差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.picking_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('打包差异数量')">
+            <template slot-scope="scope">
+              {{ scope.row.pack_quantity - scope.row.quantity }}
+            </template>
+          </el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img
@@ -189,46 +207,52 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="order_sn" :label="$t('打包单号')">
+        <el-table-column prop="sn" :label="$t('转运单号')">
           <template slot-scope="scope">
-            <span class="choose-order" @click="orderDetail(scope.row.id)">{{
-              scope.row.order_sn
-            }}</span>
+            <span v-if="scope.row.status === 2">{{ scope.row.sn }}</span>
+            <span
+              v-if="scope.row.status === 3"
+              class="choose-order"
+              @click="orderDetail(scope.row.id)"
+              >{{ scope.row.sn }}</span
+            >
           </template>
         </el-table-column>
-        <el-table-column prop="status" :label="$t('转运单状态')">
+        <el-table-column prop="status" :label="$t('转运状态')">
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 1">{{ $t('待处理') }}</span>
-            <span v-if="scope.row.status === 2">{{ $t('待支付') }}</span>
-            <span v-if="scope.row.status === 3">{{ $t('待发货') }}</span>
-            <span v-if="scope.row.status === 4">{{ $t('已发货') }}</span>
-            <span v-if="scope.row.status === 5">{{ $t('已签收') }}</span>
-            <span v-if="scope.row.status === 19">{{ $t('已作废') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('待打包') }}</span>
+            <span v-if="scope.row.status === 3">{{ $t('已完成') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="qty" :label="$t('商品数量')"></el-table-column>
-        <el-table-column prop="declare_value" :label="$t('总价值')"></el-table-column>
-        <el-table-column prop="country_name" :label="$t('目的地')">
+        <el-table-column prop="quantity" :label="$t('分货数量')"></el-table-column>
+        <el-table-column prop="picking_quantity" :label="$t('拣货数量')"></el-table-column>
+        <el-table-column prop="pack_quantity" :label="$t('打包数量')"></el-table-column>
+        <el-table-column :label="$t('拣货差异数量')">
           <template slot-scope="scope">
-            {{ scope.row.address && scope.row.address.country_name }}
+            {{ scope.row.picking_quantity - scope.row.quantity }}
           </template>
         </el-table-column>
-        <el-table-column prop="receiver_name" :label="$t('收件人')">
+        <el-table-column :label="$t('打包差异数量')">
           <template slot-scope="scope">
-            {{ scope.row.address && scope.row.address.receiver_name }}
+            {{ scope.row.pack_quantity - scope.row.quantity }}
           </template>
         </el-table-column>
-        <el-table-column prop="express_line.name" :label="$t('下单渠道')"></el-table-column>
-        <el-table-column prop="payment_mode" :label="$t('付款方式')">
+        <el-table-column prop="country" :label="$t('目的地')">
           <template slot-scope="scope">
-            <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{
-              $t('货到付款')
-            }}</span>
-            <span v-else>{{ $t('预付') }}</span>
+            {{ scope.row.country && scope.row.country.name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="user" :label="$t('收件人')">
+          <template slot-scope="scope">
+            {{ scope.row.user && scope.row.user.name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="express_line" :label="$t('下单渠道')">
+          <template slot-scope="scope">
+            {{ scope.row.express_line && scope.row.express_line.name }}
           </template>
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
-        <el-table-column prop="customer_name" :label="$t('创建人')"></el-table-column>
       </el-table>
     </div>
     <operate-log :logs="ruleForm.logs"></operate-log>
@@ -277,13 +301,16 @@
         @click="onInvalid"
         >{{ $t('作废') }}</el-button
       >
-      <el-button
+      <!-- <el-button
         size="small"
         v-if="ruleForm.status === 3"
         class="btn-green"
         @click="editDistributionGoods"
         >{{ $t('分货') }}</el-button
-      >
+      > -->
+      <el-button v-if="ruleForm.status === 3" class="btn-green" @click="onDistribution">{{
+        $t('分货完成')
+      }}</el-button>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -341,12 +368,54 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
+        this.ruleForm.orders = res.data.d_orders.map(item => {
+          const id = item.id
+          const country = item.station ? item.station.country : ''
+          const props = item.props.map(ele => ele.cn_name)
+          const sn = item.sn
+          const quantity = item.quantity
+          const picking_quantity = item.picking_quantity
+          const pack_quantity = item.pack_quantity
+          const user = item.user
+          const express_line = item.express_line
+          const created_at = item.created_at
+          const status = item.status
+          return {
+            id,
+            sn,
+            quantity,
+            picking_quantity,
+            pack_quantity,
+            country,
+            props,
+            user,
+            express_line,
+            created_at,
+            status
+          }
+        })
         this.ids = res.data.package ? res.data.package.id : ''
       })
     },
     checkImg(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
+    exportTable() {
+      this.$request.exportPartList(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     getWarehouse() {
       this.$request.getSimpleWarehouse().then(res => {
@@ -382,6 +451,31 @@ export default {
         params: {
           id
         }
+      })
+    },
+    onDistribution() {
+      this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.purchaseFinish({ ids: this.$route.params.id }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'purchaseOrder'
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     saveGoods() {
@@ -429,7 +523,6 @@ export default {
       })
     },
     editDetail(row) {
-      console.log(row)
       dialog({
         type: 'purchaseDetails',
         row
@@ -452,11 +545,18 @@ export default {
           state
         },
         data => {
-          console.log(data)
           this.ruleForm.goods[index] = data
           this.$set(this.ruleForm.goods, index, data)
         }
       )
+    },
+    editGoodsInfo(row) {
+      console.log(row)
+      dialog({
+        type: 'editGoodsInfo',
+        id: this.$route.params.id,
+        purchase: JSON.parse(JSON.stringify(row))
+      })
     },
     onDelete() {
       this.$request.deletPurchase(this.$route.params.id).then(res => {
@@ -553,6 +653,9 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .export-btn {
+    margin-top: 20px;
   }
 }
 </style>

@@ -1,11 +1,36 @@
 <template>
   <div class="agent-list-container">
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <el-date-picker
+        size="mini"
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
     <div class="btn">
       <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
       <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
       <el-button type="primary" @click="updateAgentCode">{{ $t('更新代理二维码') }}</el-button>
       <div class="changeVou">
         <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
+      </div>
+      <div class="filter">
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+        ></el-button>
       </div>
       <div class="agent-search">
         <search-group
@@ -14,6 +39,16 @@
           @search="goSearch"
         >
         </search-group>
+      </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="uploadList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="exportOeder">{{
+          $t('导出订单')
+        }}</el-button>
       </div>
     </div>
     <el-table
@@ -32,6 +67,7 @@
           <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('联系人')" prop="contact_name"></el-table-column>
       <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
       <el-table-column :label="$t('下单数')">
         <template slot-scope="scope">
@@ -171,15 +207,19 @@ export default {
       imgVisible: false,
       imgSrc: '',
       imgUser: '',
+      begin_date: null,
+      end_date: null,
       deleteNum: [],
       options: [],
       withdrawVisible: false,
+      hasFilterCondition: false,
       id: '',
       type: '',
       form: {
         content: '',
         language: ''
-      }
+      },
+      timeList: []
     }
   },
   name: 'agentList',
@@ -199,7 +239,9 @@ export default {
         .getAgents({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          begin_date: this.begin_date,
+          end_date: this.end_date
         })
         .then(res => {
           this.tableLoading = false
@@ -220,11 +262,32 @@ export default {
           }
         })
     },
+    onTime(val) {
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      // this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.getList()
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.getList()
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime(this.timeList)
+    },
     openAgent(data) {
-      this.imgSrc = data.qr_code
       this.imgVisible = true
       this.imgUser = data.user_id
       this.id = data.id
+      this.onAgentDetails(this.id)
+    },
+    onAgentDetails(id) {
+      this.$request.getEditAgent(id).then(res => {
+        this.imgSrc = res.data.qr_code
+      })
     },
     // 修改代理
     editAgent(id) {
@@ -325,6 +388,56 @@ export default {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.options = res.data
+        }
+      })
+    },
+    // 导出
+    uploadList() {
+      let params = {
+        status: this.status,
+        keyword: this.page_params.keyword,
+        type: this.type,
+        discount_type: this.discount_type,
+        template_id: this.$route.query.type === '2' ? this.$route.query.id : ''
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.uploadAgent(params).then(res => {
+        if (res.ret) {
+          // this.urlExcel = res.data.url
+          // window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 导出订单
+    exportOeder() {
+      let params = {}
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.exportAgentOrder(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -470,5 +583,18 @@ export default {
 }
 .img-code {
   display: inline-block;
+}
+.order-list-search {
+  font-size: 14px;
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  .submit {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+  }
 }
 </style>

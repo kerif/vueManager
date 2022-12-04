@@ -107,7 +107,6 @@ export default {
         customer_remark: this.ruleForm.customer_remark
       }
       this.$request.refusedWithdraw(this.userid, this.withdrawsId, info).then(res => {
-        console.log(res)
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -122,7 +121,6 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
       })
     }
   }

@@ -25,6 +25,10 @@
           </el-option>
         </el-select>
       </div>
+      <!-- 充值金额 -->
+      <div class="chooseStatus">
+        <el-input v-model="amount" size="mini" placeholder="请输入金额"></el-input>
+      </div>
       <div class="submit">
         <el-button type="primary" plain size="small" @click="submitForm">{{
           $t('搜索')
@@ -137,9 +141,10 @@ export default {
       localization: {},
       tableLoading: false,
       timeList: [],
-      begin_date: '',
-      end_date: '',
+      begin_date: null,
+      end_date: null,
       type: '',
+      amount: '',
       voucherChange: [],
       status: '',
       hasFilterCondition: false,
@@ -184,7 +189,8 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         payment_type: this.type,
-        status: this.status
+        status: this.status,
+        confirm_amount: this.amount
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
@@ -308,6 +314,7 @@ export default {
       this.timeList = []
       this.type = ''
       this.status = ''
+      this.amount = ''
     },
     // 提交表单
     submitForm() {

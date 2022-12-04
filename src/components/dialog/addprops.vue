@@ -43,7 +43,6 @@ export default {
     },
     confirm() {
       if (!this.ruleForm.cn_name) return this.$message.error(this.$t('请输入属性名称'))
-      console.log(this.ruleForm.cn_name, 'this.ruleForm.cn_name')
       if (this.state === 'edit') {
         this.$request
           .updatePackageProps(this.id, {
@@ -64,7 +63,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       } else {
         this.$request
@@ -86,7 +84,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
     }

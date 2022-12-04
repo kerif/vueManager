@@ -134,6 +134,21 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('客户标签')" class="label-sty">
+            <el-select v-model="tag_ids" multiple clearable>
+              <el-option
+                v-for="item in labelData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <el-button style="margin-left: 5px" @click="saveTag">{{ $t('保存') }}</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -168,7 +183,9 @@ export default {
       options: [],
       id: '',
       userId: '',
-      name: ''
+      name: '',
+      tag_ids: [],
+      labelData: []
     }
   },
   methods: {
@@ -215,11 +232,41 @@ export default {
     },
     handleSelect(item) {
       this.supplierId = item.id
-      console.log(typeof this.supplierId, 'this.supplierId 我是选择的ID')
       this.supplierName = item.name
     },
+    getUserLabel() {
+      this.$request.userTag().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.labelData = res.data
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    saveTag() {
+      this.$request.makeTag({ user_ids: [this.id], tag_ids: this.tag_ids }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.success()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     submit() {
-      console.log(this.supplierId, 'this.supplierId,  我是保存的ID')
       this.$request
         .updateVipInfo(this.id, {
           ...this.form,
@@ -241,7 +288,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     // 获取支持国家数据
@@ -263,6 +309,7 @@ export default {
     init() {
       this.getList()
       this.searchCountry()
+      this.getUserLabel()
     }
   }
 }

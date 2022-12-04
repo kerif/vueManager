@@ -134,38 +134,49 @@
         </el-form>
       </div>
       <div class="receiverMSg msg-top">
-        <h4 class="all-group">{{ $t('商品信息') }}</h4>
-        <el-row class="container-center number-top" :gutter="20">
-          <!-- 物品名称 -->
-          <el-col :span="7">
-            <span class="leftWidth">{{ $t('物品名称') }}</span>
-            <p class="packageName">{{ form.package_name }}</p>
-          </el-col>
-          <!-- 件数 -->
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('件数') }}</span>
-            <span>{{ form.number }}</span>
-          </el-col>
-          <!-- 物品类型 -->
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('物品总价值') }}</span>
-            <span>{{ form.package_value }}</span>
-          </el-col>
-        </el-row>
-        <el-row class="container-center number-top" :gutter="20">
-          <!-- 品牌 -->
-          <el-col :span="7">
-            <span class="leftWidth">{{ $t('品牌名称') }}</span>
-            <span>{{ form.brand_name }}</span>
-          </el-col>
-          <!-- 物品总价值 -->
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('物品分类') }}</span>
-            <span v-for="item in form.categories" :key="item.id">
-              {{ item.name_cn }}
-            </span>
-          </el-col>
-          <!-- <el-col :span="7" :offset="1">
+        <div class="flex">
+          <h4 class="all-group">{{ $t('商品信息') }}</h4>
+          <div v-if="form.status === 3">
+            <el-button class="btn-main" @click="editGood" v-if="editable === false">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-main" v-else @click="onSave">{{ $t('保存') }}</el-button>
+          </div>
+        </div>
+        <el-form :model="good">
+          <el-row class="container-center number-top" :gutter="20">
+            <el-col :span="7">
+              <span class="leftWidth">{{ $t('物品名称') }}</span>
+              <el-input v-model="good.package_name" :disabled="!editable" style="width: 50%" />
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('件数') }}</span>
+              <el-input v-model="good.number" :disabled="!editable" style="width: 50%" />
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('物品总价值') }}</span>
+              <el-input v-model="good.package_value" :disabled="!editable" style="width: 50%" />
+            </el-col>
+          </el-row>
+          <el-row class="container-center number-top" :gutter="20">
+            <el-col :span="7">
+              <span class="leftWidth">{{ $t('品牌名称') }}</span>
+              <el-input v-model="good.brand_name" :disabled="!editable" style="width: 50%" />
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('物品分类') }}</span>
+              <el-cascader
+                v-model="good.category_ids"
+                :options="classifyList"
+                :disabled="!editable"
+                :placeholder="$t('请选择')"
+                :props="props"
+                @change="changeClass"
+                clearable
+              >
+              </el-cascader>
+            </el-col>
+            <!-- <el-col :span="7" :offset="1">
             <span class="leftWidth">{{ $t('物品照片') }}</span>
             <div class="left-img" v-for="item in form.package_pictures" :key="item.id">
               <span
@@ -176,12 +187,13 @@
               </span>
             </div>
           </el-col> -->
-          <!-- 转运快递公司 -->
-          <!-- <el-col :span="7" :offset="1">
-        <span class="leftWidth">{{$t('转运快递公司')}}</span>
-        <span>{{form.logistics_company}}</span>
-      </el-col> -->
-        </el-row>
+            <!-- 转运快递公司 -->
+            <!-- <el-col :span="7" :offset="1">
+             <span class="leftWidth">{{$t('转运快递公司')}}</span>
+             <span>{{form.logistics_company}}</span>
+            </el-col> -->
+          </el-row>
+        </el-form>
         <!-- <el-row class="container-center" :gutter="20">
           <el-col :span="7">
             <span class="leftWidth">{{ $t('物品照片') }}</span>
@@ -198,7 +210,12 @@
       </div>
     </div>
     <div class="receiverMSg msg-top">
-      <h4>{{ $t('详细清单') }}</h4>
+      <div class="flex">
+        <h4>{{ $t('详细清单') }}</h4>
+        <div v-if="form.status === 3">
+          <el-button @click="onAddProduct" class="btn-main">{{ $t('添加') }}</el-button>
+        </div>
+      </div>
       <el-table
         :data="form.details"
         class="data-list number-top"
@@ -249,6 +266,16 @@
         </el-table-column>
         <!-- 备注 -->
         <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
+        <el-table-column :label="$t('操作')" width="130" v-if="form.status === 3">
+          <template slot-scope="scope">
+            <el-button class="btn-dark-green" @click="editProduct(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-light-red" @click="deleteProduct(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="receiverMSg msg-top">
@@ -351,7 +378,7 @@
       </el-row>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
+      <div class="img_box" @click="openImg(imgSrc)">
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
@@ -374,25 +401,81 @@ export default {
       tableLoading: false,
       tableData: [],
       userId: '',
-      unEdit: false
+      unEdit: false,
+      classifyList: [],
+      editable: false,
+      currencyUnit: '',
+      props: { multiple: true },
+      ids: [],
+      options: [],
+      returnItem: '',
+      good: {
+        package_name: '',
+        number: '',
+        package_value: '',
+        brand_name: '',
+        category_ids: []
+      }
     }
   },
   created() {
     if (this.$route.params.id) {
       this.getList()
       // this.getProduct()
+      this.getGoods()
     }
   },
   methods: {
+    findParents(array, id) {
+      let parentArray = []
+      let recursion = (arrayNew, id) => {
+        for (let i = 0; i < arrayNew.length; i++) {
+          let node = arrayNew[i]
+          if (node.value === id) {
+            if (node.parent_id) {
+              parentArray.push(node.parent_id, node.value)
+            } else {
+              parentArray.push(node.value)
+            }
+            break
+          } else {
+            if (node.children) {
+              recursion(node.children, id)
+            }
+          }
+        }
+      }
+      let arrayNew = array
+      recursion(arrayNew, id)
+      return parentArray
+    },
     getList() {
       this.tableLoading = true
       this.$request.getPackageDetails(this.$route.params.id).then(res => {
         this.tableLoading = false
         this.form = res.data
+        if (res.data.categories.length) {
+          this.good.category_ids = []
+          res.data.categories.forEach(ele => {
+            let index = this.good.category_ids.indexOf(ele.id)
+            if (index === -1) {
+              this.good.category_ids = this.good.category_ids.concat([
+                this.findParents(this.classifyList, ele.id)
+              ])
+            } else {
+              this.good.category_ids.splice(index, 1)
+            }
+          })
+        }
+        this.good.package_name = res.data.package_name
+        this.good.number = res.data.number
+        this.good.package_value = res.data.package_value
+        this.good.brand_name = res.data.brand_name
         this.services = res.data.services
         this.localization = res.localization
         this.boxData = res.data.box
         this.userId = res.data.user_id
+        this.currencyUnit = res.localization.currency_unit
         switch (this.form.status) {
           case 0:
             this.form.active = 1
@@ -429,6 +512,128 @@ export default {
     goClaim(id, status) {
       dialog({ type: 'claim', id: id, status }, () => {
         this.getList()
+      })
+    },
+    editGood() {
+      this.editable = true
+    },
+    onAddProduct() {
+      dialog(
+        {
+          type: 'productList',
+          state: 'add',
+          id: this.$route.params.id,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    // 编辑商品清单
+    editProduct(ele) {
+      dialog(
+        {
+          type: 'productList',
+          state: 'edit',
+          id: this.$route.params.id,
+          ele: ele,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    // 删除商品清单
+    deleteProduct(ele) {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteSingleDetails(this.$route.params.id, ele).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    changeClass(data) {
+      this.ids = data.map(item => item[item.length - 1])
+    },
+    onSave() {
+      let params = {
+        ...this.good,
+        category_ids: this.ids
+      }
+      this.$request.editGoodInfo(this.$route.params.id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.editable = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    getGoods() {
+      this.$request.getAllTree().then(res => {
+        if (res.ret) {
+          if (res.data.length) {
+            this.options = res.data
+            this.classifyList = res.data.map(item => {
+              return {
+                value: item.id,
+                label: item.name,
+                children:
+                  item.children < 1
+                    ? undefined
+                    : item.children.map(item => {
+                        return {
+                          value: item.id,
+                          label: item.name,
+                          parent_id: item.parent_id,
+                          children:
+                            item.children < 1
+                              ? undefined
+                              : item.children.map(item => {
+                                  return {
+                                    value: item.id,
+                                    label: item.name,
+                                    parent_id: item.parent_id
+                                  }
+                                })
+                        }
+                      })
+              }
+            })
+            console.log(this.classifyList)
+          }
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     goExpress(expressNum) {
@@ -468,6 +673,9 @@ export default {
           }
         })
       })
+    },
+    openImg(imgSrc) {
+      window.open(imgSrc)
     }
   }
 }
@@ -604,6 +812,11 @@ export default {
   .number-top {
     font-size: 14px;
     font-weight: 650;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>

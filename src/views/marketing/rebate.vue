@@ -279,7 +279,6 @@ export default {
     },
     chooseLine() {
       dialog({ type: 'lineChoose' }, data => {
-        // console.log(data, '我是路线data')
         this.lineName = data
         this.ruleForm.express_line_ids = data.map(item => item.id)
       })
@@ -295,7 +294,6 @@ export default {
     },
     // 基础配置 修改语言
     onProps(line, lang) {
-      console.log(line, lang)
       this.serviceCode = line['trans_' + lang.language_code]
       dialog({ type: 'rebateLang', line: line, lang: lang, transCode: this.serviceCode }, () => {
         this.getList()
@@ -328,7 +326,6 @@ export default {
   }
   .choose-btn {
     margin-bottom: 20px;
-    // margin-left: 80px;
     margin-left: 290px;
     .el-button {
       vertical-align: top;

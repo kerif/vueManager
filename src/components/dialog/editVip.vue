@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="state === 'edit' ? $t('修改客户组') : $t('添加客户组')"
+    :title="id ? $t('修改客户组') : $t('添加客户组')"
     class="dialog-vip"
     @close="clear"
   >
@@ -40,6 +40,7 @@ export default {
         description: ''
       },
       state: '',
+      id: '',
       rules: {
         name_cn: [{ required: true, message: this.$t('请输入客户组中文名'), trigger: 'blur' }],
         name_en: [{ required: true, message: this.$t('请输入客户组英文名'), trigger: 'blur' }]
@@ -67,7 +68,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           } else {
             // 如果是添加状态
@@ -86,7 +86,6 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
             })
           }
         } else {
@@ -95,6 +94,7 @@ export default {
       })
     },
     clear() {
+      this.id = ''
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''

@@ -507,10 +507,22 @@
             <el-col :span="5">
               <div class="unit">
                 <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
-                <span>{{ localization ? localization.length_unit : '' }}</span>
+                <span style="display: inline-block; width: 80px"
+                  >{{ localization ? localization.length_unit : '' }} /
+                  {{ localization ? localization.weight_unit : '' }}</span
+                >
               </div>
             </el-col>
           </el-row>
+        </el-form-item>
+        <el-form-item>
+          <div class="comment">
+            {{
+              $t(
+                '注: “单边边长”指只要有一边达成条件, 则免抛。“所有边长”指长宽三边全部达成条件, 则免抛'
+              )
+            }}
+          </div>
         </el-form-item>
       </div>
       <el-form-item>
@@ -704,11 +716,15 @@ export default {
         },
         {
           id: 2,
-          name: `${this.$t('多箱单独计算计费重量重量体积相加后计算价格')}`
+          name: `${this.$t('多箱单独计算计费重量重量体积分箱向上取值相加后计算价格')}`
         },
         {
           id: 1,
           name: this.$t('多箱单独计算价格后相加为总价')
+        },
+        {
+          id: 3,
+          name: this.$t('多箱单独计算计费重量后向上取值计算价格')
         }
       ],
       localization: {},
@@ -734,6 +750,10 @@ export default {
         {
           id: 4,
           name: this.$t('长宽高乘积')
+        },
+        {
+          id: 5,
+          name: this.$t('体积重量减实际重量')
         }
       ],
       conditionOptions: [
@@ -812,6 +832,7 @@ export default {
         this.form.base_mode = res.data.base_mode
         this.form.has_factor = res.data.has_factor
         this.form.multi_boxes = res.data.multi_boxes
+        console.log(this.form.multi_boxes, res.data.multi_boxes)
         this.form.weight_rise = res.data.weight_rise
         this.form.min_weight = res.data.min_weight
         this.form.ceil_weight = Boolean(res.data.ceil_weight)
@@ -965,6 +986,9 @@ export default {
   .sava-btn {
     min-width: 100px;
   }
+  .comment {
+    color: red;
+  }
   .icon-info {
     color: #74b34f;
     font-size: 18px;
@@ -1023,6 +1047,8 @@ export default {
   .remark {
     float: left;
     color: red;
+    font-weight: bold;
+    font-size: 18px;
   }
   .unit {
     display: flex;

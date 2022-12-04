@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     init() {
-      console.log(this.logistics_company_code, 111)
       this.form.logistics_sn = this.logistics_sn
       this.form.logistics_company_code = this.logistics_company_code
       this.form.warehouse_id = this.warehouse_id

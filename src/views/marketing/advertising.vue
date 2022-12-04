@@ -104,7 +104,6 @@ export default {
   methods: {
     getList() {},
     changeOnline(type, val) {
-      console.log(type, 'type')
       const status = val === 0 ? 0 : 1
       this.$request.closeCoupons(type, status).then(res => {
         if (res.ret) {

@@ -1,5 +1,8 @@
 <template>
   <div class="how-container">
+    <div class="title">
+      {{ $t('注：配置内容将会显示在客户端“预报包裹”页面，客户须阅读勾选') }}
+    </div>
     <el-form label-position="top">
       <el-form-item :label="$t('选择语言')">
         <el-select v-model="params.language" placeholder="请选择" @change="changeLang">
@@ -107,4 +110,11 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.title {
+  color: orange;
+  background: #fce6c9;
+  padding: 10px;
+  border-radius: 2px;
+}
+</style>

@@ -33,6 +33,7 @@
           >
         </div>
         <div class="address-sty address-right">
+          <el-button class="btn-main" @click="onAddAddress">{{ $t('新增地址') }}</el-button>
           <el-button class="btn-green" @click="changeAddress('address')">{{
             $t('更改地址')
           }}</el-button>
@@ -130,6 +131,7 @@
 <script>
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -155,7 +157,8 @@ export default {
       group: {},
       radio: '',
       stationData: [],
-      stationName: ''
+      stationName: '',
+      leader: {}
     }
   },
   components: {
@@ -175,6 +178,12 @@ export default {
         if (res.ret) {
           this.addressData = res.data
         }
+      })
+    },
+    onAddAddress() {
+      dialog({
+        type: 'addGroupAddress',
+        user: this.leader
       })
     },
     onRowChange(row) {
@@ -251,7 +260,6 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
         })
     },
     init() {

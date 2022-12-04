@@ -223,8 +223,10 @@ export default {
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
           { id: 'user_customer', name: this.$t('所属客服') },
+          { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
-          { id: 'personal_code', name: this.$t('个人通关码') }
+          { id: 'personal_code', name: this.$t('个人通关码') },
+          { id: 'group_buying_status', name: this.$t('拼团状态') }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: this.$t('收货人') },
@@ -236,6 +238,8 @@ export default {
           { id: 'address_email', name: this.$t('地址邮箱') },
           { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'street_door_no', name: this.$t('街道/门牌号') },
+          { id: 'street', name: this.$t('街道') },
+          { id: 'door_no', name: this.$t('门牌号') },
           { id: 'info_address', name: this.$t('详细地址') },
           { id: 'station_name', name: this.$t('自提点') },
           { id: 'user_address', name: this.$t('客户地址') },
@@ -314,12 +318,14 @@ export default {
           { id: 'insurance_fee', name: this.$t('保险费用') },
           { id: 'tariff_fee', name: this.$t('关税费用') },
           { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
-          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') },
+          { id: 'freight_fee', name: this.$t('运费') }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
           { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
-          { id: 'shipment_sn', name: this.$t('所属发货单') }
+          { id: 'shipment_sn', name: this.$t('所属发货单') },
+          { id: 'shipment_name', name: this.$t('发货单名称') }
         ]
         this.operationInfo = [
           { id: 'created_at', name: this.$t('提交时间') },
@@ -432,8 +438,10 @@ export default {
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
           { id: 'user_customer', name: this.$t('所属客服') },
+          { id: 'user_sale', name: this.$t('所属销售') },
           { id: 'clearance_code', name: this.$t('清关编码') },
-          { id: 'personal_code', name: this.$t('个人通关码') }
+          { id: 'personal_code', name: this.$t('个人通关码') },
+          { id: 'group_buying_status', name: this.$t('拼团状态') }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: this.$t('收货人') },
@@ -445,6 +453,8 @@ export default {
           { id: 'address_email', name: this.$t('地址邮箱') },
           { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'street_door_no', name: this.$t('街道/门牌号') },
+          { id: 'street', name: this.$t('街道') },
+          { id: 'door_no', name: this.$t('门牌号') },
           { id: 'info_address', name: this.$t('详细地址') },
           { id: 'station_name', name: this.$t('自提点') },
           { id: 'user_address', name: this.$t('客户地址') },
@@ -503,7 +513,10 @@ export default {
           { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
           { id: 'box_actual_weight_sum', name: this.$t('出库实际重量') },
           { id: 'box_volume_weight_sum', name: this.$t('出库体积重量') },
-          { id: 'box_volume_sum', name: this.$t('出库体积') }
+          { id: 'box_volume_sum', name: this.$t('出库体积') },
+          { id: 'length', name: `长(${this.localization.length_unit})` },
+          { id: 'width', name: `宽(${this.localization.length_unit})` },
+          { id: 'height', name: `高(${this.localization.length_unit})` }
         ]
         this.payInfo = [
           { id: 'payment_method', name: this.$t('付款方式') },
@@ -520,12 +533,14 @@ export default {
           { id: 'insurance_fee', name: this.$t('保险费用') },
           { id: 'tariff_fee', name: this.$t('关税费用') },
           { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
-          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') },
+          { id: 'freight_fee', name: this.$t('运费') }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
           { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
-          { id: 'shipment_sn', name: this.$t('所属发货单') }
+          { id: 'shipment_sn', name: this.$t('所属发货单') },
+          { id: 'shipment_name', name: this.$t('发货单名称') }
         ]
         this.operationInfo = [
           { id: 'created_at', name: this.$t('提交时间') },

@@ -91,6 +91,13 @@ export default {
                 title: this.$t('成功'),
                 message: res.msg
               })
+              this.$store.commit('saveFileterAfterRouterMap', {
+                fileterAfterRouterMap: [],
+                isPermissionFilter: []
+              })
+              this.$store.commit('savePermissionStatus', false)
+              this.$store.commit('removeToken')
+              this.$router.replace({ name: 'login' })
             } else {
               this.$message({
                 message: res.msg,

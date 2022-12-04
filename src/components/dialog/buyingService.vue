@@ -139,7 +139,6 @@ export default {
     // 选中中国大陆短信套餐
     chooseService(item) {
       this.onceNum = 1
-      console.log(item, 'item')
       this.station = item
       this.packageAmount = item.price
     },
@@ -156,7 +155,6 @@ export default {
     },
     // 切换套餐
     handleChange(value) {
-      console.log(value, 'value')
       if (value === 'china') {
         this.packageAmount =
           this.onceNum > 1 ? this.station.price * this.onceNum : this.station.price
@@ -200,7 +198,6 @@ export default {
       this.secondNum = ''
     },
     init() {
-      console.log(this.state, 'state')
       this.getService()
     }
   }

@@ -189,7 +189,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       } else if (this.state === 'edit') {
         this.$request
@@ -212,7 +211,6 @@ export default {
                 type: 'error'
               })
             }
-            this.show = false
           })
       }
     },

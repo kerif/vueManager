@@ -9,9 +9,37 @@
         <el-button class="btn-light-red" @click="uploadList" size="mini">{{
           $t('导出清单')
         }}</el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="allow_delete === 1"
+          @click="onDelAddress(selectIDs)"
+          >{{ $t('批量删除') }}</el-button
+        >
+        <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button>
       </div>
       <div>
-        <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('分拣码')" clearable>
+        <el-select v-model="tag_ids" @change="changeTag" :placeholder="$t('标签')" clearable>
+          <el-option
+            v-for="item in tagList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-select
+          v-model="status"
+          @change="changeAddressStatus"
+          :placeholder="$t('地址状态')"
+          clearable
+        >
+          <el-option
+            v-for="item in processData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('清关编码')" clearable>
           <el-option
             v-for="item in sortCode"
             :key="item.id"
@@ -32,27 +60,77 @@
       :data="addressList"
       class="data-list"
       v-loading="tableLoading"
+      @selection-change="handleSelectionChange"
       height="calc(100vh - 275px)"
     >
+      <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('状态')" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-else-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-else>{{ $t('审核拒绝') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('地址类型')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.station && scope.row.station.id">{{ $t('自提') }}</span>
+          <span v-else>{{ $t('派送') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
+      <el-table-column :label="$t('标签')" prop="tags" width="120">
+        <template slot-scope="scope">
+          <el-tag v-for="item in scope.row.tags" :key="item.id" style="margin: 5px">
+            {{ item.name }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('国家地区')" prop="country.name"></el-table-column>
+      <el-table-column :label="$t('省')" prop="province"></el-table-column>
       <el-table-column :label="$t('区域')" prop="sub_area.name"></el-table-column>
       <el-table-column :label="$t('城市')" prop="city"></el-table-column>
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="280" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{
             $t('修改')
           }}</el-button>
+          <el-button
+            class="btn-light-red"
+            v-if="scope.row.status === 2 && audit_required === 1"
+            @click="onProcess(scope.row.id, 1)"
+          >
+            {{ $t('重新审核') }}
+          </el-button>
+          <el-button
+            class="btn-light-red"
+            v-if="scope.row.status === 0 && audit_required === 1"
+            @click="onProcess(scope.row.id, 1)"
+          >
+            {{ $t('审核') }}
+          </el-button>
+          <el-button
+            class="btn-light-red"
+            v-if="allow_delete === 1"
+            @click="onDelAddress([scope.row.id])"
+            >{{ $t('删除') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div class="flex-btn">
+      <div class="flex-left">
+        <el-button class="btn-light-red" @click="onBatch">{{ $t('批量审核') }}</el-button>
+      </div>
+      <div class="flex-right">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -76,7 +154,28 @@ export default {
           id: 1,
           name: this.$t('已设置')
         }
-      ]
+      ],
+      selectIDs: [],
+      processData: [
+        {
+          id: 0,
+          name: this.$t('待审核')
+        },
+        {
+          id: 1,
+          name: this.$t('审核通过')
+        },
+        {
+          id: 2,
+          name: this.$t('审核拒绝')
+        }
+      ],
+      status: '',
+      allow_delete: '',
+      audit_required: '',
+      tagList: [],
+      tag_ids: '',
+      userIds: []
     }
   },
   components: {
@@ -86,9 +185,12 @@ export default {
   mixins: [pagination],
   activated() {
     this.getList()
+    this.getConfig()
   },
   mounted() {
     this.getList()
+    this.getConfig()
+    this.getTagList()
   },
   methods: {
     getList() {
@@ -98,7 +200,9 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          sort_code: this.sort_code
+          sort_code: this.sort_code,
+          status: this.status,
+          tag_ids: this.tag_ids
         })
         .then(res => {
           this.tableLoading = false
@@ -160,15 +264,112 @@ export default {
     changeVal() {
       this.page_params.handleQueryChange('sort_code', this.sort_code)
       this.getList()
+    },
+    handleSelectionChange(val) {
+      this.userIds = val.map(item => item.user_id)
+      this.selectIDs = val.map(item => item.id)
+    },
+    onDelAddress(id) {
+      if (!id.length) return this.$message.error(this.$t('请选择'))
+      let params = {
+        ids: id
+      }
+      this.$request.batchDelAddress(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onProcess(id, status) {
+      dialog(
+        {
+          type: 'addressAudit',
+          id,
+          address_status: status
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    changeAddressStatus() {
+      this.page_params.handleQueryChange('status', this.status)
+      this.getList()
+    },
+    changeTag() {
+      this.page_params.handleQueryChange('tag_ids', this.tag_ids)
+      this.getList()
+    },
+    getConfig() {
+      this.$request.getAddressConfig().then(res => {
+        if (res.ret) {
+          this.allow_delete = res.data.allow_delete
+          this.audit_required = res.data.audit_required
+        }
+      })
+    },
+    tagManage() {
+      dialog(
+        {
+          type: 'tagManage'
+        },
+        () => {
+          this.getList()
+          this.getTagList()
+        }
+      )
+    },
+    onBatch() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'batchReplaceTag',
+          ids: this.selectIDs,
+          userIds: this.userIds
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    getTagList() {
+      this.$request.addressTagList().then(res => {
+        if (res.ret) {
+          this.tagList = res.data
+        }
+      })
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .searchGroup {
   float: right;
 }
 .clear {
   clear: both;
+}
+.flex-btn {
+  display: flex;
+  align-items: center;
+  .flex-left {
+    flex: 1;
+  }
+  .flex-right {
+    flex: auto;
+  }
 }
 </style>

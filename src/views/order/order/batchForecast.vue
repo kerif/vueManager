@@ -45,7 +45,7 @@
           <el-table-column :label="$t('包裹单号')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('快递名称')">
             <template slot-scope="scope">
-              <span>{{ scope.row.express.name }}</span>
+              <span>{{ scope.row.express ? scope.row.express.name : '' }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('商品类型')">
@@ -63,7 +63,7 @@
           <el-table-column :label="$t('商品备注')" prop="remark"></el-table-column>
           <el-table-column :label="$t('仓库')">
             <template slot-scope="scope">
-              <span>{{ scope.row.warehouse.warehouse_name }}</span>
+              <span>{{ scope.row.warehouse ? scope.row.warehouse.warehouse_name : '' }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('操作')" width="260">
