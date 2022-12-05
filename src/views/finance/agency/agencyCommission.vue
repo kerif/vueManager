@@ -387,14 +387,14 @@ export default {
     font-weight: bold;
     color: red;
   }
-  /deep/.el-dialog__header {
+  ::v-deep.el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-dialog__title {
+  ::v-deep.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
-  /deep/.el-dialog__close {
+  ::v-deep.el-dialog__close {
     color: #fff;
   }
 }

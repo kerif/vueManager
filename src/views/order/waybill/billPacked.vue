@@ -1679,7 +1679,7 @@ export default {
   .add-sty {
     text-align: right;
   }
-  /deep/.el-checkbox-group {
+  ::v-deep.el-checkbox-group {
     font-size: 14px;
   }
   .input-sty {

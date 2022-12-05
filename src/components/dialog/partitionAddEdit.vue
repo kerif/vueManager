@@ -29,6 +29,57 @@
         <el-checkbox v-if="ruleForm.radio === 1" v-model="check" @change="onCheck">{{
           $t('全选')
         }}</el-checkbox>
+        <div v-if="ruleForm.radio === 1">
+          <h4>{{ $t('国家/地区方案') }}</h4>
+          {{ partitionData }}
+          <el-table :data="partitionData">
+            <el-table-column label="#" type="index"> </el-table-column>
+            <el-table-column prop="name" width="155" :label="$t('国家/地区')"> </el-table-column>
+            <el-table-column :label="$t('省/州/市')">
+              <template slot-scope="scope">
+                <div v-if="scope.row.children.length > 0">
+                  <el-card class="box-card" v-for="item in scope.row.children" :key="item.id">
+                    <div slot="header" class="clearfix">
+                      <span class="xianzhi">限:</span><span> {{ item.name }}</span>
+                      <el-button-group style="float: right; padding: 3px 0">
+                        <el-button size="mini">添加城市</el-button>
+                        <el-button size="mini">移除城市</el-button>
+                      </el-button-group>
+                    </div>
+                    <div v-if="item.children.length > 0">
+                      <el-tag v-for="subitem in item.children" :key="subitem.id" closable>
+                        {{ subitem.name }}
+                      </el-tag>
+                    </div>
+                    <div v-else>
+                      <el-alert
+                        :title="`不设置默认为${item.name}全境范围`"
+                        type="success"
+                        :closable="false"
+                      >
+                      </el-alert>
+                    </div>
+                  </el-card>
+                </div>
+                <div v-else>
+                  <el-card>
+                    <el-alert title="不设置默认为全境范围" type="success" :closable="false">
+                    </el-alert>
+                  </el-card>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="155" :label="$t('操作')">
+              <template slot="header">
+                <el-button size="mini">添加国家/地区</el-button>
+              </template>
+              <template>
+                <el-button size="mini">添加省/州</el-button><br />
+                <el-button size="mini">移除省/州</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <el-cascader
           v-if="ruleForm.radio === 1"
           style="width: 30%; margin-left: 20px"
@@ -141,7 +192,49 @@ export default {
       end: '',
       check: false,
       checkLength: '',
-      newArr: []
+      newArr: [],
+      partitionData: [
+        {
+          id: 1,
+          name: '美国',
+          children: [
+            {
+              id: 10,
+              name: '亚拉巴马州',
+              children: [
+                {
+                  id: 100,
+                  name: '伯明翰'
+                },
+                {
+                  id: 101,
+                  name: '蒙哥马利'
+                },
+                {
+                  id: 102,
+                  name: '莫比尔'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: '加拿大',
+          children: []
+        },
+        {
+          id: 3,
+          name: '英国',
+          children: [
+            {
+              id: 30,
+              name: '大不列颠',
+              children: []
+            }
+          ]
+        }
+      ]
     }
   },
   created() {
@@ -437,6 +530,12 @@ export default {
 </script>
 <style lang="scss">
 .dialog-partition-add-edit {
+  .xianzhi {
+    padding: 5px;
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+  }
   .pagination-box {
     margin-top: 10px;
   }

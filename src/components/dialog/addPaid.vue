@@ -207,31 +207,31 @@ export default {
 </script>
 <style lang="scss" scoped>
 .dialog-addPaid {
-  /deep/.input-sty {
+  ::v-deep.input-sty {
     width: 40% !important;
     margin-left: 50px;
   }
-  /deep/.el-textarea {
+  ::v-deep.el-textarea {
     width: 40% !important;
     margin-left: 50px;
   }
-  /deep/.el-form-item__label {
+  ::v-deep.el-form-item__label {
     width: 200px;
   }
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-dialog__title {
+  ::v-deep.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
   .el-form-item__error {
     margin-left: 250px !important;
   }
-  /deep/.el-dialog__close {
+  ::v-deep.el-dialog__close {
     color: #fff;
   }
-  /deep/.avatar-uploader .el-upload {
+  ::v-deep.avatar-uploader .el-upload {
     margin-left: 50px;
   }
   .right-padding {

@@ -244,20 +244,20 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-addInvoicing {
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-input {
+  ::v-deep.el-input {
     width: 50%;
   }
-  /deep/.el-textarea {
+  ::v-deep.el-textarea {
     width: 50%;
   }
-  /deep/.el-dialog__title {
+  ::v-deep.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
-  /deep/.el-dialog__close {
+  ::v-deep.el-dialog__close {
     color: #fff;
   }
 }

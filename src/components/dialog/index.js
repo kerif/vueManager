@@ -172,6 +172,7 @@ import groupDetail from './groupDetail.vue'
 import addressAudit from './addressAudit.vue'
 import tagManage from './tagManage.vue'
 import batchReplaceTag from './batchReplaceTag.vue'
+import vipProfile from './vipProfile.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -343,7 +344,7 @@ const groupDetailController = Vue.extend(groupDetail)
 const addressAuditController = Vue.extend(addressAudit)
 const tagManageController = Vue.extend(tagManage)
 const batchReplaceTagController = Vue.extend(batchReplaceTag)
-
+const vipProfileController = Vue.extend(vipProfile)
 const mixin = {
   data() {
     return {
@@ -1553,6 +1554,13 @@ function initInstance(type) {
     case 'addDiscountTable':
     case 'editDiscountTable':
       instance = new DiscountTable({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 个人中心
+    case 'vipProfile':
+      instance = new vipProfileController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

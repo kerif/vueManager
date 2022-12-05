@@ -2786,16 +2786,16 @@ export default {
 .dialog-input {
   width: 30% !important;
 }
-/deep/.el-drawer__open .el-drawer.rtl {
+::v-deep.el-drawer__open .el-drawer.rtl {
   width: 90% !important;
 }
-/deep/ .tmp .el-drawer__open .el-drawer.rtl {
+::v-deep .tmp .el-drawer__open .el-drawer.rtl {
   width: 30% !important;
 }
-/deep/.el-dialog__close {
+::v-deep.el-dialog__close {
   color: black !important;
 }
-/deep/.el-icon-close:before {
+::v-deep.el-icon-close:before {
   color: black !important;
 }
 .add-box {

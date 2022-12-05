@@ -174,6 +174,8 @@ const Ship = loadonDemand('station/ship')
 const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
+// 拣货日志
+const PickingLog = loadonDemand('station/pickingLog')
 // 仓库自提
 // const warehouseSelf = loadonDemand('station/warehouseSelf')
 // 仓库自提 订单详情
@@ -996,6 +998,17 @@ export default [
               level: 2,
               group: '货站',
               name: '拣货日志'
+            }
+          },
+          {
+            path: '/station/pickingLog',
+            name: 'pickingContainer',
+            component: PickingLog,
+            id: 503,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '拣货日志新'
             }
           },
           // {
