@@ -173,6 +173,9 @@ import addressAudit from './addressAudit.vue'
 import tagManage from './tagManage.vue'
 import batchReplaceTag from './batchReplaceTag.vue'
 import vipProfile from './vipProfile.vue'
+import areaSelectCountry from './areaSelectCountry.vue'
+import areaSelectProince from './areaSelectProince.vue'
+import areaSelectCity from './areaSelectCity.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -345,6 +348,10 @@ const addressAuditController = Vue.extend(addressAudit)
 const tagManageController = Vue.extend(tagManage)
 const batchReplaceTagController = Vue.extend(batchReplaceTag)
 const vipProfileController = Vue.extend(vipProfile)
+const areaSelectCountryController = Vue.extend(areaSelectCountry)
+const areaSelectProinceController = Vue.extend(areaSelectProince)
+const areaSelectCityController = Vue.extend(areaSelectCity)
+
 const mixin = {
   data() {
     return {
@@ -1561,6 +1568,27 @@ function initInstance(type) {
     // 个人中心
     case 'vipProfile':
       instance = new vipProfileController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 选择国家
+    case 'areaSelectCountry':
+      instance = new areaSelectCountryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 选择省
+    case 'areaSelectProince':
+      instance = new areaSelectProinceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 选择城市
+    case 'areaSelectCity':
+      instance = new areaSelectCityController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

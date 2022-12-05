@@ -32,22 +32,36 @@
         <div v-if="ruleForm.radio === 1">
           <h4>{{ $t('国家/地区方案') }}</h4>
           {{ partitionData }}
+          {{ getSumbitData }}
           <el-table :data="partitionData">
             <el-table-column label="#" type="index"> </el-table-column>
             <el-table-column prop="name" width="155" :label="$t('国家/地区')"> </el-table-column>
             <el-table-column :label="$t('省/州/市')">
               <template slot-scope="scope">
                 <div v-if="scope.row.children.length > 0">
-                  <el-card class="box-card" v-for="item in scope.row.children" :key="item.id">
+                  <el-card
+                    style="float: left; width: 50%"
+                    v-for="item in scope.row.children"
+                    :key="item.id"
+                  >
                     <div slot="header" class="clearfix">
                       <span class="xianzhi">限:</span><span> {{ item.name }}</span>
                       <el-button-group style="float: right; padding: 3px 0">
-                        <el-button size="mini">添加城市</el-button>
-                        <el-button size="mini">移除城市</el-button>
+                        <el-button size="mini" @click="chooseCity(scope.row.id, item.id)"
+                          >添加城市</el-button
+                        >
+                        <el-button size="mini" @click="removeProvince(scope.row.id, item.id)"
+                          >移除此项</el-button
+                        >
                       </el-button-group>
                     </div>
                     <div v-if="item.children.length > 0">
-                      <el-tag v-for="subitem in item.children" :key="subitem.id" closable>
+                      <el-tag
+                        v-for="subitem in item.children"
+                        :key="subitem.id"
+                        closable
+                        @close="removeCity(scope.row.id, item.id, subitem.id)"
+                      >
                         {{ subitem.name }}
                       </el-tag>
                     </div>
@@ -71,11 +85,14 @@
             </el-table-column>
             <el-table-column width="155" :label="$t('操作')">
               <template slot="header">
-                <el-button size="mini">添加国家/地区</el-button>
+                <el-button size="mini" @click="chooseCountryOrArea">添加国家/地区</el-button>
               </template>
-              <template>
-                <el-button size="mini">添加省/州</el-button><br />
-                <el-button size="mini">移除省/州</el-button>
+              <template slot-scope="scope">
+                <el-button size="mini" @click="chooseProvince(scope.row.id)">添加省/州</el-button
+                ><br />
+                <el-button size="mini" @click="removeCountryOrArea(scope.row.id)"
+                  >移除此项</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -157,6 +174,7 @@
 </template>
 <script>
 import { getIds } from '@/utils/index'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -193,54 +211,192 @@ export default {
       check: false,
       checkLength: '',
       newArr: [],
-      partitionData: [
-        {
-          id: 1,
-          name: '美国',
-          children: [
-            {
-              id: 10,
-              name: '亚拉巴马州',
-              children: [
-                {
-                  id: 100,
-                  name: '伯明翰'
-                },
-                {
-                  id: 101,
-                  name: '蒙哥马利'
-                },
-                {
-                  id: 102,
-                  name: '莫比尔'
-                }
-              ]
+      partitionData: []
+    }
+  },
+  computed: {
+    getSumbitData() {
+      let resultArr = []
+      console.log('getSumbitData')
+      for (let index = 0; index < this.partitionData.length; index++) {
+        let countryInfo = this.partitionData[index]
+        let countryInfoAllProinice = this.partitionData[index].children
+        // 如果没有省
+        if (countryInfoAllProinice.length === 0) {
+          resultArr.push({
+            country_id: countryInfo.id,
+            area_id: 0,
+            sub_area_id: 0
+          })
+        } else {
+          for (let index2 = 0; index2 < countryInfoAllProinice.length; index2++) {
+            // 如果没有市
+            let theProince = countryInfoAllProinice[index2]
+
+            if (theProince.children.length === 0) {
+              resultArr.push({
+                country_id: countryInfo.id,
+                area_id: theProince.id,
+                sub_area_id: 0
+              })
+            } else {
+              //有省有市
+              for (let index3 = 0; index3 < theProince.children.length; index3++) {
+                let theCity = theProince.children[index3]
+                resultArr.push({
+                  country_id: countryInfo.id,
+                  area_id: theProince.id,
+                  sub_area_id: theCity.id
+                })
+              }
             }
-          ]
-        },
-        {
-          id: 2,
-          name: '加拿大',
-          children: []
-        },
-        {
-          id: 3,
-          name: '英国',
-          children: [
-            {
-              id: 30,
-              name: '大不列颠',
-              children: []
-            }
-          ]
+          }
         }
-      ]
+      }
+      return resultArr
     }
   },
   created() {
     this.getCountry()
   },
   methods: {
+    //查看国家ID
+    getCountryIndex(id) {
+      var index = -1
+      for (let index2 = 0; index2 < this.partitionData.length; index2++) {
+        if (this.partitionData[index2].id === id) {
+          index = index2
+          break
+        }
+      }
+      return index
+    },
+    //得到省ID
+    getProvinceIndex(cid, pid) {
+      var countryIndex = this.getCountryIndex(cid)
+      var provinceIndex = -1
+      for (let index2 = 0; index2 < this.partitionData[countryIndex].children.length; index2++) {
+        if (this.partitionData[countryIndex].children[index2].id === pid) {
+          provinceIndex = index2
+          break
+        }
+      }
+      return [countryIndex, provinceIndex]
+    },
+    //得到市ID
+    getCityIndex(cid, pid, aid) {
+      var countryIndex = this.getCountryIndex(cid)
+      var provinceIndex = -1
+      var cityIndex = -1
+      for (let index2 = 0; index2 < this.partitionData[countryIndex].children.length; index2++) {
+        if (this.partitionData[countryIndex].children[index2].id === pid) {
+          provinceIndex = index2
+          break
+        }
+      }
+      for (
+        let index3 = 0;
+        index3 < this.partitionData[countryIndex].children[provinceIndex].children.length;
+        index3++
+      ) {
+        if (this.partitionData[countryIndex].children[provinceIndex].children[index3].id === aid) {
+          cityIndex = index3
+          break
+        }
+      }
+      return [countryIndex, provinceIndex, cityIndex]
+    },
+    removeCountryOrArea(id) {
+      this.$confirm(this.$t('确定要移除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.partitionData.splice(this.getCountryIndex(id), 1)
+      })
+    },
+    // 选择国家或地区
+    chooseCountryOrArea() {
+      dialog({ type: 'areaSelectCountry' }, res => {
+        if (res.length > 0) {
+          for (let index = 0; index < res.length; index++) {
+            const element = res[index]
+            const resultIndex = this.getCountryIndex(element.id)
+            if (resultIndex === -1) {
+              this.partitionData.push({
+                id: element.id,
+                name: element.name,
+                children: []
+              })
+            }
+          }
+        }
+      })
+    },
+    // 选择省
+    chooseProvince(countryId) {
+      const countryIndex = this.getCountryIndex(countryId)
+      var caption = this.partitionData[countryIndex].name
+      dialog({ type: 'areaSelectProince', pId: countryId, caption: caption }, res => {
+        if (res.length > 0) {
+          for (let index = 0; index < res.length; index++) {
+            const element = res[index]
+
+            const resultIndexArr = this.getProvinceIndex(countryId, element.id)
+            console.log('resultIndexArr', resultIndexArr)
+            if (resultIndexArr[1] === -1) {
+              this.partitionData[resultIndexArr[0]].children.push({
+                id: element.id,
+                name: element.name,
+                children: []
+              })
+            }
+          }
+        }
+      })
+    },
+    // 选择市
+    chooseCity(countryId, provinceId) {
+      const resultIndexArr = this.getProvinceIndex(countryId, provinceId)
+      var caption = this.partitionData[resultIndexArr[0]].name
+      caption += '>' + this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].name
+      dialog({ type: 'areaSelectCity', caption: caption, pId: provinceId }, res => {
+        if (res.length > 0) {
+          for (let index = 0; index < res.length; index++) {
+            const element = res[index]
+            console.log('chooseCity->res[index]', res[index])
+            const resultIndexArr = this.getCityIndex(countryId, provinceId, element.id)
+            console.log('chooseCity->resultIndexArr', resultIndexArr)
+            if (resultIndexArr[2] === -1) {
+              this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].children.push({
+                id: element.id,
+                name: element.name
+              })
+            }
+          }
+        }
+      })
+    },
+    removeCity(countryId, provinceId, cityId) {
+      const resultIndexArr = this.getCityIndex(countryId, provinceId, cityId)
+      if (resultIndexArr[2] !== -1) {
+        this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].children.splice(
+          resultIndexArr[2],
+          1
+        )
+      }
+    },
+    removeProvince(countryId, provinceId) {
+      this.$confirm(this.$t('确定要移除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        const resultIndexArr = this.getProvinceIndex(countryId, provinceId)
+        console.log('resultIndexArr', resultIndexArr)
+        this.partitionData[resultIndexArr[0]].children.splice(resultIndexArr[1], 1)
+      })
+    },
     getList() {
       if (this.status === 'partition') {
         this.getPartition()
@@ -535,6 +691,7 @@ export default {
     background-color: red;
     color: white;
     border-radius: 5px;
+    display: none;
   }
   .pagination-box {
     margin-top: 10px;
