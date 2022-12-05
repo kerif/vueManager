@@ -176,6 +176,8 @@ import vipProfile from './vipProfile.vue'
 import areaSelectCountry from './areaSelectCountry.vue'
 import areaSelectProince from './areaSelectProince.vue'
 import areaSelectCity from './areaSelectCity.vue'
+import areaChooseCountry from './areaChooseCountry.vue'
+import batchAddPostCode from './batchAddPostCode.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -351,6 +353,8 @@ const vipProfileController = Vue.extend(vipProfile)
 const areaSelectCountryController = Vue.extend(areaSelectCountry)
 const areaSelectProinceController = Vue.extend(areaSelectProince)
 const areaSelectCityController = Vue.extend(areaSelectCity)
+const areaChooseCountryController = Vue.extend(areaChooseCountry)
+const batchAddPostCodeController = Vue.extend(batchAddPostCode)
 
 const mixin = {
   data() {
@@ -1589,6 +1593,20 @@ function initInstance(type) {
     // 选择城市
     case 'areaSelectCity':
       instance = new areaSelectCityController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 选择一个国家
+    case 'areaChooseCountry':
+      instance = new areaChooseCountryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量添加邮编
+    case 'batchAddPostCode':
+      instance = new batchAddPostCodeController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

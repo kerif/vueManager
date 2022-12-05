@@ -19,15 +19,8 @@
         <el-button type="primary" plain>搜索</el-button>
       </el-col>
     </el-row>
-    <el-table
-      :data="dataList"
-      style="width: 100%"
-      tooltip-effect="dark"
-      height="450px"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" v-if="multiple"> </el-table-column>
-      <el-table-column width="100" v-else>
+    <el-table :data="dataList" style="width: 100%" tooltip-effect="dark" height="450px">
+      <el-table-column width="100">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleChoose(scope.row)">选择</el-button>
         </template>
@@ -35,10 +28,6 @@
       <el-table-column prop="name" label="国家/地区"> </el-table-column>
       <el-table-column prop="code" label="代码"> </el-table-column>
     </el-table>
-    <div slot="footer" class="dialog-footer" v-if="multiple">
-      <el-button @click="show = false">取 消</el-button>
-      <el-button type="primary" @click="onConfirm">确 定</el-button>
-    </div>
   </el-dialog>
 </template>
 <script>
@@ -64,21 +53,6 @@ export default {
     },
     handleChoose(row) {
       const resut = { id: row.id, name: row.name }
-      this.success(resut)
-      this.show = false
-    },
-    onConfirm() {
-      if (!this.selected.length) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      const resut = []
-      for (let index = 0; index < this.selected.length; index++) {
-        const element = this.selected[index]
-        resut.push({
-          id: element.id,
-          name: element.name
-        })
-      }
       this.success(resut)
       this.show = false
     }

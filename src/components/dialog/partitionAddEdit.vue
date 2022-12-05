@@ -1,179 +1,170 @@
 <template>
-  <el-dialog
+  <el-drawer
+    size="85%"
     :visible.sync="show"
     :title="state === 'add' ? $t('新增分区') : $t('编辑分区')"
     class="dialog-partition-add-edit"
     @close="clear"
-    width="65%"
   >
-    <div class="remark">
-      {{
-        $t(
-          '注：新增分区后，该分区默认为未开启状态，同时会生成该分区对应的空白价格表，请先前往【价格表】配置价格后，再开启该分区投入使用。'
-        )
-      }}
-    </div>
-    <el-form ref="form" :model="ruleForm" class="commission-top">
-      <el-form-item :label="$t('分区名称')">
-        <el-input class="input-sty" v-model="ruleForm.name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('参考时效')">
-        <el-input class="input-sty" v-model="ruleForm.reference_time"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('分区方案')">
-        <el-radio-group v-model="ruleForm.radio">
-          <el-radio :label="1">{{ $t('国家地区') }}</el-radio>
-          <el-radio :label="2">{{ $t('国家邮编') }}</el-radio>
-        </el-radio-group>
-        <br />
-        <el-checkbox v-if="ruleForm.radio === 1" v-model="check" @change="onCheck">{{
-          $t('全选')
-        }}</el-checkbox>
-        <div v-if="ruleForm.radio === 1">
-          <h4>{{ $t('国家/地区方案') }}</h4>
-          {{ partitionData }}
-          {{ getSumbitData }}
-          <el-table :data="partitionData">
-            <el-table-column label="#" type="index"> </el-table-column>
-            <el-table-column prop="name" width="155" :label="$t('国家/地区')"> </el-table-column>
-            <el-table-column :label="$t('省/州/市')">
-              <template slot-scope="scope">
-                <div v-if="scope.row.children.length > 0">
+    <div class="pad">
+      <div class="remark">
+        {{
+          $t(
+            '注：新增分区后，该分区默认为未开启状态，同时会生成该分区对应的空白价格表，请先前往【价格表】配置价格后，再开启该分区投入使用。'
+          )
+        }}
+      </div>
+      <el-form ref="form" :model="ruleForm" class="commission-top">
+        <el-form-item :label="$t('分区名称')">
+          <el-input class="input-sty" v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('参考时效')">
+          <el-input class="input-sty" v-model="ruleForm.reference_time"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('分区方案')">
+          <el-radio-group v-model="ruleForm.radio">
+            <el-radio :label="1">{{ $t('国家/地区方案') }}</el-radio>
+            <el-radio :label="2">{{ $t('单国家/地区邮编方案') }}</el-radio>
+          </el-radio-group>
+          <br />
+          <div v-if="ruleForm.radio === 1">
+            <h4>{{ $t('国家/地区方案') }}</h4>
+            <el-table :data="partitionAreaData">
+              <el-table-column label="#" width="55" type="index"> </el-table-column>
+              <el-table-column prop="name" width="155" :label="$t('国家/地区')"> </el-table-column>
+              <el-table-column :label="$t('省/州/市')">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.children.length > 0">
+                    <el-card
+                      style="float: left; width: 50%"
+                      v-for="item in scope.row.children"
+                      :key="item.id"
+                    >
+                      <div slot="header" class="clearfix">
+                        <span class="xianzhi">限:</span><span> {{ item.name }}</span>
+                        <el-button-group style="float: right; padding: 3px 0">
+                          <el-button size="mini" @click="chooseCity(scope.row.id, item.id)"
+                            >添加城市</el-button
+                          >
+                          <el-button size="mini" @click="removeProvince(scope.row.id, item.id)"
+                            >移除此项</el-button
+                          >
+                        </el-button-group>
+                      </div>
+                      <div v-if="item.children.length > 0">
+                        <el-tag
+                          v-for="subitem in item.children"
+                          :key="subitem.id"
+                          closable
+                          @close="removeCity(scope.row.id, item.id, subitem.id)"
+                        >
+                          {{ subitem.name }}
+                        </el-tag>
+                      </div>
+                      <div v-else>
+                        <el-alert
+                          :title="`不设置默认为${item.name}全境范围`"
+                          type="success"
+                          :closable="false"
+                        >
+                        </el-alert>
+                      </div>
+                    </el-card>
+                  </div>
+                  <div v-else>
+                    <el-card>
+                      <el-alert title="不设置默认为全境范围" type="success" :closable="false">
+                      </el-alert>
+                    </el-card>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column width="155" :label="$t('操作')">
+                <template slot="header">
+                  <el-button size="mini" @click="chooseCountryOrArea">添加国家/地区</el-button>
+                </template>
+                <template slot-scope="scope">
+                  <el-button size="mini" @click="chooseProvince(scope.row.id)">添加省/州</el-button
+                  ><br />
+                  <el-button size="mini" @click="removeCountryOrArea(scope.row.id)"
+                    >移除此项</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+
+          <div v-else-if="ruleForm.radio === 2">
+            <h4>{{ $t('单国家/地区邮编方案') }}</h4>
+            <el-table :data="partitionPostData">
+              <el-table-column label="#" type="index" width="55"> </el-table-column>
+              <el-table-column prop="name" width="155" :label="$t('国家/地区')"> </el-table-column>
+              <el-table-column :label="$t('内容')">
+                <template slot-scope="scope">
                   <el-card
-                    style="float: left; width: 50%"
-                    v-for="item in scope.row.children"
+                    class="post-box"
+                    v-for="(item, index) in scope.row.children"
                     :key="item.id"
                   >
-                    <div slot="header" class="clearfix">
-                      <span class="xianzhi">限:</span><span> {{ item.name }}</span>
-                      <el-button-group style="float: right; padding: 3px 0">
-                        <el-button size="mini" @click="chooseCity(scope.row.id, item.id)"
-                          >添加城市</el-button
-                        >
-                        <el-button size="mini" @click="removeProvince(scope.row.id, item.id)"
-                          >移除此项</el-button
-                        >
-                      </el-button-group>
-                    </div>
-                    <div v-if="item.children.length > 0">
-                      <el-tag
-                        v-for="subitem in item.children"
-                        :key="subitem.id"
-                        closable
-                        @close="removeCity(scope.row.id, item.id, subitem.id)"
+                    <div slot="header">
+                      <span>{{ $t('请输入邮编范围') }}</span>
+                      <el-button
+                        style="float: right; padding: 3px 0"
+                        type="text"
+                        @click="removePost(scope.$index, index)"
+                        >移除此项</el-button
                       >
-                        {{ subitem.name }}
-                      </el-tag>
                     </div>
-                    <div v-else>
-                      <el-alert
-                        :title="`不设置默认为${item.name}全境范围`"
-                        type="success"
-                        :closable="false"
-                      >
-                      </el-alert>
-                    </div>
+                    <el-row>
+                      <el-col :span="11">
+                        <el-input
+                          v-model="item.start"
+                          size="mini"
+                          :placeholder="$t('请输入起始邮编')"
+                        ></el-input>
+                      </el-col>
+                      <el-col :span="2">-</el-col>
+                      <el-col :span="11">
+                        <el-input
+                          v-model="item.end"
+                          size="mini"
+                          :placeholder="$t('请输入截止邮编')"
+                        ></el-input>
+                      </el-col>
+                    </el-row>
                   </el-card>
-                </div>
-                <div v-else>
-                  <el-card>
-                    <el-alert title="不设置默认为全境范围" type="success" :closable="false">
-                    </el-alert>
-                  </el-card>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="155" :label="$t('操作')">
-              <template slot="header">
-                <el-button size="mini" @click="chooseCountryOrArea">添加国家/地区</el-button>
-              </template>
-              <template slot-scope="scope">
-                <el-button size="mini" @click="chooseProvince(scope.row.id)">添加省/州</el-button
-                ><br />
-                <el-button size="mini" @click="removeCountryOrArea(scope.row.id)"
-                  >移除此项</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-        <el-cascader
-          v-if="ruleForm.radio === 1"
-          style="width: 30%; margin-left: 20px"
-          @change="chooseAres"
-          v-model="areaData"
-          :options="options"
-          ref="country"
-          :props="props"
-          collapse-tags
-          clearable
-        ></el-cascader>
-        <el-row v-else style="margin-left: 60px" :gutter="20">
-          <el-col :span="5">
-            <el-select
-              v-model="ruleForm.country_id"
-              filterable
-              clearable
-              class="country-select"
-              :placeholder="$t('请选择国家')"
-            >
-              <el-option
-                v-for="item in countryList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="4" class="country-btn">
-            <el-button @click="addPost">{{ $t('添加邮编规则') }}</el-button>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-table
-        :data="postData"
-        v-if="ruleForm.radio !== 1"
-        border
-        style="width: 80%; margin-left: 60px"
-      >
-        <el-table-column label="#" type="index"> </el-table-column>
-        <el-table-column :label="$t('规则')" prop="rule"> </el-table-column>
-        <el-table-column :label="$t('内容')">
-          <template slot-scope="scope">
-            <el-col>
-              <el-input
-                v-model="scope.row.start"
-                size="mini"
-                :placeholder="$t('请输入起始邮编')"
-              ></el-input>
-              -
-              <el-input
-                v-model="scope.row.end"
-                size="mini"
-                :placeholder="$t('请输入截止邮编')"
-              ></el-input>
-            </el-col>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('操作')">
-          <template slot-scope="scope">
-            <!-- 移除 -->
-            <el-button class="danger" @click="deletePostcode(scope.$index, postData)">{{
-              $t('移除')
-            }}</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-form>
-    <div slot="footer">
+                </template>
+              </el-table-column>
+              <el-table-column width="155" :label="$t('操作')">
+                <template slot="header">
+                  <el-button
+                    v-if="partitionPostData.length === 0"
+                    size="mini"
+                    @click="choosePostCountryOrArea"
+                    >添加国家/地区</el-button
+                  >
+                </template>
+                <template slot-scope="scope">
+                  <el-button size="mini" @click="addPost(scope.$index)">添加邮编规则</el-button>
+                  <el-button size="mini" @click="batchAddPost(scope.$index)"
+                    >批量添加邮编规则</el-button
+                  >
+                  <!-- 移除 -->
+                  <el-button size="mini" class="danger" @click="deletePostcode(scope.$index)">{{
+                    $t('移除此项')
+                  }}</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-form-item>
+      </el-form>
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
-  </el-dialog>
+  </el-drawer>
 </template>
 <script>
-import { getIds } from '@/utils/index'
 import dialog from '@/components/dialog'
 export default {
   data() {
@@ -211,16 +202,18 @@ export default {
       check: false,
       checkLength: '',
       newArr: [],
-      partitionData: []
+      partitionAreaData: [],
+      partitionPostData: []
     }
   },
   computed: {
     getSumbitData() {
       let resultArr = []
       console.log('getSumbitData')
-      for (let index = 0; index < this.partitionData.length; index++) {
-        let countryInfo = this.partitionData[index]
-        let countryInfoAllProinice = this.partitionData[index].children
+      if (this.partitionAreaData.length === 0) return []
+      for (let index = 0; index < this.partitionAreaData.length; index++) {
+        let countryInfo = this.partitionAreaData[index]
+        let countryInfoAllProinice = this.partitionAreaData[index].children
         // 如果没有省
         if (countryInfoAllProinice.length === 0) {
           resultArr.push({
@@ -256,15 +249,12 @@ export default {
       return resultArr
     }
   },
-  created() {
-    this.getCountry()
-  },
   methods: {
     //查看国家ID
     getCountryIndex(id) {
       var index = -1
-      for (let index2 = 0; index2 < this.partitionData.length; index2++) {
-        if (this.partitionData[index2].id === id) {
+      for (let index2 = 0; index2 < this.partitionAreaData.length; index2++) {
+        if (this.partitionAreaData[index2].id === id) {
           index = index2
           break
         }
@@ -275,8 +265,12 @@ export default {
     getProvinceIndex(cid, pid) {
       var countryIndex = this.getCountryIndex(cid)
       var provinceIndex = -1
-      for (let index2 = 0; index2 < this.partitionData[countryIndex].children.length; index2++) {
-        if (this.partitionData[countryIndex].children[index2].id === pid) {
+      for (
+        let index2 = 0;
+        index2 < this.partitionAreaData[countryIndex].children.length;
+        index2++
+      ) {
+        if (this.partitionAreaData[countryIndex].children[index2].id === pid) {
           provinceIndex = index2
           break
         }
@@ -288,18 +282,24 @@ export default {
       var countryIndex = this.getCountryIndex(cid)
       var provinceIndex = -1
       var cityIndex = -1
-      for (let index2 = 0; index2 < this.partitionData[countryIndex].children.length; index2++) {
-        if (this.partitionData[countryIndex].children[index2].id === pid) {
+      for (
+        let index2 = 0;
+        index2 < this.partitionAreaData[countryIndex].children.length;
+        index2++
+      ) {
+        if (this.partitionAreaData[countryIndex].children[index2].id === pid) {
           provinceIndex = index2
           break
         }
       }
       for (
         let index3 = 0;
-        index3 < this.partitionData[countryIndex].children[provinceIndex].children.length;
+        index3 < this.partitionAreaData[countryIndex].children[provinceIndex].children.length;
         index3++
       ) {
-        if (this.partitionData[countryIndex].children[provinceIndex].children[index3].id === aid) {
+        if (
+          this.partitionAreaData[countryIndex].children[provinceIndex].children[index3].id === aid
+        ) {
           cityIndex = index3
           break
         }
@@ -312,18 +312,44 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.partitionData.splice(this.getCountryIndex(id), 1)
+        this.partitionAreaData.splice(this.getCountryIndex(id), 1)
       })
+    },
+    removePost(countryIndex, postIndex) {
+      console.log(countryIndex, postIndex)
+      this.$confirm(this.$t('确定要移除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.partitionPostData[countryIndex].children.splice(postIndex, 1)
+      })
+    },
+    // 选择一个国家或地区
+    choosePostCountryOrArea() {
+      if (this.partitionPostData.length === 0) {
+        dialog({ type: 'areaChooseCountry', multiple: false }, res => {
+          this.partitionPostData = [
+            {
+              id: res.id,
+              name: res.name,
+              children: [[{ rule: '邮编规则', start: '', end: '', type: 1 }]]
+            }
+          ]
+        })
+      } else {
+        this.$message.error(this.$t('最多只能添加一个国家/地区'))
+      }
     },
     // 选择国家或地区
     chooseCountryOrArea() {
-      dialog({ type: 'areaSelectCountry' }, res => {
+      dialog({ type: 'areaSelectCountry', multiple: true }, res => {
         if (res.length > 0) {
           for (let index = 0; index < res.length; index++) {
             const element = res[index]
             const resultIndex = this.getCountryIndex(element.id)
             if (resultIndex === -1) {
-              this.partitionData.push({
+              this.partitionAreaData.push({
                 id: element.id,
                 name: element.name,
                 children: []
@@ -336,7 +362,7 @@ export default {
     // 选择省
     chooseProvince(countryId) {
       const countryIndex = this.getCountryIndex(countryId)
-      var caption = this.partitionData[countryIndex].name
+      var caption = this.partitionAreaData[countryIndex].name
       dialog({ type: 'areaSelectProince', pId: countryId, caption: caption }, res => {
         if (res.length > 0) {
           for (let index = 0; index < res.length; index++) {
@@ -345,7 +371,7 @@ export default {
             const resultIndexArr = this.getProvinceIndex(countryId, element.id)
             console.log('resultIndexArr', resultIndexArr)
             if (resultIndexArr[1] === -1) {
-              this.partitionData[resultIndexArr[0]].children.push({
+              this.partitionAreaData[resultIndexArr[0]].children.push({
                 id: element.id,
                 name: element.name,
                 children: []
@@ -358,8 +384,8 @@ export default {
     // 选择市
     chooseCity(countryId, provinceId) {
       const resultIndexArr = this.getProvinceIndex(countryId, provinceId)
-      var caption = this.partitionData[resultIndexArr[0]].name
-      caption += '>' + this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].name
+      var caption = this.partitionAreaData[resultIndexArr[0]].name
+      caption += '>' + this.partitionAreaData[resultIndexArr[0]].children[resultIndexArr[1]].name
       dialog({ type: 'areaSelectCity', caption: caption, pId: provinceId }, res => {
         if (res.length > 0) {
           for (let index = 0; index < res.length; index++) {
@@ -368,7 +394,7 @@ export default {
             const resultIndexArr = this.getCityIndex(countryId, provinceId, element.id)
             console.log('chooseCity->resultIndexArr', resultIndexArr)
             if (resultIndexArr[2] === -1) {
-              this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].children.push({
+              this.partitionAreaData[resultIndexArr[0]].children[resultIndexArr[1]].children.push({
                 id: element.id,
                 name: element.name
               })
@@ -380,7 +406,7 @@ export default {
     removeCity(countryId, provinceId, cityId) {
       const resultIndexArr = this.getCityIndex(countryId, provinceId, cityId)
       if (resultIndexArr[2] !== -1) {
-        this.partitionData[resultIndexArr[0]].children[resultIndexArr[1]].children.splice(
+        this.partitionAreaData[resultIndexArr[0]].children[resultIndexArr[1]].children.splice(
           resultIndexArr[2],
           1
         )
@@ -394,7 +420,7 @@ export default {
       }).then(() => {
         const resultIndexArr = this.getProvinceIndex(countryId, provinceId)
         console.log('resultIndexArr', resultIndexArr)
-        this.partitionData[resultIndexArr[0]].children.splice(resultIndexArr[1], 1)
+        this.partitionAreaData[resultIndexArr[0]].children.splice(resultIndexArr[1], 1)
       })
     },
     getList() {
@@ -450,77 +476,6 @@ export default {
         this.check = true
       }
     },
-    onCheck(v) {
-      getIds(this.countryList, this.newArr)
-      this.areaData = v ? this.newArr : []
-      this.checkLength = this.newArr.length
-    },
-    // 获取多级区域数据 编辑渠道时
-    getAllCountries() {
-      this.$request.regionCountry(this.$route.params.id).then(res => {
-        if (res.ret) {
-          this.countryList = res.data
-          console.log(this.countryList)
-          this.options = res.data.map(item => {
-            return {
-              value: item.id,
-              label: item.name,
-              children:
-                item.areas < 1
-                  ? undefined
-                  : item.areas.map(item => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
-                      }
-                    })
-            }
-          })
-        }
-      })
-    },
-    // 预设分区表 获取国家
-    getCountry() {
-      this.$request.countryLocation().then(res => {
-        if (res.ret) {
-          this.countryList = res.data
-          this.options = res.data.map(item => {
-            return {
-              value: item.id,
-              label: item.name,
-              children:
-                item.areas < 1
-                  ? undefined
-                  : item.areas.map(item => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
-                      }
-                    })
-            }
-          })
-          console.log(this.options)
-        }
-      })
-    },
     // 切换国家
     changeCountry(item) {
       console.log(item, 'item')
@@ -528,26 +483,41 @@ export default {
     editPartition(id) {
       console.log(id)
     },
-    // 新增行
-    addRow() {
-      this.tableData.push({
-        country_id: '',
-        areaData: []
+    batchAddPost() {
+      dialog({ type: 'batchAddPostCode' }, res => {
+        if (res.length === 0) return
+        this.partitionPostData[0].children = []
+        for (let index2 = 0; index2 < res.length; index2++) {
+          const element2 = res[index2]
+          let exists = false
+          for (let index = 0; index < this.partitionPostData[0].children.length; index++) {
+            const element = this.partitionPostData[0].children[index]
+            if (
+              element2.start === element.start ||
+              element2.start === element.end ||
+              element2.end === element.end ||
+              element2.end === element.start
+            ) {
+              exists = true
+              break
+            }
+          }
+          if (!exists) {
+            this.partitionPostData[0].children.push(element2)
+          }
+        }
       })
     },
-    addPost() {
-      this.postData.push({
+    addPost(index) {
+      this.partitionPostData[index].children.push({
         rule: '邮编规则',
         start: '',
         end: '',
         type: 1
       })
     },
-    deleteParition(index, rows) {
-      rows.splice(index, 1)
-    },
-    deletePostcode(index, rows) {
-      rows.splice(index, 1)
+    deletePostcode(index) {
+      this.partitionPostData.splice(index, 1)
     },
     confirm() {
       if (this.areaData.length) {
@@ -659,12 +629,6 @@ export default {
       }
     },
     init() {
-      this.getCountry()
-      // if (this.status === 'partition') {
-      //   this.getCountry()
-      // } else {
-      //   this.getAllCountries()
-      // }
       if (this.id) {
         this.getList()
       }
@@ -686,43 +650,51 @@ export default {
 </script>
 <style lang="scss">
 .dialog-partition-add-edit {
-  .xianzhi {
-    padding: 5px;
-    background-color: red;
-    color: white;
-    border-radius: 5px;
-    display: none;
-  }
-  .pagination-box {
-    margin-top: 10px;
-  }
-  .remark {
-    color: red;
-    margin-bottom: 10px;
-  }
-  .el-dialog__header {
-    background-color: #0e102a;
-  }
-  .el-dialog__title {
-    font-size: 14px;
-    color: #fff;
-  }
-  .input-select {
-    width: 30%;
-    margin-right: 10px;
-  }
-  .el-dialog__close {
-    color: #fff;
-  }
-  .commission-top {
-    margin-left: 20px;
-  }
-  .input-sty {
-    width: 35%;
-  }
-  .add-row {
-    margin-bottom: 10px;
-    text-align: right;
+  .pad {
+    padding: 20px;
+    .xianzhi {
+      padding: 5px;
+      background-color: red;
+      color: white;
+      border-radius: 5px;
+      display: none;
+    }
+    .pagination-box {
+      margin-top: 10px;
+    }
+    .post-box {
+      width: 50%;
+      text-align: center;
+      float: left;
+    }
+    .remark {
+      color: red;
+      margin-bottom: 10px;
+    }
+    .el-dialog__header {
+      background-color: #0e102a;
+    }
+    .el-dialog__title {
+      font-size: 14px;
+      color: #fff;
+    }
+    .input-select {
+      width: 30%;
+      margin-right: 10px;
+    }
+    .el-dialog__close {
+      color: #fff;
+    }
+    .commission-top {
+      margin-left: 20px;
+    }
+    .input-sty {
+      width: 35%;
+    }
+    .add-row {
+      margin-bottom: 10px;
+      text-align: right;
+    }
   }
 }
 </style>
