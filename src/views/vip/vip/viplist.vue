@@ -327,13 +327,13 @@
           >
         </template>
       </el-table-column>
-      <!-- <el-table-column :label="$t('消费总额')" prop="consume_amount">
+      <el-table-column :label="$t('消费总额')" prop="consume_amount">
         <template slot-scope="scope">
-          <el-button type="text" @click="onPageTo(scope.row.id)">{{
+          <el-button type="text" @click="onPageTo(scope.row)">{{
             scope.row.consume_amount
           }}</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
       <el-table-column :label="$t('客户来源')" prop="user_source"> </el-table-column>
@@ -1189,11 +1189,11 @@ export default {
         }
       })
     },
-    onPageTo(id) {
-      console.log(id)
+    onPageTo(row) {
+      console.log(row, 'row')
       this.$router.push({
         name: 'transaction',
-        query: id
+        query: { keyword: row.id }
       })
     }
   },
