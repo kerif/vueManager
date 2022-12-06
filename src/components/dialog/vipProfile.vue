@@ -1,6 +1,6 @@
 <template>
   <el-drawer size="85%" :visible.sync="show" :title="$t('个人资料')">
-    <div class="dialog-vip-profile" v-if="profile">
+    <div class="dialog-vip-profile" v-if="profile.id !== undefined">
       <el-row :gutter="20">
         <el-col :span="3">
           <br />
@@ -105,10 +105,14 @@
               <template slot-scope="scope">{{ scope.row.country.name }} </template>
             </el-table-column>
             <el-table-column prop="address" label="省/州">
-              <template slot-scope="scope">{{ scope.row.area.name }} </template>
+              <template slot-scope="scope"
+                >{{ scope.row.area !== null ? scope.row.area.name : '' }}
+              </template>
             </el-table-column>
             <el-table-column prop="address" label="区域">
-              <template slot-scope="scope">{{ scope.row.sub_area.name }} </template>
+              <template slot-scope="scope"
+                >{{ scope.row.sub_area !== null ? scope.row.sub_area.name : '' }}
+              </template>
             </el-table-column>
             <el-table-column prop="city" label="城市"> </el-table-column>
             <el-table-column prop="street" label="街道"> </el-table-column>
