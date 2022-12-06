@@ -219,9 +219,7 @@ export default {
         // 如果没有省
         if (countryInfoAllProinice.length === 0) {
           resultArr.push({
-            country_id: countryInfo.id,
-            area_id: 0,
-            sub_area_id: 0
+            country_id: countryInfo.id
           })
         } else {
           for (let index2 = 0; index2 < countryInfoAllProinice.length; index2++) {
@@ -231,8 +229,7 @@ export default {
             if (theProince.children.length === 0) {
               resultArr.push({
                 country_id: countryInfo.id,
-                area_id: theProince.id,
-                sub_area_id: 0
+                area_id: theProince.id
               })
             } else {
               //有省有市

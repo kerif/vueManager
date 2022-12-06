@@ -745,7 +745,8 @@ export default {
       })
     },
     viewProfile(id) {
-      dialog({ type: 'vipProfile', id: id })
+      console.log(id)
+      // dialog({ type: 'vipProfile', id: id })
     },
     // 操作日志
     getLogs(id) {
