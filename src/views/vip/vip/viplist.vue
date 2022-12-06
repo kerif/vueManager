@@ -256,29 +256,7 @@
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
       <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
-          <!-- <span
-            @click="
-              details(
-                scope.row.id,
-                scope.row.member_level_name,
-                scope.row.customer_name,
-                scope.row.balance,
-                scope.row.created_at,
-                scope.row.name,
-                scope.row.email,
-                scope.row.point,
-                scope.row.sale_name,
-                scope.row.last_login_at,
-                scope.row.phone,
-                scope.row.user_group.name_cn,
-                scope.row.order_count,
-                scope.row.avatar
-              )
-            "
-            style="cursor: pointer"
-            >{{ scope.row.id }}</span
-          > -->
-          <span>{{ scope.row.id }}</span>
+          <el-button @click="viewProfile(scope.row.id)" type="text">{{ scope.row.id }}</el-button>
           <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
@@ -765,6 +743,10 @@ export default {
           })
         }
       })
+    },
+    viewProfile(id) {
+      console.log(id)
+      // dialog({ type: 'vipProfile', id: id })
     },
     // 操作日志
     getLogs(id) {

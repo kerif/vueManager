@@ -205,14 +205,14 @@ export default {
   .el-button {
     margin: 0px;
   }
-  /deep/ .el-table tr th.is-leaf {
+  ::v-deep .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
   }
-  /deep/ .el-table th > .cell {
+  ::v-deep .el-table th > .cell {
     text-align: center;
   }
-  /deep/ .el-table .cell {
+  ::v-deep .el-table .cell {
     text-align: center;
   }
   .col_green {

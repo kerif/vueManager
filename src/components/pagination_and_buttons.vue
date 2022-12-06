@@ -95,7 +95,7 @@ export default {
       margin: 0 0 0 10px;
     }
   }
-  /deep/.way-list-container .el-icon {
+  ::v-deep.way-list-container .el-icon {
     display: inline-block !important;
   }
 }

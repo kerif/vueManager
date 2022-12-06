@@ -282,7 +282,7 @@ export default {
     background-color: #3540a5;
     border-color: #3540a5;
   }
-  /deep/.el-form-item__label::before {
+  ::v-deep.el-form-item__label::before {
     content: '';
   }
 }

@@ -526,7 +526,7 @@ export default {
       }
       .text {
         margin-top: 10px;
-        /deep/.el-input__inner {
+        ::v-deep.el-input__inner {
           border: 1px solid #fff;
         }
         .total {
@@ -550,10 +550,10 @@ export default {
         font-size: 24px;
         font-weight: bold;
       }
-      /deep/.el-table th > .cell {
+      ::v-deep.el-table th > .cell {
         text-align: center;
       }
-      /deep/.el-table .cell {
+      ::v-deep.el-table .cell {
         text-align: center;
       }
     }

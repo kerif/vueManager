@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-failAudit {
-  /deep/.el-dialog__header {
+  ::v-deep.el-dialog__header {
     background-color: #0e102a;
   }
   .el-input {
@@ -138,7 +138,7 @@ export default {
   .el-textarea {
     width: 50%;
   }
-  /deep/.el-dialog__title {
+  ::v-deep.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
