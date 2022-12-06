@@ -43,13 +43,13 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('分区类型')">
+        <el-table-column :label="$t('分区类型')" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('国家地区') }}</span>
             <span v-else>{{ $t('国家邮编') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家地区')" width="150">
+        <el-table-column :label="$t('启用国家地区')">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">
               <!-- <span v-for="item in scope.row.areas" :key="item.id"
@@ -71,7 +71,11 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家地区总数量')" prop="areas_count"></el-table-column>
+        <el-table-column
+          width="180"
+          :label="$t('启用国家地区总数量')"
+          prop="areas_count"
+        ></el-table-column>
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch

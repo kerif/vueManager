@@ -160,7 +160,9 @@
         </el-form-item>
       </el-form>
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      <el-button type="primary" @click="confirm" v-loading="submiting" :disabled="submiting">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-drawer>
 </template>
@@ -175,6 +177,7 @@ export default {
         country_id: '',
         radio: 1
       },
+      submiting: false,
       loading: true,
       templateData: [],
       countryList: [], // 获取全部国家
@@ -428,6 +431,7 @@ export default {
     },
     getList() {
       this.loading = true
+      this.submiting = false
       if (this.status === 'partition') {
         this.getPartition()
       } else {
@@ -532,6 +536,7 @@ export default {
       //     sub_area_id: item[2]
       //   }))
       // }
+      this.submiting = true
       if (this.status === 'channel') {
         let params = {}
         params = {
@@ -561,6 +566,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
+              this.submiting = false
             }
           })
         } else {
@@ -579,6 +585,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
+              this.submiting = false
             }
           })
         }
@@ -612,6 +619,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
+              this.submiting = false
             }
           })
         } else {
@@ -629,6 +637,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
+              this.submiting = false
             }
           })
         }
