@@ -3947,8 +3947,8 @@ exports.getPickEcharts = params => {
   return $form.get('station-statistics', { params })
 }
 // 订单列表 获取国家地区（一级）
-exports.getCountriesList = () => {
-  return $form.get('countries/list')
+exports.getCountriesList = params => {
+  return $form.get('countries/list', { params })
 }
 // 订单列表 获取国家地区（剩余级）
 exports.getCountriesSecondList = params => {

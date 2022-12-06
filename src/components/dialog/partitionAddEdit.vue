@@ -6,7 +6,7 @@
     class="dialog-partition-add-edit"
     @close="clear"
   >
-    <div class="pad">
+    <div class="pad" v-loading="loading">
       <div class="remark">
         {{
           $t(
@@ -175,6 +175,7 @@ export default {
         country_id: '',
         radio: 1
       },
+      loading: true,
       templateData: [],
       countryList: [], // 获取全部国家
       options: [],
@@ -206,8 +207,9 @@ export default {
       partitionPostData: []
     }
   },
-  computed: {
-    getSumbitData() {
+  methods: {
+    // 组合后台需要的地区数据
+    getSumbitAreaData() {
       let resultArr = []
       console.log('getSumbitData')
       if (this.partitionAreaData.length === 0) return []
@@ -247,9 +249,13 @@ export default {
         }
       }
       return resultArr
-    }
-  },
-  methods: {
+    },
+    // 组合后台需要的邮编数据
+    getSumbitPostData() {
+      // 当前只支持一级
+      let resultArr = this.partitionPostData[0].children
+      return resultArr
+    },
     //查看国家ID
     getCountryIndex(id) {
       var index = -1
@@ -333,7 +339,7 @@ export default {
             {
               id: res.id,
               name: res.name,
-              children: [[{ rule: '邮编规则', start: '', end: '', type: 1 }]]
+              children: [{ rule: '邮编规则', start: '', end: '', type: 1 }]
             }
           ]
         })
@@ -424,6 +430,7 @@ export default {
       })
     },
     getList() {
+      this.loading = true
       if (this.status === 'partition') {
         this.getPartition()
       } else {
@@ -436,32 +443,37 @@ export default {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
         console.log(res.data.areas)
-        if (res.data.areas) {
-          this.areaData = res.data.areas.map(item =>
-            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          )
-        }
+        // if (res.data.areas) {
+        //   this.areaData = res.data.areas.map(item =>
+        //     [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+        //   )
+        // }
         console.log(this.areaData)
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
-        this.postData = res.data.postcode_areas
+        this.partitionPostData = res.data.partition_post_data
+        this.partitionAreaData = res.data.partition_area_data
+        this.loading = false
       })
     },
     getPartition() {
+      // 得到模板详细
       this.$request.regionTmpDetails(this.tmpId, this.id).then(res => {
         console.log(res.data)
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
         console.log(res.data.areas)
-        if (res.data.areas) {
-          this.areaData = res.data.areas.map(item =>
-            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          )
-        }
+        // if (res.data.areas) {
+        //   this.areaData = res.data.areas.map(item =>
+        //     [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+        //   )
+        // }
         console.log(this.areaData)
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
-        this.postData = res.data.postcode_areas
+        this.partitionPostData = res.data.partition_post_data
+        this.partitionAreaData = res.data.partition_area_data
+        this.loading = false
       })
     },
     chooseAres(area) {
@@ -475,10 +487,6 @@ export default {
       } else {
         this.check = true
       }
-    },
-    // 切换国家
-    changeCountry(item) {
-      console.log(item, 'item')
     },
     editPartition(id) {
       console.log(id)
@@ -520,13 +528,13 @@ export default {
       this.partitionPostData.splice(index, 1)
     },
     confirm() {
-      if (this.areaData.length) {
-        this.areasData = this.areaData.map(item => ({
-          country_id: item[0],
-          area_id: item[1],
-          sub_area_id: item[2]
-        }))
-      }
+      // if (this.areaData.length) {
+      //   this.areasData = this.areaData.map(item => ({
+      //     country_id: item[0],
+      //     area_id: item[1],
+      //     sub_area_id: item[2]
+      //   }))
+      // }
       if (this.status === 'channel') {
         let params = {}
         params = {
@@ -535,10 +543,10 @@ export default {
           type: this.ruleForm.radio
         }
         if (this.ruleForm.radio === 1) {
-          params.areas = this.areaData.length ? this.areasData : this.areaIds
+          params.areas = this.getSumbitAreaData()
         } else {
           params.country_id = this.ruleForm.country_id
-          params.postcodes = this.postData
+          params.postcodes = this.getSumbitPostData()
         }
         if (this.id) {
           // 更新
@@ -584,11 +592,12 @@ export default {
           reference_time: this.ruleForm.reference_time,
           type: this.ruleForm.radio
         }
+        //在这里设置提交参数
         if (this.ruleForm.radio === 1) {
-          params.areas = this.areaData.length ? this.areasData : this.areaIds
+          params.areas = this.getSumbitAreaData()
         } else {
           params.country_id = this.ruleForm.country_id
-          params.postcodes = this.postData
+          params.postcodes = this.getSumbitPostData()
         }
         if (this.id) {
           // 模板
@@ -644,6 +653,8 @@ export default {
       this.ruleForm.country_id = ''
       this.areaData = []
       this.postData = [{ rule: '邮编规则', start: '', end: '', type: 1 }]
+      this.partitionAreaData = []
+      this.partitionPostData = []
     }
   }
 }
@@ -658,6 +669,10 @@ export default {
       color: white;
       border-radius: 5px;
       display: none;
+    }
+    .el-tag {
+      margin-right: 2px;
+      margin-top: 2px;
     }
     .pagination-box {
       margin-top: 10px;

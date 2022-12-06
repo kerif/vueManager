@@ -11,12 +11,12 @@
           type="textarea"
           :rows="2"
           placeholder="多个关键词请用半角逗号分开"
-          v-model="textarea"
+          v-model="keyword"
         >
         </el-input
       ></el-col>
       <el-col :span="2" style="text-align: right">
-        <el-button type="primary" plain>搜索</el-button>
+        <el-button type="primary" plain @click="loadList">搜索</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -47,7 +47,8 @@ export default {
     return {
       dataList: [],
       selected: [],
-      multiple: true
+      multiple: true,
+      keyword: ''
     }
   },
   created() {
@@ -58,7 +59,7 @@ export default {
       this.selected = val
     },
     loadList() {
-      this.$request.getCountriesList().then(res => {
+      this.$request.getCountriesList({ keyword: this.keyword }).then(res => {
         this.dataList = res.data
       })
     },
