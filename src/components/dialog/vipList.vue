@@ -16,12 +16,12 @@
       <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
     </el-table>
     <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
+      <tx-pagination :pageParams="page_params"></tx-pagination>
     </div>
   </el-dialog>
 </template>
 <script>
-import NlePagination from '@/components/pagination'
+import TxPagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   data() {
@@ -30,7 +30,7 @@ export default {
     }
   },
   components: {
-    NlePagination
+    TxPagination
   },
   mixins: [pagination],
   methods: {
