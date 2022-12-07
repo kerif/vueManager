@@ -717,5 +717,8 @@ export default {
       text-align: right;
     }
   }
+  .el-drawer.rtl {
+    overflow: auto;
+  }
 }
 </style>
