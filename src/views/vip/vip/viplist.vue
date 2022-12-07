@@ -367,10 +367,7 @@
                 <span>{{ $t('操作日志') }}</span>
               </el-dropdown-item>
               <!-- 客户合并 -->
-              <el-dropdown-item
-                class="item-sty"
-                @click.native="customerMerger(scope.row.id, scope.row.name)"
-              >
+              <el-dropdown-item class="item-sty" @click.native="customerMerger(scope.row.id)">
                 <span>{{ $t('客户合并') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPassword(scope.row.id)">
@@ -397,45 +394,6 @@
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       </div>
     </div>
-    <el-dialog :title="$t('客户合并')" :visible.sync="dialogVisible" width="50%">
-      <div>
-        <p>{{ $t('当前客户ID') }}</p>
-        <p>{{ customerId }}&nbsp;---&nbsp;{{ customerName }}</p>
-        <p>*{{ $t('请输入合并目标客户ID') }}</p>
-        <!-- <el-input style="width: 40%" v-model="targetID"></el-input> -->
-        <el-autocomplete
-          :fetch-suggestions="queryCNSearch"
-          @select="handleSelect"
-          :placeholder="$t('请输入客户ID')"
-          v-model="target"
-        >
-        </el-autocomplete>
-      </div>
-      <div style="margin-top: 40px">
-        <span>{{ $t('合并规则') }}</span> <br />
-        <span>1、{{ $t('合并客户ID时，保留当前客户ID下所有信息；') }}</span
-        ><br />
-        <span
-          >2、{{
-            $t(
-              '合并目标客户的【余额、订单、包裹、收件地址、佣金、代理客户、交易记录、充值记录】合并至当前客户ID，其他信息清空；'
-            )
-          }}</span
-        >
-        <br />
-        <span
-          >3、{{
-            $t(
-              '目标客户ID合并后即作废，绑定的手机号、邮箱、微信也自动解除绑定，可用于重新绑定其他客户ID。'
-            )
-          }}</span
-        >
-      </div>
-      <div slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="mergeConfirm">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
     <!-- 分配客服 -->
     <el-dialog
       :title="
@@ -473,28 +431,6 @@
         <el-button type="primary" @click="staffConfirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$t('修改密码')" :visible.sync="dialogPwd" width="30%" @close="clear">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item :label="$t('重置密码')" prop="passowrd">
-          <el-input
-            v-model="ruleForm.password"
-            type="password"
-            :placeholder="$t('请输入重置密码')"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('再次输入重置密码')" prop="confirm_password">
-          <el-input
-            v-model="ruleForm.confirm_password"
-            type="password"
-            :placeholder="$t('请再次输入重置密码')"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="dialogPwd = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="pwdConfirm('ruleForm')">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
     <add-user-label
       :showLabel="showLabel"
       :deleteNum="deleteNum"
@@ -513,30 +449,7 @@ import addUserLabel from './addUserLabel.vue'
 export default {
   name: 'viplist',
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('请再次输入重置密码')))
-      } else if (value !== this.ruleForm.password) {
-        callback(new Error(this.$t('两次输入密码不一致!')))
-      } else {
-        callback()
-      }
-    }
     return {
-      ruleForm: {
-        password: '',
-        confirm_password: ''
-      },
-      rules: {
-        password: [
-          { required: true, message: this.$t('请输入重置密码'), trigger: 'blur' },
-          { min: 6, max: 32, message: this.$t('长度在6到32个字符'), trigger: 'change' }
-        ],
-        confirm_password: [
-          { required: true, validator: validatePass, trigger: 'blur' },
-          { min: 6, max: 32, message: this.$t('长度在6到32个字符'), trigger: 'change' }
-        ]
-      },
       vipList: [],
       deleteNum: [],
       tableLoading: false,
@@ -547,7 +460,6 @@ export default {
         user_source: ''
       },
       urlExcel: '',
-      dialogVisible: false,
       customerId: '',
       customerName: '',
       targetID: '',
@@ -556,8 +468,6 @@ export default {
       saleId: '',
       groupId: '',
       dialogStaff: false,
-      dialogPwd: false,
-      pwdId: '',
       staffStatus: '',
       searchParams: {
         level_id: '',
@@ -746,7 +656,7 @@ export default {
     },
     viewProfile(id) {
       console.log(id)
-      // dialog({ type: 'vipProfile', id: id })
+      dialog({ type: 'vipProfile', id: id })
     },
     // 操作日志
     getLogs(id) {
@@ -759,43 +669,11 @@ export default {
       })
     },
     editPassword(id) {
-      this.pwdId = id
-      this.dialogPwd = true
+      dialog({ type: 'vipChangePassword', id }, () => {})
     },
     onSource() {
       this.page_params.handleQueryChange('user_source', this.page_params.user_source)
       this.getList()
-    },
-    pwdConfirm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$request.editCustomPwd(this.pwdId, { ...this.ruleForm }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.dialogPwd = false
-              this.getList()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
-        } else {
-          return false
-        }
-      })
-    },
-    clear() {
-      this.pwdId = ''
-      this.ruleForm = {
-        password: '',
-        confirm_password: ''
-      }
     },
     clearAssign() {
       this.groupId = ''
@@ -1014,53 +892,12 @@ export default {
       })
     },
     // 合并客户
-    customerMerger(id, name) {
-      this.customerId = id
-      this.customerName = name
-      this.dialogVisible = true
-    },
-    // 客户id
-    queryCNSearch(queryString, callback) {
-      console.log(this.target)
-      var list = [{}]
-      this.$request
-        .Automatic({
-          keyword: this.target.toString()
-        })
-        .then(res => {
-          for (let i of res.data) {
-            i.value = i.id + '---' + i.name
-          }
-          list = res.data
-          callback && callback(list)
-        })
-    },
-    // 客户id
-    handleSelect(item) {
-      console.log(item)
-    },
-    //确定合并
-    mergeConfirm() {
-      if (!this.target) {
-        return this.$message.error(this.$t('请输入目标客户ID'))
-      }
-      this.targetID = this.target.split('---')[0]
-      this.$request.mergeCustomer(this.customerId, this.targetID).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.dialogVisible = false
-          this.getList()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+    customerMerger(id) {
+      // this.customerId = id
+      // this.customerName = name
+      // this.dialogVisible = true
+      dialog({ type: 'vipMerge', id }, () => {
+        this.getList()
       })
     },
     // 添加用户

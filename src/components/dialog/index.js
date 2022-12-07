@@ -178,6 +178,8 @@ import areaSelectProince from './areaSelectProince.vue'
 import areaSelectCity from './areaSelectCity.vue'
 import areaChooseCountry from './areaChooseCountry.vue'
 import batchAddPostCode from './batchAddPostCode.vue'
+import vipChangePassword from './vipChangePassword.vue'
+import vipMerge from './vipMerge.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -355,6 +357,8 @@ const areaSelectProinceController = Vue.extend(areaSelectProince)
 const areaSelectCityController = Vue.extend(areaSelectCity)
 const areaChooseCountryController = Vue.extend(areaChooseCountry)
 const batchAddPostCodeController = Vue.extend(batchAddPostCode)
+const vipChangePasswordController = Vue.extend(vipChangePassword)
+const vipMergeController = Vue.extend(vipMerge)
 
 const mixin = {
   data() {
@@ -1607,6 +1611,20 @@ function initInstance(type) {
     // 批量添加邮编
     case 'batchAddPostCode':
       instance = new batchAddPostCodeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 修改客人密码
+    case 'vipChangePassword':
+      instance = new vipChangePasswordController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 合并用户
+    case 'vipMerge':
+      instance = new vipMergeController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
