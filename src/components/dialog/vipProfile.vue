@@ -34,8 +34,11 @@
               profile.user_group !== undefined ? profile.user_group.name_cn : ''
             }}</el-descriptions-item>
             <el-descriptions-item label="余额">{{ profile.balance }}</el-descriptions-item>
-            <el-descriptions-item label="积分">{{ profile.credit }}</el-descriptions-item>
-            <el-descriptions-item label="成长值">{{ profile.consume_amount }}</el-descriptions-item>
+            <el-descriptions-item label="消费总额">{{
+              profile.consume_amount
+            }}</el-descriptions-item>
+            <el-descriptions-item label="积分">{{ profile.point }}</el-descriptions-item>
+            <el-descriptions-item label="成长值">{{ profile.growth_value }}</el-descriptions-item>
             <el-descriptions-item label="邀请人">{{ profile.invitor }}</el-descriptions-item>
             <el-descriptions-item label="国家/地区">{{
               profile.profile.country_name
@@ -50,7 +53,6 @@
           <el-button type="primary" plain @click="onUpdateGroup">修改用户组</el-button>
           <el-button type="primary" plain @click="vipMerge">客户合并</el-button>
           <el-button type="primary" plain @click="changePassword">修改密码</el-button>
-          <el-button type="primary" plain>转为代理</el-button>
         </el-button-group>
       </div>
       <el-tabs v-model="activeTabName">
@@ -200,6 +202,10 @@
           <tx-pagination :pageParams="couponParams"></tx-pagination>
         </el-tab-pane>
         <el-tab-pane :label="`邀请记录(${invitationParams.total})`" name="invite">
+          <el-button type="primary" plain @click="transferAgent">转为代理</el-button>
+          <div class="agent-text">
+            {{ $t('提示: 成为代理之前邀请的客户一键转为代理客户') }}
+          </div>
           <el-table :data="invitationList" border style="width: 100%">
             <el-table-column type="index" width="50"> </el-table-column>
             <!-- 客户ID -->
@@ -300,8 +306,33 @@ export default {
     }
   },
   methods: {
+    transferAgent() {
+      this.$confirm(this.$t('确定要转为代理客户'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.agentCustomer(this.id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     editProfile() {
-      dialog({ type: 'editInfo', id: this.id, name: this.profile.origin_name }, () => {})
+      dialog({ type: 'editInfo', id: this.id, name: this.profile.origin_name }, () => {
+        this.getProfile()
+      })
     },
     handleOrderCurrentChange(pageId) {
       this.orderParams.page = pageId
@@ -375,10 +406,7 @@ export default {
     },
     init() {
       this.show = true
-      this.$request.checkVipInfo(this.id).then(res => {
-        this.profile = res.data
-        this.addresseList = res.data.addresses
-      })
+      this.getProfile()
       this.getCouponList()
       this.getInvitationsList()
       this.getOrderList()
@@ -386,6 +414,12 @@ export default {
       this.getPointList()
       this.getTransactionList()
       this.getGrowthList()
+    },
+    getProfile() {
+      this.$request.checkVipInfo(this.id).then(res => {
+        this.profile = res.data
+        this.addresseList = res.data.addresses
+      })
     },
     getCouponList() {
       this.$request
@@ -495,12 +529,6 @@ export default {
     // 修改客户组
     onUpdateGroup() {
       dialog({ type: 'vipgroup', id: this.id }, () => {})
-    },
-    // 合并客户
-    customerMerger(id, name) {
-      this.customerId = id
-      this.customerName = name
-      this.dialogVisible = true
     },
     // 合并
     vipMerge() {

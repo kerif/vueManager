@@ -1,6 +1,7 @@
 <template>
   <el-dialog :title="$t('修改密码')" :visible.sync="show" width="30%" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+      {{ id }}
       <el-form-item :label="$t('重置密码')" prop="passowrd">
         <el-input
           v-model="ruleForm.password"
@@ -37,6 +38,7 @@ export default {
     }
     return {
       show: false,
+      id: 0,
       ruleForm: {
         password: '',
         confirm_password: ''
@@ -57,7 +59,7 @@ export default {
     pwdConfirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.editCustomPwd(this.pwdId, { ...this.ruleForm }).then(res => {
+          this.$request.editCustomPwd(this.id, { ...this.ruleForm }).then(res => {
             if (res.ret) {
               this.$notify({
                 title: this.$t('操作成功'),
@@ -79,7 +81,7 @@ export default {
       })
     },
     clear() {
-      this.pwdId = ''
+      this.id = ''
       this.ruleForm = {
         password: '',
         confirm_password: ''

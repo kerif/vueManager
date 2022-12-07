@@ -1,8 +1,8 @@
 <template>
   <el-dialog :title="$t('客户合并')" :visible.sync="show" width="50%">
-    <div>
+    <div v-lading="loading">
       <p>{{ $t('当前客户ID') }}</p>
-      <p>{{ customerId }}&nbsp;---&nbsp;{{ customerName }}</p>
+      <p>{{ id }}&nbsp;---&nbsp;{{ profile.origin_name }}</p>
       <p>*{{ $t('请输入合并目标客户ID') }}</p>
       <!-- <el-input style="width: 40%" v-model="targetID"></el-input> -->
       <el-autocomplete
@@ -45,23 +45,32 @@ export default {
   data() {
     return {
       show: false,
-      customerId: 0,
+      id: 0,
       customerName: '',
       targetID: 0,
       target: '',
       groupList: [],
       saleList: [],
-      customerList: []
+      customerList: [],
+      profile: { origin_name: '' },
+      loading: false
     }
   },
   methods: {
+    init() {
+      this.loading = true
+      this.$request.checkVipInfo(this.id).then(res => {
+        this.profile = res.data
+        this.loading = false
+      })
+    },
     //确定合并
     mergeConfirm() {
       if (!this.target) {
         return this.$message.error(this.$t('请输入目标客户ID'))
       }
       this.targetID = this.target.split('---')[0]
-      this.$request.mergeCustomer(this.customerId, this.targetID).then(res => {
+      this.$request.mergeCustomer(this.id, this.targetID).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
