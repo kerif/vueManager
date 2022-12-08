@@ -4999,3 +4999,8 @@ exports.updateChangePrice = params => {
 exports.getChangePrice = () => {
   return $form.get(`client-setting`)
 }
+
+// 充值记录 数据统计
+exports.getdataSummary = params => {
+  return $form.get(`recharge-records/total-sum`, { params })
+}
