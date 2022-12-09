@@ -7,13 +7,13 @@
   >
     <el-form :model="form">
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('用户ID')" class="label-sty">
             <span>{{ userId }}</span>
             <!-- <el-input v-model="form.receiver_name"></el-input> -->
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('国家地区')" class="label-sty">
             <!-- <span>{{form.country_name}}</span> -->
             <el-select
@@ -29,13 +29,13 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
-          <el-form-item :label="$t('收件人')" class="label-sty">
+        <el-col :span="12">
+          <el-form-item :label="$t('姓名')" class="label-sty">
             <!-- <span>{{form.receiver_name}}</span> -->
             <el-input class="input-sty" v-model="form.receiver_name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('城市')" class="label-sty">
             <!-- <span>{{form.city}}</span> -->
             <el-input class="input-sty" v-model="form.city"></el-input>
@@ -43,13 +43,13 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('联系电话')" class="label-sty">
             <!-- <span>{{form.phone}}</span> -->
             <el-input class="input-sty" v-model="form.phone"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('街道')" class="label-sty">
             <!-- <span>{{form.street}}</span> -->
             <el-input class="input-sty" v-model="form.street"></el-input>
@@ -57,13 +57,13 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('身份证号码')" class="label-sty">
             <!-- <span>{{form.id_card}}</span> -->
             <el-input class="input-sty" v-model="form.id_card"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('门牌号')" class="label-sty">
             <!-- <span>{{form.door_no}}</span> -->
             <el-input class="input-sty" v-model="form.door_no"></el-input>
@@ -71,13 +71,13 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('微信号')" class="label-sty">
             <!-- <span>{{form.wechat_id}}</span> -->
             <el-input class="input-sty" v-model="form.wechat_id"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('邮编')" class="label-sty">
             <!-- <span>{{form.postcode}}</span> -->
             <el-input class="input-sty" v-model="form.postcode"></el-input>
@@ -85,7 +85,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('邀请人')" prop="invitorId" class="label-sty">
             <!-- <el-input v-model="ruleForm.name_cn"
           placeholder="请输入用户id"></el-input> -->
@@ -99,7 +99,7 @@
             </el-autocomplete>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item class="label-sty">
             <span>{{ $t('会员识别码') }}</span>
             <el-tooltip
@@ -119,10 +119,10 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="12">
           <span class="red-sty">*{{ $t('修改邀请人的操作将会被日志记录,请谨慎操作') }}</span>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="$t('备注')" class="label-sty">
             <el-input
               type="textarea"
@@ -146,6 +146,15 @@
               ></el-option>
             </el-select>
             <el-button style="margin-left: 5px" @click="saveTag">{{ $t('保存') }}</el-button>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('邮箱')" class="label-sty">
+            <el-input
+              v-model="form.email"
+              :placeholder="$t('请输入邮箱')"
+              class="input-sty"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -175,7 +184,8 @@ export default {
         clearance_code: '',
         id_card: '',
         area: '',
-        remark: ''
+        remark: '',
+        email: ''
       },
       remarkName: '',
       invitorId: '',
@@ -211,6 +221,7 @@ export default {
           this.invitorId = res.data.invitor_id.toString()
           console.log(typeof this.invitorId, 'this.invitorId')
           this.form.remark = res.data.profile && res.data.profile.remark
+          this.form.email = res.data.profile && res.data.profile.email
         }
       })
     },
