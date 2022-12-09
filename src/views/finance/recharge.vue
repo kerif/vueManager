@@ -183,6 +183,8 @@ export default {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
+  },
+  activated() {
     if (this.$route.query.times) {
       this.timeList = this.$route.query.times.split(' ')
       this.begin_date = this.timeList[0]
@@ -323,11 +325,18 @@ export default {
           size: this.page_params.size,
           payment_type: this.type,
           status: this.status,
-          confirm_amount: this.amount
+          confirm_amount: this.amount,
+          keyword: this.page_params.keyword,
+          begin_date: this.begin_date,
+          end_date: this.end_date
         })
         .then(res => {
           this.sumAmount = res.data.amount
         })
+    },
+    goSearch() {
+      this.getList()
+      this.getAmount()
     },
     // 重置表单
     resetForm() {
@@ -341,6 +350,7 @@ export default {
       this.onTime(this.timeList)
       this.onVocherTypeChange()
       this.onShipStatus()
+      this.getAmount()
     }
   }
 }
