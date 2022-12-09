@@ -164,6 +164,12 @@ export default [
     name: '物流状态',
     width: '100',
     checked: true
+  },
+  {
+    id: 'created_at', // 1,2,3,4
+    name: '',
+    width: '160',
+    checked: true
   }
   // {
   //   id: 'pack_status_name',
