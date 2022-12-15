@@ -71,12 +71,12 @@
       </el-table-column>
       <el-table-column :label="$t('联系人')" prop="contact_name"></el-table-column>
       <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
-      <el-table-column :label="$t('下单数')" width="100">
+      <el-table-column :label="$t('推广下单数')" width="100">
         <template slot-scope="scope">
           <span style="color: blue">{{ scope.row.deal_order }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('成交数')" width="100">
+      <el-table-column :label="$t('推广成交数')" width="100">
         <template slot-scope="scope">
           <span style="color: red">{{ scope.row.deal_order }}</span>
         </template>
