@@ -71,7 +71,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="product" v-if="this.config.channel">
+      <el-form-item label="channel" v-if="this.config.channel">
         <el-select v-model="form.channel">
           <el-option
             v-for="item in channelData"
@@ -210,10 +210,10 @@ export default {
           if (res.data.channel) {
             let channel = res.data.channel
 
-            this.productData = channel.map(item => {
+            this.channelData = channel.map(item => {
               return {
-                value: item['name'],
-                label: item['code']
+                value: item['code'],
+                label: item['code'] + '-' + item['name']
               }
             })
 
