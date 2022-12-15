@@ -398,7 +398,7 @@ export default {
     width: 100%;
     height: 300px;
   }
-  /deep/.el-drawer__open .el-drawer.rtl {
+  ::v-deep.el-drawer__open .el-drawer.rtl {
     width: 90% !important;
   }
   .el-drawer.rtl {

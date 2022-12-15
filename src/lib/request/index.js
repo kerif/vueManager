@@ -570,16 +570,28 @@ exports.exportList = params => {
   return $form.get('user-addresses/export', { params })
 }
 // 客户 客户包裹列表
-exports.packageList = id => {
-  return $form.get(`users/${id}/packages`)
+exports.packageList = (id, params) => {
+  return $form.get(`users/${id}/packages`, { params })
 }
 // 客户 客户订单列表
-exports.orderList = id => {
-  return $form.get(`users/${id}/orders`)
+exports.orderList = (id, params) => {
+  return $form.get(`users/${id}/orders`, { params })
 }
 // 客户 客户地址列表
-exports.addressList = id => {
-  return $form.get(`users/${id}/addresses`)
+exports.addressList = (id, params) => {
+  return $form.get(`users/${id}/addresses`, { params })
+}
+// 客户 积分记录
+exports.pointList = (id, params) => {
+  return $form.get(`users/${id}/point-records`, { params })
+}
+// 客户 交易记录
+exports.transactionList = (id, params) => {
+  return $form.get(`users/${id}/transactions`, { params })
+}
+// 客户 成长值
+exports.growthList = (id, params) => {
+  return $form.get(`users/${id}/growth-records`, { params })
 }
 // 员工列表允许登录
 exports.allowUser = ids => {
@@ -3947,8 +3959,8 @@ exports.getPickEcharts = params => {
   return $form.get('station-statistics', { params })
 }
 // 订单列表 获取国家地区（一级）
-exports.getCountriesList = () => {
-  return $form.get('countries/list')
+exports.getCountriesList = params => {
+  return $form.get('countries/list', { params })
 }
 // 订单列表 获取国家地区（剩余级）
 exports.getCountriesSecondList = params => {

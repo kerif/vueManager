@@ -165,7 +165,7 @@ export default {
     float: right;
     width: 200px;
   }
-  /deep/.el_table .top-side {
+  ::v-deep.el_table .top-side {
     margin-top: 10px;
   }
   .img_box {

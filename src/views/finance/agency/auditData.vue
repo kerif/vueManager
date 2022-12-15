@@ -264,10 +264,10 @@ export default {
     .refuse {
       color: #e6a23c;
     }
-    /deep/.el-table th > .cell {
+    ::v-deep.el-table th > .cell {
       text-align: center;
     }
-    /deep/.el-table .cell {
+    ::v-deep.el-table .cell {
       text-align: center;
     }
   }

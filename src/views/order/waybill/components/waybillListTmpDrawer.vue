@@ -297,10 +297,10 @@ export default {
   .active {
     border: 1px solid #3540a5 !important;
   }
-  /deep/.el-dialog__close {
+  ::v-deep.el-dialog__close {
     color: black !important;
   }
-  /deep/.el-icon-close:before {
+  ::v-deep.el-icon-close:before {
     color: black;
   }
   .template-item {
