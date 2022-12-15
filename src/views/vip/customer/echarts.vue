@@ -88,7 +88,13 @@
     <div class="echarts-bottom">
       <h3>{{ $t('新增客户下单排行榜') }}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData">
-        <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+        <el-table-column :label="$t('客户ID')" prop="user_id">
+          <template slot-scope="scope">
+            <el-button type="text" @click="viewProfile(scope.row.user_id)">{{
+              scope.row.user_id
+            }}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
         <el-table-column :label="$t('成交订单数')" prop="order_count"></el-table-column>
         <el-table-column :label="$t('成交金额')" prop="order_amount"></el-table-column>
@@ -130,6 +136,7 @@
 import echarts from 'echarts'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   components: {
     NlePagination
@@ -223,6 +230,9 @@ export default {
     }
   },
   methods: {
+    viewProfile(id) {
+      dialog({ type: 'vipProfile', id: id })
+    },
     // 客户树状图
     getColumnar() {
       let params = {

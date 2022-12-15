@@ -33,10 +33,14 @@
             <el-descriptions-item label="用户组">{{
               profile.user_group !== undefined ? profile.user_group.name_cn : ''
             }}</el-descriptions-item>
-            <el-descriptions-item label="余额">{{ profile.balance }}</el-descriptions-item>
-            <el-descriptions-item label="消费总额">{{
-              profile.consume_amount
-            }}</el-descriptions-item>
+            <el-descriptions-item label="余额"
+              ><span style="color: red; font-size: 18px"> {{ profile.balance }} </span>
+            </el-descriptions-item>
+            <el-descriptions-item label="消费总额"
+              ><span style="color: blue; font-size: 18px">
+                {{ profile.consume_amount }}</span
+              ></el-descriptions-item
+            >
             <el-descriptions-item label="积分">{{ profile.point }}</el-descriptions-item>
             <el-descriptions-item label="成长值">{{ profile.growth_value }}</el-descriptions-item>
             <el-descriptions-item label="邀请人">{{ profile.invitor }}</el-descriptions-item>
