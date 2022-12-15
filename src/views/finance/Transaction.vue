@@ -32,6 +32,7 @@
         size="mini"
         clearable
         class="changeVou"
+        multiple
         :placeholder="$t('交易类型')"
       >
         <el-option v-for="item in recordChange" :key="item.id" :value="item.id" :label="item.name">
@@ -161,7 +162,7 @@ export default {
       end_date: '',
       type: '',
       line: '',
-      record: '',
+      record: [],
       voucherChange: [],
       recordChange: [],
       linesChange: [],
@@ -175,7 +176,6 @@ export default {
     NlePagination
   },
   created() {
-    this.onInit()
     this.getList()
     this.getTypes()
     this.getRecord()
@@ -183,17 +183,20 @@ export default {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
-    if (this.$route.query.times) {
-      this.timeList = this.$route.query.times.split(' ')
-      this.begin_date = this.timeList[0]
-      this.end_date = this.timeList[1]
-    }
   },
   mounted() {
     // this.getList()
     // this.getTypes()
     // this.getRecord()
     // this.getLines()
+  },
+  activated() {
+    this.onInit()
+    if (this.$route.query.times) {
+      this.timeList = this.$route.query.times.split(' ')
+      this.begin_date = this.timeList[0]
+      this.end_date = this.timeList[1]
+    }
   },
   methods: {
     getList() {
@@ -327,7 +330,7 @@ export default {
       this.timeList = []
       this.line = ''
       this.type = ''
-      this.record = ''
+      this.record = []
     },
     // 提交表单
     submitForm() {
@@ -336,10 +339,11 @@ export default {
       this.onVocherTypeChange()
     },
     onInit() {
-      // if (this.$route.query.id) {
-      //   this.page_params.keyword = this.$route.query.id
-      //   this.getList()
-      // }
+      if (this.$route.query.keyword) {
+        this.page_params.keyword = String(this.$route.query.keyword)
+        this.record = [1, 5, 8]
+        this.getList()
+      }
     }
   }
 }
