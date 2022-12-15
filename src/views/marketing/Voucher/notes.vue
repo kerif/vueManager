@@ -20,16 +20,16 @@
       <!-- 付款时间 -->
       <el-table-column :label="$t('付款时间')" prop="paid_at"></el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <tx-pagination :pageParams="page_params"></tx-pagination>
   </div>
 </template>
 
 <script>
-import NlePagination from '@/components/pagination'
+import TxPagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    NlePagination
+    TxPagination
   },
   mixins: [pagination],
   data() {

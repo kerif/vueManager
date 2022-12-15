@@ -3240,6 +3240,10 @@ exports.userCoupons = (id, params) => {
 exports.disableCoupons = id => {
   return $form.patch(`coupons/${id}/disable`)
 }
+// 删除
+exports.deleteCoupons = id => {
+  return $form.delete(`coupons/${id}/disable`)
+}
 
 /**
  * 上传图片
