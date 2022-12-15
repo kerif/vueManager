@@ -107,6 +107,7 @@
           v-for="item in formatLangData"
           :key="item.id"
           align="center"
+          width="130"
         >
           <template slot-scope="scope">
             <span

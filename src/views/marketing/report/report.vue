@@ -155,7 +155,11 @@
           :label="$t('客户ID')"
           prop="id"
           v-if="activeName === '4' || activeName === '5'"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <el-button type="text" @click="viewProfile(scope.row.id)">{{ scope.row.id }}</el-button>
+          </template>
+        </el-table-column>
         <!-- 客户昵称 -->
         <el-table-column
           :label="$t('客户昵称')"
@@ -247,6 +251,9 @@ export default {
     this.getList()
   },
   methods: {
+    viewProfile(id) {
+      dialog({ type: 'vipProfile', id: id })
+    },
     getList() {
       // this.tableLoading = true
       // this.oderData = []

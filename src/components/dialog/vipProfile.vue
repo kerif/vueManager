@@ -406,13 +406,21 @@ export default {
     },
     init() {
       this.show = true
+      this.activeTabName = 'parcel'
       this.getProfile()
+      this.couponParams.page = 1
       this.getCouponList()
+      this.invitationParams.page = 1
       this.getInvitationsList()
+      this.orderParams.page = 1
       this.getOrderList()
+      this.packageParams.page = 1
       this.getPackageList()
+      this.pointParams.page = 1
       this.getPointList()
+      this.transactionParams.page = 1
       this.getTransactionList()
+      this.growthParams.page = 1
       this.getGrowthList()
     },
     getProfile() {
