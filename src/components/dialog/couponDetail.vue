@@ -3,7 +3,7 @@
     <div class="pad" v-if="couponInfo">
       <el-descriptions :title="couponInfo.name" :column="4" border>
         <el-descriptions-item :label="$t('类型')">
-          {{ $t('type') }}
+          {{ couponInfo.type }}
         </el-descriptions-item>
         <el-descriptions-item :label="$t('最低消费')">{{
           couponInfo.threshold
