@@ -178,7 +178,7 @@ export default {
         radio: 1
       },
       submiting: false,
-      loading: true,
+      loading: false,
       templateData: [],
       countryList: [], // 获取全部国家
       options: [],
