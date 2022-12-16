@@ -180,6 +180,8 @@ import areaChooseCountry from './areaChooseCountry.vue'
 import batchAddPostCode from './batchAddPostCode.vue'
 import vipChangePassword from './vipChangePassword.vue'
 import vipMerge from './vipMerge.vue'
+import oneSevenTracking from './17Tracking.vue'
+import couponDetail from './couponDetail.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -359,6 +361,8 @@ const areaChooseCountryController = Vue.extend(areaChooseCountry)
 const batchAddPostCodeController = Vue.extend(batchAddPostCode)
 const vipChangePasswordController = Vue.extend(vipChangePassword)
 const vipMergeController = Vue.extend(vipMerge)
+const oneSevenTrackingController = Vue.extend(oneSevenTracking)
+const couponDetailController = Vue.extend(couponDetail)
 
 const mixin = {
   data() {
@@ -1625,6 +1629,20 @@ function initInstance(type) {
     // 合并用户
     case 'vipMerge':
       instance = new vipMergeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 17tracking
+    case '17Tracking':
+      instance = new oneSevenTrackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 优化券详细
+    case 'couponDetail':
+      instance = new couponDetailController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

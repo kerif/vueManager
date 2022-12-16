@@ -57,12 +57,16 @@
         <!-- 优惠券名称 -->
         <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
         <!-- 类型 -->
-        <el-table-column :label="$t('类型')" prop="type"></el-table-column>
+        <el-table-column :label="$t('类型')" prop="type" width="180"></el-table-column>
         <!-- 金额 -->
-        <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
+        <el-table-column
+          :label="$t('金额') + this.localization.currency_unit"
+          prop="amount"
+          width="120"
+        >
         </el-table-column>
         <!-- 状态 -->
-        <el-table-column :label="$t('状态')" prop="status">
+        <el-table-column :label="$t('状态')" prop="status" width="120">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未开始') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('进行中') }}</span>
@@ -78,27 +82,32 @@
           </template>
         </el-table-column>
         <!-- 最低消费金额 -->
-        <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+        <el-table-column :label="$t('最低消费金额')" prop="threshold" width="120"></el-table-column>
         <!-- 失效时间 -->
-        <el-table-column :label="$t('失效时间')" prop="expired_at"></el-table-column>
+        <el-table-column :label="$t('失效时间')" prop="expired_at" width="160"></el-table-column>
         <!-- 投放数量 -->
-        <el-table-column :label="$t('投放数量')" prop="total_count"></el-table-column>
+        <el-table-column :label="$t('投放数量')" prop="total_count" width="80"></el-table-column>
         <!-- 使用数量 -->
-        <el-table-column :label="$t('使用数量')">
+        <el-table-column :label="$t('使用数量')" width="80">
           <template slot-scope="scope">
             <span v-bind:style="{ color: scope.row.used_count > 0 ? 'blue' : '' }">{{
               scope.row.used_count
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('待使用数量')" prop="unused_count"></el-table-column>
-        <el-table-column :label="$t('过期数量')" prop="expired_count"></el-table-column>
-        <el-table-column :label="$t('作废数量')" prop="invalid_count"></el-table-column>
+        <el-table-column
+          :label="$t('待使用数量')"
+          prop="unused_count"
+          width="100"
+        ></el-table-column>
+        <el-table-column :label="$t('过期数量')" prop="expired_count" width="80"></el-table-column>
+        <el-table-column :label="$t('作废数量')" prop="invalid_count" width="80"></el-table-column>
         <el-table-column
           :label="item.name"
           v-for="item in formatLangData"
           :key="item.id"
           align="center"
+          width="130"
         >
           <template slot-scope="scope">
             <span
@@ -141,11 +150,18 @@
               @click="obsolete(scope.row.id)"
               >{{ $t('作废') }}</el-button
             >
+            <!-- 删除 -->
+            <el-button
+              class="btn-light-red detailsBtn"
+              v-if="scope.row.used_count === 0"
+              @click="onDelete(scope.row.id)"
+              >{{ $t('删除') }}</el-button
+            >
             <!-- 记录 -->
             <el-button
               size="small"
               class="btn-dark-green detailsBtn"
-              @click="recoding(scope.row.id)"
+              @click="recoding(scope.row)"
               >{{ $t('记录') }}</el-button
             >
             <el-button
@@ -393,6 +409,30 @@ export default {
     }
   },
   methods: {
+    onDelete(id) {
+      this.$confirm(this.$t('确定要删除优惠券吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCoupon(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     getList() {
       this.tableLoading = true
       this.voucherData = []
@@ -466,8 +506,8 @@ export default {
       this.customerList.splice(index, 1)
     },
     // 记录
-    recoding(id) {
-      this.$router.push({ name: 'notes', query: { id: id } })
+    recoding(couponInfo) {
+      dialog({ type: 'couponDetail', couponInfo }, () => {})
     },
     // 分享
     share(id) {
