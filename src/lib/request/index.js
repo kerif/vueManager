@@ -3386,6 +3386,11 @@ exports.deleteOrderTable = (shipId, id) => {
 exports.getAloneOrder = id => {
   return $form.get(`orders/${id}/logistics`)
 }
+
+// 发货单 导出自提点PDF
+exports.exportShipmentStationOrdersPdf = id => {
+  return $form.get(`shipments/${id}/station-orders-pdf`)
+}
 // 订单 打包 获取线路详情
 exports.getUsable = (id, params) => {
   return $form.get(`orders/${id}/usable-express-lines`, { params })
