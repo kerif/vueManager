@@ -131,8 +131,23 @@
         <el-tab-pane :label="`成交流水记录(${transactionParams.total})`" name="paylogs">
           <el-table :data="transactionList" border style="width: 100%">
             <el-table-column type="index" width="50"> </el-table-column>
-            <el-table-column prop="payment_type" label="类型" width="180"> </el-table-column>
-            <el-table-column prop="payment_type_name" label="支付类型"> </el-table-column>
+            <!-- 类型 -->
+            <el-table-column :label="$t('类型')" width="150">
+              <template slot-scope="scope">
+                <span v-if="scope.row.type === 1">{{ $t('消费') }}</span>
+                <span v-if="scope.row.type === 2">{{ $t('充值') }}</span>
+                <span v-if="scope.row.type === 3">{{ $t('退款') }}</span>
+                <span v-if="scope.row.type === 4">{{ $t('提现') }}</span>
+                <span v-if="scope.row.type === 5">{{ $t('扣款') }}</span>
+                <span v-if="scope.row.type === 6">{{ $t('充值赠送') }}</span>
+                <span v-if="scope.row.type === 7">{{ $t('补款') }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="payment_type_name"
+              label="支付类型"
+              width="150"
+            ></el-table-column>
             <el-table-column prop="order_amount" label="应付金额"> </el-table-column>
             <el-table-column prop="coupon_amount" label="抵用券金额"> </el-table-column>
             <el-table-column prop="point_amount" label="积分抵扣金额"> </el-table-column>
@@ -206,7 +221,13 @@
           <tx-pagination :pageParams="couponParams"></tx-pagination>
         </el-tab-pane>
         <el-tab-pane :label="`邀请记录(${invitationParams.total})`" name="invite">
-          <el-button type="primary" plain @click="transferAgent">转为代理</el-button>
+          <el-button
+            type="primary"
+            plain
+            @click="transferAgent"
+            :disabled="invitationList.length === 0"
+            >一键转为代理客户</el-button
+          >
           <div class="agent-text">
             {{ $t('提示: 成为代理之前邀请的客户一键转为代理客户') }}
           </div>

@@ -47,6 +47,7 @@
           <el-form-item :label="$t('联系电话')" class="label-sty">
             <!-- <span>{{form.phone}}</span> -->
             <el-input class="input-sty" v-model="form.phone"></el-input>
+            <div class="red-sty">* 本处为非注册登录电话</div>
           </el-form-item>
         </el-col>
         <el-col :span="10">

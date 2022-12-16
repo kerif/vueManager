@@ -415,7 +415,7 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.deleteCoupons(id).then(res => {
+        this.$request.deleteCoupon(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
