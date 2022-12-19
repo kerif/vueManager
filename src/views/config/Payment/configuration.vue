@@ -199,6 +199,9 @@
                   <el-menu-item index="5">
                     {{ $t('自定义标签') }}
                   </el-menu-item>
+                  <el-menu-item index="6">
+                    {{ $t('申报商品库管理') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -221,6 +224,10 @@
             <!-- 自定义标签 -->
             <el-col :span="19" v-if="secondTab4 === '5'" class="main-right">
               <custom-label></custom-label>
+            </el-col>
+            <!-- 申报商品库名称 -->
+            <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
+              <store-goods></store-goods>
             </el-col>
           </el-row>
         </div>
@@ -252,6 +259,7 @@ import Commodity from './commodity.vue'
 import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
+import StoreGoods from './storeGoods.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
@@ -283,7 +291,8 @@ export default {
     boxConfigure,
     presetPack,
     addressConfig,
-    packPriceChange
+    packPriceChange,
+    StoreGoods
     // GroupConfigure
   },
   mixins: [pagination],

@@ -1,6 +1,8 @@
 <template>
   <div class="string-container">
     <div class="headerList">
+      <el-button @click="derive">{{$t('导出')}}</el-button>
+      <el-button @click="leadIn">{{$t('导入')}}</el-button>
       <div class="select-box">
         <add-btn @click.native="addString">{{ $t('添加') }}</add-btn>
       </div>
@@ -101,6 +103,29 @@ export default {
     this.getList()
   },
   methods: {
+    leadIn(){
+      dialog({ type: 'leadIn', state: '', id: '' }, () => {
+        this.getList()
+      })
+    },
+    derive(){
+      this.$request.derive().then(res=>{
+        if (res.ret) {
+          window.open(res.data)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 获取转账支付
     getList() {
       this.tableLoading = true
