@@ -137,6 +137,26 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
+          <el-form-item :label="$t('地址')" class="label-sty">
+            <el-input
+              v-model="form.address"
+              :placeholder="$t('请输入地址')"
+              class="input-sty"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('邮箱')" class="label-sty">
+            <el-input
+              v-model="form.email"
+              :placeholder="$t('请输入邮箱')"
+              class="input-sty"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
           <el-form-item :label="$t('客户标签')" class="label-sty">
             <el-select v-model="tag_ids" multiple clearable>
               <el-option
@@ -147,15 +167,6 @@
               ></el-option>
             </el-select>
             <el-button style="margin-left: 5px" @click="saveTag">{{ $t('保存') }}</el-button>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('邮箱')" class="label-sty">
-            <el-input
-              v-model="form.email"
-              :placeholder="$t('请输入邮箱')"
-              class="input-sty"
-            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -208,7 +219,7 @@ export default {
           this.form.receiver_name = res.data.profile && res.data.profile.receiver_name
           this.form.phone = res.data.profile && res.data.profile.phone
           this.form.timezone = res.data.profile && res.data.profile.timezone
-          this.form.country_id = res.data.profile && res.data.profile.country_id
+          this.form.country_id = res.data.profile ? Number(res.data.profile.country_id) : ''
           this.form.door_no = res.data.profile && res.data.profile.door_no
           this.form.city = res.data.profile && res.data.profile.city
           this.form.postcode = res.data.profile && res.data.profile.postcode
