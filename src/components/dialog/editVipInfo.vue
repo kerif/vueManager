@@ -140,6 +140,7 @@
           <el-form-item :label="$t('地址')" class="label-sty">
             <el-input
               v-model="form.address"
+              type="textarea"
               :placeholder="$t('请输入地址')"
               class="input-sty"
             ></el-input>
