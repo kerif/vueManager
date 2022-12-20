@@ -1363,7 +1363,7 @@ export default {
             ftime: res.data.created_at
           }
         ]
-        this.boxData = res.data.box.forEach(item => {
+        res.data.box.forEach(item => {
           let maxData = Math.max(item.length, item.width, item.height)
           let minData = Math.min(item.length, item.width, item.height)
           console.log(maxData, minData)
@@ -1377,6 +1377,7 @@ export default {
           console.log(midData)
           item.volumeGirth = maxData + (midData + minData) * 2
         })
+        this.boxData = res.data.box
         this.userId = res.data.user_id
         //如果是单箱出库
         if (this.form.box_type === 1) {
