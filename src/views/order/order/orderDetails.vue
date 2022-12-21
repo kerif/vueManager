@@ -58,6 +58,7 @@
         </el-row>
       </div>
     </div>
+    <!---预报信息 基础信息开始 -->
     <div class="forecast-sty">
       <div class="information-sty">{{ $t('预报信息') }}</div>
     </div>
@@ -133,6 +134,7 @@
           </el-row>
         </el-form>
       </div>
+      <!---预报信息 基础信息商品信息 -->
       <div class="receiverMSg msg-top">
         <div class="flex">
           <h4 class="all-group">{{ $t('商品信息') }}</h4>
@@ -176,17 +178,17 @@
               >
               </el-cascader>
             </el-col>
-            <!-- <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('物品照片') }}</span>
-            <div class="left-img" v-for="item in form.package_pictures" :key="item.id">
-              <span
-                style="cursor: pointer"
-                @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
-              >
-                <img class="productImg" :src="`${$baseUrl.IMAGE_URL}${item}`" />
-              </span>
-            </div>
-          </el-col> -->
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('物品照片') }}</span>
+              <div class="left-img" v-for="item in form.item_pictures" :key="item.id">
+                <span
+                  style="cursor: pointer"
+                  @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+                >
+                  <img class="productImg" :src="`${$baseUrl.IMAGE_URL}${item}`" />
+                </span>
+              </div>
+            </el-col>
             <!-- 转运快递公司 -->
             <!-- <el-col :span="7" :offset="1">
              <span class="leftWidth">{{$t('转运快递公司')}}</span>

@@ -9,12 +9,6 @@
         <el-button class="btn-light-red" @click="uploadList" size="mini">{{
           $t('导出清单')
         }}</el-button>
-        <el-button
-          class="btn-light-red"
-          v-if="allow_delete === 1"
-          @click="onDelAddress(selectIDs)"
-          >{{ $t('批量删除') }}</el-button
-        >
         <el-button class="btn-main" @click="tagManage">{{ $t('标签管理') }}</el-button>
       </div>
       <div>
@@ -125,7 +119,13 @@
     </el-table>
     <div class="flex-btn">
       <div class="flex-left">
-        <el-button class="btn-light-red" @click="onBatch">{{ $t('批量审核') }}</el-button>
+        <el-button class="btn-light-green" @click="onBatch">{{ $t('批量审核') }}</el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="allow_delete === 1"
+          @click="onDelAddress(selectIDs)"
+          >{{ $t('批量删除') }}</el-button
+        >
       </div>
       <div class="flex-right">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
