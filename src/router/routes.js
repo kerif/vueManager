@@ -341,6 +341,10 @@ const groupSet = loadonDemand('group/groupSet')
 const contentMana = loadonDemand('group/contentMana')
 // 内容编辑
 const editContent = loadonDemand('group/editContent')
+
+// 订单 上门取件
+const pickupList = loadonDemand('order/pickup/pickupList')
+
 export default [
   {
     path: '/',
@@ -910,6 +914,17 @@ export default [
               level: 2,
               group: '订单',
               name: '申报信息'
+            }
+          },
+          {
+            path: '/order/pickup',
+            name: 'pickup',
+            component: pickupList,
+            id: 405,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '上门取件'
             }
           },
           {

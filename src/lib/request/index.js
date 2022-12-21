@@ -5025,3 +5025,34 @@ exports.getChangePrice = () => {
 exports.getdataSummary = params => {
   return $form.get(`recharge-records/total-sum`, { params })
 }
+
+// -------这里是取件相关的------------
+// 取件详细
+exports.pickupInfo = id => {
+  return $form.get(`pickup/${id}`)
+}
+
+//取件列表
+exports.pickupList = params => {
+  return $form.get(`pickup/`, { params })
+}
+
+//删除取件
+exports.pickupDelete = id => {
+  return $form.delete(`pickup/${id}`)
+}
+
+//取件转运单号
+exports.pickupSetTrackingInfo = id => {
+  return $form.post(`pickup/${id}/tracking`)
+}
+
+//取件设置审核
+exports.pickupSetCheck = id => {
+  return $form.post(`pickup/${id}/tracking`)
+}
+
+//导出取件
+exports.pickupExport = params => {
+  return $form.post(`pickup/export`, params)
+}

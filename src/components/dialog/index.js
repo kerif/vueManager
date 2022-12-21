@@ -182,6 +182,8 @@ import vipChangePassword from './vipChangePassword.vue'
 import vipMerge from './vipMerge.vue'
 import oneSevenTracking from './17Tracking.vue'
 import couponDetail from './couponDetail.vue'
+import pickupDetail from './pickupDetail.vue'
+import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -363,6 +365,8 @@ const vipChangePasswordController = Vue.extend(vipChangePassword)
 const vipMergeController = Vue.extend(vipMerge)
 const oneSevenTrackingController = Vue.extend(oneSevenTracking)
 const couponDetailController = Vue.extend(couponDetail)
+const pickupDetailController = Vue.extend(pickupDetail)
+const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
 
 const mixin = {
   data() {
@@ -1643,6 +1647,20 @@ function initInstance(type) {
     // 优化券详细
     case 'couponDetail':
       instance = new couponDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 取件详细
+    case 'pickupDetail':
+      instance = new pickupDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 设置转运单号
+    case 'pickupSetTrackingInfo':
+      instance = new pickupSetTrackingController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
