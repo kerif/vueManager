@@ -35,7 +35,7 @@
       </div>
     </div>
     <div>
-      <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
+      <el-tabs v-model="statusId" @tab-click="onTabChange" class="tab-length" stretch>
         <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
         <el-tab-pane
           :label="`${$t('待审核')} (${countData.wait_in_storage || 0})`"
@@ -47,13 +47,21 @@
         ></el-tab-pane>
         <el-tab-pane :label="`${$t('转运中')} (${countData.packed || 0})`" name="3"></el-tab-pane>
         <el-tab-pane :label="`${$t('已入库')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
-        <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       </el-tabs>
     </div>
     <div class="tools-bar">
-      <el-button type="danger" size="mini" plain @click="onDelete">删除</el-button>
-      <el-button type="success" size="mini" plain @click="onSetCheck">设为审核</el-button>
-      <el-button type="success" size="mini" plain @click="onSetTrackingNumber"
+      <el-button type="danger" size="mini" plain @click="onDelete" v-if="statusId === '1'"
+        >删除</el-button
+      >
+      <el-button type="success" size="mini" plain @click="onSetCheck('')" v-if="statusId === '1'"
+        >设为审核</el-button
+      >
+      <el-button
+        type="success"
+        size="mini"
+        plain
+        @click="onSetTrackingNumber('')"
+        v-if="statusId === '2' || statusId === '3'"
         >设置转运单号</el-button
       >
       <el-button type="info" size="mini" plain @click="onExport">导出</el-button>
@@ -63,76 +71,72 @@
         border
         stripe
         ref="table"
-        :data="orderData"
+        :data="dataList"
         @selection-change="onSelectionChange"
         v-loading="tableLoading"
         height="calc(100vh - 370px)"
         class="order-data-list"
       >
         <el-table-column
-          :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
-          :key="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
+          :type="['1', '2', '6'].includes(statusId) ? 'selection' : 'index'"
+          :key="['1', '2', '6'].includes(statusId) ? 'selection' : 'index'"
           width="55"
           align="center"
         ></el-table-column>
-        <el-table-column
-          :label="$t('预约单号')"
-          prop="package_name"
-          show-overflow-tooltip
-        ></el-table-column>
+        <el-table-column :label="$t('预约单号')" prop="sn" show-overflow-tooltip></el-table-column>
 
-        <el-table-column
-          :label="$t('会员ID')"
-          prop="package_name"
-          width="150"
-          show-overflow-tooltip
-        ></el-table-column>
+        <el-table-column :label="$t('会员ID')" prop="user_id" width="150"></el-table-column>
 
         <el-table-column
           :label="$t('状态')"
-          prop="package_name"
-          key="package_name"
+          prop="status"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
 
         <el-table-column
           :label="$t('转运公司')"
-          prop="package_name"
+          prop="express_company"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('转运单号')"
-          prop="package_name"
+          prop="express_num"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('取件姓名')"
-          prop="package_name"
+          prop="address.name"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('取件城市')"
-          prop="package_name"
+          prop="address.city"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('取件电话')"
-          prop="package_name"
+          prop="address.phone"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column :label="$t('创建时间')" prop="package_name"></el-table-column>
+        <el-table-column :label="$t('预约时间')" prop="pickup_time"></el-table-column>
+        <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
 
         <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button @click="onViewDetail(scope.row.id)" size="mini">查看详细</el-button>
-            <el-button @click="onSetCheck([scope.row.id])" size="mini">设为审核</el-button>
-            <el-button @click="onSetTrackingNumber([scope.row])" size="mini"
+            <el-button v-if="scope.row.status === 1" @click="onSetCheck([scope.row.id])" size="mini"
+              >设为审核</el-button
+            >
+            <el-button
+              v-if="scope.row.status === 2 || scope.row.status === 3"
+              @click="onSetTrackingNumber([scope.row])"
+              size="mini"
               >设置转运单号</el-button
             >
           </template>
@@ -154,8 +158,8 @@ export default {
   mixins: [pagination],
   data() {
     return {
-      activeName: 0,
-      orderData: [],
+      statusId: 0,
+      dataList: [],
       tableLoading: false,
       countData: {},
       sumData: {},
@@ -173,43 +177,119 @@ export default {
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
-    if (this.$route.query.activeName) {
-      this.activeName = this.$route.query.activeName
+    if (this.$route.query.statusId) {
+      this.statusId = this.$route.query.statusId
     }
   },
-  mounted() {},
   methods: {
     onSearch() {
       this.page_params.page = 1
       this.getList()
     },
-    onTabChange() {},
-    onExport() {},
+    onTabChange() {
+      this.page_params.page = 1
+      this.getList()
+    },
+    onExport() {
+      const params = this.computedParams()
+      this.$request
+        .pickupExport(params)
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+        .catch(() => (this.tableLoading = false))
+    },
     onDelete() {
       if (!this.selectedRows || !this.selectedRows.length) {
         return this.$message.error(this.$t('请选择'))
+      }
+      let ids = []
+      if (!this.selectedRows || !this.selectedRows.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      for (let index = 0; index < this.selectedRows.length; index++) {
+        const element = this.selectedRows[index]
+        ids.push(element.id)
       }
       this.$confirm(this.$t('您要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.error('delete')
+        this.$request.pickupDelete({ ids: ids }).then(res => {
+          if (res.ret) {
+            this.getPickupDetail()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     onSelectionChange(selection) {
       this.selectedRows = selection
     },
-    onSetCheck() {
-      if (!this.selectedRows || !this.selectedRows.length) {
-        return this.$message.error(this.$t('请选择'))
+    onSetCheck(v) {
+      let ids = []
+      if (v === '') {
+        if (!this.selectedRows || !this.selectedRows.length) {
+          return this.$message.error(this.$t('请选择'))
+        }
+        for (let index = 0; index < this.selectedRows.length; index++) {
+          const element = this.selectedRows[index]
+          ids.push(element.id)
+        }
+      } else {
+        ids = v
       }
-    },
-    onSetTrackingNumber() {
-      dialog({
-        type: 'pickupSetTrackingInfo',
-        dataList: []
+      this.$request.pickupSetCheck({ ids: ids }).then(res => {
+        if (res.ret) {
+          this.dataList = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
+    },
+    onSetTrackingNumber(v) {
+      let ids = []
+      if (v === '') {
+        if (!this.selectedRows || !this.selectedRows.length) {
+          return this.$message.error(this.$t('请选择'))
+        }
+        for (let index = 0; index < this.selectedRows.length; index++) {
+          const element = this.selectedRows[index]
+          ids.push(element)
+        }
+      } else {
+        ids = v
+      }
+      dialog(
+        {
+          type: 'pickupSetTrackingInfo',
+          tableList: ids
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     onViewDetail(id) {
       dialog({
@@ -235,15 +315,15 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        status: this.activeName === '6' ? 19 : this.activeName,
+        status: this.statusId === 0 || this.statusId === '0' ? '' : this.statusId,
         keyword: this.searchFormData.keyword
       }
       const searchData = this.searchFormData
       params = {
         ...params,
         ...searchData,
-        begin_date: searchData.date ? searchData.date[0] : '',
-        end_date: searchData.date ? searchData.date[1] : ''
+        created_begin: searchData.created_at ? searchData.created_at[0] : '',
+        created_end: searchData.created_at ? searchData.created_at[1] : ''
       }
       return params
     },
@@ -251,18 +331,14 @@ export default {
       this.tableLoading = true
       const params = this.computedParams()
       this.$request
-        .getWarehouse(params)
+        .pickupList(params)
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.sumData = res.sum
+            this.dataList = res.data
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
-            if (this.orderData.length) {
-              this.page_params.total = res.meta.total
-            } else {
-              this.page_params.total = 0
-            }
+            this.page_params.total = res.meta.total
             this.$nextTick(() => {
               this.$refs.table.doLayout()
             })

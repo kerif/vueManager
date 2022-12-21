@@ -5029,35 +5029,40 @@ exports.getdataSummary = params => {
 // -------这里是取件相关的------------
 // 取件详细
 exports.pickupInfo = id => {
-  return $form.get(`pickup/${id}`)
+  return $form.get(`pickups/${id}`)
 }
 
 //取件列表
 exports.pickupList = params => {
-  return $form.get(`pickup/`, { params })
+  return $form.get(`pickups/`, { params })
 }
 
 //删除取件
-exports.pickupDelete = id => {
-  return $form.delete(`pickup/${id}`)
+exports.pickupDelete = params => {
+  return $form.put(`pickup/batch-delete`, params)
 }
 
 //取件转运单号
-exports.pickupSetTrackingInfo = id => {
-  return $form.post(`pickup/${id}/tracking`)
+exports.pickupSetTrackingInfo = params => {
+  return $json.put(`pickups/transport`, params)
 }
 
 //取件设置审核
-exports.pickupSetCheck = id => {
-  return $form.post(`pickup/${id}/tracking`)
+exports.pickupSetCheck = params => {
+  return $form.put(`pickups/review`, params)
 }
 
 //导出取件
 exports.pickupExport = params => {
-  return $form.post(`pickup/export`, params)
+  return $form.post(`pickups/export`, params)
 }
 
-//取件日期
-exports.pickupTimeConfig = params => {
-  return $form.post(`pickup/config`, params)
+//取件更新配置
+exports.pickupTimeUpdateConfig = params => {
+  return $form.put(`pickups/config`, params)
+}
+
+//取件读取配置
+exports.pickupTimeGetConfig = params => {
+  return $form.get(`pickups/config`, { params })
 }

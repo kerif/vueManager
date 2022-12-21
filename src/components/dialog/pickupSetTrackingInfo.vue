@@ -5,23 +5,23 @@
         <el-button @click="onBatchFill">批量设置</el-button>
         <el-table :data="tableList" border style="width: 100%">
           <el-table-column type="index" width="50"> </el-table-column>
-          <el-table-column prop="pickup_no" label="预约单号" width="180"> </el-table-column>
-          <el-table-column prop="express_company_id" label="快递公司" width="180">
+          <el-table-column prop="sn" label="预约单号" width="180"> </el-table-column>
+          <el-table-column prop="company" label="快递公司" width="180">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.express_company_id" clearable placeholder="请选择">
+              <el-select v-model="scope.row.company" clearable placeholder="请选择">
                 <el-option
                   v-for="item in expressCompanyList"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id"
+                  :value="item.name"
                 >
                 </el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="express_number" label="快递单号">
+          <el-table-column prop="express_num" label="快递单号">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.express_number"></el-input>
+              <el-input v-model="scope.row.express_num"></el-input>
             </template>
           </el-table-column>
         </el-table>
@@ -68,26 +68,7 @@ export default {
       batchFillValue: '',
       batchFillError: [],
       expressCompanyList: [],
-      tableList: [
-        {
-          id: 1,
-          pickup_no: 'YY0001',
-          express_company_id: '',
-          express_number: ''
-        },
-        {
-          id: 2,
-          pickup_no: 'YY0002',
-          express_company_id: '',
-          express_number: ''
-        },
-        {
-          id: 3,
-          pickup_no: 'YY0003',
-          express_company_id: '',
-          express_number: ''
-        }
-      ]
+      tableList: []
     }
   },
   created() {
@@ -113,17 +94,19 @@ export default {
         for (let index2 = 0; index2 < this.tableList.length; index2++) {
           const tableRowData = this.tableList[index2]
           // 如果是同一个取件单号
-          if (fillValueLineArr[0] === tableRowData.pickup_no) {
+          if (fillValueLineArr[0] === tableRowData.sn) {
             for (let index3 = 0; index3 < this.expressCompanyList.length; index3++) {
               const element3 = this.expressCompanyList[index3]
+
+              console.info('找到-->', element3.name, fillValueLineArr[1])
               if (element3.name === fillValueLineArr[1]) {
                 console.info('找到', fillValueLineArr)
-                this.tableList[index2].express_company_id = element3.id
+                this.tableList[index2].company = element3.name
                 found = true
                 break
               }
             }
-            this.tableList[index2].express_number = fillValueLineArr[2]
+            this.tableList[index2].express_num = fillValueLineArr[2]
           }
         }
         if (!found) {
@@ -136,16 +119,52 @@ export default {
       }
     },
     onSumbit() {
+      let requestData = []
+      let allok = true
       for (let index = 0; index < this.tableList.length; index++) {
         const element = this.tableList[index]
-        if (element.express_company_id === '' || element.express_company_id == 0) {
+        if (element.company === undefined || element.company === '') {
+          allok = false
           break
         }
-        if (element.express_number === '') {
+        if (element.express_num === '') {
+          allok = false
           break
         }
+        requestData.push({
+          sn: element.sn,
+          company: element.company,
+          express_num: element.express_num
+        })
       }
-      this.show = false
+
+      if (!allok) {
+        this.$notify({
+          title: this.$t('操作失败'),
+          message: '请填写转运信息',
+          type: 'warning'
+        })
+        return false
+      }
+
+      allok = true
+
+      this.$request.pickupSetTrackingInfo(requestData).then(res => {
+        if (!res.ret) {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        } else {
+          this.show = false
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        }
+      })
     },
     loadExpressCompanyList() {
       this.$request.getExpressData().then(res => {
@@ -153,6 +172,7 @@ export default {
       })
     },
     onClear() {
+      this.show = false
       this.batchFillValue = ''
     }
   }

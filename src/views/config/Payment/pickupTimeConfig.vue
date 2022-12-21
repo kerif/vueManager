@@ -2,19 +2,14 @@
   <div>
     <el-form :model="form" label-width="200px">
       <el-form-item :label="$t('可上门取件日期')">
-        <el-checkbox-group v-model="form.checkedWeeks" @change="handleCheckedWeekChange">
-          <el-checkbox v-for="week in weeks" :label="week.name" :value="week.id" :key="week.id">{{
+        <el-checkbox-group v-model="form.date">
+          <el-checkbox v-for="week in weeks" :label="week.id" :key="week.id">{{
             week.name
           }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item :label="$t('可预约未来时间')">
-        <el-input-number
-          v-model="form.available_pickup_day"
-          :min="1"
-          :max="10"
-          label="天"
-        ></el-input-number>
+        <el-input-number v-model="form.day" :min="1" :max="10" label="天"></el-input-number>
       </el-form-item>
       <el-form-item :label="$t('当天最早可预约时间')">
         <el-time-select
@@ -50,10 +45,10 @@ export default {
   data() {
     return {
       form: {
-        available_pickup_day: 2,
+        day: 2,
         begin_time: '10:00',
         end_time: '18:00',
-        checkedWeeks: []
+        date: []
       },
       weeks: [
         { id: 1, name: '周一' },
@@ -62,7 +57,7 @@ export default {
         { id: 4, name: '周四' },
         { id: 5, name: '周五' },
         { id: 6, name: '周六' },
-        { id: 8, name: '周日' }
+        { id: 7, name: '周日' }
       ]
     }
   },
@@ -71,19 +66,14 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.getAddressConfig().then(res => {
+      this.$request.pickupTimeGetConfig().then(res => {
         if (res.ret) {
-          // this.form = res.data
+          this.form = res.data
         }
       })
     },
     onSubmit() {
-      let params = {
-        audit_required: this.form.audit_required,
-        audit_message: this.form.audit_message,
-        allow_delete: this.form.allow_delete
-      }
-      this.$request.pickupTimeConfig(params).then(res => {
+      this.$request.pickupTimeUpdateConfig(this.form).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
