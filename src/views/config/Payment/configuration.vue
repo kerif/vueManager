@@ -41,6 +41,9 @@
                   <el-menu-item index="10">
                     {{ $t('打包改价配置') }}
                   </el-menu-item>
+                  <el-menu-item index="11">
+                    {{ $t('上门取件配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -82,6 +85,10 @@
             <!-- 打包改价配置 -->
             <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
               <pack-price-change></pack-price-change>
+            </el-col>
+            <!-- 上门取件配置 -->
+            <el-col :span="19" v-if="secondTab1 === '11'" class="main-right">
+              <pickup-time-config></pickup-time-config>
             </el-col>
           </el-row>
         </div>
@@ -258,6 +265,7 @@ import boxConfigure from './boxConfigure'
 import presetPack from './presetPack.vue'
 import addressConfig from './addressConfig.vue'
 import packPriceChange from './packPriceChange.vue'
+import pickupTimeConfig from './pickupTimeConfig.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -283,7 +291,8 @@ export default {
     boxConfigure,
     presetPack,
     addressConfig,
-    packPriceChange
+    packPriceChange,
+    pickupTimeConfig
     // GroupConfigure
   },
   mixins: [pagination],

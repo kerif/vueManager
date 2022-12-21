@@ -5056,3 +5056,8 @@ exports.pickupSetCheck = id => {
 exports.pickupExport = params => {
   return $form.post(`pickup/export`, params)
 }
+
+//取件日期
+exports.pickupTimeConfig = params => {
+  return $form.post(`pickup/config`, params)
+}
