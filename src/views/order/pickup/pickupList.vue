@@ -130,13 +130,18 @@
         <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button @click="onViewDetail(scope.row.id)" size="mini">查看详细</el-button>
-            <el-button v-if="scope.row.status === 1" @click="onSetCheck([scope.row.id])" size="mini"
+            <el-button
+              type="primary"
+              v-if="scope.row.status === 1"
+              @click="onSetCheck([scope.row.id])"
+              size="mini"
               >设为审核</el-button
             >
             <el-button
-              v-if="scope.row.status === 2 || scope.row.status === 3"
+              v-if="scope.row.status === 2"
               @click="onSetTrackingNumber([scope.row])"
               size="mini"
+              type="info"
               >设置转运单号</el-button
             >
           </template>
