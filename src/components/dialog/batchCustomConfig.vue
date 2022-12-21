@@ -72,7 +72,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="channel" v-if="this.config.channel">
-        <el-select v-model="form.channel">
+        <el-select v-model="form.channel" filterable>
           <el-option
             v-for="item in channelData"
             :key="item.value"
