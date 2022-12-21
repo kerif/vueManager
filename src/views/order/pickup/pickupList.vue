@@ -87,12 +87,11 @@
 
         <el-table-column :label="$t('会员ID')" prop="user_id" width="150"></el-table-column>
 
-        <el-table-column
-          :label="$t('状态')"
-          prop="status"
-          width="150"
-          show-overflow-tooltip
-        ></el-table-column>
+        <el-table-column :label="$t('状态')" prop="status" width="150">
+          <teleport slot-scope="scope">
+            {{ getStatusName(scope.row.status) }}
+          </teleport>
+        </el-table-column>
 
         <el-table-column
           :label="$t('转运公司')"
@@ -187,6 +186,24 @@ export default {
     }
   },
   methods: {
+    getStatusName(status) {
+      let name = ''
+      switch (status) {
+        case 1:
+          name = '待审核'
+          break
+        case 2:
+          name = '待取件'
+          break
+        case 3:
+          name = '转运中'
+          break
+        case 4:
+          name = '已入库'
+          break
+      }
+      return name
+    },
     onSearch() {
       this.page_params.page = 1
       this.getList()
