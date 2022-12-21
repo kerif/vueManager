@@ -121,11 +121,16 @@
         </el-table-column>
       </el-table>
     </div>
-    <nle-pagination
-      style="margin-top: 5px"
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+    <div class="flex-box">
+      <div class="red-num">{{ $t('金额') }}:{{ localization.currency_unit }}{{ sumAmount }}</div>
+      <div style="flex: 1">
+        <nle-pagination
+          style="margin-top: 5px"
+          :pageParams="page_params"
+          :notNeedInitQuery="false"
+        ></nle-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -148,6 +153,7 @@ export default {
       voucherChange: [],
       status: '',
       hasFilterCondition: false,
+      sumAmount: '',
       statusList: [
         {
           id: 0,
@@ -173,9 +179,12 @@ export default {
   created() {
     this.getList()
     this.getTypes()
+    this.getAmount()
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
+  },
+  activated() {
     if (this.$route.query.times) {
       this.timeList = this.$route.query.times.split(' ')
       this.begin_date = this.timeList[0]
@@ -309,6 +318,26 @@ export default {
         this.getList()
       })
     },
+    getAmount() {
+      this.$request
+        .getdataSummary({
+          page: this.page_params.page,
+          size: this.page_params.size,
+          payment_type: this.type,
+          status: this.status,
+          confirm_amount: this.amount,
+          keyword: this.page_params.keyword,
+          begin_date: this.begin_date,
+          end_date: this.end_date
+        })
+        .then(res => {
+          this.sumAmount = res.data.amount
+        })
+    },
+    goSearch() {
+      this.getList()
+      this.getAmount()
+    },
     // 重置表单
     resetForm() {
       this.timeList = []
@@ -321,6 +350,7 @@ export default {
       this.onTime(this.timeList)
       this.onVocherTypeChange()
       this.onShipStatus()
+      this.getAmount()
     }
   }
 }
@@ -386,6 +416,17 @@ export default {
       justify-content: flex-end;
       align-items: center;
       margin-top: 10px;
+    }
+  }
+  .flex-box {
+    display: flex;
+    align-items: center;
+    .red-num {
+      color: red;
+      font-weight: bold;
+    }
+    .flex-item {
+      flex: 1;
     }
   }
 }

@@ -51,6 +51,36 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="warehouse" v-if="this.config.warehouse">
+        <el-select v-model="form.warehouse">
+          <el-option
+            v-for="item in warehouseData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="product" v-if="this.config.product">
+        <el-select v-model="form.product">
+          <el-option
+            v-for="item in productData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="channel" v-if="this.config.channel">
+        <el-select v-model="form.channel" filterable>
+          <el-option
+            v-for="item in channelData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="sortCode">
         <el-input v-model="form.sortCode" class="input-sty"></el-input>
       </el-form-item>
@@ -76,12 +106,18 @@ export default {
       packageData: [],
       payData: [],
       shipData: [],
+      channelData: [],
+      productData: [],
+      warehouseData: [],
       form: {
         deliveryType: '',
         expressType: '',
         packageType: '',
         payType: '',
         shipType: '',
+        channel: '',
+        product: '',
+        warehouse: '',
         sortCode: '',
         destinationSiteCode: ''
       }
@@ -131,10 +167,45 @@ export default {
                 label: pay[item]
               }
             })
-            this.shipData = Object.keys(ship).map(item => {
+            if (Array.isArray(ship)) {
+              this.shipData = ship.map((item, index) => {
+                return {
+                  id: Number(index),
+                  name: item
+                }
+              })
+            } else {
+              this.shipData = Object.keys(ship).map(item => {
+                return {
+                  id: Number(item),
+                  name: ship[item]
+                }
+              })
+            }
+          }
+          if (res.data.product && res.data.warehouse) {
+            let product = res.data.product
+            let warehouse = res.data.warehouse
+            this.productData = Object.keys(product).map(item => {
               return {
-                id: Number(item),
-                name: ship[item]
+                value: item,
+                label: product[item]
+              }
+            })
+            console.log(Object.keys(warehouse))
+            this.warehouseData = Object.keys(warehouse).map(item => {
+              return {
+                value: item,
+                label: warehouse[item]
+              }
+            })
+          }
+          if (res.data.channel) {
+            let channel = res.data.channel
+            this.channelData = channel.map(item => {
+              return {
+                value: item['code'],
+                label: item['code'] + '-' + item['name']
               }
             })
           }
@@ -175,6 +246,9 @@ export default {
       this.form.packageType = ''
       this.form.payType = ''
       this.form.shipType = ''
+      this.form.warehouse = ''
+      this.form.product = ''
+      this.form.channel = ''
       this.form.sortCode = ''
       this.form.destinationSiteCode = ''
     }

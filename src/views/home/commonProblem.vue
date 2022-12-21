@@ -150,8 +150,6 @@ export default {
           this.imgSrc = template.querySelector('.content p img').src
           console.log(this.imgSrc)
           img.onclick = () => {
-            // this.imgDialog = true
-            // this.imgUrl = imgSrc
             window.open(this.imgSrc)
           }
         }

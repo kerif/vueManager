@@ -643,6 +643,7 @@ export default {
       this.packageId = this.$route.query.packageId
     }
     this.getRecipeAddress()
+    this.getCountry()
   },
   methods: {
     getList() {

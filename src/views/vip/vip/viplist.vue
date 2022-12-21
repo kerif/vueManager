@@ -1008,7 +1008,6 @@ export default {
       })
     },
     onPageTo(row) {
-      console.log(row, 'row')
       this.$router.push({
         name: 'transaction',
         query: { keyword: row.id }

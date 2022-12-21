@@ -631,6 +631,7 @@
                 <el-table-column :label="$t('长')" prop="length"></el-table-column>
                 <el-table-column :label="$t('宽')" prop="width"></el-table-column>
                 <el-table-column :label="$t('高')" prop="height"></el-table-column>
+                <el-table-column :label="$t('体积周长')" prop="volumeGirth"></el-table-column>
                 <el-table-column :label="$t('体积重')" prop="volume_weight"></el-table-column>
                 <el-table-column :label="$t('实重')" prop="weight"></el-table-column>
                 <el-table-column :label="$t('承运单号')" prop="logistics_sn"></el-table-column>
@@ -1362,10 +1363,45 @@ export default {
             ftime: res.data.created_at
           }
         ]
+        res.data.box.forEach(item => {
+          let maxData = Math.max(item.length, item.width, item.height)
+          let minData = Math.min(item.length, item.width, item.height)
+          console.log(maxData, minData)
+          let value = item.length > item.width ? item.length : item.width
+          let midData
+          if (value > item.height) {
+            midData = item.height
+          } else {
+            midData = value
+          }
+          console.log(midData)
+          item.volumeGirth = maxData + (midData + minData) * 2
+        })
         this.boxData = res.data.box
         this.userId = res.data.user_id
         //如果是单箱出库
         if (this.form.box_type === 1) {
+          let maxData = Math.max(
+            res.data.details.length,
+            res.data.details.width,
+            res.data.details.height
+          )
+          let minData = Math.min(
+            res.data.details.length,
+            res.data.details.width,
+            res.data.details.height
+          )
+          console.log(maxData, minData)
+          let value =
+            res.data.details.length > res.data.details.width
+              ? res.data.details.length
+              : res.data.details.width
+          let midData
+          if (value > res.data.details.height) {
+            midData = res.data.details.height
+          } else {
+            midData = value
+          }
           this.boxData = [
             {
               id: 0,
@@ -1376,7 +1412,8 @@ export default {
               volume_weight: res.data.details.volume_weight,
               logistics_sn: this.form.order_sn,
               sn: this.form.order_sn,
-              packages: '全部一箱'
+              packages: '全部一箱',
+              volumeGirth: maxData + (midData + minData) * 2
             }
           ]
         }
