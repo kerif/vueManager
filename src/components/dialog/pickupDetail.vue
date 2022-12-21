@@ -7,7 +7,7 @@
             ><b>您的预约单号: {{ pickupInfo.sn }}</b></el-col
           >
           <el-col :span="12" class="right-text font16w">
-            {{ getStatusName }}
+            {{ getStatusName }} {{ pickupInfo.company }} {{ pickupInfo.express_num }}
           </el-col>
         </el-row>
         <el-row :gutter="20">
