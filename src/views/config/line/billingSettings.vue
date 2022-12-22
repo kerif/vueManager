@@ -93,9 +93,7 @@
             <el-col :span="16">
               <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
-                <el-button @click="batchAddRow" class="btn-deep-purple">{{
-                  $t('批量新增')
-                }}</el-button>
+                <el-button @click="batchAddRow" class="btn-green">{{ $t('批量新增') }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
               <el-table :data="form.grades" style="width: 100%" border>
@@ -183,9 +181,7 @@
             <el-col :span="16">
               <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
-                <el-button @click="batchAddRow" class="btn-deep-purple">{{
-                  $t('批量新增')
-                }}</el-button>
+                <el-button @click="batchAddRow" class="btn-green">{{ $t('批量新增') }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
               <el-table :data="form.grades" style="width: 100%" border>
@@ -225,12 +221,10 @@
       <div v-if="form.mode === 5">
         <el-form-item>
           <el-row>
-            <el-col :span="18">
+            <el-col :span="20">
               <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
-                <el-button @click="batchAddRow" class="btn-deep-purple">{{
-                  $t('批量新增')
-                }}</el-button>
+                <el-button @click="batchAddRow" class="btn-green">{{ $t('批量新增') }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
               <el-table :data="form.grades" style="width: 100%" border>
@@ -894,7 +888,7 @@ export default {
         {
           type: 'batchAddShipLineGrades',
           grades: this.form.grades,
-          model: this.form.mode
+          mode: this.form.mode
         },
         res => {
           this.form.grades = res
