@@ -84,12 +84,16 @@ export default {
     },
     onFillSubmit() {
       this.batchFillError = []
-      let fillValue = this.batchFillValue.replace(/^s+/, '').replace(/s+$/, '').split('\n')
-      console.log('fillValue--,', fillValue)
+      let fillValue = this.batchFillValue
+        .replace(/^s+/, '')
+        .replace(/s+$/, '')
+        .replace(/\t/g, ' ')
+        .split('\n')
+      // console.log('fillValue--,', fillValue)
       for (let index = 0; index < fillValue.length; index++) {
-        const element = fillValue[index].replace(/^s+/, '').replace(/s+$/, '')
+        const element = fillValue[index].replace(/^s+/, '').replace(/s+$/, '').replace(/\t/g, ' ')
         let fillValueLineArr = element.split(' ')
-        console.log('fillValueLineArr--,', index, fillValueLineArr)
+        // console.log('fillValueLineArr--,', index, fillValueLineArr)
         let found = false
         for (let index2 = 0; index2 < this.tableList.length; index2++) {
           const tableRowData = this.tableList[index2]
