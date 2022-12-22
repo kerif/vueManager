@@ -184,6 +184,7 @@ import oneSevenTracking from './17Tracking.vue'
 import couponDetail from './couponDetail.vue'
 import pickupDetail from './pickupDetail.vue'
 import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
+import systemExpired from './systemExpired.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -367,6 +368,7 @@ const oneSevenTrackingController = Vue.extend(oneSevenTracking)
 const couponDetailController = Vue.extend(couponDetail)
 const pickupDetailController = Vue.extend(pickupDetail)
 const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
+const systemExpiredController = Vue.extend(systemExpired)
 
 const mixin = {
   data() {
@@ -383,6 +385,12 @@ let instance
 
 function initInstance(type) {
   switch (type) {
+    case 'systemExpired':
+      instance = new systemExpiredController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     case 'vipgroup':
       instance = new VipGroupController({
         el: document.createElement('div'),

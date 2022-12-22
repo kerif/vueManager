@@ -585,6 +585,7 @@ export default {
     this.getStatus() // 获取是否显示弹窗
     this.getSystem()
     this.getPie()
+    this.checkExpired()
   },
   mounted() {
     this.myChart = echarts.init(document.getElementById('myChart'))
@@ -655,6 +656,10 @@ export default {
     }
   },
   methods: {
+    //检查系统是否快过期
+    checkExpired() {
+      dialog({ type: 'systemExpired' })
+    },
     // 获取上面的统计数据
     getNumbers() {
       this.$request.getIndexNumber().then(res => {
