@@ -4,21 +4,25 @@
       <div class="pickup-detail-header">
         <el-row :gutter="20">
           <el-col :span="12"
-            ><b>您的预约单号: {{ pickupInfo.sn }}</b></el-col
+            ><b>{{ $t('您的预约单号') }}: {{ pickupInfo.sn }}</b></el-col
           >
           <el-col :span="12" class="right-text font16w">
             {{ getStatusName }} {{ pickupInfo.company }} {{ pickupInfo.express_num }}
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">创建时间: {{ pickupInfo.created_at }}</el-col>
+          <el-col :span="12">{{ $t('创建时间') }}: {{ pickupInfo.created_at }}</el-col>
           <el-col :span="12" class="right-text">
             <el-button-group>
-              <el-button v-if="pickupInfo.status == 1" @click="onDelete">删除</el-button>
-              <el-button v-if="pickupInfo.status == 1" @click="onSetCheck">设为审核</el-button>
-              <el-button v-if="pickupInfo.status == 2" @click="onSetTrackingNumber"
-                >设置转运单号</el-button
-              >
+              <el-button v-if="pickupInfo.status == 1" @click="onDelete">{{
+                $t('删除')
+              }}</el-button>
+              <el-button v-if="pickupInfo.status == 1" @click="onSetCheck">{{
+                $t('设为审核')
+              }}</el-button>
+              <el-button v-if="pickupInfo.status == 2" @click="onSetTrackingNumber">{{
+                $t('设置转运单号')
+              }}</el-button>
             </el-button-group>
           </el-col>
         </el-row>
@@ -30,7 +34,7 @@
               <h5>取件地址</h5>
             </div>
             <div class="address-info">
-              <div class="address-contact-info">
+              <div class="address-contact-info" v-if="pickupInfo.address">
                 <span class="address-contact-fullname"> {{ pickupInfo.address.name }}</span>
                 <span class="address-contact-phone"> {{ pickupInfo.address.phone }}</span>
                 <br />
@@ -41,7 +45,7 @@
               </div>
             </div>
             <el-row>
-              <el-col :span="12">期望上门时间</el-col>
+              <el-col :span="12">{{ $t('期望上门时间') }}</el-col>
               <el-col :span="12" class="right-text">
                 <span style="font-size: 18px; color: blue">{{ pickupInfo.pickup_time }}</span>
               </el-col>
@@ -51,54 +55,64 @@
         <el-col :span="12">
           <el-card class="card-box" shadow="never">
             <div slot="header" class="clearfix">
-              <h5>预报信息</h5>
+              <h5>{{ $t('预报信息') }}</h5>
             </div>
             <div>
               <el-row>
-                <el-col :span="12">寄往仓库</el-col>
+                <el-col :span="12">{{ $t('寄往仓库') }}</el-col>
                 <el-col :span="12" class="right-text">{{
-                  pickupInfo.warehouse.warehouse_name
+                  pickupInfo.warehouse && pickupInfo.warehouse.warehouse_name
                 }}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="12">寄往国家/地区</el-col>
-                <el-col :span="12" class="right-text">{{ pickupInfo.country.name }}</el-col>
+                <el-col :span="12">{{ $t('寄往国家/地区') }}</el-col>
+                <el-col :span="12" class="right-text">{{
+                  pickupInfo.country && pickupInfo.country.name
+                }}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="12">预计重量</el-col>
+                <el-col :span="12">{{ $t('预计重量') }}</el-col>
                 <el-col :span="12" class="right-text"
-                  ><span class="weight-text">{{ pickupInfo.weight }} KG</span> &nbsp;
+                  ><span class="weight-text"
+                    >{{ pickupInfo.weight }} {{ localization.weight_unit }}</span
+                  >
+                  &nbsp;
                   <span class="size-text"
-                    >{{ pickupInfo.length }} * {{ pickupInfo.width }} *
-                    {{ pickupInfo.height }} CM</span
+                    >{{ pickupInfo.length }} * {{ pickupInfo.width }} * {{ pickupInfo.height }}
+                    {{ localization.length_unit }}</span
                   ></el-col
                 >
               </el-row>
               <el-row>
-                <el-col :span="12">物品照片与备注</el-col>
-                <el-col :span="12" class="text-right">{{ pickupInfo.remark }}</el-col>
+                <el-col :span="12">{{ $t('物品照片与备注') }}</el-col>
+                <el-col :span="12" class="text-right">
+                  <span>{{ pickupInfo.remark }}</span>
+                  <div v-for="(item, index) in pickupInfo.images" :key="index">
+                    <img :src="item" alt="" />
+                  </div>
+                </el-col>
               </el-row>
             </div>
           </el-card>
         </el-col>
       </el-row>
       <br />
-      <h5>物品清单</h5>
+      <h5>{{ $t('物品清单') }}</h5>
       <br />
-      <el-table :data="pickupInfo.item" border style="width: 100%">
+      <el-table :data="pickupInfo.items" border style="width: 100%">
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="express_num" label="物品名称" width="180"> </el-table-column>
-        <el-table-column prop="status_name" label="物品数量" width="180"> </el-table-column>
-        <el-table-column prop="package_value" label="物品价值"> </el-table-column>
+        <el-table-column prop="name" :label="$t('物品名称')" width="180"> </el-table-column>
+        <el-table-column prop="qty" :label="$t('物品数量')" width="180"> </el-table-column>
+        <el-table-column prop="value" :label="$t('物品价值')"> </el-table-column>
       </el-table>
 
       <el-card class="service-box" shadow="never">
         <div slot="header" class="clearfix">
-          <h5>到仓服务</h5>
+          <h5>{{ $t('到仓服务') }}</h5>
         </div>
-        <div v-for="(serivce, index) in services" :key="index">
-          拆包清点 $3.00
-          <div>这里是详细说明</div>
+        <div v-for="(service, index) in pickupInfo.services" :key="index">
+          {{ service.name }} {{ service.price }}
+          <div>{{ service.remark }}</div>
         </div>
       </el-card>
     </div>
@@ -112,7 +126,8 @@ export default {
       id: 0,
       pickupInfo: {
         id: 0
-      }
+      },
+      localization: {}
     }
   },
   computed: {
@@ -181,6 +196,7 @@ export default {
     getPickupDetail() {
       this.$request.pickupInfo(this.id).then(res => {
         this.pickupInfo = res.data
+        this.localization = res.localization
       })
     }
   }

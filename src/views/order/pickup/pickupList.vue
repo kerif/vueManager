@@ -2,7 +2,7 @@
   <div class="pickup-list-container">
     <div class="search-bar">
       <div class="search-date-picker">
-        创建时间
+        {{ $t('创建时间') }}
         <el-date-picker
           v-model="searchFormData.created_at"
           type="daterange"
@@ -13,7 +13,7 @@
           :end-placeholder="$t('结束日期')"
         >
         </el-date-picker>
-        预约时间
+        {{ $t('预约时间') }}
         <el-date-picker
           v-model="searchFormData.pickup_at"
           type="daterange"
@@ -36,35 +36,29 @@
     </div>
     <div>
       <el-tabs v-model="statusId" @tab-click="onTabChange" class="tab-length" stretch>
-        <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
-        <el-tab-pane
-          :label="`${$t('待审核')} (${countData.wait_in_storage || 0})`"
-          name="1"
-        ></el-tab-pane>
-        <el-tab-pane
-          :label="`${$t('待取件')} (${countData.in_storage || 0})`"
-          name="2"
-        ></el-tab-pane>
-        <el-tab-pane :label="`${$t('转运中')} (${countData.packed || 0})`" name="3"></el-tab-pane>
-        <el-tab-pane :label="`${$t('已入库')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
+        <el-tab-pane :label="`${$t('全部')} (${countData[0] || 0})`" name="0"></el-tab-pane>
+        <el-tab-pane :label="`${$t('待审核')} (${countData[1] || 0})`" name="1"></el-tab-pane>
+        <el-tab-pane :label="`${$t('待取件')} (${countData[2] || 0})`" name="2"></el-tab-pane>
+        <el-tab-pane :label="`${$t('转运中')} (${countData[3] || 0})`" name="3"></el-tab-pane>
+        <el-tab-pane :label="`${$t('已入库')} (${countData[4] || 0})`" name="4"></el-tab-pane>
       </el-tabs>
     </div>
     <div class="tools-bar">
-      <el-button type="danger" size="mini" plain @click="onDelete" v-if="statusId === '1'"
-        >删除</el-button
-      >
-      <el-button type="success" size="mini" plain @click="onSetCheck('')" v-if="statusId === '1'"
-        >设为审核</el-button
-      >
+      <el-button type="danger" size="mini" plain @click="onDelete" v-if="statusId === '1'">{{
+        $t('删除')
+      }}</el-button>
+      <el-button type="success" size="mini" plain @click="onSetCheck('')" v-if="statusId === '1'">{{
+        $t('设为审核')
+      }}</el-button>
       <el-button
         type="success"
         size="mini"
         plain
         @click="onSetTrackingNumber('')"
         v-if="statusId === '2' || statusId === '3'"
-        >设置转运单号</el-button
+        >{{ $t('设置转运单号') }}</el-button
       >
-      <el-button type="info" size="mini" plain @click="onExport">导出</el-button>
+      <el-button type="info" size="mini" plain @click="onExport">{{ $t('导出') }}</el-button>
     </div>
     <div>
       <el-table
@@ -88,9 +82,9 @@
         <el-table-column :label="$t('会员ID')" prop="user_id" width="150"></el-table-column>
 
         <el-table-column :label="$t('状态')" prop="status" width="150">
-          <teleport slot-scope="scope">
+          <template slot-scope="scope">
             {{ getStatusName(scope.row.status) }}
-          </teleport>
+          </template>
         </el-table-column>
 
         <el-table-column
@@ -126,22 +120,24 @@
         <el-table-column :label="$t('预约时间')" prop="pickup_time"></el-table-column>
         <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
 
-        <el-table-column :label="$t('操作')" fixed="right">
+        <el-table-column :label="$t('操作')" fixed="right" width="260px">
           <template slot-scope="scope">
-            <el-button @click="onViewDetail(scope.row.id)" size="mini">查看详细</el-button>
+            <el-button @click="onViewDetail(scope.row.id)" size="mini">{{
+              $t('查看详细')
+            }}</el-button>
             <el-button
               type="primary"
               v-if="scope.row.status === 1"
               @click="onSetCheck([scope.row.id])"
               size="mini"
-              >设为审核</el-button
+              >{{ $t('设为审核') }}</el-button
             >
             <el-button
               v-if="scope.row.status === 2"
               @click="onSetTrackingNumber([scope.row])"
               size="mini"
               type="info"
-              >设置转运单号</el-button
+              >{{ $t('设置转运单号') }}</el-button
             >
           </template>
         </el-table-column>
@@ -322,9 +318,9 @@ export default {
     // 获取订单统计数据
     getCounts() {
       const params = this.computedParams()
-      this.$request.getOrderCounts(params).then(res => {
+      this.$request.getPickUpCounts(params).then(res => {
         if (res.ret) {
-          this.countData = res.data
+          this.countData = Object.values(res.data)
         } else {
           this.$message({
             message: res.msg,

@@ -2,13 +2,13 @@
   <div>
     <el-dialog :visible.sync="show" :title="$t('设置转运单号')" @close="onClear" width="55%">
       <div class="dialog-pickup-tracking-info">
-        <el-button @click="onBatchFill">批量设置</el-button>
+        <el-button @click="onBatchFill" class="config-btn">{{ $t('批量设置') }}</el-button>
         <el-table :data="tableList" border style="width: 100%">
           <el-table-column type="index" width="50"> </el-table-column>
-          <el-table-column prop="sn" label="预约单号" width="180"> </el-table-column>
-          <el-table-column prop="company" label="快递公司" width="180">
+          <el-table-column prop="sn" :label="$t('预约单号')" width="180"> </el-table-column>
+          <el-table-column prop="company" :label="$t('快递公司')" width="180">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.company" clearable placeholder="请选择">
+              <el-select v-model="scope.row.company" clearable :placeholder="$t('请选择')">
                 <el-option
                   v-for="item in expressCompanyList"
                   :key="item.id"
@@ -19,7 +19,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="express_num" label="快递单号">
+          <el-table-column prop="express_num" :label="$t('快递单号')">
             <template slot-scope="scope">
               <el-input v-model="scope.row.express_num"></el-input>
             </template>
@@ -34,7 +34,7 @@
     </el-dialog>
 
     <el-dialog title="批量设置" :visible.sync="dialogBatchVisible" width="30%">
-      <span>预约单号 快递公司 快递单号 格式一行一个,中间空格分开</span>
+      <span>{{ $t('预约单号 快递公司 快递单号 格式一行一个,中间空格分开') }}</span>
 
       <el-input
         type="textarea"
@@ -184,6 +184,9 @@ export default {
   .btn-group {
     padding-top: 20px;
     text-align: right;
+  }
+  .config-btn {
+    margin-bottom: 20px;
   }
 }
 </style>

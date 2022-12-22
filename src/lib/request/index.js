@@ -5066,3 +5066,8 @@ exports.pickupTimeUpdateConfig = params => {
 exports.pickupTimeGetConfig = params => {
   return $form.get(`pickups/config`, { params })
 }
+
+// 获取上门取件数据统计
+exports.getPickUpCounts = params => {
+  return $form.get('pickups/counts', { params })
+}
