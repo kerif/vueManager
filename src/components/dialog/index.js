@@ -187,6 +187,7 @@ import couponDetail from './couponDetail.vue'
 import pickupDetail from './pickupDetail.vue'
 import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
 import systemExpired from './systemExpired.vue'
+import batchAddShipLineGrades from './batchAddShipLineGrades.vue'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -373,6 +374,7 @@ const couponDetailController = Vue.extend(couponDetail)
 const pickupDetailController = Vue.extend(pickupDetail)
 const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
 const systemExpiredController = Vue.extend(systemExpired)
+const batchAddShipLineGradesController = Vue.extend(batchAddShipLineGrades)
 
 const mixin = {
   data() {
@@ -1687,6 +1689,12 @@ function initInstance(type) {
     // 设置转运单号
     case 'pickupSetTrackingInfo':
       instance = new pickupSetTrackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'batchAddShipLineGrades':
+      instance = new batchAddShipLineGradesController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

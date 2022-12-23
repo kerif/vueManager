@@ -30,11 +30,14 @@ export default {
   },
   methods: {
     onConfirm() {
-      const lines = this.postcode_lines.replace(/(^\s*)|(\s*$)/g, '').split('\n')
+      const lines = this.postcode_lines
+        .replace(/(^\s*)|(\s*$)/g, '')
+        .replace(/\t/g, '-')
+        .split('\n')
       let result = []
       if (lines !== '') {
         for (let index = 0; index < lines.length; index++) {
-          const currentLine = lines[index].replace(/(^\s*)|(\s*$)/g, '')
+          const currentLine = lines[index].replace(/\t/g, '-').replace(/(^\s*)|(\s*$)/g, '')
           if (currentLine === '') continue
           const element = currentLine.split('-')
           if (element.length === 0) continue
