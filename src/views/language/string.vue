@@ -1,8 +1,8 @@
 <template>
   <div class="string-container">
     <div class="headerList">
-      <el-button @click="derive">{{$t('导出')}}</el-button>
-      <el-button @click="leadIn">{{$t('导入')}}</el-button>
+      <el-button @click="derive">{{ $t('导出') }}</el-button>
+      <el-button @click="leadIn">{{ $t('导入') }}</el-button>
       <div class="select-box">
         <add-btn @click.native="addString">{{ $t('添加') }}</add-btn>
       </div>
@@ -103,13 +103,13 @@ export default {
     this.getList()
   },
   methods: {
-    leadIn(){
+    leadIn() {
       dialog({ type: 'leadIn', state: '', id: '' }, () => {
         this.getList()
       })
     },
-    derive(){
-      this.$request.derive().then(res=>{
+    derive() {
+      this.$request.derive().then(res => {
         if (res.ret) {
           window.open(res.data)
           this.$notify({

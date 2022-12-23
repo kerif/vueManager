@@ -21,7 +21,7 @@ import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
 import addCompany from './addCompany.vue'
-import leadIn from "./leadIn.vue";
+import leadIn from './leadIn.vue'
 import shipDetails from './shipDetails.vue'
 import addTransfer from './addSetting.vue'
 import addService from './addEditService.vue'
@@ -407,13 +407,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
-      //导入字符串翻译
-      case 'leadIn':
-        instance = new lead({
-          el: document.createElement('div'),
-          mixins: [mixin]
-        })
-        break
+    //导入字符串翻译
+    case 'leadIn':
+      instance = new lead({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 添加员工组
     case 'addStaff':
       instance = new AddStaffController({
@@ -833,13 +833,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
-        //添加申报商品
-   case 'addDeclared':
+    //添加申报商品
+    case 'addDeclared':
       instance = new AddDeclared({
         el: document.createElement('div'),
         mixins: [mixin]
-     })
-    break
+      })
+      break
     // 路线 增加费用
     case 'costAdd':
       instance = new CostAddController({

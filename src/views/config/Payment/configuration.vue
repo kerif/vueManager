@@ -300,11 +300,8 @@ export default {
     presetPack,
     addressConfig,
     packPriceChange,
-<<<<<<< HEAD
-    pickupTimeConfig
-=======
+    pickupTimeConfig,
     StoreGoods
->>>>>>> 1083d80b1642c073f59e5895c5c3ebdb5a1a00c9
     // GroupConfigure
   },
   mixins: [pagination],

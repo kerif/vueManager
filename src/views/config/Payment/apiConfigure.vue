@@ -146,11 +146,15 @@
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="dialogVisible =true">{{ $t('配置') }}</el-button>
+        <el-button type="primary" @click="dialogVisible = true">{{ $t('配置') }}</el-button>
       </div>
     </div>
     <div>
-      <el-dialog :visible.sync="dialogVisible" :title="$t('配置Google地图API')" class="dialog-batchImport">
+      <el-dialog
+        :visible.sync="dialogVisible"
+        :title="$t('配置Google地图API')"
+        class="dialog-batchImport"
+      >
         <div>
           <el-form label-width="100px" :model="resource">
             <el-form-item :label="$t('开发者KEY')">
@@ -159,18 +163,18 @@
             <!-- <el-form-item :label="$t('开发者密钥')">
               <el-input v-model="form.secretKey"></el-input>
             </el-form-item> -->
-            <el-form-item >
+            <el-form-item>
               <el-button type="primary" @click="save(1)">{{ $t('保存') }}</el-button>
             </el-form-item>
-            <el-form-item :label="$t('测试海外地址')"> 
+            <el-form-item :label="$t('测试海外地址')">
               <el-input v-model="resource.address"></el-input>
             </el-form-item>
-            <el-form-item >
+            <el-form-item>
               <el-button type="primary" @click="save(2)">{{ $t('保存') }}</el-button>
             </el-form-item>
           </el-form>
         </div>
-    </el-dialog>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -181,10 +185,10 @@ export default {
     return {
       smsData: {},
       trackingData: {},
-      dialogVisible:false,
-      resource:{
-        key:'',
-        address:''
+      dialogVisible: false,
+      resource: {
+        key: '',
+        address: ''
       }
     }
   },
@@ -201,8 +205,8 @@ export default {
         }
       })
     },
-    getMapApi(){
-      this.$request.getMapApi().then(res=>{
+    getMapApi() {
+      this.$request.getMapApi().then(res => {
         if (res.ret) {
           this.resource.key = res.data.key
         }
@@ -217,18 +221,18 @@ export default {
         this.$router.push({ name: 'mailConfigur' })
       }
     },
-   async save(val){
+    async save(val) {
       let res = {}
-      if (val==1) {
-        res= await this.$request.setMapApi({key:this.resource.key})
-      }else{
-        res= await this.$request.testAddress({url:this.resource.address})
+      if (val == 1) {
+        res = await this.$request.setMapApi({ key: this.resource.key })
+      } else {
+        res = await this.$request.testAddress({ url: this.resource.address })
       }
       if (res.ret) {
-        this.$notify.success({title: this.$t('成功'),message: res.msg})
+        this.$notify.success({ title: this.$t('成功'), message: res.msg })
         this.getMapApi()
-      }else{
-        this.$notify.error({title:this.$t('操作失败'),message: res.msg})
+      } else {
+        this.$notify.error({ title: this.$t('操作失败'), message: res.msg })
       }
     },
     confirm() {

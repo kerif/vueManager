@@ -1,9 +1,19 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add'?$t('添加申报商品'):$t('修改申报商品')" class="abnormalLog-container" @close="clear">
-    <div style="width: 70%;margin: auto;">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'add' ? $t('添加申报商品') : $t('修改申报商品')"
+    class="abnormalLog-container"
+    @close="clear"
+  >
+    <div style="width: 70%; margin: auto">
       <el-form label-width="80px" :model="ruleForm">
         <el-form-item :label="$t('所属分类')">
-          <el-cascader :options="options" v-model="ruleForm.parent_id" :props="props" clearable></el-cascader>
+          <el-cascader
+            :options="options"
+            v-model="ruleForm.parent_id"
+            :props="props"
+            clearable
+          ></el-cascader>
         </el-form-item>
         <el-form-item :label="$t('中文名称')">
           <el-input v-model="ruleForm.name" class="inner-textarea"></el-input>
@@ -41,7 +51,7 @@ export default {
   methods: {
     clear() {
       this.ruleForm.name = ''
-      this.ruleForm.parent_id =''
+      this.ruleForm.parent_id = ''
       this.ruleForm.en_name = ''
     },
     getList() {
@@ -63,7 +73,7 @@ export default {
     async confirm() {
       let res = {}
       if (this.id) {
-        res = await this.$request.amendProduct(this.id,{...this.ruleForm})
+        res = await this.$request.amendProduct(this.id, { ...this.ruleForm })
       } else {
         res = await this.$request.addProduct(this.ruleForm)
       }
