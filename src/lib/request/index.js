@@ -1754,6 +1754,31 @@ exports.updateInstructions = params => {
 exports.getApiService = () => {
   return $form.get('api-services')
 }
+
+// 配置Google地图API
+exports.setMapApi = params => {
+  return $form.post('api-services/google', params)
+}
+
+// 获取详情
+exports.getMapApi = () => {
+  return $form.get('api-services/google')
+}
+
+// 字符串翻译导出
+exports.derive = () => {
+  return $form.get('string-translations/export')
+}
+
+// 字符串翻译导入
+exports.guideInto = params => {
+  return $file.post('string-translations/import',params)
+}
+
+// 测试地址
+exports.testAddress = params => {
+  return $form.get('api-services/google/test',params)
+}
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
   return $form.get(`payments/payment/status`)
@@ -2702,6 +2727,45 @@ exports.getTranslate = (id, params) => {
 //自定义标签 批量删除
 exports.deleteLabel = ids => {
   return $form.put('express-line-labels/batch-delete', ids)
+}
+
+//申报商品库管理列表
+exports.declareLists = params => {
+  return $form.get('product-names',params)
+}
+
+//添加申报商品
+exports.addProduct = params => {
+  return $form.post('product-names',params)
+}
+
+//添加申报商品
+exports.addProduct = params => {
+  return $form.post('product-names',params)
+}
+//获取获取顶级、二级商品名
+exports.getTradeName = () => {
+  return $form.get(`product-names/parent-tree`)
+}
+
+//获取商品详情
+exports.getParticulars = id => {
+  return $form.get(`product-names/${id}`)
+}
+
+//修改商品
+exports.amendProduct = (id,params) => {
+  return $form.put(`product-names/${id}`,params)
+}
+
+//删除申报商品
+exports.removeProduct = params => {
+  return $form.put(`product-names/batch-delete`,params)
+}
+
+//申报商品库管理列表
+exports.declareListChildren = id => {
+  return $form.get(`product-names/${id}/children`)
 }
 // 自提点 获取详细
 exports.getOneSelf = id => {

@@ -90,7 +90,6 @@ export default {
               res.data.map(item => ({ id: item.id, name: item.name }))
             )
           }
-          console.log(this.classifyList, 'this.classifyList')
         } else {
           this.$message({
             message: res.msg,

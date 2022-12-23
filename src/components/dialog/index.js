@@ -21,10 +21,12 @@ import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
 import addCompany from './addCompany.vue'
+import leadIn from "./leadIn.vue";
 import shipDetails from './shipDetails.vue'
 import addTransfer from './addSetting.vue'
 import addService from './addEditService.vue'
 import addIcon from './addIcon.vue'
+import addDeclared from './addDeclared.vue'
 import classifyGroup from './classifyAddEdit.vue'
 import costAdd from './addCost.vue'
 import joinShip from './joinShipping.vue'
@@ -187,6 +189,7 @@ import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
 import systemExpired from './systemExpired.vue'
 
 const InviteController = Vue.extend(inviteList)
+const lead = Vue.extend(leadIn)
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffGroupController = Vue.extend(staffGroup)
@@ -210,6 +213,7 @@ const AddTransferController = Vue.extend(addTransfer)
 const AddEditServiceController = Vue.extend(addService)
 const IconController = Vue.extend(addIcon)
 const AddClassifyController = Vue.extend(classifyGroup)
+const AddDeclared = Vue.extend(addDeclared)
 const CostAddController = Vue.extend(costAdd)
 const JoinShipController = Vue.extend(joinShip)
 const LineChangeController = Vue.extend(lineChange)
@@ -403,6 +407,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+      //导入字符串翻译
+      case 'leadIn':
+        instance = new lead({
+          el: document.createElement('div'),
+          mixins: [mixin]
+        })
+        break
     // 添加员工组
     case 'addStaff':
       instance = new AddStaffController({
@@ -822,6 +833,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+        //添加申报商品
+   case 'addDeclared':
+      instance = new AddDeclared({
+        el: document.createElement('div'),
+        mixins: [mixin]
+     })
+    break
     // 路线 增加费用
     case 'costAdd':
       instance = new CostAddController({
