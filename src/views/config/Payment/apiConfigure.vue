@@ -206,11 +206,11 @@ export default {
       })
     },
     getMapApi() {
-      this.$request.getMapApi().then(res => {
-        if (res.ret) {
-          this.resource.key = res.data.key
-        }
-      })
+      // this.$request.getMapApi().then(res => {
+      //   if (res.ret) {
+      //     this.resource.key = res.data.key
+      //   }
+      // })
     },
     goConfiguration(status) {
       if (status === 'sms') {
