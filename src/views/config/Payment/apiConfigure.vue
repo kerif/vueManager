@@ -133,7 +133,7 @@
       </div>
     </div>
     <!-- 地图api -->
-    <div class="item">
+    <!-- <div class="item">
       <div class="item-top">
         <div style="text-align: center">
           <i class="el-icon-chat-line-round icon-sty"></i>
@@ -148,8 +148,8 @@
       <div class="configureBtn">
         <el-button type="primary" @click="dialogVisible = true">{{ $t('配置') }}</el-button>
       </div>
-    </div>
-    <div>
+    </div>-->
+    <!-- <div>
       <el-dialog
         :visible.sync="dialogVisible"
         :title="$t('配置Google地图API')"
@@ -159,11 +159,11 @@
           <el-form label-width="100px" :model="resource">
             <el-form-item :label="$t('开发者KEY')">
               <el-input v-model="resource.key"></el-input>
-            </el-form-item>
-            <!-- <el-form-item :label="$t('开发者密钥')">
+            </el-form-item> -->
+    <!-- <el-form-item :label="$t('开发者密钥')">
               <el-input v-model="form.secretKey"></el-input>
             </el-form-item> -->
-            <el-form-item>
+    <!-- <el-form-item>
               <el-button type="primary" @click="save(1)">{{ $t('保存') }}</el-button>
             </el-form-item>
             <el-form-item :label="$t('测试海外地址')">
@@ -175,7 +175,7 @@
           </el-form>
         </div>
       </el-dialog>
-    </div>
+    </div> -->
   </div>
 </template>
 
