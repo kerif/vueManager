@@ -40,6 +40,7 @@
           $t('导出清单')
         }}</el-button>
       </div>
+      <el-button type="primary" size="small" @click="onNew">{{ $t('新用户福利') }}</el-button>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -317,10 +318,10 @@ export default {
       status: '',
       type: '',
       voucherChange: [
-        {
-          id: '2',
-          name: this.$t('新用户福利券')
-        },
+        // {
+        //   id: '2',
+        //   name: this.$t('新用户福利券')
+        // },
         {
           id: '1',
           name: this.$t('普通抵用券')
@@ -453,7 +454,7 @@ export default {
             //   item.disabled = true
             //   item.copySN = item.logistics_sn
             // })
-            this.voucherData = res.data
+            this.voucherData = res.data.filter(item => item.type !== '新用户福利')
             setTimeout(() => {
               this.$nextTick(() => {
                 this.$refs.table.doLayout()
@@ -766,6 +767,11 @@ export default {
       dialog({
         type: 'addExchangeCode',
         id
+      })
+    },
+    onNew() {
+      dialog({
+        type: 'newUser'
       })
     }
   }
