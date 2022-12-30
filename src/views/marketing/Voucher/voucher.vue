@@ -163,7 +163,7 @@
               size="small"
               class="btn-dark-green detailsBtn"
               @click="recoding(scope.row)"
-              >{{ $t('记录') }}</el-button
+              >{{ $t('详情') }}</el-button
             >
             <el-button
               size="small"
@@ -323,12 +323,12 @@ export default {
         //   name: this.$t('新用户福利券')
         // },
         {
-          id: '1',
-          name: this.$t('普通抵用券')
-        },
-        {
           id: '',
           name: this.$t('全部')
+        },
+        {
+          id: '1',
+          name: this.$t('普通抵用券')
         },
         {
           id: '3',
@@ -362,9 +362,9 @@ export default {
       this.activeName = this.$route.query.activeName
       this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
     }
-    if (this.$route.query.type) {
-      this.type = this.$route.query.type
-    }
+    // if (this.$route.query.type) {
+    //   this.type = this.$route.query.type
+    // }
   },
   activated() {
     this.$nextTick(() => {
@@ -508,7 +508,7 @@ export default {
     },
     // 记录
     recoding(couponInfo) {
-      dialog({ type: 'couponDetail', couponInfo }, () => {})
+      dialog({ type: 'couponDetail', couponInfo, param: 1 }, () => {})
     },
     // 分享
     share(id) {
@@ -770,8 +770,8 @@ export default {
       })
     },
     onNew() {
-      dialog({
-        type: 'newUser'
+      this.$router.push({
+        name: 'userWelfare'
       })
     }
   }

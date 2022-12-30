@@ -188,7 +188,7 @@ import pickupDetail from './pickupDetail.vue'
 import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
 import systemExpired from './systemExpired.vue'
 import batchAddShipLineGrades from './batchAddShipLineGrades.vue'
-import newUser from './newUser.vue'
+// import newUser from './newUser.vue'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -376,7 +376,7 @@ const pickupDetailController = Vue.extend(pickupDetail)
 const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
 const systemExpiredController = Vue.extend(systemExpired)
 const batchAddShipLineGradesController = Vue.extend(batchAddShipLineGrades)
-const newUserController = Vue.extend(newUser)
+// const newUserController = Vue.extend(newUser)
 
 const mixin = {
   data() {
@@ -1702,11 +1702,11 @@ function initInstance(type) {
       })
       break
     // 新用户福利
-    case 'newUser':
-      instance = new newUserController({
-        el: document.createElement('div'),
-        mixins: [mixin]
-      })
+    // case 'newUser':
+    //   instance = new newUserController({
+    //     el: document.createElement('div'),
+    //     mixins: [mixin]
+    //   })
   }
   instance.constrctType = type
 }

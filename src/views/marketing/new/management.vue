@@ -3,7 +3,17 @@
     <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
     <div class="add-sty">
       <div class="coupons">
-        <h3>{{ $t('新用户送券') }}</h3>
+        <h3>
+          {{
+            $route.params.type === 1
+              ? $t('新用户送券')
+              : $route.params.type === 2
+              ? $t('邀请新人送券')
+              : $route.params.type === 3
+              ? $t('被邀请人送券')
+              : $t('下单返券')
+          }}
+        </h3>
         <div style="width: 1100px">
           <el-row :gutter="20">
             <el-col :span="4"
@@ -29,7 +39,7 @@
           </el-row>
         </div>
         <div class="remark">
-          {{ $t('该数据统计包含已删除活动数据已发放券正常使用可前往抵用券管理查看') }}
+          {{ $t('该数据统计不包含已删除活动数据已发放券正常使用可前往抵用券管理查看') }}
         </div>
       </div>
       <add-btn @click.native="goAdd" class="btn-add">{{ $t('添加') }}</add-btn>
@@ -213,7 +223,7 @@ export default {
     },
     // 记录
     recoding(id) {
-      this.$router.push({ name: 'voucher', query: { type: '2', id: id } })
+      this.$router.push({ name: 'userWelfare', query: { type: '2', id: id } })
     },
     // 删除
     deleteData() {

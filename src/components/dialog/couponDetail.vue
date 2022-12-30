@@ -2,8 +2,11 @@
   <el-drawer size="85%" :visible.sync="show" :title="$t('抵用券详细')" class="coupon-container">
     <div class="pad" v-if="couponInfo">
       <el-descriptions :title="couponInfo.name" :column="4" border>
-        <el-descriptions-item :label="$t('类型')">
+        <el-descriptions-item v-if="param === 1" :label="$t('类型')">
           {{ couponInfo.type }}
+        </el-descriptions-item>
+        <el-descriptions-item v-if="param === 2 && couponInfo.user" :label="$t('用户')">
+          {{ couponInfo.user.id }} -- {{ couponInfo.user.name }}
         </el-descriptions-item>
         <el-descriptions-item :label="$t('最低消费')">{{
           couponInfo.threshold
@@ -33,7 +36,7 @@
           couponInfo.expired_at
         }}</el-descriptions-item>
 
-        <el-descriptions-item :label="$t('投放数量')">{{
+        <el-descriptions-item v-if="param === 1" :label="$t('投放数量')">{{
           couponInfo.total_count
         }}</el-descriptions-item>
 
@@ -43,13 +46,13 @@
           }}</span></el-descriptions-item
         >
 
-        <el-descriptions-item :label="$t('待使用数量')">{{
+        <el-descriptions-item v-if="param === 1" :label="$t('待使用数量')">{{
           couponInfo.unused_count
         }}</el-descriptions-item>
-        <el-descriptions-item :label="$t('过期数量')">{{
+        <el-descriptions-item v-if="param === 1" :label="$t('过期数量')">{{
           couponInfo.expired_count
         }}</el-descriptions-item>
-        <el-descriptions-item :label="$t('作废数量')">{{
+        <el-descriptions-item v-if="param === 1" :label="$t('作废数量')">{{
           couponInfo.invalid_count
         }}</el-descriptions-item>
       </el-descriptions>
@@ -94,11 +97,13 @@ export default {
       ruleForm: {},
       pageParams: {},
       recordingData: [],
-      tableLoading: false
+      tableLoading: false,
+      param: ''
     }
   },
   methods: {
     init() {
+      console.log(this.couponInfo, '666')
       this.show = true
       this.getLanguageList()
       // this.$request.getRebateDetails(this.id).then(res => {

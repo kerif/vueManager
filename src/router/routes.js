@@ -238,6 +238,8 @@ const Voucher = loadonDemand('marketing/Voucher/voucher')
 const Notes = loadonDemand('marketing/Voucher/notes')
 // 营销管理 添加
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
+// 营销管理 新用户福利
+const UserWelfare = loadonDemand('marketing/Voucher/userWelfare')
 // 营销管理 视频管理
 // const videoManagement = loadonDemand('marketing/video/videoMana')
 // 营销管理 渠道管理
@@ -1976,6 +1978,18 @@ export default [
               level: 3,
               group: '营销管理',
               name: '投放记录',
+              parent: '/marketing/voucher'
+            }
+          },
+          {
+            path: '/marketing/voucher/userWelfare',
+            name: 'userWelfare',
+            component: UserWelfare,
+            id: 802,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新用户福利',
               parent: '/marketing/voucher'
             }
           },
