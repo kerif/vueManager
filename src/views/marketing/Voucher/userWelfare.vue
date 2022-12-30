@@ -45,6 +45,7 @@
           <span v-if="scope.row.status === 1">{{ $t('未开始') }}</span>
           <span v-if="scope.row.status === 2">{{ $t('进行中') }}</span>
           <span v-if="scope.row.status === 3">{{ $t('已失效') }}</span>
+          <span v-if="scope.row.status === 4">{{ $t('已作废') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
