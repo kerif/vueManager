@@ -382,7 +382,7 @@ export default {
     padding: 20px;
     font-size: 13px;
     .search-date-picker {
-      flex: 2;
+      flex: 3;
     }
     .search-keyword {
       flex: 1;

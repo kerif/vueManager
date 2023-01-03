@@ -29,11 +29,29 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item
+        v-if="ruleForm.parent_id > 0"
+        :label="$t('分类分组')"
+        prop="group_name"
+        class="input-style"
+      >
+        <el-input v-model="ruleForm.group_name" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
       <el-form-item label="sku" prop="sku" class="input-style">
         <el-input v-model="ruleForm.sku" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('海关编码')" prop="hs_code" class="input-style">
         <el-input v-model="ruleForm.hs_code" :placeholder="$t('请输入海关编码')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('物品属性')" prop="hs_code" class="input-style">
+        <el-select v-model="ruleForm.props" clearable :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in propList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.cn_name"
+          ></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -52,6 +70,7 @@ export default {
         sku: '',
         hs_code: ''
       },
+      propList: [],
       classifyList: [],
       state: '',
       id: '',
@@ -61,7 +80,15 @@ export default {
       }
     }
   },
+  created() {
+    this.getPropList()
+  },
   methods: {
+    getPropList() {
+      this.$request.getProps().then(res => {
+        this.propList = res.data
+      })
+    },
     getList() {
       this.$request.getRiskDetails(this.id).then(res => {
         if (res.ret) {

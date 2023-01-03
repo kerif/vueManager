@@ -5135,3 +5135,63 @@ exports.pickupTimeGetConfig = params => {
 exports.getPickUpCounts = params => {
   return $form.get('pickups/counts', { params })
 }
+
+// 包裹预报入库积分规则
+exports.getPointRuleForParcelInbound = () => {
+  return $form.get('in-out-rule/point-pis-config/show')
+}
+
+// 包裹预报入库积分规则
+exports.setPointRuleForParcelInbound = params => {
+  return $form.post('in-out-rule/point-pis-config', params)
+}
+
+// 微信认证积分规则
+exports.getPointRuleForWechatAuth = () => {
+  return $form.get('in-out-rule/point-wa-config/show')
+}
+
+// 微信认证积分规则
+exports.setPointRuleForWechatAuth = params => {
+  return $form.post('in-out-rule/point-wa-config', params)
+}
+
+// 充值积分规则
+exports.getPointRuleForRecharge = () => {
+  return $form.get('in-out-rule/point-recharge-config/show')
+}
+
+// 充值积分规则
+exports.setPointRuleForRecharge = params => {
+  return $form.post('in-out-rule/point-recharge-config', params)
+}
+
+// 关注公众号积分规则
+exports.getPointRuleForWechatOfficeAcccount = () => {
+  return $form.get('in-out-rule/point-oa-config/show')
+}
+
+// 关注公众号积分规则
+exports.setPointRuleForWechatOfficeAcccount = params => {
+  return $form.post('in-out-rule/point-oa-config', params)
+}
+
+// 绑定手机号积分规则
+exports.getPointRuleForBindPhone = () => {
+  return $form.get('in-out-rule/point-bp-config/show')
+}
+
+// 绑定手机号积分规则
+exports.setPointRuleForBindPhone = params => {
+  return $form.post('in-out-rule/point-bp-config', params)
+}
+
+// 绑定邮箱积分规则
+exports.getPointRuleForBindEmail = () => {
+  return $form.get('in-out-rule/point-be-config/show')
+}
+
+// 绑定邮箱积分规则
+exports.setPointRuleForBindEmail = params => {
+  return $form.post('in-out-rule/point-be-config', params)
+}

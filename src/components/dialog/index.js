@@ -188,7 +188,12 @@ import pickupDetail from './pickupDetail.vue'
 import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
 import systemExpired from './systemExpired.vue'
 import batchAddShipLineGrades from './batchAddShipLineGrades.vue'
-// import newUser from './newUser.vue'
+import parcelInboundPointRule from './parcelInboundPointRule.vue'
+import wechatAuthPointRule from './wechatAuthPointRule.vue'
+import rechargePointRule from './rechargePointRule.vue'
+import wechatOfficeAccountPointRule from './wechatOfficeAccountPointRule.vue'
+import bindPhonePointRule from './bindPhonePointRule.vue'
+import bindEmailPointRule from './bindEmailPointRule.vue'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -377,6 +382,12 @@ const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
 const systemExpiredController = Vue.extend(systemExpired)
 const batchAddShipLineGradesController = Vue.extend(batchAddShipLineGrades)
 // const newUserController = Vue.extend(newUser)
+const parcelInboundPointRuleController = Vue.extend(parcelInboundPointRule)
+const wechatAuthPointRuleController = Vue.extend(wechatAuthPointRule)
+const rechargePointRuleController = Vue.extend(rechargePointRule)
+const wechatOfficeAccountPointRuleController = Vue.extend(wechatOfficeAccountPointRule)
+const bindPhonePointRuleController = Vue.extend(bindPhonePointRule)
+const bindEmailPointRuleController = Vue.extend(bindEmailPointRule)
 
 const mixin = {
   data() {
@@ -1695,6 +1706,7 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 批量添加线路渠道重量范围段
     case 'batchAddShipLineGrades':
       instance = new batchAddShipLineGradesController({
         el: document.createElement('div'),
@@ -1707,6 +1719,48 @@ function initInstance(type) {
     //     el: document.createElement('div'),
     //     mixins: [mixin]
     //   })
+    // 预报包裹入仓获得积分
+    case 'parcelInboundPointRule':
+      instance = new parcelInboundPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次设置微信认证
+    case 'wechatAuthPointRule':
+      instance = new wechatAuthPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 充值送积分
+    case 'rechargePointRule':
+      instance = new rechargePointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次关注公众号
+    case 'wechatOfficeAccountPointRule':
+      instance = new wechatOfficeAccountPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次绑定手机号
+    case 'bindPhonePointRule':
+      instance = new bindPhonePointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次绑定email
+    case 'bindEmailPointRule':
+      instance = new bindEmailPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
   }
   instance.constrctType = type
 }
