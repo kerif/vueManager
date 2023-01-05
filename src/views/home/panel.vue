@@ -969,7 +969,7 @@ export default {
       window.open(url)
     },
     uploadAndroid() {
-      let url = 'https://jiyun-app-1302976036.cos.ap-hongkong.myqcloud.com/app-release-latest.apk'
+      let url = 'https://jiyun-app-1314883188.cos.ap-hongkong.myqcloud.com/app-release-latest.apk'
       window.open(url)
     },
     uploadIos() {
