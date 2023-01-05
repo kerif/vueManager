@@ -919,6 +919,14 @@ export default {
       dialog({ type: 'invoice', state: 'add' }, () => {
         this.getList()
       })
+      // dialog(
+      //   {
+      //     type: 'invoiceList'
+      //   },
+      //   () => {
+      //     this.getList()
+      //   }
+      // )
     },
     // 编辑发货单
     editInvoice(id) {

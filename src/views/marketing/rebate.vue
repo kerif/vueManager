@@ -98,6 +98,13 @@
           </p>
         </div>
       </div>
+      <!-- <div v-if="this.ruleForm.scope === 1" class="choose-btn">
+        <div class="display-line" v-if="this.lineData.length">
+          <p v-for="item in lineData" :key="item.id">
+            {{ item.name }}
+          </p>
+        </div>
+      </div> -->
       <div class="coupons">
         <p>{{ $t('送券条件') }}：</p>
       </div>
@@ -228,7 +235,9 @@ export default {
       },
       lineName: [], // 保存获取到的路线
       localization: {},
-      statusEdit: false
+      statusEdit: false,
+      lineList: [],
+      lineData: []
     }
   },
   created() {

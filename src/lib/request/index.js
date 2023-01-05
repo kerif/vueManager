@@ -1772,12 +1772,12 @@ exports.derive = () => {
 
 // 字符串翻译导入
 exports.guideInto = params => {
-  return $file.post('string-translations/import',params)
+  return $file.post('string-translations/import', params)
 }
 
 // 测试地址
 exports.testAddress = params => {
-  return $form.get('api-services/google/test',params)
+  return $form.get('api-services/google/test', params)
 }
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
@@ -2731,17 +2731,17 @@ exports.deleteLabel = ids => {
 
 //申报商品库管理列表
 exports.declareLists = params => {
-  return $form.get('product-names',params)
+  return $form.get('product-names', params)
 }
 
 //添加申报商品
 exports.addProduct = params => {
-  return $form.post('product-names',params)
+  return $form.post('product-names', params)
 }
 
 //添加申报商品
 exports.addProduct = params => {
-  return $form.post('product-names',params)
+  return $form.post('product-names', params)
 }
 //获取获取顶级、二级商品名
 exports.getTradeName = () => {
@@ -2754,13 +2754,13 @@ exports.getParticulars = id => {
 }
 
 //修改商品
-exports.amendProduct = (id,params) => {
-  return $form.put(`product-names/${id}`,params)
+exports.amendProduct = (id, params) => {
+  return $form.put(`product-names/${id}`, params)
 }
 
 //删除申报商品
 exports.removeProduct = params => {
-  return $form.put(`product-names/batch-delete`,params)
+  return $form.put(`product-names/batch-delete`, params)
 }
 
 //申报商品库管理列表

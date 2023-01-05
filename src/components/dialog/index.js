@@ -194,6 +194,7 @@ import rechargePointRule from './rechargePointRule.vue'
 import wechatOfficeAccountPointRule from './wechatOfficeAccountPointRule.vue'
 import bindPhonePointRule from './bindPhonePointRule.vue'
 import bindEmailPointRule from './bindEmailPointRule.vue'
+import invoiceList from './invoiceList.vue'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -388,6 +389,7 @@ const rechargePointRuleController = Vue.extend(rechargePointRule)
 const wechatOfficeAccountPointRuleController = Vue.extend(wechatOfficeAccountPointRule)
 const bindPhonePointRuleController = Vue.extend(bindPhonePointRule)
 const bindEmailPointRuleController = Vue.extend(bindEmailPointRule)
+const invoiceListController = Vue.extend(invoiceList)
 
 const mixin = {
   data() {
@@ -1757,6 +1759,13 @@ function initInstance(type) {
     // 首次绑定email
     case 'bindEmailPointRule':
       instance = new bindEmailPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 发货单
+    case 'invoiceList':
+      instance = new invoiceListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

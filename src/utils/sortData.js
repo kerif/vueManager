@@ -27,6 +27,12 @@ export default [
     checked: true
   },
   {
+    id: 'code',
+    name: '线路编号',
+    width: '160',
+    checked: true
+  },
+  {
     id: 'express_line',
     name: '线路名称',
     width: '160',

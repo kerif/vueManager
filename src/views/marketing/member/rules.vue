@@ -126,67 +126,67 @@ export default {
             this.getInOutRule()
           }
         )
-      } else if (code === 'PIS_POINT_INCREASE') {
-        //包裹预报入库获得积分
-        dialog(
-          {
-            type: 'parcelInboundPointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      } else if (code === 'WA_POINT_INCREASE') {
-        //首次设置微信认证
-        dialog(
-          {
-            type: 'wechatAuthPointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      } else if (code === 'RECHARGE_POINT_INCREASE') {
-        //充值送积分
-        dialog(
-          {
-            type: 'rechargePointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      } else if (code === 'OA_POINT_INCREASE') {
-        //首次关注公众号
-        dialog(
-          {
-            type: 'wechatOfficeAccountPointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      } else if (code === 'BP_POINT_INCREASE') {
-        //首次绑定手机号送积分
-        dialog(
-          {
-            type: 'bindPhonePointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      } else if (code === 'BE_POINT_INCREASE') {
-        //首次绑定EMAIL送积分
-        dialog(
-          {
-            type: 'bindEmailPointRule'
-          },
-          () => {
-            this.getInOutRule()
-          }
-        )
-      }
+      } //else if (code === 'PIS_POINT_INCREASE') {
+      //   //包裹预报入库获得积分
+      //   dialog(
+      //     {
+      //       type: 'parcelInboundPointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // } else if (code === 'WA_POINT_INCREASE') {
+      //   //首次设置微信认证
+      //   dialog(
+      //     {
+      //       type: 'wechatAuthPointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // } else if (code === 'RECHARGE_POINT_INCREASE') {
+      //   //充值送积分
+      //   dialog(
+      //     {
+      //       type: 'rechargePointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // } else if (code === 'OA_POINT_INCREASE') {
+      //   //首次关注公众号
+      //   dialog(
+      //     {
+      //       type: 'wechatOfficeAccountPointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // } else if (code === 'BP_POINT_INCREASE') {
+      //   //首次绑定手机号送积分
+      //   dialog(
+      //     {
+      //       type: 'bindPhonePointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // } else if (code === 'BE_POINT_INCREASE') {
+      //   //首次绑定EMAIL送积分
+      //   dialog(
+      //     {
+      //       type: 'bindEmailPointRule'
+      //     },
+      //     () => {
+      //       this.getInOutRule()
+      //     }
+      //   )
+      // }
     }
   }
 }

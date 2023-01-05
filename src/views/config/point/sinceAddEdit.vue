@@ -320,6 +320,7 @@
             filterable
             popper-class="selectLine"
             class="country-select"
+            @change="onLine"
             :placeholder="$t('请选择')"
           >
             <el-option v-for="item in lineData" :key="item.id" :label="item.name" :value="item.id">
@@ -650,6 +651,9 @@ export default {
         .then(res => {
           this.lineData = res.data
         })
+    },
+    onLine() {
+      this.$forceUpdate()
     },
     // 获取计佣方式
     getRules() {

@@ -274,6 +274,9 @@
               <template v-else-if="item.id === 'status_name'">
                 {{ scope.row.status_name }}
               </template>
+              <!-- <template v-else-if="item.id === 'code'">
+                {{ scope.row.express_line.code }}
+              </template> -->
               <template v-else-if="item.id === 'express_line'">
                 {{ scope.row.express_line.cn_name }}
               </template>
@@ -1341,6 +1344,7 @@ export default {
         'user_name',
         'user_member_level',
         'order_sn',
+        'code',
         'express_line',
         'receiver_name',
         'country_name',
