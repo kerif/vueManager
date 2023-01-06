@@ -555,6 +555,7 @@ export default {
         if (this.id) {
           // 更新
           this.$request.updateRegions(this.$route.params.id, this.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -568,12 +569,13 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         } else {
           // 新建
           this.$request.newLineRegions(this.$route.params.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -587,7 +589,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         }
@@ -608,6 +610,7 @@ export default {
         if (this.id) {
           // 模板
           this.$request.updateRegionTmpDetails(this.tmpId, this.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -621,11 +624,12 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         } else {
           this.$request.newRegionTmp(this.tmpId, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -639,13 +643,14 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         }
       }
     },
     init() {
+      console.log(this.submiting, 'sub')
       if (this.id) {
         this.getList()
       }
