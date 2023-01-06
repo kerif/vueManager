@@ -342,6 +342,7 @@ export default {
               children: [{ rule: '邮编规则', start: '', end: '', type: 1 }]
             }
           ]
+          this.ruleForm.country_id = res.id
         })
       } else {
         this.$message.error(this.$t('最多只能添加一个国家/地区'))
@@ -536,6 +537,7 @@ export default {
       //     sub_area_id: item[2]
       //   }))
       // }
+      console.log(this.ruleForm.country_id, 'this.ruleForm.country_id')
       this.submiting = true
       if (this.status === 'channel') {
         let params = {}
