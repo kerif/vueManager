@@ -735,7 +735,7 @@ export default {
         height: '',
         remark: '',
         location: '',
-        box_type: 1,
+        box_type: '',
         express_line_id: '',
         warehouse_id: '',
         insurance_fee: '',
