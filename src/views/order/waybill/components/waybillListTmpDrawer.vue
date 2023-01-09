@@ -220,7 +220,15 @@ export default {
           country_id:
             searchData.countryArr.length > 1
               ? searchData.countryArr[0]
-              : searchData.countryArr[searchData.countryArr.length - 1]
+              : searchData.countryArr[searchData.countryArr.length - 1],
+          area_id:
+            searchData.countryArr.length === 2
+              ? searchData.countryArr[searchData.countryArr.length - 1]
+              : '',
+          sub_area_id:
+            searchData.countryArr.length > 2
+              ? searchData.countryArr[searchData.countryArr.length - 1]
+              : ''
         }
         this.$request.ordersExport(param).then(res => {
           if (res.ret) {

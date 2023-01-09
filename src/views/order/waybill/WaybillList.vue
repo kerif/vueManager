@@ -1697,6 +1697,7 @@ export default {
       }
       if (this.hasFilterCondition) {
         const searchData = this.searchFieldData
+        console.log(searchData.countryArr, 'searchData.countryArr')
         params = {
           ...params,
           ...searchData,
@@ -1710,7 +1711,11 @@ export default {
               ? searchData.countryArr[0]
               : searchData.countryArr[searchData.countryArr.length - 1],
           area_id:
-            searchData.countryArr.length > 1
+            searchData.countryArr.length === 2
+              ? searchData.countryArr[searchData.countryArr.length - 1]
+              : '',
+          sub_area_id:
+            searchData.countryArr.length > 2
               ? searchData.countryArr[searchData.countryArr.length - 1]
               : ''
         }
