@@ -364,10 +364,10 @@
         <el-row :gutter="20">
           <el-col :span="11" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('出箱类型')">
-              <el-radio-group v-model="user.box_type">
+              <!-- <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
                 <el-radio :label="2">{{ $t('多箱出库') }}</el-radio> </el-radio-group
-              >&nbsp;&nbsp;
+              >&nbsp;&nbsp; -->
               <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
             </el-form-item>
           </el-col>
@@ -387,7 +387,7 @@
           </el-col>
         </el-row>
         <!-- 重量 -->
-        <el-row :gutter="20" v-if="user.box_type === 1">
+        <!-- <el-row :gutter="20" v-if="user.box_type === 1">
           <el-col :span="11">
             <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
@@ -398,7 +398,6 @@
               }}</span>
             </el-form-item>
           </el-col>
-          <!-- 尺寸 -->
           <el-col :span="11" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('尺寸')">
               <el-input
@@ -421,7 +420,7 @@
               }}</el-button>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <!-- 子订单单价 -->
         <el-row :gutter="20" v-if="$route.params.parent != 0">
           <el-col :span="10">
