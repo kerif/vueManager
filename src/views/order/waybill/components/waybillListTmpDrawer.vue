@@ -224,7 +224,7 @@ export default {
           area_id:
             searchData.countryArr.length === 2
               ? searchData.countryArr[searchData.countryArr.length - 1]
-              : '',
+              : searchData.countryArr[searchData.countryArr.length - 2],
           sub_area_id:
             searchData.countryArr.length > 2
               ? searchData.countryArr[searchData.countryArr.length - 1]
