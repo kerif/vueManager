@@ -5195,3 +5195,18 @@ exports.getPointRuleForBindEmail = () => {
 exports.setPointRuleForBindEmail = params => {
   return $form.post('in-out-rule/point-be-config', params)
 }
+
+// 创建发货单
+exports.createInvoice = params => {
+  return $form.post('shipments', params)
+}
+
+// 编辑发货单
+exports.editInvoice = (id, params) => {
+  return $form.put(`shipments/${id}`, params)
+}
+
+// 获取详情
+exports.getInvoiceDetail = id => {
+  return $form.get(`shipments/${id}`)
+}

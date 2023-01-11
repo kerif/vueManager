@@ -139,6 +139,13 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 发货单号 -->
         <el-table-column :label="$t('发货单号')" prop="sn" width="155"></el-table-column>
+        <el-table-column :label="$t('类型')" prop="type">
+          <template slot-scope="scope">
+            <span>{{
+              scope.row.type === 0 ? $t('普通') : scope.row.type === 1 ? $t('空运') : $t('海运')
+            }}</span>
+          </template>
+        </el-table-column>
         <!-- 创建时间 -->
         <el-table-column :label="$t('提交时间')" prop="created_at" width="155"></el-table-column>
         <!-- 发货时间 -->
@@ -916,23 +923,32 @@ export default {
     },
     // 创建发货单
     updateInvoice() {
-      dialog({ type: 'invoice', state: 'add' }, () => {
-        this.getList()
-      })
-      // dialog(
-      //   {
-      //     type: 'invoiceList'
-      //   },
-      //   () => {
-      //     this.getList()
-      //   }
-      // )
+      // dialog({ type: 'invoice', state: 'add' }, () => {
+      //   this.getList()
+      // })
+      dialog(
+        {
+          type: 'invoiceList'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 编辑发货单
     editInvoice(id) {
-      dialog({ type: 'invoice', state: 'edit', id: id }, () => {
-        this.getList()
-      })
+      // dialog({ type: 'invoice', state: 'edit', id: id }, () => {
+      //   this.getList()
+      // })
+      dialog(
+        {
+          type: 'invoiceList',
+          id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     goInvoice(id) {
       this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {
