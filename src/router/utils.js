@@ -74,17 +74,19 @@ const getRoutesPath = (routes, arr) => {
 }
 
 const matchRoute = (routes, path) => {
-  let isMatch = false
-  routes.forEach(item => {
+  const isMatch = routes.some(item => {
     const currentArr = item.split('/')
     const toArr = path.split('/')
+    if (currentArr.length !== toArr.length) return false
+    let flag = true
     if (currentArr.length === toArr.length) {
       currentArr.forEach((current, index) => {
-        if (current === toArr[index] || /:[0-9A-Za-z]{1,}/.test(current)) {
-          isMatch = true
+        if (!(current === toArr[index] || /:[0-9A-Za-z]{1,}/.test(current))) {
+          flag = false
         }
       })
     }
+    return flag
   })
   return isMatch
 }
