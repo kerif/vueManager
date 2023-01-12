@@ -29,6 +29,7 @@ for (let type of ['null', 'string', 'number', 'function', 'Promise', 'boolean'])
 // 多叉树遍历
 const multiTree = function (node, flag) {
   let stack = []
+  let fliterArr = []
   const pushStack = function (node) {
     // 将子节点加入栈
     let children = node.children
@@ -36,7 +37,8 @@ const multiTree = function (node, flag) {
       for (let subNode of children) {
         subNode.filter = function () {
           // 添加过滤函数
-          children.splice(children.indexOf(this), 1)
+          const filterItem = children.splice(children.indexOf(this), 1)
+          fliterArr.push(...filterItem)
         }
         stack.push(subNode)
       }
@@ -54,7 +56,37 @@ const multiTree = function (node, flag) {
     }
     pushStack(item)
   }
-  return node
+  const fliterPaths = []
+  getRoutesPath(fliterArr, fliterPaths)
+  console.log(fliterPaths)
+  return [node, fliterPaths]
 }
 
-export { clone, multiTree }
+// 获取路由 path
+const getRoutesPath = (routes, arr) => {
+  routes.forEach(route => {
+    if (route.children && route.children.length) {
+      getRoutesPath(route.children, arr)
+    } else {
+      arr.push(route.path)
+    }
+  })
+}
+
+const matchRoute = (routes, path) => {
+  let isMatch = false
+  routes.forEach(item => {
+    const currentArr = item.split('/')
+    const toArr = path.split('/')
+    if (currentArr.length === toArr.length) {
+      currentArr.forEach((current, index) => {
+        if (current === toArr[index] || /:[0-9A-Za-z]{1,}/.test(current)) {
+          isMatch = true
+        }
+      })
+    }
+  })
+  return isMatch
+}
+
+export { clone, multiTree, matchRoute }

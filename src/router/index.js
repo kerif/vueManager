@@ -9,7 +9,7 @@ const loadonDemand = path => {
 // 登录
 const Login = loadonDemand('login')
 const NotFound = loadonDemand('404')
-
+const NoPermission = loadonDemand('NoPermission')
 const Layout = loadonDemand('layout/layouttop')
 
 Vue.use(Router)
@@ -39,6 +39,11 @@ const constantRouterMap = [
     path: '/pdf/orderDetailPdf/:id',
     name: 'orderDetailPdf',
     component: () => import('@/views/pdf/orderDetailPdf.vue')
+  },
+  {
+    path: '/no_permission',
+    name: 'noPermission',
+    component: NoPermission
   },
   {
     path: '*',

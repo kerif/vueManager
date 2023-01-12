@@ -12,6 +12,7 @@ export default new Vuex.Store({
     isPermissionFilter: false,
     fileterAfterRouterMap: [],
     isPermissionFilterArr: [],
+    noPermmissionArr: [],
     token: '',
     userName: '', // 用户名
     groupMe: '', // 是否显示拼团配置
@@ -75,6 +76,7 @@ export default new Vuex.Store({
     saveFileterAfterRouterMap(state, data) {
       state.fileterAfterRouterMap = data.fileterAfterRouterMap
       state.isPermissionFilterArr = data.isPermissionFilterArr
+      state.noPermmissionArr = data.noPermmissionArr
     },
     saveLanguageCode(state, data) {
       state.languageCode = data.locale
