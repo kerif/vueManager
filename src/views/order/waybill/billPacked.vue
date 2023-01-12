@@ -1111,6 +1111,20 @@ export default {
             price: item.price
           }
         })
+      if (this.user.box.length && this.user.box.length > 1) {
+        this.user.box_type = 2
+        delete this.user.width,
+          delete this.user.height,
+          delete this.user.length,
+          delete this.user.weight
+      } else if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
+        this.user.width = this.user.box[0].width
+        this.user.height = this.user.box[0].height
+        this.user.length = this.user.box[0].length
+        this.user.weight = this.user.box[0].weight
+        delete this.user.box
+      }
       if (this.user.box_type === 1) {
         this.user.system_box_id = this.boxId
       }
@@ -1132,18 +1146,6 @@ export default {
         let params = {
           ...this.user
         }
-        if (this.user.box_type === 1) {
-          params.width = this.user.width || ''
-          params.height = this.user.height || ''
-          params.length = this.user.length || ''
-          params.weight = this.user.weight || ''
-        } else {
-          params.width = ''
-          params.height = ''
-          params.length = ''
-          params.weight = ''
-        }
-
         params.declare = {
           items: [],
           tax_number: ''
@@ -1319,7 +1321,16 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
-        this.user.box = res.data.box
+        if (res.data.box_type === 1) {
+          this.user.box.push({
+            width: res.data.width,
+            height: res.data.height,
+            length: res.data.length,
+            weight: res.data.weight
+          })
+        } else {
+          this.user.box = res.data.box
+        }
         this.user.remark = res.data.remark
         this.user.location = res.data.location
         this.user.in_warehouse_item = res.data.in_warehouse_item
