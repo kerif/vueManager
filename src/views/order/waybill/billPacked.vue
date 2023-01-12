@@ -1132,6 +1132,18 @@ export default {
         let params = {
           ...this.user
         }
+        if (this.user.box_type === 1) {
+          params.width = this.user.width || ''
+          params.height = this.user.height || ''
+          params.length = this.user.length || ''
+          params.weight = this.user.weight || ''
+        } else {
+          params.width = ''
+          params.height = ''
+          params.length = ''
+          params.weight = ''
+        }
+
         params.declare = {
           items: [],
           tax_number: ''

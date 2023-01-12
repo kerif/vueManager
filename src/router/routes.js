@@ -136,6 +136,8 @@ const SinceList = loadonDemand('config/point/since')
 const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 自提点配置 计佣方式配置
 const commissionSet = loadonDemand('config/point/commission')
+// 配置 自提点配置 批量导入
+const selfbatchImport = loadonDemand('config/point/selfbatchImport')
 // 配置 更多配置
 // const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置
@@ -1450,6 +1452,18 @@ export default [
               level: 3,
               group: '配置',
               name: '计佣方式配置',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/selfbatchImport',
+            name: 'selfbatchImport',
+            component: selfbatchImport,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '批量导入',
               parent: '/config/point'
             }
           },

@@ -10,6 +10,7 @@
           <el-option v-for="item in statusList" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
+        <el-button @click="onBatch" class="btn">{{ $t('批量导入') }}</el-button>
       </div>
       <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
       <div class="sort-sty">
@@ -446,6 +447,9 @@ export default {
             this.getList()
           }
         })
+    },
+    onBatch() {
+      this.$router.push({ name: 'selfbatchImport' })
     }
   }
 }
@@ -492,8 +496,11 @@ export default {
     margin-bottom: 20px;
   }
   .chooseStatus {
-    width: 150px;
+    // width: 150px;
     display: inline-block;
+    .btn {
+      margin: 0 0 0 5px;
+    }
   }
   .second-sty {
     margin-top: 20px;

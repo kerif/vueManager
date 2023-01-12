@@ -69,8 +69,21 @@
           {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
         </div>
       </el-form-item>
+      <el-form-item :label="$t('是否退款充值')">
+        <el-switch
+          v-model="ruleForm.is_refund"
+          :active-text="$t('开')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关')"
+          active-color="#13ce66"
+          inactive-color="gray"
+          @change="changeValue"
+        >
+        </el-switch>
+      </el-form-item>
       <!-- 是否审核 -->
-      <el-form-item :label="$t('是否审核')">
+      <el-form-item :label="$t('是否审核')" v-if="!ruleForm.is_refund">
         <el-switch
           v-model="ruleForm.should_audit"
           :active-text="$t('开')"
@@ -103,7 +116,8 @@ export default {
         transfer_account: '',
         should_audit: 0,
         remark: '',
-        images: []
+        images: [],
+        is_refund: 0
       },
       baleImgList: [],
       localization: {},
@@ -157,6 +171,7 @@ export default {
       this.ruleForm.should_audit = 0
       this.ruleForm.remark = ''
       this.ruleForm.images = []
+      this.ruleForm.is_refund = 0
     },
     // 客户id
     queryCNSearch(queryString, callback) {
@@ -243,6 +258,13 @@ export default {
     },
     init() {
       this.getPaymentType()
+    },
+    changeValue(value) {
+      if (value === 1) {
+        this.ruleForm.should_audit = 1
+      } else {
+        this.ruleForm.should_audit = 0
+      }
     }
   }
 }

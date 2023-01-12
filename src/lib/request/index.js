@@ -5210,3 +5210,18 @@ exports.editInvoice = (id, params) => {
 exports.getInvoiceDetail = id => {
   return $form.get(`shipments/${id}`)
 }
+
+// 自提点模板解析
+exports.stationTmpAnalysis = params => {
+  return $file.post(`self-pickup-stations/excel-parse`, params)
+}
+
+// 批量新增
+exports.batchAddStation = params => {
+  return $json.post(`self-pickup-stations/store-batch`, params)
+}
+
+// 获取自提点导入模板
+exports.importStationTmp = () => {
+  return $form.get(`self-pickup-stations/download-template`, { responseType: 'blob' })
+}
