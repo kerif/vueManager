@@ -146,6 +146,11 @@ export default {
             })
             this.tableData.forEach(item => {
               item.express = item.express_lines.map(item => item.name).join(',')
+              item.opening_hours = ''
+              item.announcement = ''
+              item.edit_notice_jurisdiction = 0
+              item.lon = ''
+              item.lat = ''
             })
             console.log(this.tableData, 'table')
             this.localization = res.localization
@@ -169,6 +174,27 @@ export default {
       rows.splice(index, 1)
     },
     saveData() {
+      this.tableData = this.tableData.map(item => {
+        const area_id = item.area.id
+        const sub_area_id = item.sub_area.id
+        const country_id = item.country.id
+        const rule_id = item.rule.id
+        const expressLines = item.express_lines
+        delete item.area,
+          delete item.sub_area,
+          delete item.country,
+          delete item.rule,
+          delete item.express,
+          delete item.express_lines
+        return {
+          ...item,
+          area_id,
+          sub_area_id,
+          country_id,
+          rule_id,
+          expressLines
+        }
+      })
       this.$request.batchAddStation({ ...this.tableData }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -176,6 +202,7 @@ export default {
             message: res.tips,
             type: 'success'
           })
+          this.$router.go(-1)
         } else {
           this.$notify({
             title: this.$t('操作失败'),

@@ -256,6 +256,7 @@ export default {
     getList() {
       this.$request.getRebateDetails(this.$route.query.id).then(res => {
         this.ruleForm = res.data
+        this.lineData = res.data.express_lines
         this.ruleForm.trigger_condition = res.data.trigger_condition
           ? res.data.trigger_condition
           : 1
@@ -342,12 +343,11 @@ export default {
   }
   .display-line {
     display: inline-block;
-    padding: 5px;
+    padding: 5px 10px;
     width: 245px;
-    margin-left: 15px;
     background-color: #ccc;
     p {
-      margin: 0;
+      margin: 5px;
     }
   }
 }
