@@ -221,7 +221,7 @@ export default {
       })
     },
     //配置
-    expressConfig(id){
+    expressConfig(id) {
       dialog({ type: 'expressConfig', state: 'add', id: id }, () => {
         this.getExpress()
       })

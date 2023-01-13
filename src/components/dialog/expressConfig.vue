@@ -1,7 +1,20 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('基础配置')" class="dialog-add-express" width="50%" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('基础配置')"
+    class="dialog-add-express"
+    width="50%"
+    @close="clear"
+  >
     <div>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm" label-position="left">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="150px"
+        class="demo-ruleForm"
+        label-position="left"
+      >
         <el-form-item :label="$t('快递公司名称')" prop="name">
           <el-input v-model="ruleForm.name" :placeholder="$t('请输入快递公司名称')"> </el-input>
         </el-form-item>
@@ -12,11 +25,23 @@
           <el-input v-model.number="ruleForm.index" :placeholder="$t('请输入排序索引')"> </el-input>
         </el-form-item>
         <el-form-item :label="$t('启用状态')">
-          <el-switch v-model="ruleForm.state" :active-value="1" :inactive-value="0"  :active-text="$t('开')" :inactive-text="$t('关')">
+          <el-switch
+            v-model="ruleForm.state"
+            :active-value="1"
+            :inactive-value="0"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+          >
           </el-switch>
         </el-form-item>
         <el-form-item :label="$t('到件先知')">
-          <el-switch v-model="ruleForm.auto_status" :active-value="1" :inactive-value="0"  :active-text="$t('开')" :inactive-text="$t('关')">
+          <el-switch
+            v-model="ruleForm.auto_status"
+            :active-value="1"
+            :inactive-value="0"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+          >
           </el-switch>
         </el-form-item>
       </el-form>
@@ -89,7 +114,7 @@ export default {
       this.ruleForm.code = ''
       this.ruleForm.state = 1
       this.ruleForm.auto_status = 1
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.resetFields()
     },
     confirm(formName) {
       this.$refs[formName].validate(valid => {

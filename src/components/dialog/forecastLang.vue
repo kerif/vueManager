@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + $t('的翻译内容')" class="dialog-pay-lang" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="line.name + $t('的翻译内容')"
+    class="dialog-pay-lang"
+    @close="clear"
+  >
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -8,18 +13,23 @@
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <el-form-item :label="$t('描述')" prop="name">
-        <el-input type="textarea" v-model="ruleForm.name" :autosize="{ minRows: 2, maxRows: 4 }" :placeholder="$t('请输入')"></el-input>
+        <el-input
+          type="textarea"
+          v-model="ruleForm.name"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入')"
+        ></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
       <el-button :loading="$store.state.btnLoading" type="primary" @click="confirm('ruleForm')">{{
-          $t('确定')
-        }}</el-button>
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
-  <script>
+<script>
 export default {
   data() {
     return {

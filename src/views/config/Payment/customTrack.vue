@@ -444,7 +444,7 @@ export default {
     getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
-          console.log(res.data);
+          console.log(res.data)
           this.languageData = res.data
         }
       })

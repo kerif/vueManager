@@ -1147,14 +1147,14 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
-       // 更多配置 预报快递公司 配置
+    // 更多配置 预报快递公司 配置
     case 'expressConfig':
       instance = new ExpressConfig({
         el: document.createElement('div'),
         mixins: [mixin]
       })
       break
-          // 更多配置 预报快递公司 配置
+    // 更多配置 预报快递公司 配置
     case 'expressConfigAend':
       instance = new ExpressConfigAend({
         el: document.createElement('div'),
@@ -1217,7 +1217,7 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
-       // 更多配置 预报快递公司 更改语言
+    // 更多配置 预报快递公司 更改语言
     case 'forecastLang':
       instance = new ForecastLangController({
         el: document.createElement('div'),
