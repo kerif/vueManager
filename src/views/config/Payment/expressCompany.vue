@@ -70,7 +70,7 @@
           <span v-else class="el-icon-plus icon-sty" @click="onExpress(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')" width="140">
+      <el-table-column :label="$t('操作')" width="180">
         <template slot-scope="scope">
           <el-button
             class="btn-dark-green"
@@ -98,6 +98,11 @@
             "
             >{{ $t('轨迹替换') }}</el-button
           >
+          <!-- <el-button
+            class="btn-dark-green"
+            @click="expressConfig(scope.row.id)"
+            >{{ $t('配置') }}</el-button
+          > -->
         </template>
       </el-table-column>
     </el-table>
@@ -212,6 +217,12 @@ export default {
     },
     editExpress(id) {
       dialog({ type: 'expressEditAdd', state: 'edit', id: id }, () => {
+        this.getExpress()
+      })
+    },
+    //配置
+    expressConfig(id){
+      dialog({ type: 'expressConfig', state: 'add', id: id }, () => {
         this.getExpress()
       })
     },

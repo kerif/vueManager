@@ -63,6 +63,8 @@ import advertiseLang from './advertiseLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
 import expressEditAdd from './expressAddEdit.vue'
+import expressConfig from './expressConfig.vue'
+import expressConfigAend from './expressConfigAend.vue'
 import expressLang from './expressLang.vue'
 import rulesEdit from './rulesEdit.vue'
 import vipAdd from './vipAdd.vue'
@@ -71,6 +73,7 @@ import setCountry from './setCountry.vue'
 import explanationAdd from './insuranceAdd.vue'
 import expressChange from './storageChange.vue'
 import trackingLang from './trackingLang.vue'
+import forecastLang from './forecastLang.vue'
 import batchExpress from './batchExpress.vue'
 import rebateLang from './rebateLang.vue'
 import newLang from './newLang.vue'
@@ -257,6 +260,8 @@ const AdvertiseLangController = Vue.extend(advertiseLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
 const ExpressDetailsController = Vue.extend(expressEditAdd)
+const ExpressConfig = Vue.extend(expressConfig)
+const ExpressConfigAend = Vue.extend(expressConfigAend)
 const ExpressLangController = Vue.extend(expressLang)
 const RulesEditController = Vue.extend(rulesEdit)
 const VipAddController = Vue.extend(vipAdd)
@@ -265,6 +270,7 @@ const SetCountryController = Vue.extend(setCountry)
 const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
+const ForecastLangController = Vue.extend(forecastLang)
 const BatchController = Vue.extend(batchExpress)
 const RebateLangController = Vue.extend(rebateLang)
 const NewLangController = Vue.extend(newLang)
@@ -1141,6 +1147,20 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+       // 更多配置 预报快递公司 配置
+    case 'expressConfig':
+      instance = new ExpressConfig({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+          // 更多配置 预报快递公司 配置
+    case 'expressConfigAend':
+      instance = new ExpressConfigAend({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 发货快递公司 修改语言
     case 'expressLang':
       instance = new ExpressLangController({
@@ -1193,6 +1213,13 @@ function initInstance(type) {
     // 更多配置 系统物流类型 更改语言
     case 'trackingLang':
       instance = new TrackingLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+       // 更多配置 预报快递公司 更改语言
+    case 'forecastLang':
+      instance = new ForecastLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
