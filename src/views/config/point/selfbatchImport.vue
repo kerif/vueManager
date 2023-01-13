@@ -175,10 +175,10 @@ export default {
     },
     saveData() {
       this.tableData = this.tableData.map(item => {
-        const area_id = item.area.id
-        const sub_area_id = item.sub_area.id
-        const country_id = item.country.id
-        const rule_id = item.rule.id
+        const area_id = item.area && item.area.id
+        const sub_area_id = item.sub_area && item.sub_area.id
+        const country_id = item.country && item.country.id
+        const rule_id = item.rule && item.rule.id
         const expressLines = item.express_lines
         delete item.area,
           delete item.sub_area,
