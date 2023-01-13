@@ -2767,6 +2767,62 @@ exports.removeProduct = params => {
 exports.declareListChildren = id => {
   return $form.get(`product-names/${id}/children`)
 }
+
+//预报快递公司列表
+exports.ForecastExpressList = () => {
+  return $form.get(`express-companies/index`)
+}
+
+//新增预报快递公司
+exports.AddForecastCompanies = params => {
+  return $form.post(`express-companies`,params)
+}
+
+//预报快递公司列表排序
+exports.ForecastCompaniesSort = params => {
+  return $form.put(`express-companies/sort-index`,params)
+}
+
+//预报快递公司列表删除
+exports.ForecastCompaniesDelete = id => {
+  return $form.delete(`express-companies/${id}`)
+}
+
+//预报快递公司列表到件先知状态
+exports.ForecastArrivalStatus= (id,status) => {
+  return $form.put(`express-companies/${id}/auto-status/${status}`)
+}
+
+//预报快递公司列表状态
+exports.ForecastCompaniesListStatus= (id,status) => {
+  return $form.put(`express-companies/${id}/status/${status}`)
+}
+
+//预报快递公司获取详情
+exports.ForecastCompaniesDetails= (id) => {
+  return $form.get(`express-companies/${id}`)
+}
+
+//预报快递公司获取修改基础配置
+exports.updateForecastCompanies= (id,params) => {
+  return $form.put(`express-companies/${id}`,params)
+}
+
+//预报快递公司获取更新配置
+exports.updateConfig= (id,params) => {
+  return $form.put(`express-companies/${id}/config`,params)
+}
+
+//预报快递公司获取语言详情
+exports.forecastLangDetails= (id,params) => {
+  return $form.get(`express-companies/${id}`,{params})
+}
+
+//预报快递公司语言修改
+exports.forecastLang= (id,params) => {
+  return $form.put(`express-companies/${id}/translate-data`,params)
+}
+
 // 自提点 获取详细
 exports.getOneSelf = id => {
   return $form.get(`self-pickup-stations/${id}`)
