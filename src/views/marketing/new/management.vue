@@ -11,7 +11,11 @@
               ? $t('邀请新人送券')
               : $route.params.type === 3
               ? $t('被邀请人送券')
-              : $t('下单返券')
+              : $route.params.type === 4
+              ? $t('下单返券')
+              : $route.params.type === 5
+              ? $t('关注公众号领券')
+              : $t('生日营销')
           }}
         </h3>
         <div style="width: 1100px">

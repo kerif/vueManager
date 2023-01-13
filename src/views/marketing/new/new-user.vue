@@ -227,9 +227,9 @@ export default {
       } else if (type === 4) {
         // 下单返券
         this.$router.push({ name: 'rebates', params: { type: type } })
-      } // else if (type === 5) {
-      //   this.$router.push({ name: 'new', params: { type: type } })
-      // }
+      } else if (type === 5) {
+        this.$router.push({ name: 'new', params: { type: type } })
+      }
       // this.$router.push({ name: 'managementNew', params: { type: type } })
     }
   }

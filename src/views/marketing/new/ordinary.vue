@@ -135,7 +135,7 @@ export default {
         days: '',
         weight: '',
         min_weight: '',
-        scope: 1,
+        scope: 0,
         express_line_ids: []
       },
       rules: {}
