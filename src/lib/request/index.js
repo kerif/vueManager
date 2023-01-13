@@ -5225,3 +5225,13 @@ exports.batchAddStation = params => {
 exports.importStationTmp = () => {
   return $form.get(`self-pickup-stations/download-template`, { responseType: 'blob' })
 }
+
+// 导出海运发货单
+exports.uploadOceanShip = params => {
+  return $form.post(`shipments/export/ship`, params)
+}
+
+// 导出空运发货单
+exports.uploadAirShip = params => {
+  return $form.post(`shipments/export/air`, params)
+}

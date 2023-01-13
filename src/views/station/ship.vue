@@ -75,9 +75,20 @@
         <el-button size="small" class="btn-blue" @click="batchInvoice">{{
           $t('批量导入发货单')
         }}</el-button>
-        <el-button size="small" type="success" plain @click="uploadListExcel">{{
-          $t('导出清单')
-        }}</el-button>
+        <el-dropdown>
+          <el-button size="small" type="success" plain>{{ $t('导出清单') }}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="uploadListExcel">{{
+              $t('导出清单')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(1)">{{
+              $t('空运发货单')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(2)">{{
+              $t('海运发货单')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <div class="search-l">
         <search-group
@@ -1026,6 +1037,29 @@ export default {
             })
           }
         })
+    },
+    uploadInvoice(type) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      let method = type === 1 ? 'uploadAirShip' : 'uploadOceanShip'
+      let params = {
+        ids: this.deleteNum
+      }
+      this.$request[method](params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }
