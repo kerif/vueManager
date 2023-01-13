@@ -47,7 +47,9 @@
         <el-input
           class="input-sty"
           v-model="ruleForm.refund_amount"
-          :disabled="activeName === '1' || activeName === '2'"
+          :disabled="
+            activeName === '1' || activeName === '2' || (status !== 1 && paymentStatus !== 2)
+          "
         >
         </el-input>
         <div class="updateImg">
@@ -140,6 +142,8 @@ export default {
       localization: {},
       parent: '',
       packages: '',
+      status: '',
+      paymentStatus: '',
       updateProp: [
         {
           id: 0,

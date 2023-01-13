@@ -460,7 +460,9 @@
                       activeName,
                       scope.row.pay_amount,
                       scope.row.payment_type_name,
-                      scope.row.is_parent
+                      scope.row.is_parent,
+                      scope.row.status,
+                      scope.row.payment_status
                     )
                   "
                 >
@@ -779,7 +781,10 @@
                               scope.row.id,
                               activeName,
                               scope.row.pay_amount,
-                              scope.row.payment_type_name
+                              scope.row.payment_type_name,
+                              scope.row.is_parent,
+                              scope.row.status,
+                              scope.row.payment_status
                             )
                           "
                           v-if="['1', '2', '3'].includes(activeName)"
@@ -2332,7 +2337,7 @@ export default {
       )
     },
     // 作废
-    invalidOrder(id, activeName, payAmount, paymentTypeName, parent) {
+    invalidOrder(id, activeName, payAmount, paymentTypeName, parent, status, paymentStatus) {
       dialog(
         {
           type: 'voidList',
@@ -2340,7 +2345,9 @@ export default {
           activeName: activeName,
           payAmount: payAmount,
           paymentTypeName: paymentTypeName,
-          parent: parent
+          parent: parent,
+          status,
+          paymentStatus
         },
         () => {
           this.getList()

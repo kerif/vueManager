@@ -230,6 +230,7 @@ const System = loadonDemand('marketing/member/system')
 const Newuser = loadonDemand('marketing/new/new-user')
 // 营销管理 用户福利 新增
 const addNew = loadonDemand('marketing/new/addNew')
+const ordinary = loadonDemand('marketing/new/ordinary')
 // 营销管理 用户福利 管理
 const managementNew = loadonDemand('marketing/new/management')
 // 营销管理  下单返券
@@ -1904,6 +1905,18 @@ export default [
             path: '/marketing/new/addNew/:type',
             name: 'addNew',
             component: addNew,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新增用户福利',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/new/ordinary/:type',
+            name: 'ordinary',
+            component: ordinary,
             id: 801,
             meta: {
               level: 3,
