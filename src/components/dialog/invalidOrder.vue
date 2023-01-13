@@ -48,7 +48,7 @@
           class="input-sty"
           v-model="ruleForm.refund_amount"
           :disabled="
-            (status === 1 && paymentStatus === 2) || activeName === '1' || activeName === '2'
+            (activeName === '1' && !(status === 1 && paymentStatus === 2)) || activeName === '2'
           "
         >
         </el-input>
