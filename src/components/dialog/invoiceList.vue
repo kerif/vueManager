@@ -599,7 +599,20 @@ export default {
     getList() {
       this.$request.getInvoiceDetail(this.id).then(res => {
         if (res.ret) {
-          this.form = res.data
+          this.form.name = res.data.name
+          this.form.country_id = res.data.country_id
+          this.form.warehouse_id = res.data.warehouse_id
+          this.form.remark = res.data.remark
+          this.form.mawb = res.data.mawb
+          this.form.type = 1
+          if (res.data.type === 1) {
+            this.form.air_info = res.data.air_info
+          } else {
+            this.form.ship_info = res.data.ship_info
+            this.form.container_info = res.data.container_info
+          }
+          this.form.sender_info = res.data.sender_info
+          this.form.extra_info = res.data.extra_info
         }
       })
     },
