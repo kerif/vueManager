@@ -65,6 +65,12 @@
                     class="ipt"
                     placeholder="请输入sender_id"
                     v-model="ruleForm.aestron.sender_id"
+                    @input="
+                      ruleForm.aestron.sender_id = ruleForm.aestron.sender_id.replace(
+                        /[^\w\.\/]/gi,
+                        ''
+                      )
+                    "
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="app_id">
@@ -86,13 +92,13 @@
           </div>
           <div>
             <el-form label-width="100px" label-position="left">
-              <el-form-item label="中国大陆">
+              <el-form-item :label="$t('中国大陆')">
                 <el-radio-group v-model="ruleForm.area_china_platform">
                   <el-radio :label="1">{{ $t('聚合') }}</el-radio>
                   <el-radio :label="2">aestron</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="国际">
+              <el-form-item :label="$t('国际')">
                 <el-radio-group v-model="ruleForm.area_intl_platform">
                   <el-radio :label="1">{{ $t('聚合') }}</el-radio>
                   <el-radio :label="2">aestron</el-radio>
@@ -153,6 +159,7 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
+      <span class="red-title">({{ $t('聚合') }})</span>
       <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
@@ -544,6 +551,9 @@ export default {
       color: #ccc;
       vertical-align: middle;
     }
+  }
+  .red-title {
+    color: red;
   }
 }
 .details-dialog {
