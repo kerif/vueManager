@@ -38,20 +38,67 @@
           <el-button @click="purchase" class="btn-main">{{ $t('购买记录') }}</el-button>
         </div>
       </el-col>
-      <el-col :span="7" class="user-left">
+      <el-col :span="10" class="user-left">
         <div class="new-top">
           <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{
             $t('第三方短信服务')
           }}</el-radio>
-          <div class="message-main">
-            <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
-            <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
-            <el-button class="buy-sty" @click="test('china')">{{ $t('测试') }}</el-button>
+          <div style="display: flex; margin-top: 20px">
+            <div style="flex: 2">
+              <div>{{ $t('聚合') }}</div>
+              <div class="message-main">
+                <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
+                <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
+                <el-button class="buy-sty" @click="test('china')">{{ $t('测试') }}</el-button>
+              </div>
+              <div class="message-main">
+                <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
+                <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
+                <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
+              </div>
+            </div>
+            <div style="width: 260px">
+              <div>Aestron</div>
+              <el-form :model="ruleForm.aestron">
+                <el-form-item label="sender_id">
+                  <el-input
+                    class="ipt"
+                    placeholder="请输入sender_id"
+                    v-model="ruleForm.aestron.sender_id"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="app_id">
+                  <el-input
+                    placeholder="请输入app_id"
+                    class="ipt"
+                    v-model="ruleForm.aestron.app_id"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="certificate">
+                  <el-input
+                    class="ipt"
+                    placeholder="请输入certificate"
+                    v-model="ruleForm.aestron.certificate"
+                  ></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
           </div>
-          <div class="message-main">
-            <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
-            <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
-            <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
+          <div>
+            <el-form label-width="100px" label-position="left">
+              <el-form-item label="中国大陆">
+                <el-radio-group v-model="ruleForm.area_china_platform">
+                  <el-radio :label="1">{{ $t('聚合') }}</el-radio>
+                  <el-radio :label="2">aestron</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="国际">
+                <el-radio-group v-model="ruleForm.area_intl_platform">
+                  <el-radio :label="1">{{ $t('聚合') }}</el-radio>
+                  <el-radio :label="2">aestron</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
       </el-col>
@@ -195,7 +242,14 @@ export default {
         app_key: '',
         intl_app_key: '',
         count: '',
-        intl_count: ''
+        intl_count: '',
+        area_china_platform: 1,
+        area_intl_platform: 1,
+        aestron: {
+          sender_id: '',
+          app_id: '',
+          certificate: ''
+        }
       },
       radio: 2,
       dialogVisible: false,
@@ -392,7 +446,7 @@ export default {
     margin-bottom: 10px;
     padding: 20px;
     background: #fff;
-    height: 240px;
+    height: 450px;
     .top-img {
       margin-top: 50px;
       margin-bottom: 40px;
@@ -416,7 +470,7 @@ export default {
     }
   }
   .user-left {
-    margin-left: 20px;
+    // margin-left: 20px;
   }
   .font-sty {
     font-size: 12px;

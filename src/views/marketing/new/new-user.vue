@@ -53,6 +53,50 @@
             </div>
             <p class="font-sty">{{ $t('客户订单支付成功后即可返券') }}</p>
           </div>
+          <div v-if="item.type === 5">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('普通优惠券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('生成普通优惠券,生成后需要投放才能在用户的券包中') }}</p>
+          </div>
+          <div v-if="item.type === 6">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('用户抢券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('生成二维码抢券页面,由用户点击领取') }}</p>
+          </div>
+          <div v-if="item.type === 7">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('关注公众号领券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('用户关注公众号即可领取') }}</p>
+          </div>
+          <div v-if="item.type === 8">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('生日营销') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('根据用户生日日期发放生日券') }}</p>
+          </div>
           <div class="user-bottom">
             <div class="bottom-left">
               <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{

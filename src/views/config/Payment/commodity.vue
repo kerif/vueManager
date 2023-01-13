@@ -25,7 +25,11 @@
             <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
             <!-- 分类分组 -->
             <el-table-column :label="$t('分类分组')" prop="group_name"></el-table-column>
-            <el-table-column :label="$t('物品属性')" prop="group_name"></el-table-column>
+            <el-table-column :label="$t('物品属性')" prop="props">
+              <template slot-scope="scope">
+                <span v-for="item in scope.row.props" :key="item.id">{{ item.name }}</span>
+              </template>
+            </el-table-column>
             <!-- 是否显示 -->
             <el-table-column :label="$t('是否显示')">
               <template slot-scope="scope">
@@ -96,7 +100,13 @@
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 一级分类名称 -->
       <el-table-column :label="$t('一级分类名称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('物品属性')" prop="group_name"></el-table-column>
+      <el-table-column :label="$t('物品属性')" prop="props">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.props" :key="item.id">
+            {{ item.name }}
+          </span>
+        </template>
+      </el-table-column>
       <!-- 是否显示 -->
       <el-table-column :label="$t('是否显示')">
         <template slot-scope="scope">

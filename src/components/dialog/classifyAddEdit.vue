@@ -44,7 +44,7 @@
         <el-input v-model="ruleForm.hs_code" :placeholder="$t('请输入海关编码')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('物品属性')" prop="hs_code" class="input-style">
-        <el-select v-model="ruleForm.props" clearable :placeholder="$t('请选择')">
+        <el-select v-model="ruleForm.prop_ids" clearable :placeholder="$t('请选择')">
           <el-option
             v-for="item in propList"
             :key="item.id"
@@ -68,7 +68,8 @@ export default {
         name: '',
         parent_id: 0,
         sku: '',
-        hs_code: ''
+        hs_code: '',
+        prop_ids: ''
       },
       propList: [],
       classifyList: [],
@@ -128,6 +129,7 @@ export default {
     confirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.ruleForm.prop_ids = [this.ruleForm.prop_ids]
           if (this.id) {
             // 如果是编辑状态
             this.$request.updateCategories(this.id, this.ruleForm).then(res => {
@@ -175,6 +177,7 @@ export default {
       this.ruleForm.parent_id = 0
       this.ruleForm.sku = ''
       this.ruleForm.hs_code = ''
+      this.ruleForm.prop_ids = []
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
