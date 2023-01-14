@@ -207,7 +207,7 @@ export default {
     goAdd(type) {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type } })
-      } else if (type === 5 || type === 6) {
+      } else if (type === 5 || type === 6 || type === 7 || type === 8) {
         this.$router.push({ name: 'ordinary', params: { type: type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: type } })
@@ -227,9 +227,7 @@ export default {
       } else if (type === 4) {
         // 下单返券
         this.$router.push({ name: 'rebates', params: { type: type } })
-      } else if (type === 5) {
-        this.$router.push({ name: 'new', params: { type: type } })
-      } else if (type === 6) {
+      } else if (type === 5 || type === 6 || type === 7 || type === 8) {
         this.$router.push({ name: 'new', params: { type: type } })
       }
       // this.$router.push({ name: 'managementNew', params: { type: type } })

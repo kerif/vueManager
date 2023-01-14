@@ -124,7 +124,8 @@ export default {
     }
   },
   mounted() {
-    this.ForecastExpressList()
+    this.page_params.page = 1
+    this.getList()
     this.getLanguageList()
   },
   computed: {
@@ -145,7 +146,7 @@ export default {
           state: 'forecastLang'
         },
         () => {
-          this.ForecastExpressList()
+          this.getList()
         }
       )
     },
@@ -165,7 +166,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.ForecastExpressList()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -182,7 +183,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.ForecastExpressList()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -207,7 +208,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.ForecastExpressList()
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -228,7 +229,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.ForecastExpressList()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -237,7 +238,7 @@ export default {
         }
       })
     },
-    ForecastExpressList() {
+    getList() {
       this.$request
         .ForecastExpressList({
           page: this.page_params.page,
@@ -258,12 +259,12 @@ export default {
     },
     configuration(id) {
       dialog({ type: 'expressConfigAend', state: 'add', id: id }, () => {
-        this.ForecastExpressList()
+        this.getList()
       })
     },
     addClassify() {
       dialog({ type: 'expressConfig', state: 'add' }, () => {
-        this.ForecastExpressList()
+        this.getList()
       })
     },
     // 拖拽
