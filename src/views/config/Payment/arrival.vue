@@ -57,7 +57,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.auto_status"
-              @change="changeTransfer(scope.row.id, scope.row.status)"
+              @change="changeTransfer(scope.row.id, scope.row.auto_status)"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
               :active-value="1"

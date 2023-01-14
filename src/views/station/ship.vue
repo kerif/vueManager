@@ -75,7 +75,10 @@
         <el-button size="small" class="btn-blue" @click="batchInvoice">{{
           $t('批量导入发货单')
         }}</el-button>
-        <el-dropdown>
+        <el-button size="small" type="success" plain @click="uploadListExcel">{{
+          $t('导出清单')
+        }}</el-button>
+        <!-- <el-dropdown>
           <el-button size="small" type="success" plain>{{ $t('导出清单') }}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="uploadListExcel">{{
@@ -88,7 +91,7 @@
               $t('海运发货单')
             }}</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown> -->
       </div>
       <div class="search-l">
         <search-group
@@ -934,32 +937,32 @@ export default {
     },
     // 创建发货单
     updateInvoice() {
-      // dialog({ type: 'invoice', state: 'add' }, () => {
-      //   this.getList()
-      // })
-      dialog(
-        {
-          type: 'invoiceList'
-        },
-        () => {
-          this.getList()
-        }
-      )
+      dialog({ type: 'invoice', state: 'add' }, () => {
+        this.getList()
+      })
+      // dialog(
+      //   {
+      //     type: 'invoiceList'
+      //   },
+      //   () => {
+      //     this.getList()
+      //   }
+      // )
     },
     // 编辑发货单
     editInvoice(id) {
-      // dialog({ type: 'invoice', state: 'edit', id: id }, () => {
-      //   this.getList()
-      // })
-      dialog(
-        {
-          type: 'invoiceList',
-          id
-        },
-        () => {
-          this.getList()
-        }
-      )
+      dialog({ type: 'invoice', state: 'edit', id: id }, () => {
+        this.getList()
+      })
+      // dialog(
+      //   {
+      //     type: 'invoiceList',
+      //     id
+      //   },
+      //   () => {
+      //     this.getList()
+      //   }
+      // )
     },
     goInvoice(id) {
       this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {

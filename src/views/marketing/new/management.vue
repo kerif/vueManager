@@ -15,11 +15,7 @@
               ? $t('下单返券')
               : $route.params.type === 5
               ? $t('关注公众号领券')
-              : $route.params.type === 6
-              ? $t('生日营销')
-              : $route.params.type === 7
-              ? $t('普通优惠券')
-              : $t('用户抢券')
+              : $t('生日营销')
           }}
         </h3>
         <div style="width: 1100px">

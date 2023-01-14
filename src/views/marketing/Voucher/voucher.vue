@@ -362,9 +362,9 @@ export default {
       this.activeName = this.$route.query.activeName
       this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
     }
-    // if (this.$route.query.type) {
-    //   this.type = this.$route.query.type
-    // }
+    if (this.$route.query.type) {
+      this.type = this.$route.query.type
+    }
   },
   activated() {
     this.$nextTick(() => {

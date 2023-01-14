@@ -36,7 +36,7 @@
       <!-- 实际支付金额 -->
       <el-form-item
         :label="$t('实际支付金额') + this.localization.currency_unit"
-        v-if="activeName === '3'"
+        v-if="activeName === '3' || (status === 1 && paymentStatus === 2)"
       >
         <span>{{ this.payAmount }}</span
         >&nbsp;&nbsp;&nbsp;&nbsp;<span>{{ '(' + this.paymentTypeName + ')' }}</span>
