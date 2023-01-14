@@ -18,77 +18,96 @@
         <span v-if="$route.params.type === 6"
           >{{ $t('生日券') }} - {{ activeName === '0' ? $t('抵现券') : $t('抵重券') }}
         </span>
+        <span v-if="$route.params.type === 7"
+          >{{ $t('普通券') }} - {{ activeName === '0' ? $t('抵现券') : $t('抵重券') }}
+        </span>
+        <span v-if="$route.params.type === 8"
+          >{{ $t('用户抢券') }} - {{ activeName === '0' ? $t('抵现券') : $t('抵重券') }}
+        </span>
       </el-form-item>
-      <el-form-item :label="$t('券名称')">
+      <el-form-item :label="$t('券名称')" prop="name">
         <el-input
           class="input-sty"
           v-model="ruleForm.name"
           :placeholder="$t('请输入券名称')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('金额')" v-if="activeName === '0'">
+      <el-form-item :label="$t('金额')" v-if="activeName === '0'" prop="amount">
         <el-input
           class="input-sty"
           v-model="ruleForm.amount"
           :placeholder="$t('请输入金额')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('最低消费金额')" v-if="activeName === '0'">
+      <el-form-item :label="$t('最低消费金额')" v-if="activeName === '0'" prop="threshold">
         <el-input
           class="input-sty"
           v-model="ruleForm.threshold"
           :placeholder="$t('请输入最低消费金额')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('可抵重量')" v-if="activeName === '1' && $route.params.type === 6">
+      <el-form-item
+        :label="$t('可抵重量')"
+        prop="weight"
+        v-if="activeName === '1' && ($route.params.type === 6 || $route.params.type === 7)"
+      >
         <el-input
           class="input-sty"
           v-model="ruleForm.weight"
           :placeholder="$t('请输入可抵重量')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('重量')" v-if="activeName === '1' && $route.params.type === 5">
+      <el-form-item
+        :label="$t('重量')"
+        prop="weight"
+        v-if="activeName === '1' && $route.params.type === 5"
+      >
         <el-input
           class="input-sty"
           v-model="ruleForm.weight"
           :placeholder="$t('请输入重量')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('最低消费重量')" v-if="activeName === '1'">
+      <el-form-item :label="$t('最低消费重量')" v-if="activeName === '1'" prop="min_weight">
         <el-input
           class="input-sty"
           v-model="ruleForm.min_weight"
           :placeholder="$t('请输入最低消费重量')"
         ></el-input>
       </el-form-item>
-      <!-- <el-form-item :label="$t('生效时间')">
+      <el-form-item :label="$t('生效时间')" prop="effected_at">
         <el-date-picker
-          v-model="ruleForm.value"
-          value-format="yyyy-MM-dd"
-          format="yyyy-MM-dd"
-          type="date"
-          :placeholder="$t('请选择生效时间')"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          v-model="ruleForm.effected_at"
+          format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          :picker-options="pickerOptions"
+          :placeholder="$t('请输入生效时间')"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item :label="$t('失效时间')" prop="expired_at">
+        <el-date-picker
+          :picker-options="pickerOptions"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          v-model="ruleForm.expired_at"
+          format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          :placeholder="$t('请输入失效时间')"
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item :label="$t('失效时间')">
-        <el-date-picker
-          v-model="ruleForm.value"
-          value-format="yyyy-MM-dd"
-          format="yyyy-MM-dd"
-          type="date"
-          :placeholder="$t('请选择失效时间')"
-        >
-        </el-date-picker>
-      </el-form-item> -->
-      <el-form-item :label="$route.params.type === 5 ? $t('有效期') : $t('有效时长')">
+      <el-form-item
+        :label="$route.params.type === 5 ? $t('有效期') : $t('有效时长')"
+        v-if="$route.params.type === 5 || $route.params.type === 6"
+        prop="days"
+      >
         <el-input
           :placeholder="$t('请输入有效期')"
           class="input-sty"
           v-model="ruleForm.days"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('使用范围')">
+      <el-form-item :label="$t('使用范围')" prop="scope">
         <el-radio-group v-model="ruleForm.scope">
           <el-radio :label="0">{{ $t('全部') }}</el-radio>
           <el-radio :label="1">{{ $t('按路线') }}</el-radio>
@@ -104,6 +123,43 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item :label="$t('抢券时间')" v-if="$route.params.type === 8">
+        <el-date-picker
+          :picker-options="pickerOptions"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          v-model="timeList"
+          type="datetimerange"
+          :start-placeholder="$t('抢券开始时间')"
+          :end-placeholder="$t('抢券结束时间')"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item
+        :label="$t('单人限领数量')"
+        prop="share_each_count"
+        v-if="$route.params.type === 8"
+      >
+        <el-input
+          :placeholder="$t('请输入单人限领数量')"
+          v-model="ruleForm.share_each_count"
+        ></el-input>
+      </el-form-item>
+      <el-form-item
+        :label="$t('放券总数')"
+        prop="share_total_count"
+        v-if="$route.params.type === 8"
+      >
+        <el-input
+          :placeholder="$t('请输入放券总数')"
+          v-model="ruleForm.share_total_count"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('后台投放不计入总数')" v-if="$route.params.type === 8">
+        <el-radio-group v-model="ruleForm.ignore_launch_count">
+          <el-radio :label="1">{{ $t('是') }}</el-radio>
+          <el-radio :label="0">{{ $t('否') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -113,9 +169,6 @@
           >{{ $t('保存') }}</el-button
         >
       </el-form-item>
-
-      <!-- <el-form-item :label="$t('抢券时间')" v-if="activeName === '0'"></el-form-item>
-      <el-form-item :label="$t('单人限领数量')" v-if="activeName === '0'"></el-form-item> -->
     </el-form>
   </div>
 </template>
@@ -136,9 +189,34 @@ export default {
         weight: '',
         min_weight: '',
         scope: 0,
-        express_line_ids: []
+        express_line_ids: [],
+        effected_at: '',
+        expired_at: '',
+        share_each_count: '',
+        share_total_count: '',
+        ignore_launch_count: ''
       },
-      rules: {}
+      timeList: [],
+      rules: {
+        name: [{ required: true, message: this.$t('请输入名称'), trigger: 'blur' }],
+        amount: [{ required: true, message: this.$t('请输入金额'), trigger: 'blur' }],
+        threshold: [{ required: true, message: this.$t('请输入最低消费金额'), trigger: 'blur' }],
+        days: [{ required: true, message: this.$t('请输入有效期'), trigger: 'blur' }],
+        expired_at: [{ required: true, message: this.$t('请输入失效时间'), trigger: 'blur' }],
+        effected_at: [{ required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }],
+        scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }],
+        weight: [{ required: true, message: this.$t('请输入重量'), trigger: 'blur' }],
+        min_weight: [{ required: true, message: this.$t('请输入最低消费重量'), trigger: 'blur' }],
+        share_each_count: [
+          { required: true, message: this.$t('请输入单人限领数量'), trigger: 'blur' }
+        ],
+        share_total_count: [{ required: true, message: this.$t('请输入放券总数'), trigger: 'blur' }]
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      }
     }
   },
   methods: {
@@ -150,19 +228,22 @@ export default {
     },
     handleClick(tab) {
       console.log(tab, 'tab')
-      // if (tab.name && tab.name === '0') {
-      // } else {
-      // }
     },
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.activeName === '0') {
-            this.ruleForm.coupon_type = 1
-          } else {
-            this.ruleForm.coupon_type = 2
+          let params = {
+            ...this.ruleForm,
+            share_begin_at: this.timeList[0],
+            share_end_at: this.timeList[1]
           }
-          this.$request.addNew(this.$route.params.type, this.ruleForm).then(res => {
+          if (this.activeName === '0') {
+            params.coupon_type = 1
+          } else {
+            params.coupon_type = 2
+          }
+
+          this.$request.addNew(this.$route.params.type, params).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',

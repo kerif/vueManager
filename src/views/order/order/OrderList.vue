@@ -212,7 +212,7 @@
             >
               <i class="el-icon-copy-document"></i>
             </span>
-            <span class="seer" v-if="scope.row.source===3">先知</span>
+            <span class="seer" v-if="scope.row.source === 3">先知</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('状态')" key="status" v-if="activeName !== '7'">
@@ -1159,15 +1159,15 @@ export default {
 
 <style lang="scss" scoped>
 .order-list-container {
-  .seer{
+  .seer {
     padding: 2px;
     width: 40px;
     margin-left: 5px;
     display: block;
     text-align: center;
     line-height: 15px;
-    border: #F7AA47 1px solid;
-    color: #F7AA47;
+    border: #f7aa47 1px solid;
+    color: #f7aa47;
     font-size: 10px;
     border-radius: 5px;
   }

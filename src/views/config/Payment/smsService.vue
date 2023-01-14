@@ -423,7 +423,10 @@ export default {
           templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
           type: this.ruleForm.type,
           intl_app_key: this.ruleForm.intl_app_key,
-          app_key: this.ruleForm.app_key
+          app_key: this.ruleForm.app_key,
+          area_china_platform: this.ruleForm.area_china_platform,
+          area_intl_platform: this.ruleForm.area_intl_platform,
+          aestron: this.ruleForm.aestron
         })
         .then(res => {
           if (res.ret) {
