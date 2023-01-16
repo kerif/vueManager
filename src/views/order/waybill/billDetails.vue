@@ -1366,15 +1366,14 @@ export default {
         res.data.box.forEach(item => {
           let maxData = Math.max(item.length, item.width, item.height)
           let minData = Math.min(item.length, item.width, item.height)
-          console.log(maxData, minData)
-          let value = item.length > item.width ? item.length : item.width
           let midData
-          if (value > item.height) {
+          if (item.length > minData && item.length < maxData) {
+            midData = item.length
+          } else if (item.width > minData && item.width < maxData) {
+            midData = item.width
+          } else if (item.height > minData && item.height < maxData) {
             midData = item.height
-          } else {
-            midData = value
           }
-          console.log(midData)
           item.volumeGirth = maxData + (midData + minData) * 2
         })
         this.boxData = res.data.box
