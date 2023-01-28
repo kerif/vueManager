@@ -208,10 +208,10 @@
                   </el-menu-item>
                   <!-- <el-menu-item index="6">
                     {{ $t('申报商品库管理') }}
-                  </el-menu-item>
-                  <el-menu-item index="7">
+                  </el-menu-item>-->
+                  <el-menu-item index="6">
                     {{ $t('预报快递公司') }}
-                  </el-menu-item> -->
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -238,10 +238,10 @@
             <!-- 申报商品库名称 -->
             <!-- <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
               <store-goods></store-goods>
-            </el-col>
-            <el-col :span="19" v-if="secondTab4 === '7'" class="main-right">
-              <arrival></arrival>
             </el-col> -->
+            <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
+              <arrival></arrival>
+            </el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -273,7 +273,7 @@ import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 // import StoreGoods from './storeGoods.vue'
-// import Arrival from './arrival.vue'
+import Arrival from './arrival.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
@@ -307,9 +307,9 @@ export default {
     presetPack,
     addressConfig,
     packPriceChange,
-    pickupTimeConfig
+    pickupTimeConfig,
     // StoreGoods,
-    // Arrival
+    Arrival
     // GroupConfigure
   },
   mixins: [pagination],

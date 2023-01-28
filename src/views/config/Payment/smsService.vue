@@ -45,7 +45,7 @@
           }}</el-radio>
           <div style="display: flex; margin-top: 20px">
             <div style="flex: 2">
-              <!-- <div>{{ $t('聚合') }}</div> -->
+              <div>{{ $t('聚合') }}</div>
               <div class="message-main">
                 <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
                 <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
@@ -57,7 +57,7 @@
                 <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
               </div>
             </div>
-            <!-- <div style="width: 260px">
+            <div style="width: 260px">
               <div>Aestron</div>
               <el-form :model="ruleForm.aestron">
                 <el-form-item label="sender_id">
@@ -88,14 +88,14 @@
                   ></el-input>
                 </el-form-item>
               </el-form>
-            </div> -->
+            </div>
           </div>
-          <!-- <div>
+          <div>
             <el-form label-width="100px" label-position="left">
               <el-form-item :label="$t('中国大陆')">
                 <el-radio-group v-model="ruleForm.area_china_platform">
                   <el-radio :label="1">{{ $t('聚合') }}</el-radio>
-                  <el-radio :label="2">aestron</el-radio>
+                  <!-- <el-radio :label="2">aestron</el-radio> -->
                 </el-radio-group>
               </el-form-item>
               <el-form-item :label="$t('国际')">
@@ -105,7 +105,7 @@
                 </el-radio-group>
               </el-form-item>
             </el-form>
-          </div> -->
+          </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
@@ -159,7 +159,7 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
-      <!-- <span class="red-title">({{ $t('聚合') }})</span> -->
+      <span class="red-title">({{ $t('聚合') }})</span>
       <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
@@ -249,14 +249,14 @@ export default {
         app_key: '',
         intl_app_key: '',
         count: '',
-        intl_count: ''
-        // area_china_platform: 1,
-        // area_intl_platform: 1,
-        // aestron: {
-        //   sender_id: '',
-        //   app_id: '',
-        //   certificate: ''
-        // }
+        intl_count: '',
+        area_china_platform: 1,
+        area_intl_platform: 1,
+        aestron: {
+          sender_id: '',
+          app_id: '',
+          certificate: ''
+        }
       },
       radio: 2,
       dialogVisible: false,
@@ -423,10 +423,10 @@ export default {
           templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
           type: this.ruleForm.type,
           intl_app_key: this.ruleForm.intl_app_key,
-          app_key: this.ruleForm.app_key
-          // area_china_platform: this.ruleForm.area_china_platform,
-          // area_intl_platform: this.ruleForm.area_intl_platform,
-          // aestron: this.ruleForm.aestron
+          app_key: this.ruleForm.app_key,
+          area_china_platform: this.ruleForm.area_china_platform,
+          area_intl_platform: this.ruleForm.area_intl_platform,
+          aestron: this.ruleForm.aestron
         })
         .then(res => {
           if (res.ret) {
