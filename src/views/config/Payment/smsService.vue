@@ -38,7 +38,7 @@
           <el-button @click="purchase" class="btn-main">{{ $t('购买记录') }}</el-button>
         </div>
       </el-col>
-      <el-col :span="7" class="user-left">
+      <el-col :span="10" class="user-left">
         <div class="new-top">
           <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{
             $t('第三方短信服务')
