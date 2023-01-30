@@ -1367,13 +1367,23 @@ export default {
           let maxData = Math.max(item.length, item.width, item.height)
           let minData = Math.min(item.length, item.width, item.height)
           let midData
-          if (item.length > minData && item.length < maxData) {
+          if (
+            (item.length > minData && item.length < maxData) ||
+            (item.length === minData && item.length === maxData)
+          ) {
             midData = item.length
-          } else if (item.width > minData && item.width < maxData) {
+          } else if (
+            (item.width > minData && item.width < maxData) ||
+            (item.width === minData && item.width === maxData)
+          ) {
             midData = item.width
-          } else if (item.height > minData && item.height < maxData) {
+          } else if (
+            (item.height > minData && item.height < maxData) ||
+            (item.height === minData && item.height === maxData)
+          ) {
             midData = item.height
           }
+          console.log(maxData, midData, minData, 'data')
           item.volumeGirth = maxData + (midData + minData) * 2
         })
         this.boxData = res.data.box

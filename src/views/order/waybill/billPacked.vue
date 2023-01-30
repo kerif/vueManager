@@ -821,7 +821,7 @@ export default {
     AddBtn
   },
   created() {
-    this.getPackage()
+    this.getPackage(true)
     this.getExpress()
     this.getProduct()
     this.getInit()
@@ -876,7 +876,7 @@ export default {
     // 新增包裹
     addPackages() {
       dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
-        this.getPackage()
+        this.getPackage(false)
       })
     },
     // 获取商品清单
@@ -939,7 +939,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getPackage()
+            this.getPackage(false)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -970,7 +970,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getPackage()
+            this.getPackage(false)
             this.getProduct()
           } else {
             this.$notify({
@@ -1310,7 +1310,7 @@ export default {
     deleteInfo(index, rows) {
       rows.splice(index, 1)
     },
-    getPackage() {
+    getPackage(flag) {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         res.data.packages.forEach(item => {
@@ -1321,15 +1321,17 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
-        if (res.data.box_type === 1) {
-          this.user.box.push({
-            width: res.data.width,
-            height: res.data.height,
-            length: res.data.length,
-            weight: res.data.weight
-          })
-        } else {
-          this.user.box = res.data.box
+        if (flag) {
+          if (res.data.box_type === 1) {
+            this.user.box.push({
+              width: res.data.width,
+              height: res.data.height,
+              length: res.data.length,
+              weight: res.data.weight
+            })
+          } else {
+            this.user.box = res.data.box
+          }
         }
         this.user.remark = res.data.remark
         this.user.location = res.data.location
