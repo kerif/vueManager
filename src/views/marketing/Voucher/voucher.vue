@@ -365,6 +365,11 @@ export default {
     if (this.$route.query.type) {
       this.type = this.$route.query.type
     }
+    if (this.$route.params.type === 8) {
+      this.type = '3'
+    } else if (this.$route.params.type === 7) {
+      this.type = '1'
+    }
   },
   activated() {
     this.$nextTick(() => {

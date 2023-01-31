@@ -10,6 +10,16 @@
       <el-form-item :label="$t('名称')" prop="name">
         <el-input :placeholder="$t('请输入名称')" v-model="ruleForm.name"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('类型')" prop="discount_type">
+        <el-select v-model="ruleForm.discount_type" :placeholder="$t('请选择')" style="width: 50%">
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('金额')" prop="amount">
         <el-input :placeholder="$t('请输入金额')" v-model="ruleForm.amount"></el-input>
       </el-form-item>
@@ -120,7 +130,8 @@ export default {
         share_each_count: '',
         share_begin_at: '',
         share_end_at: '',
-        ignore_launch_count: 0
+        ignore_launch_count: 0,
+        discount_type: ''
       },
       lineName: [], // 保存获取到的路线
       timeList: [],
@@ -136,7 +147,17 @@ export default {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7
         }
-      }
+      },
+      options: [
+        {
+          id: 0,
+          name: this.$t('抵现券')
+        },
+        {
+          id: 2,
+          name: this.$t('抵重券')
+        }
+      ]
     }
   },
   created() {
