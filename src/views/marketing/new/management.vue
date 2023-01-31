@@ -60,22 +60,22 @@
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
       <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('类型')" prop="coupon_type">
+      <!-- <el-table-column :label="$t('类型')" prop="coupon_type">
         <template slot-scope="scope">
           <span>{{ scope.row.coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}</span>
         </template>
-      </el-table-column>
-      <!-- 金额 -->
-      <!-- <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
       </el-table-column> -->
-      <el-table-column
+      <!-- 金额 -->
+      <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
+      </el-table-column>
+      <!-- <el-table-column
         :label="$t('金额') + this.localization.currency_unit + '/' + $t('重量')"
         prop="amount"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.amount }} / {{ scope.row.weight }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <!-- 使用范围 -->
       <!-- <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -85,12 +85,12 @@
         </template>
       </el-table-column> -->
       <!-- 最低消费金额 -->
-      <!-- <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column> -->
-      <el-table-column :label="$t('最低消费金额') + '/' + $t('重量')" prop="threshold">
+      <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+      <!-- <el-table-column :label="$t('最低消费金额') + '/' + $t('重量')" prop="threshold">
         <template slot-scope="scope">
           <span>{{ scope.row.threshold }} / {{ scope.row.min_weight }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <!-- 失效时间 -->
       <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
       <el-table-column
