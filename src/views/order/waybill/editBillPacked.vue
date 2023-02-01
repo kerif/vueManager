@@ -302,16 +302,16 @@
           </el-col>
         </el-row>
         <!-- 重量 -->
-        <el-row :gutter="20" v-if="this.user.box_type === 1">
+        <!-- <el-row :gutter="20" v-if="this.user.box_type === 1">
           <el-col :span="11">
             <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
             </el-form-item>
-          </el-col>
-          <!-- 尺寸 -->
-          <el-col :span="10" :offset="2">
+          </el-col> -->
+        <!-- 尺寸 -->
+        <!-- <el-col :span="10" :offset="2">
             <el-form-item :label="$t('尺寸')">
               <el-input
                 v-model="user.length"
@@ -330,7 +330,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row :gutter="20">
           <el-form-item>
             <el-col :span="18">
