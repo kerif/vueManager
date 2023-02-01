@@ -1046,60 +1046,68 @@ export default {
           let price = ele.price
           return { id, price }
         })
-      this.$request
-        .calOrderPrice(this.$route.params.id, {
-          ...this.user,
-          services,
-          width: this.user.width || '',
-          height: this.user.height || '',
-          length: this.user.length || '',
-          weight: this.user.weight || ''
-        })
-        .then(res => {
-          if (res.ret) {
-            this.total_fee = res.data.total_fee
-            let line_services = res.data.line_services.services.map(item => {
-              let name = item.name
-              let value = item.price
-              return { name, value }
-            })
-            let order_services = res.data.order_services.services.map(item => {
-              let name = item.name
-              let value = item.price
-              return { name, value }
-            })
-            this.freightData = []
-            this.freightData.push(
-              {
-                name: '运费',
-                value: res.data.freight.first + res.data.freight.next
-              },
-              {
-                name: '关税费',
-                value: res.data.tariff_fee
-              },
-              {
-                name: '保险费',
-                value: res.data.insurance_fee
-              },
-              ...order_services,
-              ...line_services,
-              {
-                name: '渠道限制费',
-                value: res.data.line_rules.fee
-              },
-              {
-                name: '包裹增值服务',
-                value: res.data.package_service_fee
-              }
-            )
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {}
+      if (this.user.box_type === 1) {
+        params.width = this.user.box[0].width
+        params.length = this.user.box[0].length
+        params.weight = this.user.box[0].weight
+        params.height = this.user.box[0].height
+        delete this.user.box
+      }
+      params = {
+        ...this.user,
+        services
+        // width: this.user.width || '',
+        // height: this.user.height || '',
+        // length: this.user.length || '',
+        // weight: this.user.weight || ''
+      }
+
+      this.$request.calOrderPrice(this.$route.params.id, params).then(res => {
+        if (res.ret) {
+          this.total_fee = res.data.total_fee
+          let line_services = res.data.line_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          let order_services = res.data.order_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          this.freightData = []
+          this.freightData.push(
+            {
+              name: '运费',
+              value: res.data.freight.first + res.data.freight.next
+            },
+            {
+              name: '关税费',
+              value: res.data.tariff_fee
+            },
+            {
+              name: '保险费',
+              value: res.data.insurance_fee
+            },
+            ...order_services,
+            ...line_services,
+            {
+              name: '渠道限制费',
+              value: res.data.line_rules.fee
+            },
+            {
+              name: '包裹增值服务',
+              value: res.data.package_service_fee
+            }
+          )
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     //仅保存和保存并提交
     async savePacked(type) {
