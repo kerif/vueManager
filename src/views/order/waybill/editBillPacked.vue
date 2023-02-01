@@ -803,6 +803,7 @@ export default {
       rows.splice(index, 1)
     },
     savePacked() {
+      let params = {}
       this.user.services = this.updateProp
         .filter(item => item.checked)
         .map(item => {
@@ -831,7 +832,11 @@ export default {
       this.user.declare.hs_code = this.infoForm.hs_code
       this.user.declare.type = this.infoForm.type
       this.user.declare.payment_mode = this.infoForm.payment_mode
-      let params = {}
+      if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
+      } else {
+        this.user.box_type = 2
+      }
       params = {
         ...this.user
       }
