@@ -1047,11 +1047,14 @@ export default {
           return { id, price }
         })
       let params = {}
-      if (this.user.box_type === 1) {
+      if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
         params.width = this.user.box[0].width
         params.length = this.user.box[0].length
         params.weight = this.user.box[0].weight
         params.height = this.user.box[0].height
+      } else if (this.user.box.length && this.user.box.length > 1) {
+        this.user.box_type = 2
       }
       params = {
         ...this.user,
@@ -1063,6 +1066,8 @@ export default {
       }
       if (this.user.box_type === 1) {
         delete params.box
+      } else {
+        delete params.width, delete params.length, delete params.height, delete params.weight
       }
 
       this.$request.calOrderPrice(this.$route.params.id, params).then(res => {
