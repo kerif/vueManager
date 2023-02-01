@@ -1047,6 +1047,14 @@ export default {
           return { id, price }
         })
       let params = {}
+      params = {
+        ...this.user,
+        services
+        // width: this.user.width || '',
+        // height: this.user.height || '',
+        // length: this.user.length || '',
+        // weight: this.user.weight || ''
+      }
       if (this.user.box.length && this.user.box.length === 1) {
         this.user.box_type = 1
         params.width = this.user.box[0].width
@@ -1055,14 +1063,6 @@ export default {
         params.height = this.user.box[0].height
       } else if (this.user.box.length && this.user.box.length > 1) {
         this.user.box_type = 2
-      }
-      params = {
-        ...this.user,
-        services
-        // width: this.user.width || '',
-        // height: this.user.height || '',
-        // length: this.user.length || '',
-        // weight: this.user.weight || ''
       }
       if (this.user.box_type === 1) {
         delete params.box

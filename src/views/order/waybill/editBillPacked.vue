@@ -832,6 +832,9 @@ export default {
       this.user.declare.type = this.infoForm.type
       this.user.declare.payment_mode = this.infoForm.payment_mode
       let params = {}
+      params = {
+        ...this.user
+      }
       if (this.user.box.length && this.user.box.length === 1) {
         this.user.box_type = 1
         params.width = this.user.box[0].width
@@ -841,15 +844,12 @@ export default {
       } else if (this.user.box.length && this.user.box.length > 1) {
         this.user.box_type = 2
       }
-      params = {
-        ...this.user
-      }
       if (this.user.box_type === 1) {
         delete params.box
       } else {
         delete params.width, delete params.length, delete params.height, delete params.weight
       }
-
+      console.log(params, 'params')
       this.$request.saveOrderPack(this.$route.params.id, params).then(res => {
         if (res.ret) {
           this.$notify({
