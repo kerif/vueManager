@@ -280,11 +280,11 @@
         <el-row :gutter="20">
           <el-col :span="11">
             <el-form-item :label="$t('出箱类型')">
-              <el-radio-group v-model="user.box_type">
+              <!-- <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
                 <el-radio :label="2">{{ $t('多箱出库') }}</el-radio>
-                <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
-              </el-radio-group>
+              </el-radio-group> -->
+              <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
@@ -331,10 +331,14 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-if="this.user.box_type === 2">
+        <el-row :gutter="20">
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
+                <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button>
+                <el-button class="btn-deep-purple" @click="batchAddRow">{{
+                  $t('批量添加')
+                }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('添加行') }}</el-button>
               </div>
               <el-table :data="user.box" style="width: 100%" border>
@@ -639,7 +643,7 @@ export default {
     }
   },
   created() {
-    this.getPackage()
+    this.getPackage(true)
     this.getExpress()
     this.getInit()
   },
@@ -827,7 +831,21 @@ export default {
       this.user.declare.hs_code = this.infoForm.hs_code
       this.user.declare.type = this.infoForm.type
       this.user.declare.payment_mode = this.infoForm.payment_mode
-      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
+      let params = {}
+      if (this.user.box_type === 1) {
+        params.width = this.user.box[0].width
+        params.length = this.user.box[0].length
+        params.height = this.user.box[0].height
+        params.weight = this.user.box[0].weight
+      }
+      params = {
+        ...this.user
+      }
+      if (this.user.box_type === 1) {
+        delete params.box
+      }
+
+      this.$request.saveOrderPack(this.$route.params.id, params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -886,7 +904,7 @@ export default {
         this.user.express_line_id = data.id
       })
     },
-    getPackage() {
+    getPackage(flag) {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
@@ -895,6 +913,18 @@ export default {
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.line_rule_fee = res.data.payment.line_rule_fee
         this.user.box_type = res.data.box_type
+        if (flag) {
+          if (res.data.box_type === 1) {
+            this.user.box.push({
+              width: res.data.width,
+              height: res.data.height,
+              length: res.data.length,
+              weight: res.data.weight
+            })
+          } else {
+            this.user.box = res.data.box
+          }
+        }
         this.user.order_sn = res.data.order_sn
         this.user.length = res.data.length
         this.user.width = res.data.width
@@ -1036,8 +1066,43 @@ export default {
     // 新增包裹
     addPackages() {
       dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
-        this.getPackage()
+        this.getPackage(false)
       })
+    },
+    clearRow() {
+      this.user.box = []
+      this.TotalWeight = ''
+      this.UnitTotalWeight = ''
+    },
+    batchAddRow() {
+      dialog(
+        {
+          type: 'batchAdd',
+          localization: this.localization
+        },
+        data => {
+          let boxData = JSON.parse(JSON.stringify(data))
+          let boxes = JSON.parse(JSON.stringify(data.boxes))
+          for (let i = 0; i < boxes; i++) {
+            if (this.baseMode === 0) {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height,
+                volume_weight: ''
+              })
+            } else {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height
+              })
+            }
+          }
+        }
+      )
     }
   },
   computed: {

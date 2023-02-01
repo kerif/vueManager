@@ -1052,7 +1052,6 @@ export default {
         params.length = this.user.box[0].length
         params.weight = this.user.box[0].weight
         params.height = this.user.box[0].height
-        delete this.user.box
       }
       params = {
         ...this.user,
@@ -1061,6 +1060,9 @@ export default {
         // height: this.user.height || '',
         // length: this.user.length || '',
         // weight: this.user.weight || ''
+      }
+      if (this.user.box_type === 1) {
+        delete params.box
       }
 
       this.$request.calOrderPrice(this.$route.params.id, params).then(res => {
