@@ -5291,3 +5291,23 @@ exports.uploadOceanShip = params => {
 exports.uploadAirShip = params => {
   return $form.post(`shipments/export/air`, params)
 }
+
+// 短信模板列表
+exports.smsTemplateList = params => {
+  return $form.get(`api-services/sms/aestron`, { params })
+}
+
+// 短信模板详情
+exports.smsTmpDetail = id => {
+  return $form.get(`api-services/sms/aestron/${id}`)
+}
+
+// 短信模板开关
+exports.smsTmpSwitch = (id, status) => {
+  return $form.put(`api-services/sms/aestron/${id}/status/${status}`)
+}
+
+// 短信模板修改
+exports.smsTmpEdit = (id, params) => {
+  return $form.put(`api-services/sms/aestron/${id}`, params)
+}
