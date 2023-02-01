@@ -162,6 +162,7 @@ export default {
           })
         } else {
           this.show = false
+          this.success()
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

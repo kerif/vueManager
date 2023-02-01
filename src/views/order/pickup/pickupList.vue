@@ -277,7 +277,13 @@ export default {
       }
       this.$request.pickupSetCheck({ ids: ids }).then(res => {
         if (res.ret) {
-          this.dataList = res.data
+          // this.dataList = res.data
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
