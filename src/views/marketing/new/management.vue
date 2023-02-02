@@ -100,7 +100,13 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
+          <el-button
+            class="btn-purple"
+            v-if="$route.params.type === 5"
+            @click="goDetails(scope.row.id)"
+            >{{ $t('详情') }}</el-button
+          >
+          <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
             $t('详情')
           }}</el-button>
           <!-- 记录 -->
@@ -280,6 +286,8 @@ export default {
     goAdd() {
       if (this.$route.params.type === 4) {
         this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
+      } else if (this.$route.params.type === 5 || this.$route.params.type === 6) {
+        this.$router.push({ name: 'ordinary', params: { type: this.$route.params.type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
       }
@@ -288,6 +296,13 @@ export default {
     goDetails(id) {
       this.$router.push({
         name: 'rebate',
+        params: { type: this.$route.params.type },
+        query: { id: id }
+      })
+    },
+    goOtherDetails(id) {
+      this.$router.push({
+        name: 'ordinaryDetail',
         params: { type: this.$route.params.type },
         query: { id: id }
       })

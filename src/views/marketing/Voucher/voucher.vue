@@ -66,6 +66,10 @@
           width="120"
         >
         </el-table-column>
+        <!-- 最低消费金额 -->
+        <el-table-column :label="$t('最低消费金额')" prop="threshold" width="120"></el-table-column>
+        <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
+        <el-table-column :label="$t('最低重量')" prop="min_weight"></el-table-column>
         <!-- 状态 -->
         <el-table-column :label="$t('状态')" prop="status" width="120">
           <template slot-scope="scope">
@@ -82,8 +86,6 @@
             </span>
           </template>
         </el-table-column>
-        <!-- 最低消费金额 -->
-        <el-table-column :label="$t('最低消费金额')" prop="threshold" width="120"></el-table-column>
         <!-- 失效时间 -->
         <el-table-column :label="$t('失效时间')" prop="expired_at" width="160"></el-table-column>
         <!-- 投放数量 -->

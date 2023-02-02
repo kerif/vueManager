@@ -235,6 +235,8 @@ const ordinary = loadonDemand('marketing/new/ordinary')
 const managementNew = loadonDemand('marketing/new/management')
 // 营销管理  下单返券
 const rebate = loadonDemand('marketing/rebate')
+// 营销管理  下单返券
+const ordinaryDetail = loadonDemand('marketing/ordinaryDetail')
 // 营销管理 抵用券管理
 const Voucher = loadonDemand('marketing/Voucher/voucher')
 // 营销管理 记录
@@ -1934,6 +1936,18 @@ export default [
               level: 3,
               group: '营销管理',
               name: '下单返券',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/ordinaryDetail',
+            name: 'ordinaryDetail',
+            component: ordinaryDetail,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '详情',
               parent: '/marketing/new'
             }
           },
