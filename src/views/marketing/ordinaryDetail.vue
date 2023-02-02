@@ -109,6 +109,7 @@ export default {
       coupon_type: '',
       statusEdit: false,
       lineName: [],
+      lineData: [],
       rules: {},
       pickerOptions: {
         disabledDate(time) {

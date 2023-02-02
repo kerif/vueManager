@@ -207,7 +207,16 @@ export default {
     goAdd(type) {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type } })
-      } else if (type === 5 || type === 6 || type === 7 || type === 8) {
+        // this.$router.push({ name: 'ordinary', params: { type: type } })
+      } else if (
+        type === 1 ||
+        type === 2 ||
+        type === 3 ||
+        type === 5 ||
+        type === 6 ||
+        type === 7 ||
+        type === 8
+      ) {
         this.$router.push({ name: 'ordinary', params: { type: type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: type } })
