@@ -19,7 +19,7 @@
             step: '00:30',
             end: '12:30'
           }"
-          placeholder="选择时间"
+          :placeholder="$t('选择时间')"
         ></el-time-select>
       </el-form-item>
       <el-form-item :label="$t('当天截止最晚预约时间')">
@@ -30,7 +30,7 @@
             step: '00:30',
             end: '22:30'
           }"
-          placeholder="选择时间"
+          :placeholder="$t('选择时间')"
         ></el-time-select>
       </el-form-item>
       <el-form-item style="margin-top: 20px">
@@ -51,13 +51,13 @@ export default {
         date: []
       },
       weeks: [
-        { id: 1, name: '周一' },
-        { id: 2, name: '周二' },
-        { id: 3, name: '周三' },
-        { id: 4, name: '周四' },
-        { id: 5, name: '周五' },
-        { id: 6, name: '周六' },
-        { id: 7, name: '周日' }
+        { id: 1, name: this.$t('周一') },
+        { id: 2, name: this.$t('周二') },
+        { id: 3, name: this.$t('周三') },
+        { id: 4, name: this.$t('周四') },
+        { id: 5, name: this.$t('周五') },
+        { id: 6, name: this.$t('周六') },
+        { id: 7, name: this.$t('周日') }
       ]
     }
   },

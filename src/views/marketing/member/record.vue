@@ -486,9 +486,9 @@ export default {
     //详情
     getRecordDetails(id, type) {
       if (type === 1) {
-        this.title = '收入详情'
+        this.title = this.$t('收入详情')
       } else {
-        this.title = '支出详情'
+        this.title = this.$t('支出详情')
       }
       this.detailsDialog = true
       this.$request.getRecordDetails(id).then(res => {

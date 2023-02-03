@@ -3,7 +3,7 @@
     <!-- <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div> -->
-    <div class="top-title">预设分区表</div>
+    <div class="top-title">{{ $t('预设分区表') }}</div>
     <div class="bottom-sty">
       <div class="addUser">
         <div class="searchGroup">

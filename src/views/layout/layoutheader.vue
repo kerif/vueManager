@@ -91,8 +91,8 @@ export default {
     return {
       languageList: [
         { label: '简体', value: 'zhCN' },
-        { label: '繁体', value: 'zhTW' }
-        // { label: 'English', value: 'en' }
+        { label: '繁体', value: 'zhTW' },
+        { label: 'English', value: 'en' }
       ],
       language: '',
       gridData: [],

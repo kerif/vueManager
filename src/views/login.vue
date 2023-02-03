@@ -321,6 +321,10 @@
             <span :class="{ active: languageCode === 'zhTW' }" @click="languageCut('zhTW')"
               >繁体中文</span
             >
+            |
+            <span :class="{ active: languageCode === 'en' }" @click="languageCut('en')"
+              >English</span
+            >
           </p>
         </div>
         <!-- © ({{ year }}) haiouoms.com

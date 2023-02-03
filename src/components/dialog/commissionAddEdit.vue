@@ -77,18 +77,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="5">
-          <el-form-item :label="$t('首重') + weightUnit">
+          <el-form-item :label="$t('首重') + '('+weightUnit+')'">
             <el-input class="input-sty" v-model="form.first_weight"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('续重') + weightUnit">
+          <el-form-item :label="$t('续重') + '('+weightUnit+')'">
             <el-input class="input-sty" v-model="form.next_weight"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item :label="$t('首重佣金') + currencyUnit">
+          <el-form-item :label="$t('首重佣金') + '('+currencyUnit+')'">
             <el-input class="input-sty" v-model="form.first_money"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('续重佣金') + currencyUnit">
+          <el-form-item :label="$t('续重佣金') +'('+currencyUnit+')'">
             <el-input class="input-sty" v-model="form.next_money"></el-input>
           </el-form-item>
         </el-col>

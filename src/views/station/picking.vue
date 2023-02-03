@@ -132,13 +132,13 @@
         ></el-table-column>
         <!-- 重量kg -->
         <el-table-column
-          :label="'重量' + this.localization.weight_unit"
+          :label="$t('重量') +  '('+this.localization.weight_unit+')'"
           v-if="activeName !== '3' && activeName !== '4'"
           prop="weight"
         ></el-table-column>
         <!-- 长宽高cm -->
         <el-table-column
-          :label="$t('长宽高') + this.localization.length_unit"
+          :label="$t('长宽高') + '('+this.localization.length_unit+')'"
           v-if="activeName !== '3' && activeName !== '4'"
           prop="dimension"
         ></el-table-column>
