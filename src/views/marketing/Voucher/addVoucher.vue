@@ -10,7 +10,7 @@
       <el-form-item :label="$t('名称')" prop="name">
         <el-input :placeholder="$t('请输入名称')" v-model="ruleForm.name"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('折扣类型')" prop="discount_type">
+      <!-- <el-form-item :label="$t('折扣类型')" prop="discount_type">
         <el-select v-model="ruleForm.discount_type" :placeholder="$t('请选择')" style="width: 50%">
           <el-option
             v-for="item in options"
@@ -19,19 +19,19 @@
             :label="item.name"
           ></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('金额')" prop="amount" v-if="ruleForm.discount_type === 0">
+      </el-form-item> -->
+      <el-form-item :label="$t('金额')" prop="amount">
         <el-input :placeholder="$t('请输入金额')" v-model="ruleForm.amount"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('最低消费')" prop="threshold" v-if="ruleForm.discount_type === 0">
+      <el-form-item :label="$t('最低消费')" prop="threshold">
         <el-input :placeholder="$t('请输入最低消费')" v-model="ruleForm.threshold"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('重量')" prop="weight" v-if="ruleForm.discount_type === 2">
+      <!-- <el-form-item :label="$t('重量')" prop="weight" v-if="ruleForm.discount_type === 2">
         <el-input :placeholder="$t('请输入重量')" v-model="ruleForm.weight"></el-input>
       </el-form-item>
       <el-form-item :label="$t('最低重量')" prop="min_weight" v-if="ruleForm.discount_type === 2">
         <el-input :placeholder="$t('请输入最低重量')" v-model="ruleForm.min_weight"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('生效时间')" prop="effected_at">
         <el-date-picker
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -137,9 +137,9 @@ export default {
         share_begin_at: '',
         share_end_at: '',
         ignore_launch_count: 0,
-        discount_type: '',
-        weight: '',
-        min_weight: ''
+        discount_type: ''
+        // weight: '',
+        // min_weight: ''
       },
       lineName: [], // 保存获取到的路线
       timeList: [],
@@ -149,9 +149,9 @@ export default {
         threshold: [{ required: true, message: this.$t('请输入最低消费'), trigger: 'blur' }],
         expired_at: [{ required: true, message: this.$t('请输入失效时间'), trigger: 'blur' }],
         effected_at: [{ required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }],
-        scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }],
-        weight: [{ required: true, message: this.$t('请输入重量'), trigger: 'blur' }],
-        min_weight: [{ required: true, message: this.$t('请输入最低重量'), trigger: 'blur' }]
+        scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }]
+        // weight: [{ required: true, message: this.$t('请输入重量'), trigger: 'blur' }],
+        // min_weight: [{ required: true, message: this.$t('请输入最低重量'), trigger: 'blur' }]
       },
       pickerOptions: {
         disabledDate(time) {
