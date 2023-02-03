@@ -353,15 +353,15 @@
         ></el-input>
       </el-form-item>
       <el-form-item :label="$t('有效期')" prop="radio" v-if="$route.params.type === 1">
-        <el-radio-group v-model="ruleForm.radio">
+        <el-radio-group v-model="form.radio">
           <div style="margin: 0 0 10px 0">
             <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
-            <el-input v-model="ruleForm.days" style="width: 340px"></el-input>
+            <el-input v-model="form.days" style="width: 340px"></el-input>
           </div>
           <div>
             <el-radio :label="2">{{ $t('具体日期范围') }}</el-radio>
             <el-date-picker
-              v-model="ruleForm.begin_at"
+              v-model="form.begin_at"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
@@ -370,7 +370,7 @@
             </el-date-picker>
             &nbsp;&nbsp;<span style="display: inline-block; width: 10px">-</span>&nbsp;&nbsp;
             <el-date-picker
-              v-model="ruleForm.end_at"
+              v-model="form.end_at"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
@@ -401,7 +401,7 @@
         prop="trigger_condition"
         v-if="$route.params.type === 2"
       >
-        <el-radio-group v-model="ruleForm.trigger_condition">
+        <el-radio-group v-model="form.trigger_condition">
           <el-radio :label="1">{{ $t('新用户支付一笔订单') }}</el-radio>
           <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
@@ -503,6 +503,7 @@ export default {
         ignore_launch_count: 0,
         radio: 1,
         begin_at: '',
+        end_at: '',
         trigger_condition: 1
       },
       timeList: [],
@@ -577,6 +578,7 @@ export default {
       dialog({ type: 'lineChoose' }, data => {
         this.lineName = data
         this.ruleForm.express_line_ids = data.map(item => item.id)
+        this.form.express_line_ids = data.map(item => item.id)
       })
     },
     handleClick(tab) {
@@ -619,7 +621,7 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.$router.push({ name: 'voucher', params: { type: this.$route.params.type } })
+              this.$router.push({ name: 'new', params: { type: this.$route.params.type } })
             } else {
               this.$message({
                 message: res.msg,

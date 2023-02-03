@@ -12,6 +12,12 @@
         <span v-if="$route.params.type === 1"
           >{{ $t('新用户送券') }} - {{ coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}
         </span>
+        <span v-if="$route.params.type === 2"
+          >{{ $t('邀请新人送券') }} - {{ coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}
+        </span>
+        <span v-if="$route.params.type === 3"
+          >{{ $t('被邀请人送券') }} - {{ coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}
+        </span>
         <span v-if="$route.params.type === 5"
           >{{ $t('关注公众号领券') }} - {{ coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}
         </span>
@@ -62,16 +68,21 @@
       <el-form-item :label="$t('有效期')" prop="radio" v-if="$route.params.type === 1">
         <el-radio-group v-model="ruleForm.radio">
           <div style="margin: 0 0 10px 0">
-            <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
-            <el-input v-model="ruleForm.days" style="width: 340px"></el-input>
+            <el-radio :label="1" :disabled="statusEdit">{{ $t('到账后有效天数') }}</el-radio>
+            <el-input
+              v-model="ruleForm.days"
+              :disabled="statusEdit"
+              style="width: 340px"
+            ></el-input>
           </div>
           <div>
-            <el-radio :label="2">{{ $t('具体日期范围') }}</el-radio>
+            <el-radio :label="2" :disabled="statusEdit">{{ $t('具体日期范围') }}</el-radio>
             <el-date-picker
               v-model="ruleForm.begin_at"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
+              :disabled="statusEdit"
               :placeholder="$t('请选择开始日期')"
             >
             </el-date-picker>
@@ -81,6 +92,7 @@
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
+              :disabled="statusEdit"
               :placeholder="$t('请选择结束日期')"
             >
             </el-date-picker>
@@ -88,8 +100,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item
-        v-else
         :label="$route.params.type === 5 ? $t('有效期') : $t('有效时长')"
+        v-else
         prop="days"
       >
         <el-input
@@ -122,6 +134,16 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item
+        :label="$t('获券条件')"
+        prop="trigger_condition"
+        v-if="$route.params.type === 2"
+      >
+        <el-radio-group v-model="ruleForm.trigger_condition">
+          <el-radio :label="1" :disabled="statusEdit">{{ $t('新用户支付一笔订单') }}</el-radio>
+          <el-radio :label="2" :disabled="statusEdit">{{ $t('用户注册登陆') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -142,7 +164,8 @@ export default {
         min_weight: '',
         radio: 1,
         begin_at: '',
-        end_at: ''
+        end_at: '',
+        trigger_condition: 1
       },
       coupon_type: '',
       statusEdit: false,
@@ -166,6 +189,12 @@ export default {
     getList() {
       this.$request.getRebateDetails(this.$route.query.id).then(res => {
         this.ruleForm = res.data
+        if (res.data.days && !this.ruleForm.begin_at && !this.ruleForm.end_at) {
+          console.log(111111)
+          this.ruleForm.radio = 1
+        } else {
+          this.ruleForm.radio = 2
+        }
         this.coupon_type = res.data.coupon_type
         this.lineData = res.data.express_lines
         // this.ruleForm.trigger_condition = res.data.trigger_condition

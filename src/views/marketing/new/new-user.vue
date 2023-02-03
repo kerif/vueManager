@@ -106,7 +106,7 @@
                 $t('管理')
               }}</el-button>
             </div>
-            <div class="bottom-right">
+            <div class="bottom-right" v-if="item.type !== 7 && item.type !== 8">
               <el-switch
                 class="switch-sty"
                 @change="changeOnline(item.type, item.status)"

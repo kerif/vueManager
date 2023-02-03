@@ -286,11 +286,12 @@ export default {
     goAdd() {
       if (this.$route.params.type === 4) {
         this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
-      } else if (this.$route.params.type === 5 || this.$route.params.type === 6) {
-        this.$router.push({ name: 'ordinary', params: { type: this.$route.params.type } })
       } else {
-        this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
+        this.$router.push({ name: 'ordinary', params: { type: this.$route.params.type } })
       }
+      // else {
+      //   this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
+      // }
     },
     // 编辑
     goDetails(id) {
