@@ -159,15 +159,15 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
-      <span class="red-title">({{ $t('聚合') }})</span>
+      <!-- <span class="red-title">({{ $t('聚合') }})</span> -->
       <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div style="padding: 0 20px">
-        <!-- <el-tabs v-model="activeName" @tab-click="handleClick(2)">
+        <el-tabs v-model="activeName" @tab-click="handleClick(2)">
           <el-tab-pane :label="$t('聚合')" name="0"></el-tab-pane>
           <el-tab-pane label="aestron" name="1"></el-tab-pane>
-        </el-tabs> -->
-        <div class="svs-template">
+        </el-tabs>
+        <div class="svs-template" v-if="activeName === '0'">
           <el-form :model="ruleForm" label-width="130px">
             <el-row>
               <el-col :span="10" v-for="item in customerData" :key="item.id">
@@ -193,7 +193,7 @@
             </div>
           </div>
         </div>
-        <!-- <div v-else>
+        <div v-else>
           <el-table :data="tableData" border>
             <el-table-column type="index"></el-table-column>
             <el-table-column :label="$t('类型')" prop="type_name"></el-table-column>
@@ -222,7 +222,7 @@
           <div style="margin: 20px 0">
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="save-btn">
@@ -458,21 +458,20 @@ export default {
             this.page_params.total = res.meta.total
           }
         })
+      } else {
+        this.$request
+          .smsTemplateList({
+            page: this.page_params.page,
+            size: this.page_params.size
+          })
+          .then(res => {
+            if (res.ret) {
+              this.tableData = res.data
+              this.page_params.page = res.meta.current_page
+              this.page_params.total = res.meta.total
+            }
+          })
       }
-      // else {
-      //   this.$request
-      //     .smsTemplateList({
-      //       page: this.page_params.page,
-      //       size: this.page_params.size
-      //     })
-      //     .then(res => {
-      //       if (res.ret) {
-      //         this.tableData = res.data
-      //         this.page_params.page = res.meta.current_page
-      //         this.page_params.total = res.meta.total
-      //       }
-      //     })
-      // }
     },
     // 提交时间
     onTime(val) {
@@ -505,23 +504,23 @@ export default {
     // },
     changeStart(id, status) {
       console.log(id, status)
-      // this.$request.smsTmpSwitch(id, Number(status)).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     // this.getTemplateList()
-      //     this.getList(2)
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.smsTmpSwitch(id, Number(status)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          // this.getTemplateList()
+          this.getList(2)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     onEdit(id) {
       this.tmpId = id
@@ -530,31 +529,31 @@ export default {
     },
     getSmsDetail(id) {
       console.log(id)
-      // this.$request.smsTmpDetail(id).then(res => {
-      //   if (res.ret) {
-      //     this.form.content = res.data.content
-      //   }
-      // })
+      this.$request.smsTmpDetail(id).then(res => {
+        if (res.ret) {
+          this.form.content = res.data.content
+        }
+      })
     },
     onSave() {
-      // this.$request.smsTmpEdit(this.tmpId, { content: this.form.content }).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     this.editDialog = false
-      //     // this.getTemplateList()
-      //     this.getList(2)
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.smsTmpEdit(this.tmpId, { content: this.form.content }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.editDialog = false
+          // this.getTemplateList()
+          this.getList(2)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     clear() {
       this.form.content = ''

@@ -206,7 +206,7 @@ export default {
     // 新增
     goAdd(type) {
       if (type === 4) {
-        this.$router.push({ name: 'rebate', params: { type: type } })
+        this.$router.push({ name: 'rebate', params: { type: type }, query: { type } })
         // this.$router.push({ name: 'ordinary', params: { type: type } })
       } else if (
         type === 1 ||

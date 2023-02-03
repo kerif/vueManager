@@ -480,6 +480,7 @@ export default {
         ignore_launch_count: 0,
         radio: 1,
         begin_at: '',
+        end_at: '',
         trigger_condition: 1
         // times: 1,
         // order_amount: '',

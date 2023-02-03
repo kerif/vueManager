@@ -102,7 +102,7 @@
         <template slot-scope="scope">
           <el-button
             class="btn-purple"
-            v-if="$route.params.type === 5"
+            v-if="$route.params.type === 4"
             @click="goDetails(scope.row.id)"
             >{{ $t('详情') }}</el-button
           >
