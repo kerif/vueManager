@@ -100,15 +100,13 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            class="btn-purple"
-            v-if="$route.params.type === 4"
-            @click="goDetails(scope.row.id)"
-            >{{ $t('详情') }}</el-button
-          >
-          <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
+          <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
             $t('详情')
           }}</el-button>
+          <!-- v-if="$route.params.type === 4" -->
+          <!-- <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
+            $t('详情')
+          }}</el-button> -->
           <!-- 记录 -->
           <el-button
             size="small"
