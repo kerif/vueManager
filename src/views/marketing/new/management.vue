@@ -68,7 +68,6 @@
       <!-- 金额 -->
       <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
       </el-table-column>
-      <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
       <!-- 使用范围 -->
       <!-- <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -79,6 +78,7 @@
       </el-table-column> -->
       <!-- 最低消费金额 -->
       <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+      <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
       <el-table-column :label="$t('最低重量')" prop="min_weight"> </el-table-column>
       <!-- 失效时间 -->
       <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
