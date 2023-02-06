@@ -937,32 +937,32 @@ export default {
     },
     // 创建发货单
     updateInvoice() {
-      dialog({ type: 'invoice', state: 'add' }, () => {
-        this.getList()
-      })
-      // dialog(
-      //   {
-      //     type: 'invoiceList'
-      //   },
-      //   () => {
-      //     this.getList()
-      //   }
-      // )
+      // dialog({ type: 'invoice', state: 'add' }, () => {
+      //   this.getList()
+      // })
+      dialog(
+        {
+          type: 'invoiceList'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 编辑发货单
     editInvoice(id) {
-      dialog({ type: 'invoice', state: 'edit', id: id }, () => {
-        this.getList()
-      })
-      // dialog(
-      //   {
-      //     type: 'invoiceList',
-      //     id
-      //   },
-      //   () => {
-      //     this.getList()
-      //   }
-      // )
+      // dialog({ type: 'invoice', state: 'edit', id: id }, () => {
+      //   this.getList()
+      // })
+      dialog(
+        {
+          type: 'invoiceList',
+          id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     goInvoice(id) {
       this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {
