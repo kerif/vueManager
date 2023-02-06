@@ -75,10 +75,10 @@
         <el-button size="small" class="btn-blue" @click="batchInvoice">{{
           $t('批量导入发货单')
         }}</el-button>
-        <el-button size="small" type="success" plain @click="uploadListExcel">{{
+        <!-- <el-button size="small" type="success" plain @click="uploadListExcel">{{
           $t('导出清单')
-        }}</el-button>
-        <!-- <el-dropdown>
+        }}</el-button> -->
+        <el-dropdown>
           <el-button size="small" type="success" plain>{{ $t('导出清单') }}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="uploadListExcel">{{
@@ -91,7 +91,7 @@
               $t('海运发货单')
             }}</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown> -->
+        </el-dropdown>
       </div>
       <div class="search-l">
         <search-group
@@ -153,13 +153,13 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 发货单号 -->
         <el-table-column :label="$t('发货单号')" prop="sn" width="155"></el-table-column>
-        <!-- <el-table-column :label="$t('类型')" prop="type">
+        <el-table-column :label="$t('类型')" prop="type">
           <template slot-scope="scope">
             <span>{{
-              scope.row.type === 0 ? $t('普通') : scope.row.type === 1 ? $t('空运') : $t('海运')
+              scope.row.type === 3 ? $t('普通') : scope.row.type === 1 ? $t('空运') : $t('海运')
             }}</span>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <!-- 创建时间 -->
         <el-table-column :label="$t('提交时间')" prop="created_at" width="155"></el-table-column>
         <!-- 发货时间 -->
