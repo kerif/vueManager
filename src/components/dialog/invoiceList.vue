@@ -532,7 +532,7 @@ export default {
         warehouse_id: '',
         remark: '',
         mawb: '',
-        type: 1,
+        type: 0,
         air_info: {
           flight: '',
           departure_airport: '',
@@ -715,7 +715,7 @@ export default {
         warehouse_id: '',
         remark: '',
         mawb: '',
-        type: 1,
+        type: 0,
         air_info: {
           flight: '',
           departure_airport: '',
