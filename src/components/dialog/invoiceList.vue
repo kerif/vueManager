@@ -156,7 +156,7 @@
               <el-form-item :label="$t('预计开船时间')">
                 <el-input
                   v-model="form.ship_info.expected_time_of_ship"
-                  placeholder="请输入预计开船时间"
+                  placeholder="请输入预计开船时间, 如2023-12-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -164,7 +164,7 @@
               <el-form-item :label="$t('实际开船时间')">
                 <el-input
                   v-model="form.ship_info.time_of_ship"
-                  placeholder="请输入实际开船时间"
+                  placeholder="请输入实际开船时间, 如2023-12-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -174,7 +174,7 @@
               <el-form-item :label="$t('预计到达时间')">
                 <el-input
                   v-model="form.ship_info.expected_time_of_arrival"
-                  placeholder="请输入预计到达时间"
+                  placeholder="请输入预计到达时间, 如2023-12-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -182,7 +182,7 @@
               <el-form-item :label="$t('实际到达时间')">
                 <el-input
                   v-model="form.ship_info.time_of_arrival"
-                  placeholder="请输入实际到达时间"
+                  placeholder="请输入实际到达时间, 如2023-12-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>

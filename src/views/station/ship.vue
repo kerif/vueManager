@@ -156,7 +156,13 @@
         <el-table-column :label="$t('类型')" prop="type">
           <template slot-scope="scope">
             <span>{{
-              scope.row.type === 3 ? $t('普通') : scope.row.type === 1 ? $t('空运') : $t('海运')
+              scope.row.type === 0
+                ? $t('普通')
+                : scope.row.type === 1
+                ? $t('空运')
+                : scope.row.type === 2
+                ? $t('海运')
+                : $t('其他')
             }}</span>
           </template>
         </el-table-column>
