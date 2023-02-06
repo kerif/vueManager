@@ -105,7 +105,7 @@
               <el-form-item :label="$t('预计起飞时间')">
                 <el-input
                   v-model="form.air_info.expected_time_of_departure"
-                  placeholder="请输入预计起飞时间"
+                  placeholder="请输入预计起飞时间, 如2023-11-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -113,7 +113,7 @@
               <el-form-item :label="$t('实际起飞时间')">
                 <el-input
                   v-model="form.air_info.time_of_departure"
-                  placeholder="请输入实际起飞时间"
+                  placeholder="请输入实际起飞时间, 如2023-11-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -123,7 +123,7 @@
               <el-form-item :label="$t('预计到达时间')">
                 <el-input
                   v-model="form.air_info.expected_time_of_arrival"
-                  placeholder="请输入预计到达时间"
+                  placeholder="请输入预计到达时间, 如2023-11-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -131,7 +131,7 @@
               <el-form-item :label="$t('实际到达时间')">
                 <el-input
                   v-model="form.air_info.time_of_arrival"
-                  placeholder="请输入实际到达时间"
+                  placeholder="请输入实际到达时间, 如2023-11-23 12:12"
                 ></el-input>
               </el-form-item>
             </el-col>
