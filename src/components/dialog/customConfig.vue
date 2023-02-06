@@ -51,7 +51,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="warehouse" v-if="this.config.warehouse">
+      <el-form-item label="warehouse" v-if="this.config.warehouse">
         <el-select v-model="form.warehouse">
           <el-option
             v-for="item in warehouseData"
@@ -70,7 +70,17 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
+      <el-form-item label="channel" v-if="this.config.channel">
+        <el-select v-model="form.channel">
+          <el-option
+            v-for="item in channelData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="sortCode">
         <el-input v-model="form.sortCode" class="input-sty"></el-input>
       </el-form-item>
@@ -96,16 +106,18 @@ export default {
       packageData: [],
       payData: [],
       shipData: [],
-      // productData: [],
-      // warehouseData: [],
+      channelData: [],
+      productData: [],
+      warehouseData: [],
       form: {
         deliveryType: '',
         expressType: '',
         packageType: '',
         payType: '',
         shipType: '',
-        // product: '',
-        // warehouse: '',
+        channel: '',
+        product: '',
+        warehouse: '',
         sortCode: '',
         destinationSiteCode: ''
       }
@@ -173,27 +185,40 @@ export default {
             this.getSelectData()
           }
 
-          // if (res.data.product && res.data.warehouse) {
-          //   console.log(11)
-          //   let product = res.data.product
-          //   let warehouse = res.data.warehouse
+          if (res.data.product && res.data.warehouse) {
+            console.log(11)
+            let product = res.data.product
+            let warehouse = res.data.warehouse
 
-          //   this.productData = Object.keys(product).map(item => {
-          //     return {
-          //       value: item,
-          //       label: product[item]
-          //     }
-          //   })
-          //   console.log(Object.keys(warehouse))
-          //   this.warehouseData = Object.keys(warehouse).map(item => {
-          //     return {
-          //       value: item,
-          //       label: warehouse[item]
-          //     }
-          //   })
+            this.productData = Object.keys(product).map(item => {
+              return {
+                value: item,
+                label: product[item]
+              }
+            })
+            console.log(Object.keys(warehouse))
+            this.warehouseData = Object.keys(warehouse).map(item => {
+              return {
+                value: item,
+                label: warehouse[item]
+              }
+            })
 
-          //   this.getSelectData()
-          // }
+            this.getSelectData()
+          }
+
+          if (res.data.channel) {
+            let channel = res.data.channel
+
+            this.channelData = channel.map(item => {
+              return {
+                value: item['code'],
+                label: item['code'] + '-' + item['name']
+              }
+            })
+
+            this.getSelectData()
+          }
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -211,6 +236,7 @@ export default {
         this.form.expressType = res.data.expressType
         this.form.payType = res.data.payType
         this.form.product = res.data.product
+        this.form.channel = res.data.channel
         this.form.warehouse = res.data.warehouse
         this.form.sortCode = res.data.sortCode
         this.form.destinationSiteCode = res.data.destinationSiteCode
@@ -245,6 +271,7 @@ export default {
       this.form.shipType = ''
       this.form.warehouse = ''
       this.form.product = ''
+      this.form.channel = ''
       this.form.sortCode = ''
       this.form.destinationSiteCode = ''
     }
