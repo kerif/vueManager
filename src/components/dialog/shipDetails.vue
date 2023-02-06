@@ -22,6 +22,7 @@
       </el-dialog>
       <div class="import-list">
         <el-button class="btn-deep-purple" @click="exportList">{{ $t('导出清单') }}</el-button>
+        <el-button size="small" @click="exportPdf">{{ $t('按自提点导出PDF') }}</el-button>
       </div>
       <el-table :data="shipData" border @selection-change="selectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
@@ -301,6 +302,23 @@ export default {
       this.show = false
       // this.showInner = true
       this.showTmpDrawer = true
+    },
+    exportPdf() {
+      this.$request.exportShipmentStationOrdersPdf(this.id).then(res => {
+        if (res.ret) {
+          window.open(res.data)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     receiveTmp() {
       this.showTmpDrawer = false

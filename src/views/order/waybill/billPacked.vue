@@ -364,10 +364,10 @@
         <el-row :gutter="20">
           <el-col :span="11" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('出箱类型')">
-              <el-radio-group v-model="user.box_type">
+              <!-- <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
                 <el-radio :label="2">{{ $t('多箱出库') }}</el-radio> </el-radio-group
-              >&nbsp;&nbsp;
+              >&nbsp;&nbsp; -->
               <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
             </el-form-item>
           </el-col>
@@ -387,7 +387,7 @@
           </el-col>
         </el-row>
         <!-- 重量 -->
-        <el-row :gutter="20" v-if="user.box_type === 1">
+        <!-- <el-row :gutter="20" v-if="user.box_type === 1">
           <el-col :span="11">
             <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
@@ -398,7 +398,6 @@
               }}</span>
             </el-form-item>
           </el-col>
-          <!-- 尺寸 -->
           <el-col :span="11" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('尺寸')">
               <el-input
@@ -421,7 +420,7 @@
               }}</el-button>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <!-- 子订单单价 -->
         <el-row :gutter="20" v-if="$route.params.parent != 0">
           <el-col :span="10">
@@ -459,7 +458,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-if="user.box_type === 2">
+        <el-row :gutter="20">
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
@@ -736,7 +735,7 @@ export default {
         height: '',
         remark: '',
         location: '',
-        box_type: 1,
+        box_type: '',
         express_line_id: '',
         warehouse_id: '',
         insurance_fee: '',
@@ -822,7 +821,7 @@ export default {
     AddBtn
   },
   created() {
-    this.getPackage()
+    this.getPackage(true)
     this.getExpress()
     this.getProduct()
     this.getInit()
@@ -877,7 +876,7 @@ export default {
     // 新增包裹
     addPackages() {
       dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
-        this.getPackage()
+        this.getPackage(false)
       })
     },
     // 获取商品清单
@@ -940,7 +939,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getPackage()
+            this.getPackage(false)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -971,7 +970,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getPackage()
+            this.getPackage(false)
             this.getProduct()
           } else {
             this.$notify({
@@ -1047,60 +1046,80 @@ export default {
           let price = ele.price
           return { id, price }
         })
-      this.$request
-        .calOrderPrice(this.$route.params.id, {
-          ...this.user,
-          services,
-          width: this.user.width || '',
-          height: this.user.height || '',
-          length: this.user.length || '',
-          weight: this.user.weight || ''
-        })
-        .then(res => {
-          if (res.ret) {
-            this.total_fee = res.data.total_fee
-            let line_services = res.data.line_services.services.map(item => {
-              let name = item.name
-              let value = item.price
-              return { name, value }
-            })
-            let order_services = res.data.order_services.services.map(item => {
-              let name = item.name
-              let value = item.price
-              return { name, value }
-            })
-            this.freightData = []
-            this.freightData.push(
-              {
-                name: '运费',
-                value: res.data.freight.first + res.data.freight.next
-              },
-              {
-                name: '关税费',
-                value: res.data.tariff_fee
-              },
-              {
-                name: '保险费',
-                value: res.data.insurance_fee
-              },
-              ...order_services,
-              ...line_services,
-              {
-                name: '渠道限制费',
-                value: res.data.line_rules.fee
-              },
-              {
-                name: '包裹增值服务',
-                value: res.data.package_service_fee
-              }
-            )
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      let params = {}
+      if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
+      } else {
+        this.user.box_type = 2
+      }
+      params = {
+        ...this.user,
+        services
+        // width: this.user.width || '',
+        // height: this.user.height || '',
+        // length: this.user.length || '',
+        // weight: this.user.weight || ''
+      }
+      if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
+        params.width = this.user.box[0].width
+        params.length = this.user.box[0].length
+        params.weight = this.user.box[0].weight
+        params.height = this.user.box[0].height
+      } else if (this.user.box.length && this.user.box.length > 1) {
+        this.user.box_type = 2
+      }
+      if (this.user.box_type === 1) {
+        delete params.box
+      } else {
+        delete params.width, delete params.length, delete params.height, delete params.weight
+      }
+
+      this.$request.calOrderPrice(this.$route.params.id, params).then(res => {
+        if (res.ret) {
+          this.total_fee = res.data.total_fee
+          let line_services = res.data.line_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          let order_services = res.data.order_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          this.freightData = []
+          this.freightData.push(
+            {
+              name: '运费',
+              value: res.data.freight.first + res.data.freight.next
+            },
+            {
+              name: '关税费',
+              value: res.data.tariff_fee
+            },
+            {
+              name: '保险费',
+              value: res.data.insurance_fee
+            },
+            ...order_services,
+            ...line_services,
+            {
+              name: '渠道限制费',
+              value: res.data.line_rules.fee
+            },
+            {
+              name: '包裹增值服务',
+              value: res.data.package_service_fee
+            }
+          )
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     //仅保存和保存并提交
     async savePacked(type) {
@@ -1112,6 +1131,20 @@ export default {
             price: item.price
           }
         })
+      if (this.user.box.length && this.user.box.length > 1) {
+        this.user.box_type = 2
+        delete this.user.width,
+          delete this.user.height,
+          delete this.user.length,
+          delete this.user.weight
+      } else if (this.user.box.length && this.user.box.length === 1) {
+        this.user.box_type = 1
+        this.user.width = this.user.box[0].width
+        this.user.height = this.user.box[0].height
+        this.user.length = this.user.box[0].length
+        this.user.weight = this.user.box[0].weight
+        delete this.user.box
+      }
       if (this.user.box_type === 1) {
         this.user.system_box_id = this.boxId
       }
@@ -1297,7 +1330,7 @@ export default {
     deleteInfo(index, rows) {
       rows.splice(index, 1)
     },
-    getPackage() {
+    getPackage(flag) {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         res.data.packages.forEach(item => {
@@ -1308,7 +1341,18 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
-        this.user.box = res.data.box
+        if (flag) {
+          if (res.data.box_type === 1) {
+            this.user.box.push({
+              width: res.data.width,
+              height: res.data.height,
+              length: res.data.length,
+              weight: res.data.weight
+            })
+          } else {
+            this.user.box = res.data.box
+          }
+        }
         this.user.remark = res.data.remark
         this.user.location = res.data.location
         this.user.in_warehouse_item = res.data.in_warehouse_item

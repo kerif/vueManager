@@ -275,7 +275,7 @@ export default {
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.localization = res.localization
-            console.log(this.valueData, 'valueData')
+            // console.log(this.valueData, 'valueData')
           } else {
             this.$message({
               message: res.msg,

@@ -1754,6 +1754,31 @@ exports.updateInstructions = params => {
 exports.getApiService = () => {
   return $form.get('api-services')
 }
+
+// 配置Google地图API
+exports.setMapApi = params => {
+  return $form.post('api-services/google', params)
+}
+
+// 获取详情
+exports.getMapApi = () => {
+  return $form.get('api-services/google')
+}
+
+// 字符串翻译导出
+exports.derive = () => {
+  return $form.get('string-translations/export')
+}
+
+// 字符串翻译导入
+exports.guideInto = params => {
+  return $file.post('string-translations/import', params)
+}
+
+// 测试地址
+exports.testAddress = params => {
+  return $form.get('api-services/google/test', params)
+}
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
   return $form.get(`payments/payment/status`)
@@ -2703,6 +2728,101 @@ exports.getTranslate = (id, params) => {
 exports.deleteLabel = ids => {
   return $form.put('express-line-labels/batch-delete', ids)
 }
+
+//申报商品库管理列表
+exports.declareLists = params => {
+  return $form.get('product-names', params)
+}
+
+//添加申报商品
+exports.addProduct = params => {
+  return $form.post('product-names', params)
+}
+
+//添加申报商品
+exports.addProduct = params => {
+  return $form.post('product-names', params)
+}
+//获取获取顶级、二级商品名
+exports.getTradeName = () => {
+  return $form.get(`product-names/parent-tree`)
+}
+
+//获取商品详情
+exports.getParticulars = id => {
+  return $form.get(`product-names/${id}`)
+}
+
+//修改商品
+exports.amendProduct = (id, params) => {
+  return $form.put(`product-names/${id}`, params)
+}
+
+//删除申报商品
+exports.removeProduct = params => {
+  return $form.put(`product-names/batch-delete`, params)
+}
+
+//申报商品库管理列表
+exports.declareListChildren = id => {
+  return $form.get(`product-names/${id}/children`)
+}
+
+//预报快递公司列表
+exports.ForecastExpressList = params => {
+  return $form.get(`express-companies/index`, { params })
+}
+
+//新增预报快递公司
+exports.AddForecastCompanies = params => {
+  return $form.post(`express-companies`, params)
+}
+
+//预报快递公司列表排序
+exports.ForecastCompaniesSort = params => {
+  return $form.put(`express-companies/sort-index`, params)
+}
+
+//预报快递公司列表删除
+exports.ForecastCompaniesDelete = id => {
+  return $form.delete(`express-companies/${id}`)
+}
+
+//预报快递公司列表到件先知状态
+exports.ForecastArrivalStatus = (id, status) => {
+  return $form.put(`express-companies/${id}/auto-status/${status}`)
+}
+
+//预报快递公司列表状态
+exports.ForecastCompaniesListStatus = (id, status) => {
+  return $form.put(`express-companies/${id}/status/${status}`)
+}
+
+//预报快递公司获取详情
+exports.ForecastCompaniesDetails = id => {
+  return $form.get(`express-companies/${id}`)
+}
+
+//预报快递公司获取修改基础配置
+exports.updateForecastCompanies = (id, params) => {
+  return $form.put(`express-companies/${id}`, params)
+}
+
+//预报快递公司获取更新配置
+exports.updateConfig = (id, params) => {
+  return $form.put(`express-companies/${id}/config`, params)
+}
+
+//预报快递公司获取语言详情
+exports.forecastLangDetails = (id, params) => {
+  return $form.get(`express-companies/${id}`, { params })
+}
+
+//预报快递公司语言修改
+exports.forecastLang = (id, params) => {
+  return $form.put(`express-companies/${id}/translate-data`, params)
+}
+
 // 自提点 获取详细
 exports.getOneSelf = id => {
   return $form.get(`self-pickup-stations/${id}`)
@@ -3240,6 +3360,10 @@ exports.userCoupons = (id, params) => {
 exports.disableCoupons = id => {
   return $form.patch(`coupons/${id}/disable`)
 }
+// 删除
+exports.deleteCoupon = id => {
+  return $form.delete(`coupons/${id}`)
+}
 
 /**
  * 上传图片
@@ -3381,6 +3505,11 @@ exports.deleteOrderTable = (shipId, id) => {
 // 发货单 获取单条轨迹
 exports.getAloneOrder = id => {
   return $form.get(`orders/${id}/logistics`)
+}
+
+// 发货单 导出自提点PDF
+exports.exportShipmentStationOrdersPdf = id => {
+  return $form.get(`shipments/${id}/station-orders-pdf`)
 }
 // 订单 打包 获取线路详情
 exports.getUsable = (id, params) => {
@@ -5013,3 +5142,172 @@ exports.getChangePrice = () => {
 }
 
 // 充值记录 数据统计
+exports.getdataSummary = params => {
+  return $form.get(`recharge-records/total-sum`, { params })
+}
+
+// -------这里是取件相关的------------
+// 取件详细
+exports.pickupInfo = id => {
+  return $form.get(`pickups/${id}`)
+}
+
+//取件列表
+exports.pickupList = params => {
+  return $form.get(`pickups/`, { params })
+}
+
+//删除取件
+exports.pickupDelete = params => {
+  return $form.put(`pickup/batch-delete`, params)
+}
+
+//取件转运单号
+exports.pickupSetTrackingInfo = params => {
+  return $json.put(`pickups/transport`, params)
+}
+
+//取件设置审核
+exports.pickupSetCheck = params => {
+  return $form.put(`pickups/review`, params)
+}
+
+//导出取件
+exports.pickupExport = params => {
+  return $form.post(`pickups/export`, params)
+}
+
+//取件更新配置
+exports.pickupTimeUpdateConfig = params => {
+  return $form.put(`pickups/config`, params)
+}
+
+//取件读取配置
+exports.pickupTimeGetConfig = params => {
+  return $form.get(`pickups/config`, { params })
+}
+
+// 获取上门取件数据统计
+exports.getPickUpCounts = params => {
+  return $form.get('pickups/counts', { params })
+}
+
+// 包裹预报入库积分规则
+exports.getPointRuleForParcelInbound = () => {
+  return $form.get('in-out-rule/point-pis-config/show')
+}
+
+// 包裹预报入库积分规则
+exports.setPointRuleForParcelInbound = params => {
+  return $form.post('in-out-rule/point-pis-config', params)
+}
+
+// 微信认证积分规则
+exports.getPointRuleForWechatAuth = () => {
+  return $form.get('in-out-rule/point-wa-config/show')
+}
+
+// 微信认证积分规则
+exports.setPointRuleForWechatAuth = params => {
+  return $form.post('in-out-rule/point-wa-config', params)
+}
+
+// 充值积分规则
+exports.getPointRuleForRecharge = () => {
+  return $form.get('in-out-rule/point-recharge-config/show')
+}
+
+// 充值积分规则
+exports.setPointRuleForRecharge = params => {
+  return $form.post('in-out-rule/point-recharge-config', params)
+}
+
+// 关注公众号积分规则
+exports.getPointRuleForWechatOfficeAcccount = () => {
+  return $form.get('in-out-rule/point-oa-config/show')
+}
+
+// 关注公众号积分规则
+exports.setPointRuleForWechatOfficeAcccount = params => {
+  return $form.post('in-out-rule/point-oa-config', params)
+}
+
+// 绑定手机号积分规则
+exports.getPointRuleForBindPhone = () => {
+  return $form.get('in-out-rule/point-bp-config/show')
+}
+
+// 绑定手机号积分规则
+exports.setPointRuleForBindPhone = params => {
+  return $form.post('in-out-rule/point-bp-config', params)
+}
+
+// 绑定邮箱积分规则
+exports.getPointRuleForBindEmail = () => {
+  return $form.get('in-out-rule/point-be-config/show')
+}
+
+// 绑定邮箱积分规则
+exports.setPointRuleForBindEmail = params => {
+  return $form.post('in-out-rule/point-be-config', params)
+}
+
+// 创建发货单
+exports.createInvoice = params => {
+  return $form.post('shipments', params)
+}
+
+// 编辑发货单
+exports.editInvoice = (id, params) => {
+  return $form.put(`shipments/${id}`, params)
+}
+
+// 获取详情
+exports.getInvoiceDetail = id => {
+  return $form.get(`shipments/${id}`)
+}
+
+// 自提点模板解析
+exports.stationTmpAnalysis = params => {
+  return $file.post(`self-pickup-stations/excel-parse`, params)
+}
+
+// 批量新增
+exports.batchAddStation = params => {
+  return $json.post(`self-pickup-stations/store-batch`, params)
+}
+
+// 获取自提点导入模板
+exports.importStationTmp = () => {
+  return $form.get(`self-pickup-stations/download-template`, { responseType: 'blob' })
+}
+
+// 导出海运发货单
+exports.uploadOceanShip = params => {
+  return $form.post(`shipments/export/ship`, params)
+}
+
+// 导出空运发货单
+exports.uploadAirShip = params => {
+  return $form.post(`shipments/export/air`, params)
+}
+
+// 短信模板列表
+exports.smsTemplateList = params => {
+  return $form.get(`api-services/sms/aestron`, { params })
+}
+
+// 短信模板详情
+exports.smsTmpDetail = id => {
+  return $form.get(`api-services/sms/aestron/${id}`)
+}
+
+// 短信模板开关
+exports.smsTmpSwitch = (id, status) => {
+  return $form.put(`api-services/sms/aestron/${id}/status/${status}`)
+}
+
+// 短信模板修改
+exports.smsTmpEdit = (id, params) => {
+  return $form.put(`api-services/sms/aestron/${id}`, params)
+}

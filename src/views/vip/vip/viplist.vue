@@ -655,7 +655,6 @@ export default {
       })
     },
     viewProfile(id) {
-      console.log(id)
       dialog({ type: 'vipProfile', id: id })
     },
     // 操作日志
@@ -1009,7 +1008,6 @@ export default {
       })
     },
     onPageTo(row) {
-      console.log(row, 'row')
       this.$router.push({
         name: 'transaction',
         query: { keyword: row.id }

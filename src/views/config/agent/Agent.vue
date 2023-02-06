@@ -62,19 +62,21 @@
       height="calc(100vh - 275px)"
     >
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('代理名称')" width="185">
+      <el-table-column :label="$t('代理名称')" width="250">
         <template slot-scope="scope">
-          <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
+          <el-button type="text" @click="viewProfile(scope.row.user_id)"
+            >{{ scope.row.user_id }}-{{ scope.row.agent_name }}</el-button
+          >
         </template>
       </el-table-column>
       <el-table-column :label="$t('联系人')" prop="contact_name"></el-table-column>
       <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
-      <el-table-column :label="$t('下单数')">
+      <el-table-column :label="$t('推广下单数')" width="100">
         <template slot-scope="scope">
           <span style="color: blue">{{ scope.row.deal_order }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('成交数')">
+      <el-table-column :label="$t('推广成交数')" width="100">
         <template slot-scope="scope">
           <span style="color: red">{{ scope.row.deal_order }}</span>
         </template>
@@ -93,7 +95,7 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="450" fixed="right">
+      <el-table-column label="操作" width="600" fixed="right">
         <template slot-scope="scope">
           <!-- 代理二维码 -->
           <el-button class="btn-green" @click.stop="openAgent(scope.row)">{{
@@ -113,14 +115,6 @@
             >{{ $t('设置佣金') }}</el-button
           >
           <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
-          <el-badge
-            :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''"
-            class="item record-sty"
-          >
-            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{
-              $t('成交记录')
-            }}</el-button>
-          </el-badge>
           <!-- 提现申请 -->
           <el-badge
             :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''"
@@ -133,6 +127,15 @@
           <el-button class="btn-blue" @click="invite(scope.row.user_id)">{{
             $t('邀请记录')
           }}</el-button>
+
+          <el-badge
+            :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''"
+            class="item record-sty"
+          >
+            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{
+              $t('成交记录')
+            }}</el-button>
+          </el-badge>
         </template>
       </el-table-column>
     </el-table>
@@ -233,6 +236,9 @@ export default {
     this.getList()
   },
   methods: {
+    viewProfile(id) {
+      dialog({ type: 'vipProfile', id: id })
+    },
     getList() {
       this.tableLoading = true
       this.$request

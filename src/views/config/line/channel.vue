@@ -163,6 +163,8 @@
           </template>
         </el-table-column>
         <!-- 线路名称 -->
+        <el-table-column :label="$t('渠道代码')" prop="code" width="150"></el-table-column>
+        <!-- 线路名称 -->
         <el-table-column :label="$t('渠道名称')" prop="name"></el-table-column>
         <!-- 价格模式 -->
         <el-table-column :label="$t('价格模式')" width="150">

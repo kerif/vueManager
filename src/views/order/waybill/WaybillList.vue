@@ -274,6 +274,9 @@
               <template v-else-if="item.id === 'status_name'">
                 {{ scope.row.status_name }}
               </template>
+              <!-- <template v-else-if="item.id === 'code'">
+                {{ scope.row.express_line.code }}
+              </template> -->
               <template v-else-if="item.id === 'express_line'">
                 {{ scope.row.express_line.cn_name }}
               </template>
@@ -327,6 +330,9 @@
                 <span v-else-if="activeName === '3'">{{ scope.row.paid_at }}</span>
                 <span v-else-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
                 <span v-else>{{ scope.row.updated_at }}</span>
+              </template>
+              <template v-else-if="item.id === 'created_at'">
+                <span v-if="activeName === '3'">{{ scope.row.created_at }}</span>
               </template>
               <template v-else-if="item.id === 'shipment_sn'">
                 <span @click="goShip(scope.row.shipment_sn)" class="choose-order">
@@ -454,7 +460,9 @@
                       activeName,
                       scope.row.pay_amount,
                       scope.row.payment_type_name,
-                      scope.row.is_parent
+                      scope.row.is_parent,
+                      scope.row.status,
+                      scope.row.payment_status
                     )
                   "
                 >
@@ -677,7 +685,7 @@
               <el-table-column
                 :label="$t('拣货时间')"
                 prop="packed_at"
-                v-if="activeName === '2' || activeName === '3'"
+                v-if="activeName === '1' || activeName === '2' || activeName === '3'"
               ></el-table-column>
               <el-table-column :label="$t('签收时间')" v-if="activeName === '5'">
                 <template slot-scope="scope">
@@ -773,7 +781,10 @@
                               scope.row.id,
                               activeName,
                               scope.row.pay_amount,
-                              scope.row.payment_type_name
+                              scope.row.payment_type_name,
+                              scope.row.is_parent,
+                              scope.row.status,
+                              scope.row.payment_status
                             )
                           "
                           v-if="['1', '2', '3'].includes(activeName)"
@@ -1338,6 +1349,7 @@ export default {
         'user_name',
         'user_member_level',
         'order_sn',
+        'code',
         'express_line',
         'receiver_name',
         'country_name',
@@ -1389,7 +1401,7 @@ export default {
             if (item.id === 'updated_at') {
               item.name = this.timeLabel
             }
-            if ([...column, 'is_saved', 'updated_at'].includes(item.id)) {
+            if ([...column, 'is_saved', 'updated_at', 'packed_at'].includes(item.id)) {
               this.checkColumn.push(item)
             }
             break
@@ -1405,6 +1417,9 @@ export default {
             if (item.id === 'updated_at') {
               item.name = this.timeLabel
             }
+            if (item.id === 'created_at') {
+              item.name = this.$t('提交时间')
+            }
             if (
               [
                 ...column,
@@ -1416,7 +1431,8 @@ export default {
                 'packed_at',
                 'shipment_sn',
                 'boxes_count',
-                'third_tracking_status_name'
+                'third_tracking_status_name',
+                'created_at'
                 // 'pack_status_name'
               ].includes(item.id)
             ) {
@@ -1686,6 +1702,7 @@ export default {
       }
       if (this.hasFilterCondition) {
         const searchData = this.searchFieldData
+        console.log(searchData.countryArr, 'searchData.countryArr')
         params = {
           ...params,
           ...searchData,
@@ -1699,7 +1716,11 @@ export default {
               ? searchData.countryArr[0]
               : searchData.countryArr[searchData.countryArr.length - 1],
           area_id:
-            searchData.countryArr.length > 1
+            searchData.countryArr.length === 2
+              ? searchData.countryArr[searchData.countryArr.length - 1]
+              : searchData.countryArr[searchData.countryArr.length - 2],
+          sub_area_id:
+            searchData.countryArr.length > 2
               ? searchData.countryArr[searchData.countryArr.length - 1]
               : ''
         }
@@ -2316,7 +2337,7 @@ export default {
       )
     },
     // 作废
-    invalidOrder(id, activeName, payAmount, paymentTypeName, parent) {
+    invalidOrder(id, activeName, payAmount, paymentTypeName, parent, status, paymentStatus) {
       dialog(
         {
           type: 'voidList',
@@ -2324,7 +2345,9 @@ export default {
           activeName: activeName,
           payAmount: payAmount,
           paymentTypeName: paymentTypeName,
-          parent: parent
+          parent: parent,
+          status,
+          paymentStatus
         },
         () => {
           this.getList()

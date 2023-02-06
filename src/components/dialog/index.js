@@ -21,10 +21,12 @@ import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
 import addCompany from './addCompany.vue'
+import leadIn from './leadIn.vue'
 import shipDetails from './shipDetails.vue'
 import addTransfer from './addSetting.vue'
 import addService from './addEditService.vue'
 import addIcon from './addIcon.vue'
+import addDeclared from './addDeclared.vue'
 import classifyGroup from './classifyAddEdit.vue'
 import costAdd from './addCost.vue'
 import joinShip from './joinShipping.vue'
@@ -61,6 +63,8 @@ import advertiseLang from './advertiseLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
 import expressEditAdd from './expressAddEdit.vue'
+import expressConfig from './expressConfig.vue'
+import expressConfigAend from './expressConfigAend.vue'
 import expressLang from './expressLang.vue'
 import rulesEdit from './rulesEdit.vue'
 import vipAdd from './vipAdd.vue'
@@ -69,6 +73,7 @@ import setCountry from './setCountry.vue'
 import explanationAdd from './insuranceAdd.vue'
 import expressChange from './storageChange.vue'
 import trackingLang from './trackingLang.vue'
+import forecastLang from './forecastLang.vue'
 import batchExpress from './batchExpress.vue'
 import rebateLang from './rebateLang.vue'
 import newLang from './newLang.vue'
@@ -180,8 +185,22 @@ import areaChooseCountry from './areaChooseCountry.vue'
 import batchAddPostCode from './batchAddPostCode.vue'
 import vipChangePassword from './vipChangePassword.vue'
 import vipMerge from './vipMerge.vue'
+import oneSevenTracking from './17Tracking.vue'
+import couponDetail from './couponDetail.vue'
+import pickupDetail from './pickupDetail.vue'
+import pickupSetTrackingInfo from './pickupSetTrackingInfo.vue'
+import systemExpired from './systemExpired.vue'
+import batchAddShipLineGrades from './batchAddShipLineGrades.vue'
+import parcelInboundPointRule from './parcelInboundPointRule.vue'
+import wechatAuthPointRule from './wechatAuthPointRule.vue'
+import rechargePointRule from './rechargePointRule.vue'
+import wechatOfficeAccountPointRule from './wechatOfficeAccountPointRule.vue'
+import bindPhonePointRule from './bindPhonePointRule.vue'
+import bindEmailPointRule from './bindEmailPointRule.vue'
+import invoiceList from './invoiceList.vue'
 
 const InviteController = Vue.extend(inviteList)
+const lead = Vue.extend(leadIn)
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffGroupController = Vue.extend(staffGroup)
@@ -205,6 +224,7 @@ const AddTransferController = Vue.extend(addTransfer)
 const AddEditServiceController = Vue.extend(addService)
 const IconController = Vue.extend(addIcon)
 const AddClassifyController = Vue.extend(classifyGroup)
+const AddDeclared = Vue.extend(addDeclared)
 const CostAddController = Vue.extend(costAdd)
 const JoinShipController = Vue.extend(joinShip)
 const LineChangeController = Vue.extend(lineChange)
@@ -240,6 +260,8 @@ const AdvertiseLangController = Vue.extend(advertiseLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
 const ExpressDetailsController = Vue.extend(expressEditAdd)
+const ExpressConfig = Vue.extend(expressConfig)
+const ExpressConfigAend = Vue.extend(expressConfigAend)
 const ExpressLangController = Vue.extend(expressLang)
 const RulesEditController = Vue.extend(rulesEdit)
 const VipAddController = Vue.extend(vipAdd)
@@ -248,6 +270,7 @@ const SetCountryController = Vue.extend(setCountry)
 const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
+const ForecastLangController = Vue.extend(forecastLang)
 const BatchController = Vue.extend(batchExpress)
 const RebateLangController = Vue.extend(rebateLang)
 const NewLangController = Vue.extend(newLang)
@@ -359,6 +382,20 @@ const areaChooseCountryController = Vue.extend(areaChooseCountry)
 const batchAddPostCodeController = Vue.extend(batchAddPostCode)
 const vipChangePasswordController = Vue.extend(vipChangePassword)
 const vipMergeController = Vue.extend(vipMerge)
+const oneSevenTrackingController = Vue.extend(oneSevenTracking)
+const couponDetailController = Vue.extend(couponDetail)
+const pickupDetailController = Vue.extend(pickupDetail)
+const pickupSetTrackingController = Vue.extend(pickupSetTrackingInfo)
+const systemExpiredController = Vue.extend(systemExpired)
+const batchAddShipLineGradesController = Vue.extend(batchAddShipLineGrades)
+// const newUserController = Vue.extend(newUser)
+const parcelInboundPointRuleController = Vue.extend(parcelInboundPointRule)
+const wechatAuthPointRuleController = Vue.extend(wechatAuthPointRule)
+const rechargePointRuleController = Vue.extend(rechargePointRule)
+const wechatOfficeAccountPointRuleController = Vue.extend(wechatOfficeAccountPointRule)
+const bindPhonePointRuleController = Vue.extend(bindPhonePointRule)
+const bindEmailPointRuleController = Vue.extend(bindEmailPointRule)
+const invoiceListController = Vue.extend(invoiceList)
 
 const mixin = {
   data() {
@@ -375,6 +412,12 @@ let instance
 
 function initInstance(type) {
   switch (type) {
+    case 'systemExpired':
+      instance = new systemExpiredController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     case 'vipgroup':
       instance = new VipGroupController({
         el: document.createElement('div'),
@@ -383,6 +426,13 @@ function initInstance(type) {
       break
     case 'inviteList':
       instance = new InviteController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //导入字符串翻译
+    case 'leadIn':
+      instance = new lead({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -806,6 +856,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    //添加申报商品
+    case 'addDeclared':
+      instance = new AddDeclared({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 路线 增加费用
     case 'costAdd':
       instance = new CostAddController({
@@ -1090,6 +1147,20 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 更多配置 预报快递公司 配置
+    case 'expressConfig':
+      instance = new ExpressConfig({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 预报快递公司 配置
+    case 'expressConfigAend':
+      instance = new ExpressConfigAend({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 发货快递公司 修改语言
     case 'expressLang':
       instance = new ExpressLangController({
@@ -1142,6 +1213,13 @@ function initInstance(type) {
     // 更多配置 系统物流类型 更改语言
     case 'trackingLang':
       instance = new TrackingLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 预报快递公司 更改语言
+    case 'forecastLang':
+      instance = new ForecastLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -1625,6 +1703,96 @@ function initInstance(type) {
     // 合并用户
     case 'vipMerge':
       instance = new vipMergeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 17tracking
+    case '17Tracking':
+      instance = new oneSevenTrackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 优化券详细
+    case 'couponDetail':
+      instance = new couponDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 取件详细
+    case 'pickupDetail':
+      instance = new pickupDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 设置转运单号
+    case 'pickupSetTrackingInfo':
+      instance = new pickupSetTrackingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量添加线路渠道重量范围段
+    case 'batchAddShipLineGrades':
+      instance = new batchAddShipLineGradesController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新用户福利
+    // case 'newUser':
+    //   instance = new newUserController({
+    //     el: document.createElement('div'),
+    //     mixins: [mixin]
+    //   })
+    // 预报包裹入仓获得积分
+    case 'parcelInboundPointRule':
+      instance = new parcelInboundPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次设置微信认证
+    case 'wechatAuthPointRule':
+      instance = new wechatAuthPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 充值送积分
+    case 'rechargePointRule':
+      instance = new rechargePointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次关注公众号
+    case 'wechatOfficeAccountPointRule':
+      instance = new wechatOfficeAccountPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次绑定手机号
+    case 'bindPhonePointRule':
+      instance = new bindPhonePointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 首次绑定email
+    case 'bindEmailPointRule':
+      instance = new bindEmailPointRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 发货单
+    case 'invoiceList':
+      instance = new invoiceListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

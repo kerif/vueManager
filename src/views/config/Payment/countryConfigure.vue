@@ -121,6 +121,47 @@
               <el-table-column type="expand">
                 <template slot-scope="props">
                   <el-table :data="props.row.areas" @selection-change="secondChange">
+                    <el-table-column type="expand">
+                      <template slot-scope="props">
+                        <el-table :data="props.row.areas" @selection-change="thirdChange">
+                          <el-table-column
+                            type="selection"
+                            width="55"
+                            align="center"
+                          ></el-table-column>
+                          <el-table-column :label="$t('四级区域')" prop="name"></el-table-column>
+                          <el-table-column :label="$t('是否启用')">
+                            <template slot-scope="scope">
+                              <el-switch
+                                v-model="scope.row.enabled"
+                                @change="changeShow($event, scope.row.id)"
+                                :active-text="$t('开')"
+                                :inactive-text="$t('关')"
+                                :active-value="1"
+                                :inactive-value="0"
+                                active-color="#13ce66"
+                                inactive-color="gray"
+                              >
+                              </el-switch>
+                            </template>
+                          </el-table-column>
+                          <el-table-column :label="$t('操作')">
+                            <template slot-scope="scope">
+                              <el-button
+                                class="btn-dark-green btn-margin"
+                                @click="editLowLevelCountry(scope.row.id)"
+                                >{{ $t('编辑') }}</el-button
+                              >
+                              <el-button
+                                @click="deleteLOwLevel([scope.row.id])"
+                                class="btn-light-red"
+                                >{{ $t('删除') }}</el-button
+                              >
+                            </template>
+                          </el-table-column>
+                        </el-table>
+                      </template>
+                    </el-table-column>
                     <el-table-column type="selection" width="55" align="center"></el-table-column>
                     <!-- 二级分类名称 -->
                     <el-table-column :label="$t('三级区域')" prop="name"></el-table-column>
@@ -297,6 +338,7 @@ export default {
       currentCountryList: [],
       deleteNum: [],
       secondNum: [],
+      thirdNum: [],
       enabled: 0,
       countryId: '',
       countryName: '',
@@ -498,6 +540,12 @@ export default {
       this.secondNum = Array.from(data)
       console.log(this.secondNum, 'this.secondNum')
     },
+    thirdChange(selection) {
+      console.log(selection, 'third')
+      const data = new Set([...this.thirdNum, ...selection.map(item => item.id)])
+      this.thirdNum = Array.from(data)
+      console.log(this.thirdNum, 'this.thirdNum')
+    },
     // 点开当前行，获取二级菜单数据
     // onExpand (row) {
     //   // 如果当前货单已经获取了二级菜单数据，就不在获取
@@ -660,12 +708,18 @@ export default {
     beforeUploadImg() {},
     // 批量删除
     batchDelete() {
-      if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
+      if (
+        this.deleteNum.length === 0 &&
+        this.secondNum.length === 0 &&
+        this.thirdNum.length === 0
+      ) {
         return this.$message.error(this.$t('请选择'))
       }
       const idNum = this.secondNum.concat(this.deleteNum)
       this.$confirm(
-        this.$t('您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级地址也会删除'),
+        this.$t(
+          '您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级和四级地址也会删除'
+        ),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),

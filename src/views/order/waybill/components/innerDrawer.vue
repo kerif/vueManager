@@ -278,7 +278,6 @@ export default {
         ]
         // 出库信息
         this.outboundInfo = [
-          { id: 'box_count', name: this.$t('分箱箱数') },
           { id: 'box_sn', name: this.$t('分箱箱号') },
           { id: 'box_packages', name: this.$t('分箱所含包裹') },
           { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
@@ -295,6 +294,7 @@ export default {
         ]
         // 出库信息总计
         this.outboundSum = [
+          { id: 'box_count', name: this.$t('分箱箱数') },
           { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
           { id: 'box_actual_weight_sum', name: this.$t('出库实际重量') },
           { id: 'box_volume_weight_sum', name: this.$t('出库体积重量') },
@@ -493,7 +493,6 @@ export default {
         ]
         // 出库信息
         this.outboundInfo = [
-          { id: 'box_count', name: this.$t('分箱箱数') },
           { id: 'box_sn', name: this.$t('分箱箱号') },
           { id: 'box_packages', name: this.$t('分箱所含包裹') },
           { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
@@ -510,6 +509,7 @@ export default {
         ]
         // 出库信息总计
         this.outboundSum = [
+          { id: 'box_count', name: this.$t('分箱箱数') },
           { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
           { id: 'box_actual_weight_sum', name: this.$t('出库实际重量') },
           { id: 'box_volume_weight_sum', name: this.$t('出库体积重量') },

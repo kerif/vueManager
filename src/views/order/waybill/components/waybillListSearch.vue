@@ -409,6 +409,7 @@ export default {
       ],
       countryProps: {
         lazy: true,
+        checkStrictly: true,
         value: 'id',
         label: 'name',
         lazyLoad(node, resolve) {

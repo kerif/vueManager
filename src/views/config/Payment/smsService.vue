@@ -34,24 +34,77 @@
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}
           </div> -->
-          <el-button @click="templateDetails" class="btn-main">{{ $t('详情') }}</el-button>
+          <el-button @click="templateDetails(1)" class="btn-main">{{ $t('详情') }}</el-button>
           <el-button @click="purchase" class="btn-main">{{ $t('购买记录') }}</el-button>
         </div>
       </el-col>
-      <el-col :span="7" class="user-left">
+      <el-col :span="10" class="user-left">
         <div class="new-top">
           <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{
             $t('第三方短信服务')
           }}</el-radio>
-          <div class="message-main">
-            <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
-            <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
-            <el-button class="buy-sty" @click="test('china')">{{ $t('测试') }}</el-button>
+          <div style="display: flex; margin-top: 20px">
+            <div style="flex: 2">
+              <div>{{ $t('聚合') }}</div>
+              <div class="message-main">
+                <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
+                <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
+                <el-button class="buy-sty" @click="test('china')">{{ $t('测试') }}</el-button>
+              </div>
+              <div class="message-main">
+                <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
+                <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
+                <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
+              </div>
+            </div>
+            <div style="width: 260px">
+              <div>Aestron</div>
+              <el-form :model="ruleForm.aestron">
+                <el-form-item label="SenderId">
+                  <el-input
+                    class="ipt"
+                    placeholder="请输入SenderId"
+                    v-model="ruleForm.aestron.sender_id"
+                    @input="
+                      ruleForm.aestron.sender_id = ruleForm.aestron.sender_id.replace(
+                        /[^\w\.\/]/gi,
+                        ''
+                      )
+                    "
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="AppId">
+                  <el-input
+                    placeholder="请输入AppId"
+                    class="ipt"
+                    v-model="ruleForm.aestron.app_id"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="Certificate">
+                  <el-input
+                    class="ipt"
+                    placeholder="请输入Certificate"
+                    v-model="ruleForm.aestron.certificate"
+                  ></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
           </div>
-          <div class="message-main">
-            <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
-            <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
-            <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
+          <div>
+            <el-form label-width="100px" label-position="left">
+              <el-form-item :label="$t('中国大陆')">
+                <el-radio-group v-model="ruleForm.area_china_platform">
+                  <el-radio :label="1">{{ $t('聚合') }}</el-radio>
+                  <!-- <el-radio :label="2">aestron</el-radio> -->
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('国际')">
+                <el-radio-group v-model="ruleForm.area_intl_platform">
+                  <el-radio :label="1">{{ $t('聚合') }}</el-radio>
+                  <el-radio :label="2">Aestron</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
       </el-col>
@@ -72,6 +125,21 @@
     <div v-if="ruleForm.type === 2">
       <h2 class="template-sty">{{ $t('短信模版系统内') }}</h2>
       <!-- <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button> -->
+      <div class="template-box">
+        <div class="template-main">
+          <div class="template-icon">
+            <i class="el-icon-warning tip-icon"></i>
+          </div>
+          <div class="template-msg">
+            {{
+              $t(
+                '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+              )
+            }}<br />
+            {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+          </div>
+        </div>
+      </div>
       <div class="svs-template">
         <el-row :gutter="20">
           <el-col :span="10" v-for="item in smsData" :key="item.id">
@@ -106,31 +174,103 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
+      <!-- <span class="red-title">({{ $t('聚合') }})</span> -->
       <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
-      <div class="svs-template">
-        <el-form :model="ruleForm" label-width="130px">
-          <el-row>
-            <el-col :span="10" v-for="item in customerData" :key="item.id">
-              <el-form-item :label="item.type_name">
-                <el-input class="input-sty" v-model="item.template_id"></el-input>
-                <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div class="template-main">
-          <div class="template-icon">
-            <i class="el-icon-warning code-sty"></i>
+      <div style="padding: 0 20px">
+        <el-tabs v-model="activeName" @tab-click="handleClick(2)">
+          <el-tab-pane :label="$t('聚合')" name="0"></el-tab-pane>
+          <el-tab-pane label="Aestron" name="1"></el-tab-pane>
+        </el-tabs>
+        <div v-if="activeName === '0'">
+          <div class="template-box">
+            <div class="template-main">
+              <div class="template-icon">
+                <i class="el-icon-warning tip-icon"></i>
+              </div>
+              <div class="template-msg">
+                {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
+                {{
+                  $t(
+                    '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+                  )
+                }}<br />
+                {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+              </div>
+            </div>
           </div>
-          <div class="template-msg">
-            {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
-            {{
-              $t(
-                '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
-              )
-            }}<br />
-            {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+          <div class="svs-template">
+            <el-form :model="ruleForm" label-width="130px">
+              <el-row>
+                <el-col :span="10" v-for="item in customerData" :key="item.id">
+                  <el-form-item :label="item.type_name">
+                    <el-input class="input-sty" v-model="item.template_id"></el-input>
+                    <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <!-- <div class="template-main">
+            <div class="template-icon">
+              <i class="el-icon-warning code-sty"></i>
+            </div>
+            <div class="template-msg">
+              {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
+              {{
+                $t(
+                  '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+                )
+              }}<br />
+              {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+            </div>
+          </div> -->
+          </div>
+        </div>
+        <div v-else>
+          <div class="template-box">
+            <div class="template-main">
+              <div class="template-icon">
+                <i class="el-icon-warning tip-icon"></i>
+              </div>
+              <div class="template-msg">
+                {{
+                  $t(
+                    '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+                  )
+                }}<br />
+                {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+              </div>
+            </div>
+          </div>
+          <el-table :data="tableData" border>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column :label="$t('类型')" prop="type_name"></el-table-column>
+            <el-table-column :label="$t('是否启用')" prop="status">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.status"
+                  @change="changeStart(scope.row.id, scope.row.status)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray"
+                >
+                </el-switch>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('短信描述')" prop="content"></el-table-column>
+            <el-table-column :label="$t('操作')">
+              <template slot-scope="scope">
+                <el-button class="btn-dark-green" @click="onEdit(scope.row.id)">{{
+                  $t('编辑')
+                }}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="margin: 20px 0">
+            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
           </div>
         </div>
       </div>
@@ -175,6 +315,17 @@
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="editDialog" width="30%" :title="$t('编辑')" @close="clear">
+      <el-input
+        v-model="form.content"
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 4 }"
+      ></el-input>
+      <div slot="footer">
+        <el-button @click="editDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="onSave">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -195,7 +346,14 @@ export default {
         app_key: '',
         intl_app_key: '',
         count: '',
-        intl_count: ''
+        intl_count: '',
+        area_china_platform: 1,
+        area_intl_platform: 1,
+        aestron: {
+          sender_id: '',
+          app_id: '',
+          certificate: ''
+        }
       },
       radio: 2,
       dialogVisible: false,
@@ -204,7 +362,14 @@ export default {
       customerData: [],
       begin_date: '',
       end_date: '',
-      timeList: []
+      timeList: [],
+      activeName: '0',
+      tableData: [],
+      editDialog: false,
+      tmpId: '',
+      form: {
+        content: ''
+      }
     }
   },
   created() {
@@ -320,28 +485,43 @@ export default {
       dialog({ type: 'purchaseHistory', state: 'sms' })
     },
     // 详情
-    templateDetails() {
+    templateDetails(type) {
       this.dialogVisible = true
-      this.getList()
+      this.getList(type)
       // smsRecord
     },
     // 获取详情
-    getList() {
-      this.begin_date = this.timeList[0]
-      this.end_date = this.timeList[1]
-      let params = {
-        page: this.page_params.page,
-        size: this.page_params.size
-      }
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
-      this.$request.smsRecord(params).then(res => {
-        if (res.ret) {
-          this.templateData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
+    getList(type) {
+      if (type === 1) {
+        this.begin_date = this.timeList[0]
+        this.end_date = this.timeList[1]
+        let params = {
+          page: this.page_params.page,
+          size: this.page_params.size
         }
-      })
+        this.begin_date && (params.begin_date = this.begin_date)
+        this.end_date && (params.end_date = this.end_date)
+        this.$request.smsRecord(params).then(res => {
+          if (res.ret) {
+            this.templateData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
+      } else {
+        this.$request
+          .smsTemplateList({
+            page: this.page_params.page,
+            size: this.page_params.size
+          })
+          .then(res => {
+            if (res.ret) {
+              this.tableData = res.data
+              this.page_params.page = res.meta.current_page
+              this.page_params.total = res.meta.total
+            }
+          })
+      }
     },
     // 提交时间
     onTime(val) {
@@ -350,7 +530,83 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      this.getList(1)
+    },
+    handleClick(type) {
+      if (this.activeName === '1') {
+        // this.getTemplateList()
+        this.getList(type)
+      }
+    },
+    // getTemplateList() {
+    //   this.$request
+    //     .smsTemplateList({
+    //       page: this.page_params.page,
+    //       size: this.page_params.size
+    //     })
+    //     .then(res => {
+    //       if (res.ret) {
+    //         this.tableData = res.data
+    //         this.page_params.page = res.meta.current_page
+    //         this.page_params.total = res.meta.total
+    //       }
+    //     })
+    // },
+    changeStart(id, status) {
+      console.log(id, status)
+      this.$request.smsTmpSwitch(id, Number(status)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          // this.getTemplateList()
+          this.getList(2)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onEdit(id) {
+      this.tmpId = id
+      this.editDialog = true
+      this.getSmsDetail(id)
+    },
+    getSmsDetail(id) {
+      console.log(id)
+      this.$request.smsTmpDetail(id).then(res => {
+        if (res.ret) {
+          this.form.content = res.data.content
+        }
+      })
+    },
+    onSave() {
+      this.$request.smsTmpEdit(this.tmpId, { content: this.form.content }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.editDialog = false
+          // this.getTemplateList()
+          this.getList(2)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    clear() {
+      this.form.content = ''
     },
     // 保存
     saveTemplate() {
@@ -362,7 +618,10 @@ export default {
           templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
           type: this.ruleForm.type,
           intl_app_key: this.ruleForm.intl_app_key,
-          app_key: this.ruleForm.app_key
+          app_key: this.ruleForm.app_key,
+          area_china_platform: this.ruleForm.area_china_platform,
+          area_intl_platform: this.ruleForm.area_intl_platform,
+          aestron: this.ruleForm.aestron
         })
         .then(res => {
           if (res.ret) {
@@ -392,7 +651,7 @@ export default {
     margin-bottom: 10px;
     padding: 20px;
     background: #fff;
-    height: 240px;
+    height: 450px;
     .top-img {
       margin-top: 50px;
       margin-bottom: 40px;
@@ -416,7 +675,7 @@ export default {
     }
   }
   .user-left {
-    margin-left: 20px;
+    // margin-left: 20px;
   }
   .font-sty {
     font-size: 12px;
@@ -456,13 +715,13 @@ export default {
     background-color: #fff;
     width: 90%;
     padding: 20px;
-    margin-left: 20px;
+    // margin-left: 20px;
     .input-sty {
       width: 50%;
     }
   }
   .save-btn {
-    margin-top: 20px;
+    margin-top: 50px;
     margin-left: 20px;
   }
   .code-sty {
@@ -478,6 +737,12 @@ export default {
     width: 160px;
     margin-bottom: 20px;
   }
+  .template-box {
+    width: 800px;
+    padding: 10px;
+    margin: 20px 0;
+    background-color: #fef0f0;
+  }
   .template-main {
     .template-icon {
       display: inline-block;
@@ -487,9 +752,16 @@ export default {
     .template-msg {
       display: inline-block;
       font-size: 14px;
-      color: #ccc;
+      // color: #ccc;
+      color: red;
       vertical-align: middle;
     }
+    .tip-icon {
+      color: red;
+    }
+  }
+  .red-title {
+    color: red;
   }
 }
 .details-dialog {

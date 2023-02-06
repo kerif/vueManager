@@ -29,11 +29,29 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item
+        v-if="ruleForm.parent_id > 0"
+        :label="$t('分类分组')"
+        prop="group_name"
+        class="input-style"
+      >
+        <el-input v-model="ruleForm.group_name" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
       <el-form-item label="sku" prop="sku" class="input-style">
         <el-input v-model="ruleForm.sku" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('海关编码')" prop="hs_code" class="input-style">
         <el-input v-model="ruleForm.hs_code" :placeholder="$t('请输入海关编码')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('物品属性')" prop="hs_code" class="input-style">
+        <el-select v-model="ruleForm.prop_ids" clearable :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in propList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.cn_name"
+          ></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -50,8 +68,10 @@ export default {
         name: '',
         parent_id: 0,
         sku: '',
-        hs_code: ''
+        hs_code: '',
+        prop_ids: ''
       },
+      propList: [],
       classifyList: [],
       state: '',
       id: '',
@@ -61,7 +81,15 @@ export default {
       }
     }
   },
+  created() {
+    this.getPropList()
+  },
   methods: {
+    getPropList() {
+      this.$request.getProps().then(res => {
+        this.propList = res.data
+      })
+    },
     getList() {
       this.$request.getRiskDetails(this.id).then(res => {
         if (res.ret) {
@@ -90,7 +118,6 @@ export default {
               res.data.map(item => ({ id: item.id, name: item.name }))
             )
           }
-          console.log(this.classifyList, 'this.classifyList')
         } else {
           this.$message({
             message: res.msg,
@@ -102,6 +129,7 @@ export default {
     confirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.ruleForm.prop_ids = [this.ruleForm.prop_ids]
           if (this.id) {
             // 如果是编辑状态
             this.$request.updateCategories(this.id, this.ruleForm).then(res => {
@@ -149,6 +177,7 @@ export default {
       this.ruleForm.parent_id = 0
       this.ruleForm.sku = ''
       this.ruleForm.hs_code = ''
+      this.ruleForm.prop_ids = []
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()

@@ -27,6 +27,12 @@ export default [
     checked: true
   },
   {
+    id: 'code',
+    name: '线路编号',
+    width: '160',
+    checked: true
+  },
+  {
     id: 'express_line',
     name: '线路名称',
     width: '160',
@@ -163,6 +169,12 @@ export default [
     id: 'third_tracking_status_name',
     name: '物流状态',
     width: '100',
+    checked: true
+  },
+  {
+    id: 'created_at', // 1,2,3,4
+    name: '',
+    width: '160',
     checked: true
   }
   // {

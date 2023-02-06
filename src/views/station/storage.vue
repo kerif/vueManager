@@ -363,9 +363,9 @@
             <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
               <span
                 style="cursor: pointer"
-                @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item.path}`), (imgVisible = true)"
+                @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
               >
-                <img :src="`${$baseUrl.IMAGE_URL}${item.path}`" class="itemImg" />
+                <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="itemImg" />
               </span>
             </div>
           </div>

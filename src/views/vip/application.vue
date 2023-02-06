@@ -18,7 +18,13 @@
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id">
+        <template slot-scope="scope">
+          <el-button type="text" @click="viewProfile(scope.row.user_id)">{{
+            scope.row.user_id
+          }}</el-button>
+        </template>
+      </el-table-column>
       <!-- 客户昵称 -->
       <el-table-column :label="$t('客户昵称')">
         <template slot-scope="scope">
@@ -122,6 +128,9 @@ export default {
     }
   },
   methods: {
+    viewProfile(id) {
+      dialog({ type: 'vipProfile', id: id })
+    },
     getList() {
       this.tableLoading = true
       this.oderData = []

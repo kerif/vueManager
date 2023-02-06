@@ -53,6 +53,50 @@
             </div>
             <p class="font-sty">{{ $t('客户订单支付成功后即可返券') }}</p>
           </div>
+          <!-- <div v-if="item.type === 5">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('关注公众号领券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('用户关注公众号即可领取') }}</p>
+          </div>
+          <div v-if="item.type === 6">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('生日营销') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('根据用户生日日期发放生日券') }}</p>
+          </div>
+          <div v-if="item.type === 7">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('普通优惠券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('生成普通优惠券,生成后需要投放才能在用户的券包中') }}</p>
+          </div>
+          <div v-if="item.type === 8">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png" />
+              <p>
+                <strong
+                  ><span>{{ $t('用户抢券') }}</span></strong
+                >
+              </p>
+            </div>
+            <p class="font-sty">{{ $t('生成二维码抢券页面,由用户点击领取') }}</p>
+          </div> -->
           <div class="user-bottom">
             <div class="bottom-left">
               <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{
@@ -63,6 +107,7 @@
               }}</el-button>
             </div>
             <div class="bottom-right">
+              <!-- <div class="bottom-right" v-if="item.type !== 7 && item.type !== 8"> -->
               <el-switch
                 class="switch-sty"
                 @change="changeOnline(item.type, item.status)"
@@ -162,10 +207,22 @@ export default {
     // 新增
     goAdd(type) {
       if (type === 4) {
-        this.$router.push({ name: 'rebate', params: { type: type } })
+        this.$router.push({ name: 'rebate', params: { type: type }, query: { type } })
+        // this.$router.push({ name: 'ordinary', params: { type: type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: type } })
       }
+      // else if (
+      //   type === 1 ||
+      //   type === 2 ||
+      //   type === 3 ||
+      //   type === 5 ||
+      //   type === 6 ||
+      //   type === 7 ||
+      //   type === 8
+      // ) {
+      //   this.$router.push({ name: 'ordinary', params: { type: type } })
+      // }
     },
     // 管理
     goMana(type) {
@@ -182,6 +239,11 @@ export default {
         // 下单返券
         this.$router.push({ name: 'rebates', params: { type: type } })
       }
+      // else if (type === 5 || type === 6) {
+      //   this.$router.push({ name: 'new', params: { type: type } })
+      // } else if (type === 7 || type === 8) {
+      //   this.$router.push({ name: 'voucher', params: { type: type } })
+      // }
       // this.$router.push({ name: 'managementNew', params: { type: type } })
     }
   }

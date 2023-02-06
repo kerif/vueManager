@@ -21,6 +21,7 @@
           <span>{{ scope.row.used_count }} / {{ scope.row.received_count }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('同用户领取上限')" prop="each_count"></el-table-column>
       <el-table-column :label="$t('状态')" prop="status">
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{ $t('进行中') }}</span>
@@ -39,7 +40,7 @@
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
     <el-dialog :visible.sync="showCode" :title="$t('新增兑换码')" append-to-body @close="clearCode">
-      <el-form :model="form" label-position="right" label-width="150px">
+      <el-form :model="form" label-position="right" label-width="200px">
         <el-form-item :label="$t('兑换码')">
           <el-input
             v-model="form.code"
@@ -49,6 +50,9 @@
         </el-form-item>
         <el-form-item :label="$t('最大可领取量')">
           <el-input v-model="form.total_count" style="width: 50%"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('同用户领取上限')">
+          <el-input-number v-model="form.each_count" :min="1" :max="1000"></el-input-number>
         </el-form-item>
         <el-form-item :label="$t('兑换码备注')">
           <el-input type="textarea" v-model="form.remark" style="width: 50%"></el-input>
@@ -73,7 +77,8 @@ export default {
       form: {
         code: '',
         remark: '',
-        total_count: ''
+        total_count: '',
+        each_count: ''
       },
       showCode: false
     }

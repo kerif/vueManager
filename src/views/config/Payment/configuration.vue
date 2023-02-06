@@ -41,6 +41,9 @@
                   <el-menu-item index="10">
                     {{ $t('打包改价配置') }}
                   </el-menu-item>
+                  <el-menu-item index="11">
+                    {{ $t('上门取件配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -82,6 +85,10 @@
             <!-- 打包改价配置 -->
             <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
               <pack-price-change></pack-price-change>
+            </el-col>
+            <!-- 上门取件配置 -->
+            <el-col :span="19" v-if="secondTab1 === '11'" class="main-right">
+              <pickup-time-config></pickup-time-config>
             </el-col>
           </el-row>
         </div>
@@ -199,6 +206,12 @@
                   <el-menu-item index="5">
                     {{ $t('自定义标签') }}
                   </el-menu-item>
+                  <!-- <el-menu-item index="6">
+                    {{ $t('申报商品库管理') }}
+                  </el-menu-item>-->
+                  <el-menu-item index="6">
+                    {{ $t('预报快递公司') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -221,6 +234,13 @@
             <!-- 自定义标签 -->
             <el-col :span="19" v-if="secondTab4 === '5'" class="main-right">
               <custom-label></custom-label>
+            </el-col>
+            <!-- 申报商品库名称 -->
+            <!-- <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
+              <store-goods></store-goods>
+            </el-col> -->
+            <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
+              <arrival></arrival>
             </el-col>
           </el-row>
         </div>
@@ -252,12 +272,15 @@ import Commodity from './commodity.vue'
 import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
+// import StoreGoods from './storeGoods.vue'
+import Arrival from './arrival.vue'
 import LoginConfigure from './loginConfigure.vue'
 import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 import boxConfigure from './boxConfigure'
 import presetPack from './presetPack.vue'
 import addressConfig from './addressConfig.vue'
 import packPriceChange from './packPriceChange.vue'
+import pickupTimeConfig from './pickupTimeConfig.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -283,7 +306,10 @@ export default {
     boxConfigure,
     presetPack,
     addressConfig,
-    packPriceChange
+    packPriceChange,
+    pickupTimeConfig,
+    // StoreGoods,
+    Arrival
     // GroupConfigure
   },
   mixins: [pagination],

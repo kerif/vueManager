@@ -5,8 +5,8 @@ module.exports = {
   productionSourceMap: process.env.NODE_ENV !== 'production',
   devServer: {
     overlay: {
-      warnings: true,
-      error: true
+      warnings: false,
+      error: false
     }
   },
   configureWebpack: config => {

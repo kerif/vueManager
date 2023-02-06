@@ -78,6 +78,20 @@
         <el-button size="small" type="success" plain @click="uploadListExcel">{{
           $t('导出清单')
         }}</el-button>
+        <!-- <el-dropdown>
+          <el-button size="small" type="success" plain>{{ $t('导出清单') }}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="uploadListExcel">{{
+              $t('导出清单')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(1)">{{
+              $t('空运发货单')
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="uploadInvoice(2)">{{
+              $t('海运发货单')
+            }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> -->
       </div>
       <div class="search-l">
         <search-group
@@ -139,6 +153,13 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 发货单号 -->
         <el-table-column :label="$t('发货单号')" prop="sn" width="155"></el-table-column>
+        <!-- <el-table-column :label="$t('类型')" prop="type">
+          <template slot-scope="scope">
+            <span>{{
+              scope.row.type === 0 ? $t('普通') : scope.row.type === 1 ? $t('空运') : $t('海运')
+            }}</span>
+          </template>
+        </el-table-column> -->
         <!-- 创建时间 -->
         <el-table-column :label="$t('提交时间')" prop="created_at" width="155"></el-table-column>
         <!-- 发货时间 -->
@@ -919,12 +940,29 @@ export default {
       dialog({ type: 'invoice', state: 'add' }, () => {
         this.getList()
       })
+      // dialog(
+      //   {
+      //     type: 'invoiceList'
+      //   },
+      //   () => {
+      //     this.getList()
+      //   }
+      // )
     },
     // 编辑发货单
     editInvoice(id) {
       dialog({ type: 'invoice', state: 'edit', id: id }, () => {
         this.getList()
       })
+      // dialog(
+      //   {
+      //     type: 'invoiceList',
+      //     id
+      //   },
+      //   () => {
+      //     this.getList()
+      //   }
+      // )
     },
     goInvoice(id) {
       this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {
@@ -1002,6 +1040,29 @@ export default {
             })
           }
         })
+    },
+    uploadInvoice(type) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      let method = type === 1 ? 'uploadAirShip' : 'uploadOceanShip'
+      let params = {
+        ids: this.deleteNum
+      }
+      this.$request[method](params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }

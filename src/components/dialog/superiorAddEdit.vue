@@ -25,13 +25,30 @@
           <span class="tips-sty">{{ $t('添加二级区域不要选择此项') }}</span>
         </div>
         <el-select
-          v-model="ruleForm.parent_id"
+          v-model="ruleForm.child_id"
           :placeholder="$t('请选择区域')"
           filterable
+          @change="changeArea"
           :disabled="!ruleForm.country_id"
           clearable
         >
           <el-option v-for="item in childData" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <div>
+          {{ $t('子区域') }}
+          <span class="tips-sty">{{ $t('添加三级区域不要选择此项') }}</span>
+        </div>
+        <el-select
+          v-model="ruleForm.subchild_id"
+          :placeholder="$t('请选择区域')"
+          filterable
+          :disabled="!ruleForm.child_id"
+          clearable
+        >
+          <el-option v-for="item in subData" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -85,9 +102,12 @@ export default {
       areaData: [],
       country: [],
       childData: [],
+      subData: [],
       ruleForm: {
         country_id: '',
         parent_id: '',
+        child_id: '',
+        subchild_id: '',
         name: '',
         postcode: '',
         code: '',
@@ -149,11 +169,19 @@ export default {
         this.getAreas()
       }
     },
+    changeArea() {
+      if (this.ruleForm.child_id) {
+        this.getAreas()
+      }
+    },
     // 获取区域数据
     getAreas() {
       this.$request.superiorArea(this.ruleForm.country_id).then(res => {
         if (res.ret) {
           this.childData = res.data
+          if (this.ruleForm.child_id) {
+            this.subData = res.data.find(item => item.id === this.ruleForm.child_id).areas
+          }
         }
       })
     },
@@ -194,6 +222,11 @@ export default {
         translation[item.language_code] = item.value
       })
       if (this.state === 'add') {
+        if (this.ruleForm.child_id && !this.ruleForm.subchild_id) {
+          this.ruleForm.parent_id = this.ruleForm.child_id
+        } else if (this.ruleForm.child_id && this.ruleForm.subchild_id) {
+          this.ruleForm.parent_id = this.ruleForm.subchild_id
+        }
         this.$request
           .newAreas({
             ...this.ruleForm,
@@ -246,6 +279,8 @@ export default {
     clear() {
       this.ruleForm.country_id = ''
       this.ruleForm.parent_id = ''
+      this.ruleForm.child_id = ''
+      this.ruleForm.subchild_id = ''
       this.ruleForm.name = ''
       this.ruleForm.postcode = ''
       this.ruleForm.code = ''

@@ -238,7 +238,6 @@ export default {
     },
     // 自定义物流类型 修改语言
     TypeLang(line, lang) {
-      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       dialog(
         { type: 'trackingLang', line: line, lang: lang, transCode: this.transCode, state: 'type' },
@@ -445,6 +444,7 @@ export default {
     getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
+          console.log(res.data)
           this.languageData = res.data
         }
       })

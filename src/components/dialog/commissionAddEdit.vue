@@ -16,6 +16,13 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="13">
+          <el-form-item :label="$t('编号')" class="label-sty">
+            <el-input class="input-sty" v-model="form.code"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="13">
           <el-form-item :label="$t('计佣方式')" class="label-sty">
             <el-select
               clearable
@@ -100,6 +107,7 @@ export default {
     return {
       form: {
         name: '',
+        code: '',
         amount: '',
         weight_type: '',
         multi_boxes: '',

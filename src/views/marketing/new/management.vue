@@ -3,7 +3,21 @@
     <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
     <div class="add-sty">
       <div class="coupons">
-        <h3>{{ $t('新用户送券') }}</h3>
+        <h3>
+          {{
+            $route.params.type === 1
+              ? $t('新用户送券')
+              : $route.params.type === 2
+              ? $t('邀请新人送券')
+              : $route.params.type === 3
+              ? $t('被邀请人送券')
+              : $route.params.type === 4
+              ? $t('下单返券')
+              : $route.params.type === 5
+              ? $t('关注公众号领券')
+              : $t('生日营销')
+          }}
+        </h3>
         <div style="width: 1100px">
           <el-row :gutter="20">
             <el-col :span="4"
@@ -29,7 +43,7 @@
           </el-row>
         </div>
         <div class="remark">
-          {{ $t('该数据统计包含已删除活动数据已发放券正常使用可前往抵用券管理查看') }}
+          {{ $t('该数据统计不包含已删除活动数据已发放券正常使用可前往抵用券管理查看') }}
         </div>
       </div>
       <add-btn @click.native="goAdd" class="btn-add">{{ $t('添加') }}</add-btn>
@@ -46,6 +60,11 @@
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
       <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
+      <!-- <el-table-column :label="$t('类型')" prop="coupon_type">
+        <template slot-scope="scope">
+          <span>{{ scope.row.coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}</span>
+        </template>
+      </el-table-column> -->
       <!-- 金额 -->
       <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
       </el-table-column>
@@ -59,6 +78,8 @@
       </el-table-column> -->
       <!-- 最低消费金额 -->
       <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+      <!-- <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
+      <el-table-column :label="$t('最低重量')" prop="min_weight"> </el-table-column> -->
       <!-- 失效时间 -->
       <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
       <el-table-column
@@ -82,6 +103,10 @@
           <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
             $t('详情')
           }}</el-button>
+          <!-- v-if="$route.params.type === 4" -->
+          <!-- <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
+            $t('详情')
+          }}</el-button> -->
           <!-- 记录 -->
           <el-button
             size="small"
@@ -213,7 +238,7 @@ export default {
     },
     // 记录
     recoding(id) {
-      this.$router.push({ name: 'voucher', query: { type: '2', id: id } })
+      this.$router.push({ name: 'userWelfare', query: { type: '2', id: id } })
     },
     // 删除
     deleteData() {
@@ -262,11 +287,21 @@ export default {
       } else {
         this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
       }
+      // else {
+      //   this.$router.push({ name: 'ordinary', params: { type: this.$route.params.type } })
+      // }
     },
     // 编辑
     goDetails(id) {
       this.$router.push({
         name: 'rebate',
+        params: { type: this.$route.params.type },
+        query: { id: id }
+      })
+    },
+    goOtherDetails(id) {
+      this.$router.push({
+        name: 'ordinaryDetail',
         params: { type: this.$route.params.type },
         query: { id: id }
       })

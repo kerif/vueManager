@@ -178,7 +178,7 @@ export default {
         radio: 1
       },
       submiting: false,
-      loading: true,
+      loading: false,
       templateData: [],
       countryList: [], // 获取全部国家
       options: [],
@@ -342,6 +342,7 @@ export default {
               children: [{ rule: '邮编规则', start: '', end: '', type: 1 }]
             }
           ]
+          this.ruleForm.country_id = res.id
         })
       } else {
         this.$message.error(this.$t('最多只能添加一个国家/地区'))
@@ -536,6 +537,7 @@ export default {
       //     sub_area_id: item[2]
       //   }))
       // }
+      console.log(this.ruleForm.country_id, 'this.ruleForm.country_id')
       this.submiting = true
       if (this.status === 'channel') {
         let params = {}
@@ -553,6 +555,7 @@ export default {
         if (this.id) {
           // 更新
           this.$request.updateRegions(this.$route.params.id, this.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -566,12 +569,13 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         } else {
           // 新建
           this.$request.newLineRegions(this.$route.params.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -585,7 +589,7 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         }
@@ -606,6 +610,7 @@ export default {
         if (this.id) {
           // 模板
           this.$request.updateRegionTmpDetails(this.tmpId, this.id, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -619,11 +624,12 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         } else {
           this.$request.newRegionTmp(this.tmpId, params).then(res => {
+            this.submiting = false
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -637,13 +643,14 @@ export default {
                 message: res.msg,
                 type: 'error'
               })
-              this.submiting = false
+              // this.submiting = false
             }
           })
         }
       }
     },
     init() {
+      console.log(this.submiting, 'sub')
       if (this.id) {
         this.getList()
       }

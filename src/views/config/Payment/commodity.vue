@@ -23,6 +23,13 @@
             <el-table-column type="selection"></el-table-column>
             <!-- 二级分类名称 -->
             <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
+            <!-- 分类分组 -->
+            <el-table-column :label="$t('分类分组')" prop="group_name"></el-table-column>
+            <el-table-column :label="$t('物品属性')" prop="props">
+              <template slot-scope="scope">
+                <span v-for="item in scope.row.props" :key="item.id">{{ item.name }}</span>
+              </template>
+            </el-table-column>
             <!-- 是否显示 -->
             <el-table-column :label="$t('是否显示')">
               <template slot-scope="scope">
@@ -61,12 +68,12 @@
                 <span
                   v-if="scope.row['trans_' + item.language_code]"
                   class="el-icon-check icon-sty"
-                  @click="onCategories(scope.row, item)"
+                  @click="onTranslation(scope.row, item)"
                 ></span>
                 <span
                   v-else
                   class="el-icon-plus icon-sty"
-                  @click="onCategories(scope.row, item)"
+                  @click="onTranslation(scope.row, item)"
                 ></span>
               </template>
             </el-table-column>
@@ -93,6 +100,13 @@
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 一级分类名称 -->
       <el-table-column :label="$t('一级分类名称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('物品属性')" prop="props">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.props" :key="item.id">
+            {{ item.name }}
+          </span>
+        </template>
+      </el-table-column>
       <!-- 是否显示 -->
       <el-table-column :label="$t('是否显示')">
         <template slot-scope="scope">
@@ -131,9 +145,9 @@
           <span
             v-if="scope.row['trans_' + item.language_code]"
             class="el-icon-check icon-sty"
-            @click="onCategories(scope.row, item)"
+            @click="onTranslation(scope.row, item)"
           ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onTranslation(scope.row, item)"></span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -152,27 +166,43 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <categories-lang
+      @onClose="onCategoriesLangClose"
+      @onSuccess="onCategoriesSuccess"
+      :init-data="categoriesLangDialogData"
+      :show="categoriesLangShow"
+    ></categories-lang>
+    <tx-pagination :pageParams="page_params" :notNeedInitQuery="false"></tx-pagination>
   </div>
 </template>
 
 <script>
 import AddBtn from '@/components/addBtn'
-import NlePagination from '@/components/pagination'
+import TxPagination from '@/components/pagination'
 import dialog from '@/components/dialog'
+import CategoriesLang from './categoriesLang'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    NlePagination,
+    TxPagination,
+    CategoriesLang,
     AddBtn
   },
   mixins: [pagination],
   data() {
     return {
+      categoriesLangShow: false,
+      categoriesLangDialogData: {
+        line: {},
+        lang: {},
+        transCode: ''
+      },
       tableLoading: false,
       languageData: [],
       selectNum: [],
       deleteNum: [],
+      currentTranslangRow: null,
+      currentTranslangCode: '',
       page_params: {
         type: ''
       },
@@ -200,6 +230,13 @@ export default {
     }
   },
   methods: {
+    onCategoriesLangClose() {
+      this.categoriesLangShow = false
+    },
+    onCategoriesSuccess() {
+      this.currentTranslangRow[this.currentTranslangCode] = 1
+      this.categoriesLangShow = false
+    },
     getList() {
       this.getCategories()
     },
@@ -351,16 +388,14 @@ export default {
       })
     },
     // 商品分类管理 修改语言
-    onCategories(line, lang) {
-      this.categoriesCode = line['trans_' + lang.language_code]
-      this.$router.push({
-        name: 'categoriesLangAdd',
-        params: {
-          line: JSON.stringify(line),
-          lang: JSON.stringify(lang),
-          transCode: this.categoriesCode
-        }
-      })
+    onTranslation(row, lang) {
+      this.categoriesLangDialogData = {
+        id: row.id,
+        lang
+      }
+      this.currentTranslangRow = row
+      this.currentTranslangCode = 'trans_' + lang.language_code
+      this.categoriesLangShow = true
     },
     // 编辑商品分类
     editClassify(id) {
@@ -405,4 +440,9 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.el-icon-check,
+.el-icon-plus {
+  cursor: pointer;
+}
+</style>

@@ -10,6 +10,7 @@
     <el-table :data="tableData" border @selection-change="selectionChange" style="width: 100%">
       <el-table-column type="selection" width="55"> </el-table-column>
       <!-- 线路名称 -->
+      <!-- <el-table-column prop="code" :label="$t('线路编号')"></el-table-column> -->
       <el-table-column prop="name" :label="$t('线路名称')"> </el-table-column>
       <!-- 支持国家 -->
       <el-table-column :label="$t('支持国家')">

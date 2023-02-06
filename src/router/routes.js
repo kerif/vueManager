@@ -136,6 +136,8 @@ const SinceList = loadonDemand('config/point/since')
 const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 自提点配置 计佣方式配置
 const commissionSet = loadonDemand('config/point/commission')
+// 配置 自提点配置 批量导入
+const selfbatchImport = loadonDemand('config/point/selfbatchImport')
 // 配置 更多配置
 // const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置
@@ -228,16 +230,21 @@ const System = loadonDemand('marketing/member/system')
 const Newuser = loadonDemand('marketing/new/new-user')
 // 营销管理 用户福利 新增
 const addNew = loadonDemand('marketing/new/addNew')
+const ordinary = loadonDemand('marketing/new/ordinary')
 // 营销管理 用户福利 管理
 const managementNew = loadonDemand('marketing/new/management')
 // 营销管理  下单返券
 const rebate = loadonDemand('marketing/rebate')
+// 营销管理  下单返券
+const ordinaryDetail = loadonDemand('marketing/ordinaryDetail')
 // 营销管理 抵用券管理
 const Voucher = loadonDemand('marketing/Voucher/voucher')
 // 营销管理 记录
 const Notes = loadonDemand('marketing/Voucher/notes')
 // 营销管理 添加
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
+// 营销管理 新用户福利
+const UserWelfare = loadonDemand('marketing/Voucher/userWelfare')
 // 营销管理 视频管理
 // const videoManagement = loadonDemand('marketing/video/videoMana')
 // 营销管理 渠道管理
@@ -341,6 +348,10 @@ const groupSet = loadonDemand('group/groupSet')
 const contentMana = loadonDemand('group/contentMana')
 // 内容编辑
 const editContent = loadonDemand('group/editContent')
+
+// 订单 上门取件
+const pickupList = loadonDemand('order/pickup/pickupList')
+
 export default [
   {
     path: '/',
@@ -913,6 +924,17 @@ export default [
             }
           },
           {
+            path: '/order/pickup',
+            name: 'pickup',
+            component: pickupList,
+            id: 405,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '上门取件'
+            }
+          },
+          {
             path: '/order/orderEcharts',
             name: 'orderEcharts',
             component: orderEcharts,
@@ -1436,6 +1458,18 @@ export default [
               parent: '/config/point'
             }
           },
+          {
+            path: '/config/point/selfbatchImport',
+            name: 'selfbatchImport',
+            component: selfbatchImport,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '批量导入',
+              parent: '/config/point'
+            }
+          },
           // {
           //   path: '/config/payment',
           //   name: 'payment',
@@ -1882,6 +1916,18 @@ export default [
             }
           },
           {
+            path: '/marketing/new/ordinary/:type',
+            name: 'ordinary',
+            component: ordinary,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新增用户福利',
+              parent: '/marketing/new'
+            }
+          },
+          {
             path: '/marketing/rebate',
             name: 'rebate',
             component: rebate,
@@ -1890,6 +1936,18 @@ export default [
               level: 3,
               group: '营销管理',
               name: '下单返券',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/ordinaryDetail',
+            name: 'ordinaryDetail',
+            component: ordinaryDetail,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '详情',
               parent: '/marketing/new'
             }
           },
@@ -1961,6 +2019,18 @@ export default [
               level: 3,
               group: '营销管理',
               name: '投放记录',
+              parent: '/marketing/voucher'
+            }
+          },
+          {
+            path: '/marketing/voucher/userWelfare',
+            name: 'userWelfare',
+            component: UserWelfare,
+            id: 802,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新用户福利',
               parent: '/marketing/voucher'
             }
           },

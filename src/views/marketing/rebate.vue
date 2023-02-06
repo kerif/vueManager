@@ -98,6 +98,13 @@
           </p>
         </div>
       </div>
+      <div v-if="this.ruleForm.scope === 1" class="choose-btn">
+        <div class="display-line" v-if="this.lineData.length">
+          <p v-for="item in lineData" :key="item.id">
+            {{ item.name }}
+          </p>
+        </div>
+      </div>
       <div class="coupons">
         <p>{{ $t('送券条件') }}：</p>
       </div>
@@ -228,7 +235,9 @@ export default {
       },
       lineName: [], // 保存获取到的路线
       localization: {},
-      statusEdit: false
+      statusEdit: false,
+      lineList: [],
+      lineData: []
     }
   },
   created() {
@@ -247,6 +256,7 @@ export default {
     getList() {
       this.$request.getRebateDetails(this.$route.query.id).then(res => {
         this.ruleForm = res.data
+        this.lineData = res.data.express_lines
         this.ruleForm.trigger_condition = res.data.trigger_condition
           ? res.data.trigger_condition
           : 1
@@ -333,12 +343,11 @@ export default {
   }
   .display-line {
     display: inline-block;
-    padding: 5px;
+    padding: 5px 10px;
     width: 245px;
-    margin-left: 15px;
     background-color: #ccc;
     p {
-      margin: 0;
+      margin: 5px;
     }
   }
 }
