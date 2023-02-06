@@ -186,10 +186,10 @@
               detailData.user && detailData.user.name
             }}
           </div>
-          <div class="text">
+          <!-- <div class="text">
             {{ detailData.updated_at }}&nbsp; {{ detailData.status_name }} &nbsp;
             {{ detailData.operator }}
-          </div>
+          </div> -->
           <div v-if="log">
             <div v-for="item in log" :key="item.id" class="text">
               {{ item.created_at }}&nbsp;{{ item.sn }}&nbsp;{{ item.content }}
