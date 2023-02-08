@@ -77,19 +77,11 @@ export default {
         ? this.$store.state.fileterAfterRouterMap[0].children
         : []
     },
-    showMeun() {
-      let lists = []
-      this.showMeunList.forEach(item => {
-        if (this.menuId === item.key) {
-          lists = item.lists
-        }
-      })
-      return lists
-    },
     formatRouterMap() {
       let formatRouterMap = {}
+      let showMeun = this.showMeunList.filter(item=>item.key===this.menuId)[0].lists
       this.fileterAfterRouterMap &&
-        this.fileterAfterRouterMap.filter(item => this.showMeun.includes(item.path)).forEach(item => {
+        this.fileterAfterRouterMap.filter(item => showMeun.includes(item.path)).forEach(item => {
           item.children.forEach(ele => {
             if (formatRouterMap[ele.meta.group]) {
               formatRouterMap[ele.meta.group].children.push({
