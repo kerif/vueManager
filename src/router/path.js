@@ -464,7 +464,7 @@ export default [
       {
         path: 'marketing',
         component: LayoutContainer,
-        icon: 'icon-marketing',
+        icon: 'marketing',
         id: 800,
         children: [
           {
@@ -730,7 +730,7 @@ export default [
       {
         path: 'content',
         component: LayoutContainer,
-        icon: 'icon-ico_rencai',
+        icon: 'content',
         id: 200,
         children: [
           {
@@ -760,7 +760,7 @@ export default [
       {
         path: 'website',
         component: LayoutContainer,
-        icon: 'icon-shuju',
+        icon: 'website',
         id: 1100,
         children: [
           {
@@ -1005,7 +1005,7 @@ export default [
       {
         path: 'customer',
         component: LayoutContainer,
-        icon: 'icon-kefu',
+        icon: 'kefu',
         id: 900,
         children: [
           {
@@ -1094,7 +1094,7 @@ export default [
       {
         path: 'vip',
         component: LayoutContainer,
-        icon: 'icon-gaiicon-',
+        icon: 'vip',
         id: 300,
         children: [
           {
@@ -1298,7 +1298,7 @@ export default [
       {
         path: 'staff',
         component: LayoutContainer,
-        icon: 'icon-ico_rencai',
+        icon: 'staff',
         id: 200,
         children: [
           {
@@ -1364,7 +1364,7 @@ export default [
       {
         path: 'basics',
         component: LayoutContainer,
-        icon: 'icon-ico_rencai',
+        icon: 'basics',
         id: 1102,
         children: [
           {
@@ -1843,7 +1843,7 @@ export default [
       {
         path: 'order',
         component: LayoutContainer,
-        icon: 'icon-ico_yuebao',
+        icon: 'order',
         id: 400,
         children: [
           {
@@ -2036,7 +2036,7 @@ export default [
       {
         path: 'station',
         component: LayoutContainer,
-        icon: 'icon-gongbao',
+        icon: 'freight',
         id: 500,
         children: [
           {
@@ -2216,7 +2216,7 @@ export default [
       {
         path: 'pick',
         component: LayoutContainer,
-        icon: 'icon-dandianjingying',
+        icon: 'details',
         id: 1200,
         children: [
           {
@@ -2247,7 +2247,7 @@ export default [
       {
         path: 'finance',
         component: LayoutContainer,
-        icon: 'icon-feiyongduoweifenxi',
+        icon: 'audit',
         id: 700,
         children: [
           {
@@ -2256,7 +2256,7 @@ export default [
             component: TransactionDetails,
             id: 701,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '转账支付详情',
               parent: '/finance/transaction'
@@ -2268,7 +2268,7 @@ export default [
             component: TransactionWechat,
             id: 701,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '在线支付详情',
               parent: '/finance/transaction'
@@ -2280,7 +2280,7 @@ export default [
             component: Recharge,
             id: 702,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '充值记录'
             }
@@ -2291,7 +2291,7 @@ export default [
             component: RechargeDetails,
             id: 702,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '审核详情',
               parent: '/finance/recharge'
@@ -2303,7 +2303,7 @@ export default [
             component: RechargeDetails,
             id: 702,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '充值审核',
               parent: '/finance/recharge'
@@ -2315,7 +2315,7 @@ export default [
             component: balance,
             id: 703,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '余额扣款'
             }
@@ -2326,7 +2326,7 @@ export default [
             component: orderReplenishment,
             id: 710,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '订单补款'
             }
@@ -2337,7 +2337,7 @@ export default [
             component: orderReplenishDetail,
             id: 710,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '订单补款详情',
               parent: '/finance/orderReplenishment'
@@ -2349,7 +2349,7 @@ export default [
             component: selfSettlement,
             id: 705,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '自提点佣金结算'
             }
@@ -2360,7 +2360,7 @@ export default [
             component: recordDetails,
             id: 705,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '结算记录',
               parent: '/finance/selfSettlement'
@@ -2372,7 +2372,7 @@ export default [
             component: orderReview,
             id: 706,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '订单财务审核'
             }
@@ -2383,7 +2383,7 @@ export default [
             component: reviewFinance,
             id: 706,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '审核',
               parent: '/finance/orderReview'
@@ -2395,7 +2395,7 @@ export default [
             component: GrowthFinance,
             id: 707,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '成长值财务'
             }
@@ -2406,7 +2406,7 @@ export default [
             component: GrowthFinanceDetails,
             id: 707,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '成长值财务详情'
             }
@@ -2417,7 +2417,7 @@ export default [
             component: agencySettlement,
             id: 708,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 2,
               name: '代理佣金结算'
             }
@@ -2428,7 +2428,7 @@ export default [
             component: viewDetails,
             id: 708,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '查看详细',
               parent: '/finance/agency'
@@ -2440,7 +2440,7 @@ export default [
             component: agencyCommission,
             id: 708,
             meta: {
-              group: '财务',
+              group: '财务审核',
               level: 3,
               name: '代理结算',
               parent: '/finance/agency'
@@ -2451,7 +2451,7 @@ export default [
       {
         path: 'consumption',
         component: LayoutContainer,
-        icon: 'icon-feiyongduoweifenxi',
+        icon: 'finance',
         id: 700,
         children: [
           {
@@ -2470,7 +2470,7 @@ export default [
       {
         path: 'consumption',
         component: LayoutContainer,
-        icon: 'icon-feiyongduoweifenxi',
+        icon: 'invoice',
         id: 700,
         children: [
           {
@@ -2501,7 +2501,7 @@ export default [
       {
         path: 'config',
         component: LayoutContainer,
-        icon: 'icon-ico_zhuizon',
+        icon: 'setting',
         id: 600,
         children: [
           {
@@ -2520,7 +2520,7 @@ export default [
       {
         path: 'language',
         component: LayoutContainer,
-        icon: 'icon-yuyanshixunzhongxin',
+        icon: 'content',
         id: 1000,
         children: [
           {
@@ -2550,7 +2550,7 @@ export default [
       {
         path: 'overview',
         component: LayoutContainer,
-        icon: 'icon-ico_zhuizon',
+        icon: 'dataEcharts',
         id: 600,
         children: [
           {

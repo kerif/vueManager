@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "34021344",
+      "name": "CP合作",
+      "font_class": "CPhezuo",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "34021345",
+      "name": "客服",
+      "font_class": "kefu2",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "34021346",
+      "name": "内容更新",
+      "font_class": "neironggengxin",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "34021347",
+      "name": "数据",
+      "font_class": "shuju1",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "34021348",
+      "name": "微官网",
+      "font_class": "weiguanwang",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "34021349",
+      "name": "数据库配置",
+      "font_class": "shujukupeizhi",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "34021350",
+      "name": "员工管理",
+      "font_class": "yuangongguanli",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
       "icon_id": "11082335",
       "name": "单店经营",
       "font_class": "dandianjingying",
@@ -214,13 +263,6 @@
       "font_class": "huowudui",
       "unicode": "ec89",
       "unicode_decimal": 60553
-    },
-    {
-      "icon_id": "6348678",
-      "name": "营销管理",
-      "font_class": "marketing",
-      "unicode": "ec90",
-      "unicode_decimal": 60552
     }
   ]
 }

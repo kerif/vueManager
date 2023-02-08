@@ -20,7 +20,7 @@
       <div>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            {{ languageCode=='zhCN'?'简体':'繁体' }}
+            {{ languageCode=='zhCN'?'简体':languageCode=='zhTW'?'繁体':'English' }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>
@@ -122,19 +122,19 @@ export default {
     return {
       languageList: [
         { label: '简体', value: 'zhCN' },
-        { label: '繁体', value: 'zhTW' }
-        // { label: 'English', value: 'en' }
+        { label: '繁体', value: 'zhTW' },
+        { label: 'English', value: 'en' }
       ],
       language: '',
       gridData: [],
       customData: {},
       topList: [
-        { title: '首页', id: 1 },
-        { title: '运营', id: 2 },
-        { title: '仓库', id: 3 },
-        { title: '财务', id: 4 },
-        { title: '数据', id: 5 },
-        { title: '配置', id: 6 }
+        { title: this.$t('首页'), id: 1 },
+        { title: this.$t('运营'), id: 2 },
+        { title: this.$t('仓库'), id: 3 },
+        { title: this.$t('财务'), id: 4 },
+        { title: this.$t('数据'), id: 5 },
+        { title: this.$t('配置'), id: 6 }
       ],
       form: {
         company_name: '',

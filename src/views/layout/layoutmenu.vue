@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div :class="$store.state.languageCode=='en'?'layoutmenu':''">
     <div class="navigation-text">
-      <div :class="[isCollapse ? 'titles' : 'menu-title']">{{ $store.state.menuTitle }}</div>
+      <div :class="[isCollapse ? 'titles' : 'menu-title']">{{ $t($store.state.menuTitle) }}</div>
       <div @click="switchLeft" class="transfer-left">
         <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']" style="font-size: 24px"></i>
       </div>
@@ -10,7 +10,10 @@
       <el-menu :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path" text-color="#17233D" :router="true" :collapse="isCollapse" active-text-color="#7E8BFF" :unique-opened="true" class="route-menu" @select="onMenuSelect">
         <el-submenu v-for="(route, index) in formatRouterMap" :key="route.name" :index="index + ''">
           <template slot="title">
-            <i :class="['iconfont', 'icon-title', route.icon]"></i>
+            <!-- <i :class="['iconfont', 'icon-title', route.icon]"></i> -->
+            <img 
+            :src="require(`@/assets/${route.icon}.png`)"
+             style="width: 18px;height: 18px;margin-right: 22px;" />
             <span>{{ $t(route.name) }}</span>
           </template>
           <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
@@ -43,6 +46,7 @@ export default {
       return this.$store.state.isCollapse
     },
     menuId() {
+      console.log(this.$store.state.languageCode);
       return this.$store.state.menuTitleId
     },
     fileterAfterRouterMap() {
@@ -68,12 +72,6 @@ export default {
     formatRouterMap() {
       let formatRouterMap = {}
       let formatRouterList = []
-      if (this.menuId == 1) {
-        this.$router.push({
-          name: 'panel'
-        })
-        return
-      }
       formatRouterList = this.fileterAfterRouterMap.filter(item => this.showMeun.includes(item.path))
       this.fileterAfterRouterMap &&
         formatRouterList.forEach(item => {
@@ -100,6 +98,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.layoutmenu{
+  overflow-y: hidden;
+}
 .layout-aside {
   .el-button.is-round {
     padding: 12px 8px;
