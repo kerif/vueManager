@@ -41,6 +41,7 @@
                 <span class="address-contact-phone"> {{ pickupInfo.address.phone }}</span>
                 <br />
                 <div class="address-contact-address">
+                  {{ pickupInfo.address.country_name }}
                   {{ pickupInfo.address.area && pickupInfo.address.area.name
                   }}{{ pickupInfo.address.sub_area && pickupInfo.address.sub_area.name
                   }}{{ pickupInfo.address.street }}{{ pickupInfo.address.door_no }}
@@ -70,7 +71,7 @@
               <el-row>
                 <el-col :span="12">{{ $t('寄往国家/地区') }}</el-col>
                 <el-col :span="12" class="right-text">{{
-                  pickupInfo.country && pickupInfo.country.name
+                  pickupInfo.country ? pickupInfo.country.name : $t('待定')
                 }}</el-col>
               </el-row>
               <el-row>
@@ -89,7 +90,7 @@
               <el-row>
                 <el-col :span="12">{{ $t('物品照片与备注') }}</el-col>
                 <el-col :span="12" class="right-text">
-                  <span>{{ pickupInfo.remark }}</span>
+                  <span style="display: inline-block">{{ pickupInfo.remark }}</span>
                   <div v-for="(item, index) in pickupInfo.images" :key="index">
                     <img :src="`${$baseUrl.IMAGE_URL}${item}`" alt="" class="img" />
                   </div>
