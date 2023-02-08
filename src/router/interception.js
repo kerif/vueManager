@@ -2,7 +2,8 @@ import { Message } from 'element-ui'
 import store from '@/store'
 import request from '@/lib/request'
 import { clone, multiTree, matchRoute } from './utils'
-import dynamicRouters from './routes'
+// import dynamicRouters from './routes'
+import dynamicRouters from './path'
 const whiteList = ['login', 'NotFound'] // 不重定向白名单
 
 const dynamicAddRouter = (router, next, to) => {

@@ -214,6 +214,13 @@
       "font_class": "huowudui",
       "unicode": "ec89",
       "unicode_decimal": 60553
+    },
+    {
+      "icon_id": "6348678",
+      "name": "营销管理",
+      "font_class": "marketing",
+      "unicode": "ec90",
+      "unicode_decimal": 60552
     }
   ]
 }

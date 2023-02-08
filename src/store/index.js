@@ -23,7 +23,9 @@ export default new Vuex.Store({
     unread: 0,
     refund: 0,
     orderListFieldData: [], // 订单列表显示字段
-    siderBarImage: ''
+    siderBarImage: '',
+    menuTitleId: 0,
+    menuTitle: ''
   },
   mutations: {
     updateOrderListFieldData(state, data) {
@@ -55,6 +57,22 @@ export default new Vuex.Store({
     changeRefund(state, data) {
       state.refund = data.refund
       state.payment = data.payment
+    },
+    saveMenu(state, data) {
+      state.menuTitleId = data.id
+      state.menuTitle = data.title
+      localStorage.setItem('MENU', JSON.stringify(data))
+    },
+    switchMenu(state) {
+      let MenuData = JSON.parse(localStorage.getItem('MENU'))
+      if (MenuData != null) {
+        state.menuTitleId = MenuData.id
+        state.menuTitle = MenuData.title
+      } else {
+        state.menuTitleId = 1
+        state.menuTitle = ''
+      }
+
     },
     switchCollapse(state, isCollapse) {
       state.isCollapse = isCollapse

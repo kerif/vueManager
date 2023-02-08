@@ -222,7 +222,7 @@ export default {
     align-items: center;
     color: #3540a5;
     font-size: 14px;
-    width: 63px;
+    width: 65px;
     cursor: pointer;
     .back-icon {
       font-size: 18px;
@@ -244,7 +244,7 @@ export default {
       justify-content: space-between;
       position: relative;
       cursor: pointer;
-      height: 26px;
+      height: 27px;
       line-height: 26px;
       border: 1px solid #d8dce5;
       color: #495060;
@@ -307,8 +307,8 @@ export default {
 .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;

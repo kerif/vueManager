@@ -1,80 +1,5 @@
 <template>
-  <el-header :class="[isCollapse && 'isCollapses']" class="layout-header" style="height: auto">
-    <div class="header-top">
-      <div @click="switchLeft" class="transfer-left">
-        <i
-          :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
-          style="font-size: 24px"
-        ></i>
-        <el-select v-model="languageCode" style="margin-left: 25px">
-          <el-option
-            v-for="item in languageList"
-            :key="item.id"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <el-popover placement="top" width="800" trigger="click">
-        <el-table :data="gridData">
-          <el-table-column label="文件名">
-            <template slot-scope="scope">
-              <div class="name-sty">{{ scope.row.name }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column property="created_at" width="165" label="时间"></el-table-column>
-          <el-table-column width="80" label="状态">
-            <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">{{ $t('处理中') }}</span>
-              <span v-if="scope.row.status === 1" style="color: blue">{{ $t('完成') }}</span>
-              <span v-if="scope.row.status === 2" style="color: red">{{ $t('失败') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column width="100" label="操作">
-            <template slot-scope="scope">
-              <el-button
-                icon="el-icon-download"
-                round
-                size="mini"
-                v-if="scope.row.status === 1"
-                @click="goUpload(scope.row.url)"
-                >{{ $t('下载') }}</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-button
-          icon="el-icon-download download-icon"
-          slot="reference"
-          round
-          @click="uploadManagenent"
-          >{{ $t('下载管理') }}
-        </el-button>
-      </el-popover>
-      <el-tooltip :content="$t('常见问题')" placement="top">
-        <span class="el-icon-question quest-icon" @click="getCommonProblem"></span>
-      </el-tooltip>
-      <el-badge :value="$store.state.unread > 0 ? $store.state.unread : ''" class="item">
-        <el-tooltip :content="$t('系统消息')" placement="top">
-          <span class="el-icon-message info-icon" @click="getSystemInfo"></span>
-        </el-tooltip>
-      </el-badge>
-      <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
-      <el-popover class="user-box" placement="bottom" trigger="click" width="250">
-        <p>{{ $t('公司') }}：{{ form.company_name }}</p>
-        <p>{{ $t('系统有效期') }}：{{ form.expired_at }}</p>
-        <p>{{ $t('所属员工组') }}：{{ form.group_name }}</p>
-        <p>{{ $t('uuid') }}：{{ form.uuid }}</p>
-        <div>
-          {{ $t('员工二维码') }}:
-          <div style="margin-left: 80px">
-            <img class="img" :src="form.invite_code ? form.invite_code : ''" />
-          </div>
-        </div>
-        <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
-      </el-popover>
-      <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
-    </div>
+  <el-header>
     <div :class="[isCollapse && 'isCollapses']" class="layout-nav">
       <tags-view />
     </div>
@@ -247,36 +172,36 @@ export default {
       border: none;
     }
   }
-  .quest-icon {
-    font-size: 20px;
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    margin-left: 20px;
-    vertical-align: middle;
-  }
-  .info-icon {
-    font-size: 20px;
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    margin-left: 20px;
-    vertical-align: middle;
-  }
-  .logout-icon {
-    font-size: 20px;
-    position: relative;
-    top: 4px;
-    cursor: pointer;
-    vertical-align: middle;
-    &:hover {
-      color: #3540a5;
-      animation: move 0.3s ease-in 2;
-    }
-  }
-  .download-icon {
-    vertical-align: middle;
-  }
+  // .quest-icon {
+  //   font-size: 20px;
+  //   cursor: pointer;
+  //   position: relative;
+  //   top: 4px;
+  //   margin-left: 20px;
+  //   vertical-align: middle;
+  // }
+  // .info-icon {
+  //   font-size: 20px;
+  //   cursor: pointer;
+  //   position: relative;
+  //   top: 4px;
+  //   margin-left: 20px;
+  //   vertical-align: middle;
+  // }
+  // .logout-icon {
+  //   font-size: 20px;
+  //   position: relative;
+  //   top: 4px;
+  //   cursor: pointer;
+  //   vertical-align: middle;
+  //   &:hover {
+  //     color: #3540a5;
+  //     animation: move 0.3s ease-in 2;
+  //   }
+  // }
+  // .download-icon {
+  //   vertical-align: middle;
+  // }
   .transfer-left {
     float: left;
     // margin-top: 10px;
