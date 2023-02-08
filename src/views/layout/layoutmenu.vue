@@ -88,10 +88,8 @@ export default {
     },
     formatRouterMap() {
       let formatRouterMap = {}
-      let formatRouterList = []
-      formatRouterList = this.fileterAfterRouterMap.filter(item => this.showMeun.includes(item.path))
       this.fileterAfterRouterMap &&
-        formatRouterList.forEach(item => {
+        this.fileterAfterRouterMap.filter(item => this.showMeun.includes(item.path)).forEach(item => {
           item.children.forEach(ele => {
             if (formatRouterMap[ele.meta.group]) {
               formatRouterMap[ele.meta.group].children.push({
