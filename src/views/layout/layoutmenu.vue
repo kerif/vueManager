@@ -44,7 +44,6 @@ export default {
       return this.$store.state.isCollapse
     },
     menuId() {
-      console.log(this.$store.state.languageCode);
       return this.$store.state.menuTitleId
     },
     fileterAfterRouterMap() {
