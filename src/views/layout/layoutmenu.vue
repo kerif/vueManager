@@ -26,6 +26,32 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      showMeunList: [
+        {
+          key: 2,
+          lists: ['marketing', 'content', 'website', 'customer', 'vip', 'staff', 'basics']
+        },
+        {
+          key: 3,
+          lists: ['order', 'station', 'pick']
+        },
+        {
+          key: 4,
+          lists: ['finance', 'consumption']
+        },
+        {
+          key: 5,
+          lists: ['overview']
+        },
+        {
+          key: 6,
+          lists: ['config', 'language']
+        }
+      ]
+    }
+  },
   methods: {
     switchLeft() {
       this.$store.commit('switchCollapse', !this.$store.state.isCollapse)
@@ -53,17 +79,11 @@ export default {
     },
     showMeun() {
       let lists = []
-      if (this.menuId == 2) {
-        lists = ['marketing', 'content', 'website', 'customer', 'vip', 'staff', 'basics']
-      } else if (this.menuId == 3) {
-        lists = ['order', 'station', 'pick']
-      } else if (this.menuId == 4) {
-        lists = ['finance', 'consumption']
-      } else if (this.menuId == 5) {
-        lists = ['overview']
-      } else if (this.menuId == 6) {
-        lists = ['config', 'language']
-      }
+      this.showMeunList.forEach(item => {
+        if (this.menuId === item.key) {
+          lists = item.lists
+        }
+      })
       return lists
     },
     formatRouterMap() {
