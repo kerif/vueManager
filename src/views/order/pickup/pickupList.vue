@@ -101,13 +101,13 @@
         ></el-table-column>
         <el-table-column
           :label="$t('取件姓名')"
-          prop="address.name"
+          prop="address.receiver_name"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('取件城市')"
-          prop="address.city"
+          prop="address.sub_area.name"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
@@ -202,6 +202,7 @@ export default {
     },
     onSearch() {
       this.page_params.page = 1
+      this.getCounts()
       this.getList()
     },
     onTabChange() {
@@ -345,9 +346,10 @@ export default {
       const searchData = this.searchFormData
       params = {
         ...params,
-        ...searchData,
         created_begin: searchData.created_at ? searchData.created_at[0] : '',
-        created_end: searchData.created_at ? searchData.created_at[1] : ''
+        created_end: searchData.created_at ? searchData.created_at[1] : '',
+        pickup_begin: searchData.pickup_at ? searchData.pickup_at[0] : '',
+        pickup_end: searchData.pickup_at ? searchData.pickup_at[1] : ''
       }
       return params
     },
