@@ -10,7 +10,7 @@
       <el-main>
         <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : menuId==1?'homepanel':'']">
           <el-main :class="[isCollapse && 'isCollapses']">
-            <layout-header style="height: auto;"></layout-header>
+            <layout-header></layout-header>
             <div class="middle">
               <transition :css="false">
                 <keep-alive :include="cachedViews">
