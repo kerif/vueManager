@@ -124,7 +124,7 @@
         <span>{{ current }}</span>
       </el-form-item>
       <el-form-item :label="$t('汇率转换显示')">
-        <el-select v-model="ruleForm.currency" clearable placeholder="请选择">
+        <el-select v-model="ruleForm.currency" clearable :placeholder="$t('请选择')">
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.code">
           </el-option>
         </el-select>

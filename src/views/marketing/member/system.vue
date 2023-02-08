@@ -1,13 +1,13 @@
 <template>
   <div class="system">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="基础配置" name="first" :lazy="true">
+      <el-tab-pane :label="$t('基础配置')" name="first" :lazy="true">
         <grade />
       </el-tab-pane>
-      <el-tab-pane label="收支规则" name="second" :lazy="true">
+      <el-tab-pane :label="$t('收支规则')" name="second" :lazy="true">
         <rules />
       </el-tab-pane>
-      <el-tab-pane label="收支记录" name="third" :lazy="true">
+      <el-tab-pane  :label="$t('收支记录')" name="third" :lazy="true">
         <record />
       </el-tab-pane>
     </el-tabs>

@@ -205,11 +205,12 @@
           <el-form-item prop="countryArr">
             <el-cascader
               :placeholder="$t('收货国家地区')"
-              :show-all-levels="false"
+              :show-all-levels="true"
               :props="countryProps"
               v-model="searchFieldData.countryArr"
               ref="getCountryName"
               @change="changeVal"
+              checkStrictly
               filterable
               clearable
             ></el-cascader>

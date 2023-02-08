@@ -109,9 +109,9 @@
           type="daterange"
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')"
         >
         </el-date-picker>
       </div>
@@ -132,9 +132,9 @@
           v-model="loginTime"
           type="daterange"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')"
         ></el-date-picker>
       </div>
       <div class="search-item">

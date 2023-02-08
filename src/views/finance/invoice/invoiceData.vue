@@ -33,7 +33,7 @@
       </div>
       <div class="header-search">
         <el-input
-          placeholder="请输入内容"
+          :placeholder="$t('请输入内容')"
           v-model="page_params.keyword"
           @keyup.enter.native="triggerVal"
         >
