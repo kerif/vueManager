@@ -11,10 +11,8 @@
         <el-submenu v-for="(route, index) in formatRouterMap" :key="route.name" :index="index + ''">
           <template slot="title">
             <!-- <i :class="['iconfont', 'icon-title', route.icon]"></i> -->
-            <img 
-            :src="require(`@/assets/${route.icon}.png`)"
-             style="width: 18px;height: 18px;margin-right: 22px;" />
-            <span>{{ $t(route.name) }}</span>
+            <img :src="require(`@/assets/${route.icon}.png`)" style="width: 18px;height: 18px;margin-right: 22px;" />
+            <span class="menu-title">{{ $t(route.name) }}</span>
           </template>
           <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
             <el-menu-item :index="childRoute.path" :key="childRoute.name" v-if="childRoute.level === 2" class="route-item" @click="onRoute(route)">
@@ -98,8 +96,11 @@ export default {
 }
 </script>
 <style lang="scss">
-.layoutmenu{
+.layoutmenu {
   overflow-y: hidden;
+}
+.menu-title {
+  font-size: 16px;
 }
 .layout-aside {
   .el-button.is-round {
