@@ -18,18 +18,13 @@
     </div>
     <div class="menu-right">
       <div>
-        <el-dropdown trigger="click" @command="handleCommand">
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{ languageCode=='zhCN'?'简体':languageCode=='zhTW'?'繁体':'English' }}
-            <el-icon class="el-icon--right">
-              <arrow-down />
-            </el-icon>
           </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item in languageList" :key="item.value" :command="item.value">{{ item.label }}</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in languageList" :key="item.value" :command="item.value">{{ item.label }}</el-dropdown-item>
+          </el-dropdown-menu>
         </el-dropdown>
         <el-popover placement="top" width="800" trigger="click">
           <el-table :data="gridData">
@@ -342,10 +337,6 @@ export default {
     border: #3540a5;
     color: #fff;
   }
-  .el-dropdown-link {
-    cursor: pointer;
-    color: #409eff;
-  }
   .el-icon-arrow-down {
     font-size: 12px;
   }
@@ -388,6 +379,9 @@ export default {
       height: 60px;
       font-size: 15px;
       color: #fff;
+      width: 80px;
+      display: block;
+      text-align: center;
     }
     .name-sty {
       width: 70px !important;
