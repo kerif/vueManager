@@ -315,7 +315,7 @@ export default {
     cursor: pointer;
     vertical-align: middle;
     &:hover {
-      color: #3540a5;
+      color: #fff !important;
       animation: move 0.3s ease-in 2;
     }
   }
@@ -346,7 +346,7 @@ export default {
   position: relative;
   top: 0;
   z-index: 99;
-  background-color: #4c5ad9;
+  background-color: #3641A3 !important;
   display: flex;
   justify-content: space-between;
   transition: all 0.2s ease-in;
