@@ -1,6 +1,7 @@
 <template>
   <el-header>
-    <div :class="[isCollapse && 'isCollapses']" class="layout-nav">
+    <!-- :class="[isCollapse && 'isCollapses']" -->
+    <div :class="[isCollapse ? 'isCollapses' : $store.state.menuTitleId !== 1?'layout-navs':'']" class="layout-nav">
       <tags-view />
     </div>
   </el-header>
@@ -138,6 +139,9 @@ export default {
 .isCollapses {
   width: 100vw !important;
   left: 60px;
+}
+.layout-navs{
+  width: calc(100vw - 210px) !important;
 }
 .img {
   width: 50%;

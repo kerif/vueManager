@@ -98,7 +98,7 @@ export default {
   }
   .layout-nav {
     padding: 5px 20px;
-    width: calc(100vw - 210px);
+    width: calc(100vw - 20px);
     box-sizing: border-box;
     position: relative;
     transition: all 0.2s ease-in;
