@@ -348,13 +348,14 @@ export default {
   z-index: 99;
   background-color: #3641A3 !important;
   display: flex;
-  //justify-content: space-between;
-  justify-content: flex-start;
+  justify-content: space-between;
+  //justify-content: flex-start;
   transition: all 0.2s ease-in;
   overflow-x: hidden;
   .menu-left {
     line-height: 60px;
     display: flex;
+    width: 42%;
     justify-items: center;
     align-items: center;
     .menu-background {
@@ -375,8 +376,6 @@ export default {
     color: #fff;
     text-align: right;
     margin-right: 40px;
-    position: absolute;
-    right: 0px;
     .el-dropdown-link {
       height: 60px;
       font-size: 15px;

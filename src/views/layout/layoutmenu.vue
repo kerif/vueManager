@@ -200,6 +200,7 @@ export default {
 .menu-right {
   line-height: 60px;
   color: #fff;
+  width: 40%;
   .el-dropdown-link {
     height: 60px;
     font-size: 15px;
