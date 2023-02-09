@@ -41,6 +41,14 @@ switch (hostName) {
       BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
     }
     break
+  // v4 
+  case 'dev-admin-v4.haiouoms.com':
+    baseUrl = {
+      BASE_API_URL: 'https://api-jiyun-v3.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://api-jiyun-v3.haiouoms.com',
+      BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
+    }
+    break
   default:
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v3.haiouoms.com/api/admin',
