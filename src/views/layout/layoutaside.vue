@@ -346,7 +346,7 @@ export default {
   position: relative;
   top: 0;
   z-index: 99;
-  background-color: #838592;
+  background-color: #4c5ad9;
   display: flex;
   justify-content: space-between;
   transition: all 0.2s ease-in;
