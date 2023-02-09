@@ -198,7 +198,6 @@ export default {
   border-radius: 50%;
 }
 .menu-right {
-  width: 40%;
   line-height: 60px;
   color: #fff;
   .el-dropdown-link {
