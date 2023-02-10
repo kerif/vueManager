@@ -351,6 +351,9 @@
               <template v-else-if="item.id === 'exceptional_operator'">
                 <span>{{ scope.row.exceptional_operator }}</span>
               </template>
+              <template v-else-if="item.id === 'phone'">
+                <span>{{ scope.row.address && scope.row.address.phone }}</span>
+              </template>
               <template v-else-if="item.id === 'address_type'">
                 <span>{{ scope.row.address_type }}</span>
                 <!-- <span v-if="scope.row.station_name !== ''">--{{ scope.row.station_name }}</span> -->
@@ -1360,7 +1363,8 @@ export default {
         'sale_name',
         'customer_name',
         'weight',
-        'fee'
+        'fee',
+        'phone'
       ]
       this.checkColumn = []
       this.tableColumn.forEach(item => {

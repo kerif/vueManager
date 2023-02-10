@@ -400,6 +400,9 @@
                 <el-dropdown-item @click.native="returnWarehouse(scope.row.id)">
                   <span v-if="activeName === '2'">{{ $t('退回未入库') }}</span>
                 </el-dropdown-item>
+                <el-dropdown-item @click.native="onUnclaimed(scope.row.id)">
+                  <span v-if="activeName === '2'">{{ $t('退回无人认领') }}</span>
+                </el-dropdown-item>
                 <el-dropdown-item @click.native="onLogs(scope.row.express_num)">
                   <span
                     v-if="
@@ -914,6 +917,29 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.returnBack(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    onUnclaimed(id) {
+      this.$confirm(this.$t('您是否确认将该包裹退回无人认领状态'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.ReturnUnclaimed(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

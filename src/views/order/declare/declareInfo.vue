@@ -259,7 +259,7 @@
               <el-input
                 :placeholder="$t('请输入')"
                 class="input-sty"
-                v-model="ruleForm.agent_amount"
+                v-model="item.agent_amount"
               ></el-input>
             </el-form-item>
           </el-form>

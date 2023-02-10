@@ -5311,3 +5311,18 @@ exports.smsTmpSwitch = (id, status) => {
 exports.smsTmpEdit = (id, params) => {
   return $form.put(`api-services/sms/aestron/${id}`, params)
 }
+
+//自动签收配置获取
+exports.getAutoSign = () => {
+  return $form.get('order-basic-settings')
+}
+
+//自动签收配置保存
+exports.saveAutoSign = params => {
+  return $form.post('order-basic-settings', params)
+}
+
+// 已入库退回无人认领
+exports.ReturnUnclaimed = id => {
+  return $form.put(`packages/${id}/back-to-no-owner`)
+}

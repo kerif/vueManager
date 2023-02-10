@@ -44,6 +44,9 @@
                   <el-menu-item index="11">
                     {{ $t('上门取件配置') }}
                   </el-menu-item>
+                  <el-menu-item index="12">
+                    {{ $t('自动签收配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -89,6 +92,9 @@
             <!-- 上门取件配置 -->
             <el-col :span="19" v-if="secondTab1 === '11'" class="main-right">
               <pickup-time-config></pickup-time-config>
+            </el-col>
+            <el-col :span="19" v-if="secondTab1 === '12'" class="main-right">
+              <auto-sign></auto-sign>
             </el-col>
           </el-row>
         </div>
@@ -281,6 +287,7 @@ import presetPack from './presetPack.vue'
 import addressConfig from './addressConfig.vue'
 import packPriceChange from './packPriceChange.vue'
 import pickupTimeConfig from './pickupTimeConfig.vue'
+import autoSign from './autoSign.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -309,7 +316,8 @@ export default {
     packPriceChange,
     pickupTimeConfig,
     // StoreGoods,
-    Arrival
+    Arrival,
+    autoSign
     // GroupConfigure
   },
   mixins: [pagination],

@@ -110,6 +110,8 @@
             <span v-if="scope.row.type === 8">{{ $t('添加') }}</span>
             <span v-if="scope.row.type === 9">{{ $t('APP签收') }}</span>
             <span v-if="scope.row.type === 10">{{ $t('包裹上架') }}</span>
+            <span v-if="scope.row.type === 11">{{ $t('包裹下架') }}</span>
+            <span v-if="scope.row.type === 12">{{ $t('退回无人认领') }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -313,6 +315,14 @@ export default {
         {
           id: 10,
           name: this.$t('包裹上架')
+        },
+        {
+          id: 11,
+          name: this.$t('包裹下架')
+        },
+        {
+          id: 12,
+          name: this.$t('退回无人认领')
         }
       ],
       type: ''

@@ -317,6 +317,9 @@ export default {
         },
         {
           label: '_'
+        },
+        {
+          label: this.$t('空')
         }
       ],
       boxNumOptions: [
@@ -331,6 +334,10 @@ export default {
         {
           id: 2,
           name: this.$t('大写字母(A,B,C,D,E......)')
+        },
+        {
+          id: 5,
+          name: this.$t('补0数字(01,02,03,04,05......)')
         }
       ],
       subOptions: [
@@ -367,6 +374,10 @@ export default {
         {
           id: 3,
           name: this.$t('自提点')
+        },
+        {
+          id: 5,
+          name: this.$t('补0数字(01,02,03,04,05......)')
         }
       ],
       boxRules: {
@@ -411,7 +422,7 @@ export default {
             this.orderRules.prefix = res.data.prefix
             this.orderRules.tableData = res.data.warehouse_prefix
           } else if (this.name === 3) {
-            this.boxRules.connector = res.data.link
+            this.boxRules.connector = this.boxRules.connector === '' ? this.$t('空') : res.data.link
             this.boxRules.boxNum = res.data.sn
           } else if (this.name === 4) {
             this.groupRules.connector = res.data.link
@@ -426,10 +437,12 @@ export default {
           } else if (this.name === 9) {
             this.pickList.prefix = res.data.prefix
           } else if (this.name === 10) {
-            this.shipOrder.connector = res.data.link
+            this.shipOrder.connector =
+              this.shipOrder.connector === '' ? this.$t('空') : res.data.link
             this.shipOrder.boxNum = res.data.sn
           } else {
-            this.purchaseOrder.connector = res.data.link
+            this.purchaseOrder.connector =
+              this.purchaseOrder.connector === '' ? this.$t('空') : res.data.link
             this.purchaseOrder.boxNum = res.data.sn
           }
         }
@@ -490,7 +503,7 @@ export default {
       } else if (this.name === 3) {
         this.$request
           .updateRules(this.id, {
-            link: this.boxRules.connector,
+            link: this.boxRules.connector === this.$t('空') ? '' : this.boxRules.connector,
             sn: this.boxRules.boxNum
           })
           .then(res => {
@@ -620,7 +633,7 @@ export default {
       } else if (this.name === 10) {
         this.$request
           .updateRules(this.id, {
-            link: this.shipOrder.connector,
+            link: this.shipOrder.connector === this.$t('空') ? '' : this.shipOrder.connector,
             sn: this.shipOrder.boxNum
           })
           .then(res => {
@@ -642,7 +655,8 @@ export default {
       } else {
         this.$request
           .updateRules(this.id, {
-            link: this.purchaseOrder.connector,
+            link:
+              this.purchaseOrder.connector === this.$t('空') ? '' : this.purchaseOrder.connector,
             sn: this.purchaseOrder.boxNum
           })
           .then(res => {

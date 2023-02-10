@@ -176,6 +176,12 @@ export default [
     name: '',
     width: '160',
     checked: true
+  },
+  {
+    id: 'phone',
+    name: '收货人电话',
+    width: '160',
+    checked: true
   }
   // {
   //   id: 'pack_status_name',
