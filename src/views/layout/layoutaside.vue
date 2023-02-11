@@ -449,11 +449,6 @@ export default {
     }
   }
 }
-.el-dropdown-menu {
-  width: 100px !important;
-  text-align: center;
-  top: 45px !important;
-}
 .el-menu-item-group__title {
   padding: 0;
 }
