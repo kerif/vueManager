@@ -1261,9 +1261,9 @@ export default {
         if (res.ret) this.groupDataList = res.data
       })
     },
-    sortNum(pre, next) {
-      return pre - next
-    },
+    // sortNum(pre, next) {
+    //   return pre - next
+    // },
     getList() {
       this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
@@ -1369,7 +1369,7 @@ export default {
         res.data.box.forEach(item => {
           let mulArrList = []
           mulArrList.push(Number(item.length), Number(item.width), Number(item.height))
-          this.sortNum(mulArrList)
+          mulArrList.sort()
           let minData = mulArrList[0]
           let midData = mulArrList[1]
           let maxData = mulArrList[2]
@@ -1379,8 +1379,13 @@ export default {
         this.userId = res.data.user_id
         //如果是单箱出库
         if (this.form.box_type === 1) {
-          let arrList = [res.data.details.length, res.data.details.width, res.data.details.height]
-          this.sortNum(arrList)
+          let arrList = [
+            Number(res.data.details.length),
+            Number(res.data.details.width),
+            Number(res.data.details.height)
+          ]
+          arrList.sort()
+          console.log(arrList, 'arrList')
           let minData = arrList[0]
           let midData = arrList[1]
           let maxData = arrList[2]
