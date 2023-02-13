@@ -2,15 +2,25 @@
   <div>
     <div class="rate-top">
       <div class="rate-left">
-        1&nbsp;{{ $t('人民币') }}&nbsp;=
+        1<el-select v-model="currency_code" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in rateList"
+            :key="item.id"
+            :value="item.code"
+            :label="item.name"
+          ></el-option> </el-select
+        >=
         <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
         {{ currencyData.name }}
       </div>
-      <el-button class="btn-dark-green" @click="saveRate">{{ $t('保存') }}</el-button>
-      <el-button class="btn-blue-green" @click="autoGet">{{ $t('自动获取') }}</el-button>
+      <div style="margin-top: 20px">
+        <el-button class="btn-dark-green" @click="saveRate">{{ $t('保存') }}</el-button>
+        <el-button class="btn-blue-green" @click="autoGet">{{ $t('自动获取') }}</el-button>
+      </div>
     </div>
     <el-table :data="ratesData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
+      <el-table-column :label="$t('当前币种')" prop="currency_name"> </el-table-column>
       <el-table-column
         prop="rate"
         :label="$t('汇率（当前币种:' + currencyData.name + '）')"
@@ -33,6 +43,9 @@
             @click="changeRate(scope.row.id)"
             >{{ $t('生效') }}</el-button
           >
+          <el-button v-else class="btn-dark-green" @click="changeUnRate(scope.row.id)">{{
+            $t('取消生效')
+          }}</el-button>
           <el-button class="btn-light-red" @click="deleteRate(scope.row.id)">{{
             $t('删除')
           }}</el-button>
@@ -59,12 +72,15 @@ export default {
       tableLoading: false,
       page_params: {
         type: ''
-      }
+      },
+      currency_code: '',
+      rateList: []
     }
   },
   created() {
     this.getRate()
     this.getCurrency()
+    this.getAllCurrency()
   },
   methods: {
     getList() {
@@ -93,6 +109,13 @@ export default {
         })
         .then(res => {
           if (res.ret) {
+            res.data.forEach(item => {
+              this.rateList.forEach(ele => {
+                if (item.currency_code === ele.code) {
+                  item.currency_name = ele.name
+                }
+              })
+            })
             this.ratesData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -120,30 +143,33 @@ export default {
     },
     // 新建汇率
     saveRate() {
+      if (!this.currency_code) {
+        return this.$message.error(this.$t('请选择货币单位'))
+      }
       if (!this.rate) {
         return this.$message.error(this.$t('请输入汇率'))
-      } else {
-        this.$request
-          .saveRate({
-            rate: this.rate
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
-              this.getRate()
-              this.rate = ''
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
       }
+      this.$request
+        .saveRate({
+          rate: this.rate,
+          currency_code: this.currency_code
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getRate()
+            this.rate = ''
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 汇率 开启或关闭
     changeRate(id) {
@@ -186,6 +212,30 @@ export default {
             })
           }
         })
+      })
+    },
+    getAllCurrency() {
+      this.$request.getAllRate().then(res => {
+        if (res.ret) {
+          this.rateList = res.data
+        }
+      })
+    },
+    changeUnRate(id) {
+      this.$request.startRate(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getRate()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     }
   }

@@ -1261,6 +1261,9 @@ export default {
         if (res.ret) this.groupDataList = res.data
       })
     },
+    sortNum(pre, next) {
+      return pre - next
+    },
     getList() {
       this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
@@ -1364,53 +1367,23 @@ export default {
           }
         ]
         res.data.box.forEach(item => {
-          let maxData = Math.max(item.length, item.width, item.height)
-          let minData = Math.min(item.length, item.width, item.height)
-          let midData
-          if (
-            (item.length > minData && item.length < maxData) ||
-            (item.length === minData && item.length === maxData)
-          ) {
-            midData = item.length
-          } else if (
-            (item.width > minData && item.width < maxData) ||
-            (item.width === minData && item.width === maxData)
-          ) {
-            midData = item.width
-          } else if (
-            (item.height > minData && item.height < maxData) ||
-            (item.height === minData && item.height === maxData)
-          ) {
-            midData = item.height
-          }
-          console.log(maxData, midData, minData, 'data')
+          let mulArrList = []
+          mulArrList.push(Number(item.length), Number(item.width), Number(item.height))
+          this.sortNum(mulArrList)
+          let minData = mulArrList[0]
+          let midData = mulArrList[1]
+          let maxData = mulArrList[2]
           item.volumeGirth = maxData + (midData + minData) * 2
         })
         this.boxData = res.data.box
         this.userId = res.data.user_id
         //如果是单箱出库
         if (this.form.box_type === 1) {
-          let maxData = Math.max(
-            res.data.details.length,
-            res.data.details.width,
-            res.data.details.height
-          )
-          let minData = Math.min(
-            res.data.details.length,
-            res.data.details.width,
-            res.data.details.height
-          )
-          console.log(maxData, minData)
-          let value =
-            res.data.details.length > res.data.details.width
-              ? res.data.details.length
-              : res.data.details.width
-          let midData
-          if (value > res.data.details.height) {
-            midData = res.data.details.height
-          } else {
-            midData = value
-          }
+          let arrList = [res.data.details.length, res.data.details.width, res.data.details.height]
+          this.sortNum(arrList)
+          let minData = arrList[0]
+          let midData = arrList[1]
+          let maxData = arrList[2]
           this.boxData = [
             {
               id: 0,

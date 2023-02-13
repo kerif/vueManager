@@ -5326,3 +5326,8 @@ exports.saveAutoSign = params => {
 exports.ReturnUnclaimed = id => {
   return $form.put(`packages/${id}/back-to-no-owner`)
 }
+
+// 更多配置 取消生效
+exports.startRate = id => {
+  return $form.put(`exchange-rates/${id}/un-enabled`)
+}
