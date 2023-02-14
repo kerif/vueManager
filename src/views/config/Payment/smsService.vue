@@ -63,7 +63,7 @@
                 <el-form-item label="SenderId">
                   <el-input
                     class="ipt"
-                    placeholder="请输入SenderId"
+                    placeholder="请输入SenderId,只允许输入数字或者字母"
                     v-model="ruleForm.aestron.sender_id"
                     @input="
                       ruleForm.aestron.sender_id = ruleForm.aestron.sender_id.replace(

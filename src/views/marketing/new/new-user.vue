@@ -53,7 +53,7 @@
             </div>
             <p class="font-sty">{{ $t('客户订单支付成功后即可返券') }}</p>
           </div>
-          <!-- <div v-if="item.type === 5">
+          <div v-if="item.type === 5">
             <div class="top-img">
               <img src="../../../assets/top-4.png" />
               <p>
@@ -96,7 +96,7 @@
               </p>
             </div>
             <p class="font-sty">{{ $t('生成二维码抢券页面,由用户点击领取') }}</p>
-          </div> -->
+          </div>
           <div class="user-bottom">
             <div class="bottom-left">
               <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{
@@ -106,8 +106,7 @@
                 $t('管理')
               }}</el-button>
             </div>
-            <div class="bottom-right">
-              <!-- <div class="bottom-right" v-if="item.type !== 7 && item.type !== 8"> -->
+            <div class="bottom-right" v-if="item.type !== 7 && item.type !== 8">
               <el-switch
                 class="switch-sty"
                 @change="changeOnline(item.type, item.status)"
@@ -209,20 +208,13 @@ export default {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type }, query: { type } })
         // this.$router.push({ name: 'ordinary', params: { type: type } })
+      } else if (type === 1 || type === 2 || type === 3 || type === 5 || type === 6) {
+        this.$router.push({ name: 'ordinary', query: { type: JSON.stringify(type) } })
+      } else if (type === 7 || type === 8) {
+        this.$router.push({ name: 'addVoucher', params: { type: type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: type } })
       }
-      // else if (
-      //   type === 1 ||
-      //   type === 2 ||
-      //   type === 3 ||
-      //   type === 5 ||
-      //   type === 6 ||
-      //   type === 7 ||
-      //   type === 8
-      // ) {
-      //   this.$router.push({ name: 'ordinary', params: { type: type } })
-      // }
     },
     // 管理
     goMana(type) {
@@ -238,12 +230,11 @@ export default {
       } else if (type === 4) {
         // 下单返券
         this.$router.push({ name: 'rebates', params: { type: type } })
+      } else if (type === 5 || type === 6) {
+        this.$router.push({ name: 'new', params: { type: type } })
+      } else if (type === 7 || type === 8) {
+        this.$router.push({ name: 'voucher', params: { type: type } })
       }
-      // else if (type === 5 || type === 6) {
-      //   this.$router.push({ name: 'new', params: { type: type } })
-      // } else if (type === 7 || type === 8) {
-      //   this.$router.push({ name: 'voucher', params: { type: type } })
-      // }
       // this.$router.push({ name: 'managementNew', params: { type: type } })
     }
   }

@@ -60,11 +60,11 @@
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
       <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
-      <!-- <el-table-column :label="$t('类型')" prop="coupon_type">
+      <el-table-column :label="$t('类型')" prop="coupon_type">
         <template slot-scope="scope">
           <span>{{ scope.row.coupon_type === 1 ? $t('抵现券') : $t('抵重券') }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <!-- 金额 -->
       <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
       </el-table-column>
@@ -78,8 +78,8 @@
       </el-table-column> -->
       <!-- 最低消费金额 -->
       <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
-      <!-- <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
-      <el-table-column :label="$t('最低重量')" prop="min_weight"> </el-table-column> -->
+      <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
+      <el-table-column :label="$t('最低重量')" prop="min_weight"> </el-table-column>
       <!-- 失效时间 -->
       <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
       <el-table-column
@@ -100,13 +100,15 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
+          <el-button
+            class="btn-purple"
+            v-if="$route.params.type === 4"
+            @click="goDetails(scope.row.id)"
+            >{{ $t('详情') }}</el-button
+          >
+          <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
             $t('详情')
           }}</el-button>
-          <!-- v-if="$route.params.type === 4" -->
-          <!-- <el-button class="btn-purple" v-else @click="goOtherDetails(scope.row.id)">{{
-            $t('详情')
-          }}</el-button> -->
           <!-- 记录 -->
           <el-button
             size="small"
@@ -285,10 +287,13 @@ export default {
       if (this.$route.params.type === 4) {
         this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
       } else {
-        this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
+        this.$router.push({
+          name: 'ordinary',
+          query: { type: JSON.stringify(this.$route.params.type) }
+        })
       }
       // else {
-      //   this.$router.push({ name: 'ordinary', params: { type: this.$route.params.type } })
+      //   this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
       // }
     },
     // 编辑

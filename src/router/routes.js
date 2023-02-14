@@ -1916,7 +1916,7 @@ export default [
             }
           },
           {
-            path: '/marketing/new/ordinary/:type',
+            path: '/marketing/new/ordinary',
             name: 'ordinary',
             component: ordinary,
             id: 801,
