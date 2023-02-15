@@ -422,7 +422,7 @@ export default {
             this.orderRules.prefix = res.data.prefix
             this.orderRules.tableData = res.data.warehouse_prefix
           } else if (this.name === 3) {
-            this.boxRules.connector = this.boxRules.connector === '' ? this.$t('空') : res.data.link
+            this.boxRules.connector = res.data.link === '' ? this.$t('空') : res.data.link
             this.boxRules.boxNum = res.data.sn
           } else if (this.name === 4) {
             this.groupRules.connector = res.data.link
@@ -437,12 +437,10 @@ export default {
           } else if (this.name === 9) {
             this.pickList.prefix = res.data.prefix
           } else if (this.name === 10) {
-            this.shipOrder.connector =
-              this.shipOrder.connector === '' ? this.$t('空') : res.data.link
+            this.shipOrder.connector = res.data.link === '' ? this.$t('空') : res.data.link
             this.shipOrder.boxNum = res.data.sn
           } else {
-            this.purchaseOrder.connector =
-              this.purchaseOrder.connector === '' ? this.$t('空') : res.data.link
+            this.purchaseOrder.connector = res.data.link === '' ? this.$t('空') : res.data.link
             this.purchaseOrder.boxNum = res.data.sn
           }
         }
