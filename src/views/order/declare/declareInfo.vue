@@ -694,6 +694,10 @@ export default {
       this.infoData.push({
         cn_name: '',
         en_name: '',
+        sku: '',
+        hs_code: '',
+        material: '',
+        weight: '',
         quantity: '',
         unit: '',
         unit_value: '',
@@ -705,6 +709,10 @@ export default {
       items.push({
         cn_name: '',
         en_name: '',
+        sku: '',
+        hs_code: '',
+        material: '',
+        weight: '',
         quantity: '',
         unit: '',
         unit_value: '',
