@@ -184,6 +184,11 @@
               <el-input v-model="scope.row.material"></el-input>
             </template>
           </el-table-column>
+          <el-table-column :label="$t('重量')">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.weight"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
               <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
@@ -314,6 +319,11 @@
             <el-table-column :label="$t('材质')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.material"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('重量')">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.weight"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('数量')">
