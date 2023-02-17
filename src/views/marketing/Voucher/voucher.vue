@@ -56,14 +56,14 @@
         <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
         <el-table-column type="index" width="50"></el-table-column>
         <!-- 优惠券名称 -->
-        <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('优惠券名称')" prop="name" width="160"></el-table-column>
         <!-- 类型 -->
-        <el-table-column :label="$t('类型')" prop="type" width="180"></el-table-column>
-        <!-- <el-table-column :label="$t('折扣类型')" prop="discount_type">
+        <el-table-column :label="$t('类型')" prop="type" width="100"></el-table-column>
+        <el-table-column :label="$t('折扣类型')" prop="discount_type">
           <template slot-scope="scope">
             <span>{{ scope.row.discount_type === 0 ? $t('抵现券') : $t('抵重券') }}</span>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <!-- 金额 -->
         <el-table-column
           :label="$t('金额') + this.localization.currency_unit"
@@ -73,8 +73,8 @@
         </el-table-column>
         <!-- 最低消费金额 -->
         <el-table-column :label="$t('最低消费金额')" prop="threshold" width="120"></el-table-column>
-        <!-- <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
-        <el-table-column :label="$t('最低重量')" prop="min_weight"></el-table-column> -->
+        <el-table-column :label="$t('重量')" prop="weight"></el-table-column>
+        <el-table-column :label="$t('最低重量')" prop="min_weight"></el-table-column>
         <!-- 状态 -->
         <el-table-column :label="$t('状态')" prop="status" width="120">
           <template slot-scope="scope">

@@ -468,6 +468,7 @@
             >
               <i class="el-icon-copy-document"></i>
             </span>
+            <span class="seer" v-if="scope.row.source === 3">{{ $t('先知') }}</span>
           </template>
         </el-table-column>
         <!-- 包裹编码 -->
