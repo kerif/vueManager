@@ -1686,7 +1686,7 @@ export default {
       let params = {
         order_ids: this.$route.params.id,
         is_member: Number(this.is_member),
-        reamrk: this.logisticsRemark,
+        remark: this.logisticsRemark,
         created_at: this.created_at
       }
       if (this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)) {
