@@ -138,6 +138,16 @@
           </el-table>
         </div>
       </el-form-item>
+      <el-form-item :label="$t('预留面单')">
+        <el-select :placeholder="$t('请选择')" v-model="landing.auto_sn_express_id">
+          <el-option
+            v-for="item in reservedList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -155,11 +165,13 @@ export default {
         channel_code: '',
         push_type: 1,
         third_push_now: 0,
-        channel_type: 1
+        channel_type: 1,
+        auto_sn_express_id: ''
       },
       dockingList: [],
       channelList: [],
-      tableData: []
+      tableData: [],
+      reservedList: []
     }
   },
   created() {
