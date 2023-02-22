@@ -5376,3 +5376,8 @@ exports.reservedNoList = params => {
 exports.delReservedNo = id => {
   return $form.delete('reserved/' + id)
 }
+
+// 预留面单
+exports.reservedFaceSheet = () => {
+  return $form.get('express-lines/reserved-number-express')
+}

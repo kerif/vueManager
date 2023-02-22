@@ -178,6 +178,7 @@ export default {
     this.getDocking()
     this.dockData()
     this.getList()
+    this.getReservedSheet()
   },
   activated() {
     this.getList()
@@ -213,6 +214,7 @@ export default {
           this.landing.push_type = res.data.push_type
           this.landing.third_push_now = res.data.third_push_now
           this.landing.channel_type = res.data.channel_type
+          this.landing.auto_sn_express_id = res.data.auto_sn_express_id
         }
       })
     },
@@ -278,6 +280,13 @@ export default {
             message: res.msg,
             type: 'warning'
           })
+        }
+      })
+    },
+    getReservedSheet() {
+      this.$request.reservedFaceSheet().then(res => {
+        if (res.ret) {
+          this.reservedList = res.data
         }
       })
     }
