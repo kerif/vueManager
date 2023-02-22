@@ -164,6 +164,12 @@ const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
+// 配置 预报单号
+const reservationNo = loadonDemand('config/reservationNo/reservationNoList')
+// 配置 预报单号详情
+const reservationNoDetail = loadonDemand('config/reservationNo/reservationNoDetail')
+// 配置 预报单号导入清单
+const reservationNoImport = loadonDemand('config/reservationNo/import')
 // 自提点 转运包裹管理
 const PackageManagement = loadonDemand('pick/packageMana')
 // 自提点 仓位管理
@@ -1491,6 +1497,41 @@ export default [
               group: '配置',
               name: '邮件通知配置',
               parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/reservationNo',
+            name: 'reservationNo',
+            component: reservationNo,
+            id: 606,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '预留单号'
+            }
+          },
+          {
+            path: '/config/reservationNo/detail',
+            component: reservationNoDetail,
+            name: 'reservationNoDetail',
+            id: 606,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '预留订单号详情',
+              parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservationNo/import',
+            component: reservationNoImport,
+            name: 'reservationNoImport',
+            id: 606,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '导入清单',
+              parent: '/config/reservationNo'
             }
           },
           {

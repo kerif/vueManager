@@ -5331,3 +5331,48 @@ exports.ReturnUnclaimed = id => {
 exports.startRate = id => {
   return $form.put(`exchange-rates/${id}/un-enabled`)
 }
+
+// 下载预留单号模板
+exports.downloadReservedTpl = () => {
+  return $form.get('reserved/tpl', { responseType: 'blob' })
+}
+
+// 导入预留单号文件
+exports.importReservedNo = params => {
+  return $file.post('reserved/import', params)
+}
+
+// 提交预留单号数据
+exports.saveReservedNo = params => {
+  return $form.post('reserved', params)
+}
+
+// 删除单个预留单号
+exports.delItemNo = id => {
+  return $form.delete(`reserved/item/${id}`)
+}
+
+// 预留单号详情
+exports.reservedNoDetail = (id, params) => {
+  return $form.get('reserved/' + id, { params })
+}
+
+// 预留单号列表
+exports.reservedNoItemList = (id, params) => {
+  return $form.get('reserved/items/' + id, { params })
+}
+
+// 作废单号
+exports.setInvalid = params => {
+  return $form.post('reserved/is-invalid', params)
+}
+
+// 预留单号
+exports.reservedNoList = params => {
+  return $form.get('reserved', { params })
+}
+
+// 删除预留单号
+exports.delReservedNo = id => {
+  return $form.delete('reserved/' + id)
+}
