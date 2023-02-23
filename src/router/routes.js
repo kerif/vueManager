@@ -1503,7 +1503,7 @@ export default [
             path: '/config/reservationNo',
             name: 'reservationNo',
             component: reservationNo,
-            id: 606,
+            id: 607,
             meta: {
               group: '配置',
               level: 2,
@@ -1514,7 +1514,7 @@ export default [
             path: '/config/reservationNo/detail',
             component: reservationNoDetail,
             name: 'reservationNoDetail',
-            id: 606,
+            id: 607,
             meta: {
               group: '配置',
               level: 3,
@@ -1526,7 +1526,7 @@ export default [
             path: '/config/reservationNo/import',
             component: reservationNoImport,
             name: 'reservationNoImport',
-            id: 606,
+            id: 607,
             meta: {
               group: '配置',
               level: 3,
