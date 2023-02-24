@@ -2,7 +2,7 @@
   <div>
     <div class="rate-top">
       <div class="rate-left">
-        1{{ currencyData.name }}=
+        1{{ $t('人民币') }}=
         <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
         <el-select v-model="currency_code" :placeholder="$t('请选择')">
           <el-option
