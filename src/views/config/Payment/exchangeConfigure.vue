@@ -130,7 +130,7 @@ export default {
     },
     // 自动获取
     autoGet() {
-      this.$request.autoGet().then(res => {
+      this.$request.autoGet({ currency_code: this.currency_code }).then(res => {
         if (res.ret) {
           this.rate = res.data.rate
         } else {

@@ -1824,8 +1824,8 @@ exports.getUserDetails = id => {
   return $form.get(`users/${id}`)
 }
 // 更多配置 自动获取
-exports.autoGet = () => {
-  return $form.get('exchange-rates/rate')
+exports.autoGet = params => {
+  return $form.get('exchange-rates/rate', { params })
 }
 // 更多配置 新建汇率
 exports.saveRate = params => {
