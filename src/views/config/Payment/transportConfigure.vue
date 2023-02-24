@@ -18,6 +18,9 @@
       <el-form-item :label="$t('标题')">
         <el-input class="input-sty" v-model="params.title"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('预报提示')">
+        <el-input class="input-sty" v-model="params.tips" type="textarea"></el-input>
+      </el-form-item>
       <!-- 如何下单 -->
       <el-form-item :label="$t('内容')">
         <el-row>
@@ -39,7 +42,8 @@ export default {
       params: {
         title: '',
         language: '',
-        content: ''
+        content: '',
+        tips: ''
       },
       options: []
     }
@@ -68,6 +72,7 @@ export default {
             this.params.title = res.data.title
             this.params.content = res.data.content
             this.params.language = res.data.language
+            this.params.tips = res.data.tips
             this.editor.txt.html(this.params.content)
           }
         })
@@ -85,6 +90,7 @@ export default {
           this.params.title = res.data.title
           this.params.content = res.data.content
           this.params.language = res.data.language
+          this.params.tips = res.data.tips
         }
       })
     },

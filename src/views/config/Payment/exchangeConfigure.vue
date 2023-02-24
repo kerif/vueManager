@@ -2,16 +2,16 @@
   <div>
     <div class="rate-top">
       <div class="rate-left">
-        1<el-select v-model="currency_code" :placeholder="$t('请选择')">
+        1{{ currencyData.name }}=
+        <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
+        <el-select v-model="currency_code" :placeholder="$t('请选择')">
           <el-option
             v-for="item in rateList"
             :key="item.id"
             :value="item.code"
             :label="item.name"
-          ></el-option> </el-select
-        >=
-        <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
-        {{ currencyData.name }}
+          ></el-option>
+        </el-select>
       </div>
       <div style="margin-top: 20px">
         <el-button class="btn-dark-green" @click="saveRate">{{ $t('保存') }}</el-button>
@@ -21,10 +21,7 @@
     <el-table :data="ratesData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <el-table-column :label="$t('当前币种')" prop="currency_name"> </el-table-column>
-      <el-table-column
-        prop="rate"
-        :label="$t('汇率（当前币种:' + currencyData.name + '）')"
-      ></el-table-column>
+      <el-table-column prop="rate" :label="$t('汇率')"></el-table-column>
       <el-table-column :label="$t('是否生效')">
         <template slot-scope="scope">
           <span v-if="scope.row.enabled === 1">{{ $t('是') }}</span>
@@ -81,6 +78,9 @@ export default {
     this.getRate()
     this.getCurrency()
     this.getAllCurrency()
+  },
+  mounted() {
+    this.getRate()
   },
   methods: {
     getList() {
