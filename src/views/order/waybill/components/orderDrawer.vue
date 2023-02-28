@@ -230,7 +230,8 @@ export default {
           { id: 'remark', name: this.$t('备注') },
           { id: 'address_type', name: this.$t('收货方式') },
           { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') }
+          { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'address_id_card', name: this.$t('身份证号(地址)') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -393,7 +394,8 @@ export default {
           { id: 'remark', name: this.$t('备注') },
           { id: 'address_type', name: this.$t('收货方式') },
           { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') }
+          { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'address_id_card', name: this.$t('身份证号(地址)') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
