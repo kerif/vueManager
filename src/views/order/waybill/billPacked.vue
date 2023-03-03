@@ -900,14 +900,13 @@ export default {
           type: 'presetPackBox'
         },
         data => {
-          let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
+          let { id, length, width, height } = JSON.parse(JSON.stringify(data))
           if (type === 'single') {
             this.user.length = length
             this.user.width = width
             this.user.height = height
             this.boxId = id
           } else {
-            this.user.box[index].weight = weight
             this.user.box[index].length = length
             this.user.box[index].width = width
             this.user.box[index].height = height
