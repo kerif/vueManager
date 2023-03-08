@@ -15,6 +15,13 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('字符串3')" v-if="type === 7">
+        <el-row>
+          <el-col :span="10">
+            <el-input v-model="form.content3"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 编辑图片 -->
       <el-form-item :label="$t('内容')" class="updateChe" v-if="type === 6 || type === 7">
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
@@ -57,7 +64,8 @@ export default {
       form: {
         image: '',
         content1: '',
-        content2: ''
+        content2: '',
+        content3: ''
       },
       baleImgList: [],
       type: '',
@@ -79,6 +87,7 @@ export default {
           res.data.content.image && (this.baleImgList[0] = res.data.content.image)
           this.form.content1 = res.data.content.content1
           this.form.content2 = res.data.content.content2
+          this.form.content3 = res.data.content.content3
         }
       })
     },
@@ -127,7 +136,8 @@ export default {
           content: {
             image: this.form.image,
             content1: this.form.content1,
-            content2: this.form.content2 ? this.form.content2 : ''
+            content2: this.form.content2 ? this.form.content2 : '',
+            content3: this.form.content3 ? this.form.content3 : ''
           }
         })
         .then(res => {
