@@ -121,7 +121,7 @@
                 <template slot-scope="scope">
                   <el-select
                     :disabled="!item.state"
-                    v-if="scope.row.param === 16"
+                    v-if="scope.row.param === 16 || scope.row.param === 17"
                     v-model="scope.row.comparison"
                     @change="changeComparison($event, item)"
                     :placeholder="$t('请选择')"
@@ -168,6 +168,19 @@
                       :value="item.id"
                     ></el-option>
                   </el-select>
+                  <el-select
+                    v-else-if="scope.row.param === 17"
+                    v-model="scope.row.remote_ids"
+                    :disabled="!item.state"
+                    multiple
+                  >
+                    <el-option
+                      v-for="item in remoteList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    ></el-option>
+                  </el-select>
                   <el-input v-else :disabled="!item.state" v-model="scope.row.value"></el-input>
                 </template>
               </el-table-column>
@@ -184,17 +197,19 @@
           </div>
           <el-form-item :label="$t('限定方式')">
             <!-- <span>满足以下条件之一</span> -->
-            <el-radio-group v-model="item.type" v-if="item.state">
+            <el-radio-group v-model="item.type" v-if="item.state" @change="changeMode">
               <el-radio :label="1">{{ $t('按订单收费') }}</el-radio>
               <el-radio :label="2">{{ $t('按箱收费') }}</el-radio>
               <el-radio :label="3">{{ $t('按单位计费重量收费') }}</el-radio>
               <el-radio :label="4">{{ $t('限制出仓') }}</el-radio>
+              <el-radio :label="5">{{ $t('高级模式') }}</el-radio>
             </el-radio-group>
             <div v-else>
               <span v-if="item.type === 1">{{ $t('按订单收费') }}</span>
               <span v-if="item.type === 2">{{ $t('按箱收费') }}</span>
               <span v-if="item.type === 3">{{ $t('按单位计费重量收费') }}</span>
               <span v-if="item.type === 4">{{ $t('限制出仓') }}</span>
+              <span v-if="item.type === 5">{{ $t('高级模式') }}</span>
             </div>
           </el-form-item>
           <div v-if="item.type === 4">
@@ -215,6 +230,146 @@
                 :rows="2"
                 :placeholder="$t('请输入内容')"
               ></el-input>
+            </el-form-item>
+          </div>
+          <div v-else-if="item.type === 5">
+            <div class="special-box">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  width: 750px;
+                  justify-content: space-between;
+                "
+              >
+                <div class="special-text">{{ $t('如果以下条件达成') }}</div>
+                <div>
+                  <el-button @click="openExample">{{ $t('示例') }}</el-button>
+                </div>
+              </div>
+              <div class="flex-ipt">
+                <div class="textarea-text">
+                  <el-input
+                    type="textarea"
+                    v-model="item.condition"
+                    :rows="3"
+                    :disabled="!item.state"
+                    @input="onInput"
+                    @blur="onBlur"
+                  >
+                  </el-input>
+                </div>
+                <el-select
+                  v-model="mode1"
+                  :placeholder="$t('请选择')"
+                  @change="changeCondition($event, 1)"
+                  :disabled="!item.state"
+                  clearable
+                >
+                  <el-option
+                    v-for="(item, index) in modeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+              </div>
+              <div class="special-text">{{ $t('那么收费标准是') }}</div>
+              <div class="flex-ipt">
+                <div class="textarea-text">
+                  <el-input
+                    type="textarea"
+                    v-model="item.result"
+                    :rows="3"
+                    :disabled="!item.state"
+                    @input="onInput"
+                    @blur="onBlur"
+                  >
+                  </el-input>
+                </div>
+                <el-select
+                  v-model="mode2"
+                  :placeholder="$t('请选择')"
+                  @change="changeCondition($event, 2)"
+                  :disabled="!item.state"
+                  clearable
+                >
+                  <el-option
+                    v-for="(item, index) in modeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+              </div>
+              <div class="special-text red-tip">*{{ $t('不填默认是不收费') }}</div>
+              <div class="special-text">{{ $t('达不到的收费标准是') }}</div>
+              <div class="flex-ipt">
+                <div class="textarea-text">
+                  <el-input
+                    type="textarea"
+                    v-model="item.else_result"
+                    :rows="3"
+                    :disabled="!item.state"
+                    @input="onInput"
+                    @blur="onBlur"
+                  >
+                  </el-input>
+                </div>
+                <el-select
+                  v-model="mode3"
+                  :placeholder="$t('请选择')"
+                  @change="changeCondition($event, 3)"
+                  :disabled="!item.state"
+                  clearable
+                >
+                  <el-option
+                    v-for="(item, index) in modeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+              </div>
+              <div class="special-text red-tip">*{{ $t('不填默认是不收费') }}</div>
+            </div>
+            <div v-if="showParam">
+              <el-form-item :label="$t('限制出仓提示')">
+                <el-input
+                  :disabled="!item.state"
+                  type="textarea"
+                  v-model="item.notice"
+                  class="tips-sty"
+                ></el-input>
+              </el-form-item>
+              <el-form-item v-for="lang in stringData" :key="lang.id" :label="lang.name">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="lang.value"
+                  type="textarea"
+                  class="tips-sty"
+                  :rows="2"
+                  :placeholder="$t('请输入内容')"
+                ></el-input>
+              </el-form-item>
+            </div>
+            <el-form-item :label="$t('收费范围')">
+              <el-row>
+                <el-col :span="8">
+                  <el-input
+                    :disabled="!item.state"
+                    v-model="item.min_charge"
+                    :placeholder="$t('请输入最低收费空值为不设限制')"
+                  ></el-input>
+                </el-col>
+                <el-col :span="8" :offset="1">
+                  <el-input
+                    :disabled="!item.state"
+                    v-model="item.max_charge"
+                    :placeholder="$t('请输入最高收费空值为不设限制')"
+                  ></el-input>
+                </el-col>
+              </el-row>
             </el-form-item>
           </div>
           <div v-else>
@@ -273,6 +428,9 @@
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="show" :title="$t('示例')">
+      <img src="@/assets/example.png" alt="" />
+    </el-dialog>
   </div>
 </template>
 
@@ -311,26 +469,6 @@ export default {
         }
       ],
       conditionOption: [
-        {
-          id: '>',
-          name: this.$t('大于')
-        },
-        {
-          id: '>=',
-          name: this.$t('大于等于')
-        },
-        {
-          id: '<',
-          name: this.$t('小于')
-        },
-        {
-          id: '<=',
-          name: this.$t('小于等于')
-        },
-        {
-          id: '=',
-          name: this.$t('等于')
-        },
         {
           id: 'contains',
           name: this.$t('包含')
@@ -372,18 +510,30 @@ export default {
           max_charge: '',
           region_ids: '',
           notice: '',
+          condition: '',
+          result: '',
+          else_result: '',
           conditions: [
             {
               param: '',
               comparison: '',
               value: '',
-              tag_ids: []
+              tag_ids: [],
+              remote_ids: []
             }
           ]
         }
       ],
       editData: {},
-      tagList: []
+      tagList: [],
+      modeList: [],
+      mode1: '',
+      mode2: '',
+      mode3: '',
+      remoteList: [],
+      show: false,
+      blurIndex: null,
+      showParam: false
     }
   },
   created() {
@@ -394,6 +544,7 @@ export default {
     this.getPartition()
     this.getRulesData()
     this.getTagList()
+    this.getRemoteList()
   },
   methods: {
     getRulesData() {
@@ -402,7 +553,15 @@ export default {
           res.data.forEach(item => {
             item.conditions.forEach(ele => {
               ele.tag_ids = ele.address_tags.map(val => val.id)
+              ele.remote_ids = ele.remote_types.map(val => val.id)
             })
+            if (
+              item.condition.indexOf('限制出仓') != -1 ||
+              item.result.indexOf('限制出仓') != -1 ||
+              item.else_result.indexOf('限制出仓') != -1
+            ) {
+              this.showParam = true
+            }
           })
           this.channel = res.data.map(item => {
             return {
@@ -411,12 +570,14 @@ export default {
             }
           })
           console.log(this.channel, 'this.channel')
-          this.stringData = this.stringData.map(item => {
-            const value = res.data.notice_translations[item.language_code]
-            return {
-              ...item,
-              value
-            }
+          res.data.forEach(ele => {
+            this.stringData = this.stringData.map(item => {
+              const value = ele.notice_translations[item.language_code]
+              return {
+                ...item,
+                value
+              }
+            })
           })
         }
       })
@@ -437,6 +598,21 @@ export default {
           this.form.rule_fee_mode = res.data.rule_fee_mode
         }
       })
+    },
+    changeMode(val) {
+      if (val === 5) {
+        this.getConfigList()
+      }
+    },
+    getConfigList() {
+      this.$request.remoteFeeConfig(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.modeList = res.data
+        }
+      })
+    },
+    openExample() {
+      this.show = true
     },
     // 更新 规则数据
     saveRules() {
@@ -502,6 +678,7 @@ export default {
       this.editData = clone.object(state)
       console.log(state, 'state')
       state.state = true
+      this.getConfigList()
     },
     cancelSave() {
       // state.state = false
@@ -553,9 +730,51 @@ export default {
         tag_ids: []
       })
     },
+    changeCondition(e, type) {
+      let index = this.blurIndex
+      if (type === 1) {
+        if (e) {
+          this.channel.forEach(item => {
+            let str = item.condition ? item.condition : ''
+            item.condition = str.slice(0, index) + e + str.slice(index)
+          })
+        }
+      } else if (type === 2) {
+        if (e) {
+          this.channel.forEach(item => {
+            let str = item.result ? item.result : ''
+            item.result = str.slice(0, index) + e + str.slice(index)
+          })
+        }
+      } else {
+        if (e) {
+          this.channel.forEach(item => {
+            let str = item.else_result ? item.else_result : ''
+            item.else_result = str.slice(0, index) + e + str.slice(index)
+          })
+        }
+      }
+      this.channel.forEach(item => {
+        if (
+          item.condition.indexOf('限制出仓') != -1 ||
+          item.result.indexOf('限制出仓') != -1 ||
+          item.else_result.indexOf('限制出仓') != -1
+        ) {
+          this.showParam = true
+        } else {
+          this.showParam = false
+        }
+      })
+    },
+    onInput() {
+      this.$forceUpdate()
+    },
+    onBlur(e) {
+      this.blurIndex = e.srcElement.selectionStart
+    },
     saveChannles(item) {
       item.conditions.forEach(ele => {
-        if (ele.tag_ids.length) {
+        if (ele.tag_ids.length || ele.remote_ids.length) {
           ele.value = 0
         }
       })
@@ -568,7 +787,7 @@ export default {
         this.$request
           .updateNewRules(this.$route.params.id, item.id, {
             ...item,
-            notice_translations: item.type === 4 ? translation : ''
+            notice_translations: item.type === 4 || item.type === 5 ? translation : ''
           })
           .then(res => {
             if (res.ret) {
@@ -590,7 +809,7 @@ export default {
         this.$request
           .newRules(this.$route.params.id, {
             ...item,
-            notice_translations: item.type === 4 ? translation : ''
+            notice_translations: item.type === 4 || item.type === 5 ? translation : ''
           })
           .then(res => {
             if (res.ret) {
@@ -619,19 +838,31 @@ export default {
     },
     changeParam(value, item) {
       item.conditions.forEach(ele => {
-        if (value !== 16 && ele.comparison === 'contains') {
+        if ((value !== 16 || value !== 17) && ele.comparison === 'contains') {
           ele.comparison = ''
           ele.value = ''
           ele.tag_ids = []
+          ele.remote_ids = []
+        }
+      })
+      if (value === 17) {
+        this.getRemoteList()
+      }
+    },
+    getRemoteList() {
+      this.$request.remoteAreaList().then(res => {
+        if (res.ret) {
+          this.remoteList = res.data
         }
       })
     },
     changeComparison(value, item) {
       item.conditions.forEach(ele => {
-        if (value !== 'contains' && ele.param === 16) {
+        if (value !== 'contains' && (ele.param === 16 || ele.param === 17)) {
           ele.param = ''
           ele.value = ''
           ele.tag_ids = []
+          ele.remote_ids = []
         }
       })
     }
@@ -684,6 +915,23 @@ export default {
   }
   .btn-sty {
     text-align: right;
+  }
+  .special-box {
+    margin-left: 120px;
+    .special-text {
+      font-size: 14px;
+      margin: 15px 0;
+    }
+    .red-tip {
+      color: red;
+    }
+    .flex-ipt {
+      display: flex;
+    }
+    .textarea-text {
+      width: 50%;
+      margin-right: 10px;
+    }
   }
 }
 </style>

@@ -5381,3 +5381,13 @@ exports.delReservedNo = id => {
 exports.reservedFaceSheet = () => {
   return $form.get('express-lines/reserved-number-express')
 }
+
+// 偏远费用 高级配置变量列表
+exports.remoteFeeConfig = id => {
+  return $form.get(`express-lines/${id}/advance-conditions`)
+}
+
+// 偏远地区列表
+exports.remoteAreaList = params => {
+  return $form.get(`remote-types`, { params })
+}
