@@ -198,6 +198,7 @@ import wechatOfficeAccountPointRule from './wechatOfficeAccountPointRule.vue'
 import bindPhonePointRule from './bindPhonePointRule.vue'
 import bindEmailPointRule from './bindEmailPointRule.vue'
 import invoiceList from './invoiceList.vue'
+import remoteInfo from './remoteInfo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -396,6 +397,7 @@ const wechatOfficeAccountPointRuleController = Vue.extend(wechatOfficeAccountPoi
 const bindPhonePointRuleController = Vue.extend(bindPhonePointRule)
 const bindEmailPointRuleController = Vue.extend(bindEmailPointRule)
 const invoiceListController = Vue.extend(invoiceList)
+const remoteInfoController = Vue.extend(remoteInfo)
 
 const mixin = {
   data() {
@@ -1793,6 +1795,12 @@ function initInstance(type) {
     // 发货单
     case 'invoiceList':
       instance = new invoiceListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'remoteInfo':
+      instance = new remoteInfoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

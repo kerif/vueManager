@@ -5312,14 +5312,63 @@ exports.smsTmpEdit = (id, params) => {
   return $form.put(`api-services/sms/aestron/${id}`, params)
 }
 
+//自动签收配置保存
+exports.saveAutoSign = params => {
+  return $form.post('order-basic-settings', params)
+}
+
 //自动签收配置获取
 exports.getAutoSign = () => {
   return $form.get('order-basic-settings')
 }
 
-//自动签收配置保存
-exports.saveAutoSign = params => {
-  return $form.post('order-basic-settings', params)
+// 预留单号
+exports.reservedNoList = params => {
+  return $form.get('reserved', { params })
+}
+
+// 预留单号详情
+exports.reservedNoDetail = (id, params) => {
+  return $form.get('reserved/' + id, { params })
+}
+
+// 预留单号列表
+exports.reservedNoItemList = (id, params) => {
+  return $form.get('reserved/items/' + id, { params })
+}
+
+// 作废单号
+exports.setInvalid = params => {
+  return $form.post('reserved/is-invalid', params)
+}
+
+// 删除预留单号
+exports.delReservedNo = id => {
+  return $form.delete('reserved/' + id)
+}
+
+// 下载预留单号模板
+exports.downloadReservedTpl = () => {
+  return $form.get('reserved/tpl', { responseType: 'blob' })
+}
+
+// 导入预留单号文件
+exports.importReservedNo = params => {
+  return $file.post('reserved/import', params)
+}
+
+// 提交预留单号数据
+exports.saveReservedNo = params => {
+  return $form.post('reserved', params)
+}
+
+// 删除单个预留单号
+exports.delItemNo = id => {
+  return $form.delete(`reserved/item/${id}`)
+}
+// 删除评论
+exports.delEvaluation = id => {
+  return $form.delete(`order-comments/${id}`)
 }
 
 // 已入库退回无人认领
@@ -5327,9 +5376,153 @@ exports.ReturnUnclaimed = id => {
   return $form.put(`packages/${id}/back-to-no-owner`)
 }
 
+// 偏远地区列表
+exports.remoteAreaList = params => {
+  return $form.get(`remote-types`, { params })
+}
+
+// 获取偏远详情
+exports.getRemoteDetail = id => {
+  return $form.get(`remote-types/${id}`)
+}
+
+// 保存
+exports.saveRemote = params => {
+  return $form.post(`remote-types`, params)
+}
+
+// 修改
+exports.saveEditRemote = (id, params) => {
+  return $form.put(`remote-types/${id}`, params)
+}
+
+// 批量删除
+exports.batchDelRemote = ids => {
+  return $form.put(`remote-types/batch-delete`, ids)
+}
+
+// 获取偏远数据列表
+exports.remoteDestination = params => {
+  return $form.get(`remote-destinations`, { params })
+}
+
+// 获取详情
+exports.remoteDestinationDeatil = id => {
+  return $form.get(`remote-destinations/${id}`)
+}
+
+// 新增
+exports.addRemoteDestination = params => {
+  return $form.post(`remote-destinations`, params)
+}
+
+// 批量新增
+exports.batchRemoteData = params => {
+  return $form.post('remote-destinations/batch-store', params)
+}
+
+// 修改
+exports.editRemoteDestination = (id, params) => {
+  return $form.put(`remote-destinations/${id}`, params)
+}
+
+// 删除
+exports.delRemoteDestination = ids => {
+  return $form.put(`remote-destinations/batch-delete`, ids)
+}
+
+// 预留面单
+exports.reservedFaceSheet = () => {
+  return $form.get('express-lines/reserved-number-express')
+}
+
 // 更多配置 取消生效
 exports.startRate = id => {
   return $form.put(`exchange-rates/${id}/un-enabled`)
+}
+
+// 偏远地区查询
+exports.remoteSearch = params => {
+  return $form.get(`remote-query`, { params })
+}
+
+// 更新配置
+exports.updateUserConfig = params => {
+  return $form.put(`setting/user-uid`, params)
+}
+
+// 获取配置
+exports.getUserNumConfig = () => {
+  return $form.get(`setting/user-uid`)
+}
+
+// 获取寄件地址
+exports.getSendAddress = params => {
+  return $form.get('shipments/user-address', { params })
+}
+
+// 获取快递方式
+exports.getExpressList = params => {
+  return $form.post(`shipments/single-order-usable-lines`, params)
+}
+
+// 单票转运入库参数
+exports.inStorage = params => {
+  return $form.post(`shipments/in-storage`, params)
+}
+// 大货专区货位
+exports.bigAutoLocation = (id, params) => {
+  return $form.get(`shipments/warehouse/${id}/goods-allocation-like`, { params })
+}
+
+// 箱袋预留号管理 列表
+exports.reservedList = params => {
+  return $form.get(`reserve-box-batch-numbers`, { params })
+}
+
+// 列表
+exports.reservedNumList = params => {
+  return $form.get(`reserve-box-numbers`, { params })
+}
+
+// 箱袋预留号管理 删除
+exports.delReservedList = id => {
+  return $form.delete(`reserve-box-batch-numbers/${id}`)
+}
+
+// 箱袋预留号管理 详情
+exports.reservedDetail = id => {
+  return $form.get(`reserve-box-batch-numbers/${id}`)
+}
+
+// 箱袋预留号管理 作废
+exports.invalidReservedNum = batchId => {
+  return $form.put(`reserve-box-numbers/batch/${batchId}/invalid`)
+}
+
+// 箱袋预留号管理 下载模板
+exports.downloadReservedTmp = () => {
+  return $form.get(`reserve-box-batch-numbers/download-template`, { responseType: 'blob' })
+}
+
+// 箱袋预留号管理
+exports.saveReservedData = params => {
+  return $form.post(`reserve-box-batch-numbers`, params)
+}
+
+// 箱袋预留号管理 导入模板
+exports.importReservedNum = params => {
+  return $file.post(`reserve-box-batch-numbers/excel-import`, params)
+}
+
+// 初始化用户编号
+exports.initUserId = () => {
+  return $form.get(`setting/user-uid/init-config`)
+}
+
+// 偏远费用 高级配置变量列表
+exports.remoteFeeConfig = id => {
+  return $form.get(`express-lines/${id}/advance-conditions`)
 }
 
 // 下载预留单号模板
@@ -5380,66 +5573,6 @@ exports.delReservedNo = id => {
 // 预留面单
 exports.reservedFaceSheet = () => {
   return $form.get('express-lines/reserved-number-express')
-}
-
-// 偏远费用 高级配置变量列表
-exports.remoteFeeConfig = id => {
-  return $form.get(`express-lines/${id}/advance-conditions`)
-}
-
-// 偏远地区列表
-exports.remoteAreaList = params => {
-  return $form.get(`remote-types`, { params })
-}
-
-// 批量删除
-exports.batchDelRemote = ids => {
-  return $form.put(`remote-types/batch-delete`, ids)
-}
-
-// 获取偏远数据列表
-exports.remoteDestination = params => {
-  return $form.get(`remote-destinations`, { params })
-}
-
-// 保存
-exports.saveRemote = params => {
-  return $form.post(`remote-types`, params)
-}
-
-// 修改
-exports.saveEditRemote = (id, params) => {
-  return $form.put(`remote-types/${id}`, params)
-}
-
-// 修改
-exports.editRemoteDestination = (id, params) => {
-  return $form.put(`remote-destinations/${id}`, params)
-}
-
-// 新增
-exports.addRemoteDestination = params => {
-  return $form.post(`remote-destinations`, params)
-}
-
-// 获取偏远详情
-exports.getRemoteDetail = id => {
-  return $form.get(`remote-types/${id}`)
-}
-
-// 获取详情
-exports.remoteDestinationDeatil = id => {
-  return $form.get(`remote-destinations/${id}`)
-}
-
-// 批量新增
-exports.batchRemoteData = params => {
-  return $form.post('remote-destinations/batch-store', params)
-}
-
-// 删除
-exports.delRemoteDestination = ids => {
-  return $form.put(`remote-destinations/batch-delete`, ids)
 }
 
 // chatgpt 提问
