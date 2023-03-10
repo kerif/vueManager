@@ -172,6 +172,12 @@ const reservationNo = loadonDemand('config/reservationNo/reservationNoList')
 const reservationNoDetail = loadonDemand('config/reservationNo/reservationNoDetail')
 // 配置 预报单号导入清单
 const reservationNoImport = loadonDemand('config/reservationNo/import')
+// 配置 箱/袋预留号管理
+const boxReservedNum = loadonDemand('config/reservedBox/boxReservedNum')
+// 配置 箱/袋预留号管理 详情
+const boxReservedDetail = loadonDemand('config/reservedBox/boxReservedDetail')
+// 配置 导入
+const boxReservedImport = loadonDemand('config/reservedBox/boxReservedImport')
 // 自提点 转运包裹管理
 const PackageManagement = loadonDemand('pick/packageMana')
 // 自提点 仓位管理
@@ -1547,6 +1553,41 @@ export default [
               level: 3,
               name: '导入清单',
               parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedNum',
+            name: 'boxReservedNum',
+            component: boxReservedNum,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '箱/袋预留号'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedDetail',
+            name: 'boxReservedDetail',
+            component: boxReservedDetail,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '详情',
+              parent: '/config/reservedBox'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedImport',
+            name: 'boxReservedImport',
+            component: boxReservedImport,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '导入',
+              parent: '/config/reservedBox'
             }
           },
           {
