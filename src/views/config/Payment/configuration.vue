@@ -218,6 +218,9 @@
                   <el-menu-item index="6">
                     {{ $t('预报快递公司') }}
                   </el-menu-item>
+                  <el-menu-item index="7">
+                    {{ $t('自定义用户编号') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -247,6 +250,9 @@
             </el-col> -->
             <el-col :span="19" v-if="secondTab4 === '6'" class="main-right">
               <arrival></arrival>
+            </el-col>
+            <el-col :span="19" v-if="secondTab4 === '7'" class="main-right">
+              <custom-user-num></custom-user-num>
             </el-col>
           </el-row>
         </div>
@@ -289,6 +295,7 @@ import packPriceChange from './packPriceChange.vue'
 import pickupTimeConfig from './pickupTimeConfig.vue'
 import autoSign from './autoSign.vue'
 // import GroupConfigure from './groupConfigure.vue'
+import customUserNum from './customUserNum.vue'
 export default {
   components: {
     AppConfigure,
@@ -317,8 +324,9 @@ export default {
     pickupTimeConfig,
     // StoreGoods,
     Arrival,
-    autoSign
-    // GroupConfigure
+    autoSign,
+    // GroupConfigure,
+    customUserNum
   },
   mixins: [pagination],
   data() {

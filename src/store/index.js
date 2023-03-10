@@ -23,7 +23,8 @@ export default new Vuex.Store({
     unread: 0,
     refund: 0,
     orderListFieldData: [], // 订单列表显示字段
-    siderBarImage: ''
+    siderBarImage: '',
+    uid: 0
   },
   mutations: {
     updateOrderListFieldData(state, data) {
@@ -95,6 +96,9 @@ export default new Vuex.Store({
       if (localStorage.getItem('language')) {
         localStorage.removeItem('language')
       }
+    },
+    saveUid(state, data) {
+      state.uid = data
     }
   },
   actions: {}

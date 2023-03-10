@@ -174,11 +174,15 @@
           :label="$t('客户ID')"
           v-if="activeName !== '7'"
           key="user_id"
-          width="120"
+          width="160"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span
+              ><span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+              }}<span v-if="$store.state.uid === 1">)</span>---{{ scope.row.user_name }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column

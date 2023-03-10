@@ -254,9 +254,13 @@
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
-      <el-table-column :label="$t('客户ID')">
+      <el-table-column :label="$t('客户ID')" width="160">
         <template slot-scope="scope">
-          <el-button @click="viewProfile(scope.row.id)" type="text">{{ scope.row.id }}</el-button>
+          <el-button @click="viewProfile(scope.row.id)" type="text">
+            <span v-if="$store.state.uid === 1">{{ scope.row.uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.id
+            }}<span v-if="$store.state.uid === 1">)</span></el-button
+          >
           <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>

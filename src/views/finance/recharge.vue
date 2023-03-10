@@ -66,7 +66,9 @@
         <!-- 客户ID -->
         <el-table-column :label="$t('客户ID')">
           <template slot-scope="scope">
-            {{ scope.row.user.id }}
+            <span v-if="$store.state.uid === 1">{{ scope.row.user.uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user.id
+            }}<span v-if="$store.state.uid === 1">)</span>
           </template>
         </el-table-column>
         <!-- 用户名 -->

@@ -18,7 +18,14 @@
       stripe
     >
       <el-table-column type="index"></el-table-column>
-      <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
+      <el-table-column prop="id" :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span v-if="$store.state.uid === 1">{{ scope.row.uid }}</span
+          ><span v-if="$store.state.uid === 1">(</span>
+          {{ scope.row.id }}
+          <span v-if="$store.state.uid === 1">)</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
       <el-table-column :label="$t('客户组')">
         <template slot-scope="scope">

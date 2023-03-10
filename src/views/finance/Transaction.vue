@@ -70,7 +70,13 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 客户ID -->
-        <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+        <el-table-column :label="$t('客户ID')" prop="user_id">
+          <template slot-scope="scope">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span>
+          </template>
+        </el-table-column>
         <!-- 用户名 -->
         <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
         <!-- 类型 -->

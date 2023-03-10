@@ -64,8 +64,10 @@
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('代理名称')" width="250">
         <template slot-scope="scope">
-          <el-button type="text" @click="viewProfile(scope.row.user_id)"
-            >{{ scope.row.user_id }}-{{ scope.row.agent_name }}</el-button
+          <el-button type="text" @click="viewProfile(scope.row.user_id)">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span>-{{ scope.row.agent_name }}</el-button
           >
         </template>
       </el-table-column>

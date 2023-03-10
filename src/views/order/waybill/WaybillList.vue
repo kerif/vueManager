@@ -228,7 +228,12 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <template v-if="item.id === 'order_sn'">
+              <template v-if="item.id === 'user_id'">
+                <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+                <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+                }}<span v-if="$store.state.uid === 1">)</span>
+              </template>
+              <template v-else-if="item.id === 'order_sn'">
                 <el-button @click="details(scope.row.id, activeName)" type="text">{{
                   scope.row.order_sn
                 }}</el-button>

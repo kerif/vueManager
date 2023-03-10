@@ -79,8 +79,13 @@
         ></el-table-column>
         <el-table-column :label="$t('预约单号')" prop="sn" show-overflow-tooltip></el-table-column>
 
-        <el-table-column :label="$t('会员ID')" prop="user_id" width="150"></el-table-column>
-
+        <el-table-column :label="$t('会员ID')" prop="user_id" width="150">
+          <template slot-scope="scope">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('状态')" prop="status" width="150">
           <template slot-scope="scope">
             {{ getStatusName(scope.row.status) }}

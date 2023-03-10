@@ -83,7 +83,11 @@
         <!-- 客户ID -->
         <el-table-column :label="$t('客户ID')" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+            <span v-if="$store.state.uid === 1">{{ scope.row.user.uid }}</span>
+            <span
+              ><span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+              }}<span v-if="$store.state.uid === 1">)</span>---{{ scope.row.user_name }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column :label="$t('标签')" width="200" prop="user_tags">
