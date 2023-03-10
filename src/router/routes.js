@@ -934,7 +934,7 @@ export default [
             path: '/order/remote/remoteSearch',
             name: 'remoteSearch',
             component: remoteSearch,
-            id: 410,
+            id: 409,
             meta: {
               level: 2,
               group: '订单',
