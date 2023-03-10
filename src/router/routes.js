@@ -102,6 +102,8 @@ const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 const othersCost = loadonDemand('config/line/otherCost')
 // 配置 添加、修改icon
 const IconAdd = loadonDemand('config/line/IconAdd')
+// 配置 偏远地区设置
+const RemoteAreas = loadonDemand('config/RemoteAreas/remoteSetting')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 配置 添加、修改仓库地址
@@ -1310,6 +1312,17 @@ export default [
               level: 3,
               name: '其余费用',
               parent: '/config/line/linelist'
+            }
+          },
+          {
+            path: '/config/remoteAreas',
+            component: RemoteAreas,
+            name: 'RemoteAreas',
+            id: 609,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '偏远地区设置'
             }
           },
           {

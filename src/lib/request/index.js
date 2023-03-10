@@ -5391,3 +5391,53 @@ exports.remoteFeeConfig = id => {
 exports.remoteAreaList = params => {
   return $form.get(`remote-types`, { params })
 }
+
+// 批量删除
+exports.batchDelRemote = ids => {
+  return $form.put(`remote-types/batch-delete`, ids)
+}
+
+// 获取偏远数据列表
+exports.remoteDestination = params => {
+  return $form.get(`remote-destinations`, { params })
+}
+
+// 保存
+exports.saveRemote = params => {
+  return $form.post(`remote-types`, params)
+}
+
+// 修改
+exports.saveEditRemote = (id, params) => {
+  return $form.put(`remote-types/${id}`, params)
+}
+
+// 修改
+exports.editRemoteDestination = (id, params) => {
+  return $form.put(`remote-destinations/${id}`, params)
+}
+
+// 新增
+exports.addRemoteDestination = params => {
+  return $form.post(`remote-destinations`, params)
+}
+
+// 获取偏远详情
+exports.getRemoteDetail = id => {
+  return $form.get(`remote-types/${id}`)
+}
+
+// 获取详情
+exports.remoteDestinationDeatil = id => {
+  return $form.get(`remote-destinations/${id}`)
+}
+
+// 批量新增
+exports.batchRemoteData = params => {
+  return $form.post('remote-destinations/batch-store', params)
+}
+
+// 删除
+exports.delRemoteDestination = ids => {
+  return $form.put(`remote-destinations/batch-delete`, ids)
+}
