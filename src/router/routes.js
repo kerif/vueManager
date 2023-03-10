@@ -234,6 +234,8 @@ const Billpacked = loadonDemand('order/waybill/billPacked')
 const Freight = loadonDemand('order/freight/freight')
 // 订单 运费查询 路线详情
 const freightDetail = loadonDemand('order/freight/freightDetail')
+// 偏远地区查询
+const remoteSearch = loadonDemand('order/remote/remoteSearch')
 // 订单 申报信息
 const declareInfo = loadonDemand('order/declare/declareInfo')
 // 订单 包裹订单概览
@@ -926,6 +928,17 @@ export default [
               group: '订单',
               name: '打包处理',
               parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/remote/remoteSearch',
+            name: 'remoteSearch',
+            component: remoteSearch,
+            id: 410,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '偏远地区查询'
             }
           },
           {
