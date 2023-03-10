@@ -270,6 +270,8 @@ const imageSet = loadonDemand('marketing/imageSet')
 // const imageSet2 = loadonDemand('marketing/imageSet2')
 // 营销管理 弹窗广告管理
 const advertiseList = loadonDemand('marketing/advertise/advertiseList')
+// 营销管理 chatgpt 文案
+const AiAssistant = loadonDemand('marketing/ai/index')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -2226,6 +2228,17 @@ export default [
               group: '营销管理',
               name: '弹窗广告管理',
               parent: '/marketing/advertising'
+            }
+          },
+          {
+            path: '/marketing/ai_assistant',
+            name: 'aiAssistant',
+            component: AiAssistant,
+            id: 807,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: 'AI内容助手'
             }
           }
           // {

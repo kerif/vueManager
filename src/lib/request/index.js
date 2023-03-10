@@ -5441,3 +5441,6 @@ exports.batchRemoteData = params => {
 exports.delRemoteDestination = ids => {
   return $form.put(`remote-destinations/batch-delete`, ids)
 }
+
+// chatgpt 提问
+exports.aiChat = params => $json.post('chat/question', params)
