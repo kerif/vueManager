@@ -429,7 +429,7 @@
       </div>
     </div>
     <el-dialog :visible.sync="show" :title="$t('示例')">
-      <!-- <img src="@/assets/example.png" alt="" /> -->
+      <img src="@/assets/example.png" alt="" />
     </el-dialog>
   </div>
 </template>

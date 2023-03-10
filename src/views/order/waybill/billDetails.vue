@@ -619,7 +619,7 @@
                 v-loading="tableLoading"
                 ref="table"
               >
-                <el-table-column :label="$t('箱号')" type="index" width="50"></el-table-column>
+                <el-table-column :label="$t('序号')" type="index" width="50"></el-table-column>
                 <el-table-column :label="$t('包裹号')">
                   <template slot-scope="scope">
                     <span v-for="(item, index) in scope.row.packages" :key="index">
@@ -634,6 +634,7 @@
                 <el-table-column :label="$t('体积周长')" prop="volumeGirth"></el-table-column>
                 <el-table-column :label="$t('体积重')" prop="volume_weight"></el-table-column>
                 <el-table-column :label="$t('实重')" prop="weight"></el-table-column>
+                <el-table-column :label="$t('箱号')" prop="sn"></el-table-column>
                 <el-table-column :label="$t('承运单号')" prop="logistics_sn"></el-table-column>
               </el-table>
               <el-row class="size">
