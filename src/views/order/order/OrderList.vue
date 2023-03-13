@@ -395,6 +395,12 @@
                   <!-- 入库 -->
                   <span v-if="activeName === '1' || scope.row.status === 1">{{ $t('入库') }}</span>
                 </el-dropdown-item>
+                <el-dropdown-item @click.native="onStorage(scope.row.id)">
+                  <!-- 入库 -->
+                  <span v-if="activeName === '1' || scope.row.status === 1">{{
+                    $t('入库下单')
+                  }}</span>
+                </el-dropdown-item>
                 <el-dropdown-item @click.native="goExpress(scope.row.express_num)">
                   <span
                     v-if="['1', '2'].includes(activeName) && [1, 2].includes(scope.row.status)"
@@ -763,6 +769,9 @@ export default {
     },
     storage(id) {
       this.$router.push({ name: 'editStorage', params: { id: id } })
+    },
+    onStorage(id) {
+      this.$router.push({ name: 'warehouseOrder', query: { id } })
     },
     // 已入库编辑
     editWarehoused(id) {

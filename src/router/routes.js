@@ -166,6 +166,8 @@ const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
+// 快速入库下单
+const warehouseOrder = loadonDemand('station/warehouseOrder')
 // 配置 预报单号
 const reservationNo = loadonDemand('config/reservationNo/reservationNoList')
 // 配置 预报单号详情
@@ -983,16 +985,27 @@ export default [
         id: 500,
         children: [
           {
-            path: '/station/storage',
-            name: 'storageContainer',
-            component: Storage,
+            path: '/station/warehouseOrder',
+            name: 'warehouseOrder',
+            component: warehouseOrder,
             id: 501,
             meta: {
               level: 2,
               group: '货站',
-              name: '包裹快速入库'
+              name: '快速入库下单'
             }
           },
+          // {
+          //   path: '/station/storage',
+          //   name: 'storageContainer',
+          //   component: Storage,
+          //   id: 501,
+          //   meta: {
+          //     level: 2,
+          //     group: '货站',
+          //     name: '包裹快速入库'
+          //   }
+          // },
           {
             path: '/station/storage/:id',
             name: 'editStorage',
