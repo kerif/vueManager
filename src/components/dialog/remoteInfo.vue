@@ -47,8 +47,16 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('城市')" prop="city"></el-table-column>
-        <el-table-column :label="$t('起始邮编')" prop="start_postcode"></el-table-column>
-        <el-table-column :label="$t('结束邮编')" prop="end_postcode"></el-table-column>
+        <el-table-column :label="$t('起始邮编')" prop="start_postcode">
+          <template slot-scope="scope">
+            <span>{{ scope.row.start_postcode === 'null' ? '' : scope.row.start_postcode }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('结束邮编')" prop="end_postcode">
+          <template slot-scope="scope">
+            <span>{{ scope.row.end_postcode === 'null' ? '' : scope.row.end_postcode }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('偏远等级')" prop="grade"></el-table-column>
         <el-table-column :label="$t('来源')" prop="source_name"></el-table-column>
         <el-table-column :label="$t('操作人')" prop="operator_name"></el-table-column>
@@ -144,7 +152,7 @@
     >
       <el-form label-width="120px">
         <div class="table-text">
-          <div class="table-item">*{{ $t('国家/地区二字码') }}</div>
+          <div class="table-item"><span class="red-color">*</span>{{ $t('国家/地区二字码') }}</div>
           <div class="table-item">{{ $t('城市') }}</div>
           <div class="table-item">{{ $t('起始邮编') }}</div>
           <div class="table-item">{{ $t('结束邮编') }}</div>
@@ -408,6 +416,14 @@ export default {
         return this.$message.error(this.$t('偏远信息不能为空'))
       }
       this.list = this.columns
+      this.list.forEach(item => {
+        if (item.start_postcode === '') {
+          item.start_postcode = 'null'
+        } else if (item.end_postcode === '') {
+          console.log(123655)
+          item.end_postcode = 'null'
+        }
+      })
       this.$request
         .batchRemoteData({ remote_type_id: this.remote_type_id, list: this.list })
         .then(res => {
@@ -490,6 +506,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+.red-color {
+  color: red;
 }
 .import-container {
   .table-text {

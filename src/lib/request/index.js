@@ -5418,7 +5418,7 @@ exports.addRemoteDestination = params => {
 
 // 批量新增
 exports.batchRemoteData = params => {
-  return $form.post('remote-destinations/batch-store', params)
+  return $json.post('remote-destinations/batch-store', params)
 }
 
 // 修改
