@@ -995,17 +995,17 @@ export default [
               name: '快速入库下单'
             }
           },
-          // {
-          //   path: '/station/storage',
-          //   name: 'storageContainer',
-          //   component: Storage,
-          //   id: 501,
-          //   meta: {
-          //     level: 2,
-          //     group: '货站',
-          //     name: '包裹快速入库'
-          //   }
-          // },
+          {
+            path: '/station/storage',
+            name: 'storageContainer',
+            component: Storage,
+            id: 501,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '包裹快速入库'
+            }
+          },
           {
             path: '/station/storage/:id',
             name: 'editStorage',
