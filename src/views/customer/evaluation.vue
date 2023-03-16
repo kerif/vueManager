@@ -169,6 +169,18 @@
                     @click="onDeleteReply(item.id, ele.id)"
                     >{{ $t('删除') }}</span
                   >
+                  <span
+                    v-if="ele.display === 0"
+                    style="color: #3540a5; margin-left: 30px; cursor: pointer"
+                    @click="onDisplay(ele.id, 1)"
+                    >{{ $t('显示') }}</span
+                  >
+                  <span
+                    v-else
+                    style="color: #3540a5; margin-left: 30px; cursor: pointer"
+                    @click="onDisplay(ele.id, 0)"
+                    >{{ $t('隐藏') }}</span
+                  >
                 </div>
 
                 <div style="padding: 10px 0" v-else>
@@ -179,6 +191,18 @@
                     style="color: red; margin-left: 30px; cursor: pointer"
                     @click="onDeleteReply(item.id, ele.id)"
                     >{{ $t('删除') }}</span
+                  >
+                  <span
+                    v-if="ele.display === 0"
+                    style="color: #3540a5; margin-left: 30px; cursor: pointer"
+                    @click="onDisplay(ele.id, 1)"
+                    >{{ $t('显示') }}</span
+                  >
+                  <span
+                    v-else
+                    style="color: #3540a5; margin-left: 30px; cursor: pointer"
+                    @click="onDisplay(ele.id, 0)"
+                    >{{ $t('隐藏') }}</span
                   >
                 </div>
               </div>
@@ -677,21 +701,51 @@ export default {
       })
     },
     onDeleteReply(id, replyId) {
-      this.$request.delReply(id, replyId).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.getList()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+      this.$confirm(this.$t('您真的要执行此操作吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.delReply(id, replyId).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    onDisplay(id, display) {
+      this.$confirm(this.$t('您真的要执行此操作吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.setComment(id, display).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   }

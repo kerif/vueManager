@@ -5577,3 +5577,6 @@ exports.reservedFaceSheet = () => {
 
 // chatgpt 提问
 exports.aiChat = params => $json.post('chat/question', params)
+
+// 评论显示与隐藏
+exports.setComment = (id, display) => $form.put(`order-comments/${id}/display/${display}`)
