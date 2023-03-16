@@ -3,11 +3,14 @@
     <div class="search-box">
       <el-form :inline="true" :model="form" :rules="rules" ref="form">
         <el-form-item :label="$t('目的地')" prop="country_code">
-          <el-input
-            v-model="form.country_code"
-            :placeholder="$t('请输入国家地区2字码')"
-            clearable
-          ></el-input>
+          <el-select v-model="form.country_code" :placeholder="$t('请选择')" clearable filterable>
+            <el-option
+              v-for="item in countryList"
+              :key="item.id"
+              :value="item.code"
+              :label="item.code_name"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('城市')">
           <el-input v-model="form.city" clearable :placeholder="$t('请输入城市')"></el-input>
@@ -65,17 +68,34 @@ export default {
         postcode: ''
       },
       tableData: [],
+      countryList: [],
       rules: {
-        country_code: [{ required: true, message: this.$t('请输入目的地'), trigger: 'blur' }],
-        postcode: [{ required: true, message: this.$t('请输入邮编'), trigger: 'blur' }]
+        country_code: [{ required: true, message: this.$t('请输入目的地'), trigger: 'blur' }]
+        // postcode: [{ required: true, message: this.$t('请输入邮编'), trigger: 'blur' }]
       }
     }
   },
-  created() {},
+  created() {
+    this.getCountry()
+  },
   methods: {
+    getCountry() {
+      this.$request.getCountriesList().then(res => {
+        this.countryList = res.data.map(item => {
+          return {
+            id: item.id,
+            code: item.code,
+            code_name: item.code + '---' + item.name
+          }
+        })
+      })
+    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if (!this.form.city && !this.form.postcode) {
+            return this.$message.error(this.$t('城市、邮编至少填写一项'))
+          }
           this.$request.remoteSearch(this.form).then(res => {
             if (res.ret) {
               this.tableData = res.data.data
