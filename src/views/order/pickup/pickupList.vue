@@ -255,7 +255,13 @@ export default {
       }).then(() => {
         this.$request.pickupDelete({ ids: ids }).then(res => {
           if (res.ret) {
-            this.getPickupDetail()
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.getCounts()
           } else {
             this.$message({
               message: res.msg,

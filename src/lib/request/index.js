@@ -5159,7 +5159,7 @@ exports.pickupList = params => {
 
 //删除取件
 exports.pickupDelete = params => {
-  return $form.put(`pickup/batch-delete`, params)
+  return $form.put(`pickups/batch-delete`, params)
 }
 
 //取件转运单号
