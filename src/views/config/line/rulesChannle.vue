@@ -774,7 +774,7 @@ export default {
     },
     saveChannles(item) {
       item.conditions.forEach(ele => {
-        if (ele.tag_ids.length || ele.remote_ids.length) {
+        if ((ele.tag_ids && ele.tag_ids.length) || (ele.remote_ids && ele.remote_ids.length)) {
           ele.value = 0
         }
       })
