@@ -139,7 +139,6 @@
                     v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
-                    @change="changeComparison(scope.$index, $event, item)"
                     :placeholder="$t('请选择')"
                     clearable
                   >
