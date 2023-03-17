@@ -104,7 +104,7 @@
                     :disabled="!item.state"
                     v-model="scope.row.param"
                     :placeholder="$t('请选择')"
-                    @change="changeParam($event, item)"
+                    @change="changeParam(scope.$index, $event, item)"
                     clearable
                   >
                     <el-option
@@ -123,7 +123,7 @@
                     :disabled="!item.state"
                     v-if="scope.row.param === 16 || scope.row.param === 17"
                     v-model="scope.row.comparison"
-                    @change="changeComparison($event, item)"
+                    @change="changeComparison(scope.$index, $event, item)"
                     :placeholder="$t('请选择')"
                     clearable
                   >
@@ -139,7 +139,7 @@
                     v-else
                     :disabled="!item.state"
                     v-model="scope.row.comparison"
-                    @change="changeComparison($event, item)"
+                    @change="changeComparison(scope.$index, $event, item)"
                     :placeholder="$t('请选择')"
                     clearable
                   >
@@ -836,13 +836,13 @@ export default {
         }
       })
     },
-    changeParam(value, item) {
+    changeParam(index, value, item) {
       item.conditions.forEach(ele => {
         if ((value !== 16 || value !== 17) && ele.comparison === 'contains') {
-          ele.comparison = ''
-          ele.value = ''
-          ele.tag_ids = []
-          ele.remote_ids = []
+          item.conditions[index].comparison = ''
+          item.conditions[index].value = ''
+          item.conditions[index].tag_ids = []
+          item.conditions[index].remote_ids = []
         }
       })
       if (value === 17) {
@@ -856,13 +856,13 @@ export default {
         }
       })
     },
-    changeComparison(value, item) {
+    changeComparison(ind, value, item) {
       item.conditions.forEach(ele => {
         if (value !== 'contains' && (ele.param === 16 || ele.param === 17)) {
-          ele.param = ''
-          ele.value = ''
-          ele.tag_ids = []
-          ele.remote_ids = []
+          item.conditions[ind].param = ''
+          item.conditions[ind].value = ''
+          item.conditions[ind].tag_ids = []
+          item.conditions[ind].remote_ids = []
         }
       })
     }
