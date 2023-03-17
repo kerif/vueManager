@@ -269,7 +269,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.remote_type_id = res.data.id || ''
+            this.remote_type_id = res.data.id
             this.success()
           } else {
             this.$message({
@@ -367,7 +367,7 @@ export default {
         if (res.ret) {
           this.form.name = res.data.name
           this.form.remark = res.data.remark
-          this.remote_type_id = res.data.id || ''
+          this.remote_type_id = res.data.id
           this.getList()
         }
       })
@@ -481,6 +481,7 @@ export default {
     clear() {
       this.id = ''
       this.remote_type_id = ''
+      this.tableData = []
       this.form = {
         name: '',
         remark: ''
