@@ -68,7 +68,7 @@
           </p>
         </div>
       </div>
-      <el-form-item :label="$t('优惠券类型')" prop="scope">
+      <el-form-item :label="$t('优惠券类型')" prop="is_shared">
         <el-radio-group v-model="ruleForm.is_shared">
           <el-radio :label="0">{{ $t('普通抵用券') }}</el-radio>
           <el-radio :label="1">{{ $t('用户抢券') }}</el-radio>
@@ -86,13 +86,13 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label="$t('单人限领数量')" prop="name">
+        <el-form-item :label="$t('单人限领数量')" prop="share_each_count">
           <el-input
             :placeholder="$t('请输入单人限领数量')"
             v-model="ruleForm.share_each_count"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('放券总数')" prop="amount">
+        <el-form-item :label="$t('放券总数')" prop="share_total_count">
           <el-input
             :placeholder="$t('请输入放券总数')"
             v-model="ruleForm.share_total_count"
