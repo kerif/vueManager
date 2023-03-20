@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="show"
     :title="id ? $t('修改偏远信息') : $t('添加偏远信息')"
+    width="75%"
     @close="clear"
   >
     <el-form :inline="true" :model="form" :rules="rules">
@@ -486,6 +487,8 @@ export default {
         name: '',
         remark: ''
       }
+      this.page_params.page = 1
+      this.page_params.total = 0
     },
     clearImport() {
       this.listVal = ''
@@ -507,7 +510,8 @@ export default {
 .bottom-btn {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-right: 150px;
 }
 .red-color {
   color: red;
