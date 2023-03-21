@@ -1220,11 +1220,13 @@ export default {
         return this.$message.error(this.$t('请输入重量'))
       } else if (this.ruleForm.warehouse_id === '') {
         return this.$message.error(this.$t('请选择仓库'))
-      } else if (this.ruleForm.user_id === '') {
-        return this.$message.error(this.$t('请输入用户编号'))
       } else if (!this.ruleForm.props.length) {
         return this.$message.error(this.$t('请选择物品属性'))
       }
+      if (this.ruleForm.mode === 2 && this.ruleForm.user_id === '') {
+        return this.$message.error(this.$t('请输入用户编号'))
+      }
+
       if (this.ruleForm.mode === 2) {
         if (this.ruleForm.express_line_id === '') {
           return this.$message.error(this.$t('请选择快递方式'))
