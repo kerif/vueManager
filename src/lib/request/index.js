@@ -5496,13 +5496,13 @@ exports.reservedDetail = id => {
 }
 
 // 箱袋预留号管理 作废
-exports.invalidReservedNum = batchId => {
-  return $form.put(`reserve-box-numbers/batch/${batchId}/invalid`)
+exports.invalidReservedNum = (batchId, ids) => {
+  return $form.put(`reserve-box-numbers/batch/${batchId}/invalid`, ids)
 }
 
 // 箱袋预留号管理 下载模板
-exports.downloadReservedTmp = () => {
-  return $form.get(`reserve-box-batch-numbers/download-template`, { responseType: 'blob' })
+exports.downloadReservedTmp = type => {
+  return $form.get(`reserve-box-batch-numbers/download-template/${type}`, { responseType: 'blob' })
 }
 
 // 箱袋预留号管理

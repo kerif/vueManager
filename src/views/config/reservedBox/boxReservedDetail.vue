@@ -71,6 +71,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="packages" :label="$t('对应包裹号')"> </el-table-column>
+        <el-table-column prop="clearance_area" :label="$t('通关专区')"></el-table-column>
+        <el-table-column prop="customs_broker" :label="$t('报关业者')"></el-table-column>
       </el-table>
       <div class="bottom-box">
         <div style="width: 300px">
@@ -149,7 +151,8 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.invalidReservedNum({ batchId: this.ids }).then(res => {
+        let batchId = this.$route.query.id
+        this.$request.invalidReservedNum(batchId, { ids: this.ids }).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

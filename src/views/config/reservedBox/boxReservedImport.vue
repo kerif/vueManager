@@ -22,14 +22,24 @@
       </el-row>
       <el-row class="row">
         <el-col :span="2">{{ $t('模板') }}</el-col>
-        <el-col :span="6">
-          <div class="model" @click="downloadTpl">
-            <img
-              style="width: 30px; height: 30px; margin-right: 8px"
-              src="@/assets/excImg.jpg"
-              alt=""
-            />
-            <span>{{ $t('标准模板') }}</span>
+        <el-col :span="12">
+          <div style="display: flex">
+            <div class="model" @click="downloadTpl(1)">
+              <img
+                style="width: 30px; height: 30px; margin-right: 8px"
+                src="@/assets/excImg.jpg"
+                alt=""
+              />
+              <span>{{ $t('标准模板') }}</span>
+            </div>
+            <div class="model" @click="downloadTpl(2)">
+              <img
+                style="width: 30px; height: 30px; margin-right: 8px"
+                src="@/assets/excImg.jpg"
+                alt=""
+              />
+              <span>{{ $t('台湾模板') }}</span>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -65,7 +75,9 @@
           height="calc(100vh - 550px)"
         >
           <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
-          <el-table-column prop="sn" :label="$t('预留单号')"></el-table-column>
+          <el-table-column prop="box_sn" :label="$t('预留箱号')"></el-table-column>
+          <el-table-column prop="clearance_area" :label="$t('通关专区')"></el-table-column>
+          <el-table-column prop="customs_broker" :label="$t('报关业者')"></el-table-column>
         </el-table>
       </el-row>
       <el-row class="row" style="margin-top: 16px">
@@ -127,8 +139,8 @@ export default {
         }
       })
     },
-    downloadTpl() {
-      this.$request.downloadReservedTmp().then(res => {
+    downloadTpl(type) {
+      this.$request.downloadReservedTmp(type).then(res => {
         downloadStreamFile(res, '箱/袋号模板')
       })
     },
@@ -145,7 +157,9 @@ export default {
           })
           this.tableData = res.data.map(item => {
             return {
-              sn: item[0]
+              box_sn: item[0],
+              clearance_area: item[1],
+              customs_broker: item[2]
             }
           })
           this.importFileSuccess = 1
@@ -173,7 +187,7 @@ export default {
 
       const box_sns = []
       this.tableData.forEach(item => {
-        box_sns.push(item.sn)
+        box_sns.push(item)
       })
       this.$request
         .saveReservedData({
@@ -230,6 +244,7 @@ export default {
       box-sizing: border-box;
       justify-content: center;
       font-size: 16px;
+      margin-right: 30px;
       cursor: pointer;
     }
     .sub-row {
