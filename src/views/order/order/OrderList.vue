@@ -553,6 +553,7 @@
     <batch-modify
       :showBatch="showBatch"
       :deleteNum="deleteNum"
+      :isFresh="isFresh"
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
@@ -609,7 +610,8 @@ export default {
       },
       showBatch: false,
       packageData: [],
-      trackId: ''
+      trackId: '',
+      isFresh: true
     }
   },
   activated() {

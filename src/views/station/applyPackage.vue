@@ -6,10 +6,11 @@
       </div> -->
     <div class="apply-top">
       <el-row :gutter="20">
-        <el-col :span="4">
+        <el-col :span="6">
           <el-radio-group v-model="radio">
             <el-radio :label="1" class="radio-sty">{{ $t('按预报单号') }}</el-radio>
             <el-radio :label="2">{{ $t('按会员ID') }}</el-radio>
+            <el-radio :label="3">{{ $t('按包裹备注') }}</el-radio>
           </el-radio-group>
           <el-select v-model="warehouse_id" :placeholder="$t('仓库')" class="select-sty" clearable>
             <el-option
@@ -39,11 +40,23 @@
           <el-input
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 8 }"
-            :placeholder="this.radio === 1 ? $t('多个包裹单号请用回车分割') : $t('请输入会员ID')"
+            :placeholder="
+              radio === 1
+                ? $t('多个包裹单号请用回车分割')
+                : radio === 2
+                ? $t('请输入会员ID')
+                : $t('请输入关键词')
+            "
             v-model="textarea2"
           >
           </el-input>
-          <span class="tips-sty">*{{ $t('不能将不同用户的包裹合并打包') }}</span>
+          <span class="tips-sty"
+            >*{{
+              radio === 3
+                ? $t('按照包裹备注搜索出所有相同备注包裹')
+                : $t('不能将不同用户的包裹合并打包')
+            }}</span
+          >
         </el-col>
         <el-col :span="2">
           <el-button @click.native="search">{{ $t('查询') }}</el-button>
@@ -52,6 +65,9 @@
           <el-button @click.native="byBatch">{{ $t('按预报批次集包') }}</el-button>
         </el-col>
       </el-row>
+    </div>
+    <div class="edit-btn">
+      <el-button class="btn-light-red" @click="batchModify">{{ $t('批量修改') }}</el-button>
     </div>
     <el-table
       :data="applyList"
@@ -161,6 +177,7 @@
               </template>
             </el-table-column>
             <el-table-column :label="$t('物品重量')" prop="package_weight"> </el-table-column>
+            <el-table-column :label="$t('价值')" prop="package_value"></el-table-column>
             <el-table-column :label="$t('寄往国家')" prop="destination_country.cn_name">
             </el-table-column>
             <el-table-column :label="$t('仓库')" prop="warehouse.name"> </el-table-column>
@@ -183,16 +200,24 @@
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <batch-modify
+      :showBatch="showBatch"
+      :deleteNum="deleteNum"
+      :packageData="packageData"
+      @passVal="passVal"
+    ></batch-modify>
   </div>
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
 // import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import BatchModify from '@/views/order/order/components/batchModify'
 export default {
   name: 'applyPackage',
   components: {
-    SearchGroup
+    SearchGroup,
+    BatchModify
   },
   mixins: [pagination],
   data() {
@@ -217,7 +242,10 @@ export default {
       days: '',
       country_id: '',
       prop_ids: '',
-      warehouse_id: ''
+      warehouse_id: '',
+      showBatch: false,
+      packageData: [],
+      remark: ''
     }
   },
   created() {
@@ -269,11 +297,9 @@ export default {
       } else if (this.textarea2 === '') {
         return this.$message.error(this.$t('请输入'))
       }
-      console.log(this.textarea2, '111')
-      console.log(typeof this.textarea2, 'type')
       this.expressNum = this.textarea2.split(/[(\r\n)\r\n]+/)
       this.userId = this.textarea2
-      console.log(this.expressNum, 'this.expressNum')
+      this.remark = this.textarea2
       if (this.radio === 1) {
         this.$request
           .packs({
@@ -294,8 +320,7 @@ export default {
               this.applyList = []
             }
           })
-      } else {
-        console.log('woshi2222')
+      } else if (this.radio === 2) {
         this.$request
           .packs({
             user_id: this.userId,
@@ -315,15 +340,44 @@ export default {
               this.applyList = []
             }
           })
+      } else {
+        this.$request
+          .packs({
+            warehouse_id: this.warehouse_id,
+            country_id: this.country_id,
+            prop_ids: this.prop_ids,
+            remark: this.remark
+          })
+          .then(res => {
+            if (res.data.length) {
+              this.applyList = res.data
+              this.localization = res.localization
+            } else {
+              this.$notify({
+                title: this.$t('包裹未找到'),
+                type: 'warning'
+              })
+              this.applyList = []
+            }
+          })
       }
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       this.userNum = selection.map(item => item.user_id)
-      console.log(this.deleteNum, 'this.deleteNum')
+      this.packageData = selection
     },
     getDatas() {
       // this.page_params.handleQueryChange('days', this.days)
+    },
+    passVal() {
+      this.showBatch = false
+    },
+    batchModify() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.showBatch = true
     },
     // 打包合箱
     boxing() {
@@ -486,5 +540,8 @@ export default {
   padding: 10px;
   background-color: #f5f5f5 !important;
   margin-bottom: 20px;
+}
+.edit-btn {
+  margin-top: 20px;
 }
 </style>
