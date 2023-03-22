@@ -97,6 +97,7 @@
         "
         prop="package_weight"
       ></el-table-column>
+      <el-table-column :label="$t('价值')" prop="package_value"></el-table-column>
       <!-- 寄往国家 -->
       <el-table-column :label="$t('寄往国家')" prop="destination_country.name"></el-table-column>
       <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"></el-table-column>
@@ -177,7 +178,6 @@
               </template>
             </el-table-column>
             <el-table-column :label="$t('物品重量')" prop="package_weight"> </el-table-column>
-            <el-table-column :label="$t('价值')" prop="package_value"></el-table-column>
             <el-table-column :label="$t('寄往国家')" prop="destination_country.cn_name">
             </el-table-column>
             <el-table-column :label="$t('仓库')" prop="warehouse.name"> </el-table-column>
