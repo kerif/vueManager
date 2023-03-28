@@ -1,7 +1,7 @@
 <template>
   <div class="commission-config">
     <div class="commission-box">
-      <el-form label-width="80px">
+      <el-form label-width="100px">
         <el-form-item :label="$t('分成方式')">
           <el-select v-model="config.type">
             <el-option
@@ -20,7 +20,20 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('默认佣金')">
-          <el-input class="ipt" v-model="config.value" />
+          <el-input class="ipt" v-model="config.value">
+            <template slot="append">
+              {{ config.type === 1 ? '%' : localization.currency_unit }}
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('客户首单金额')">
+          <el-input class="ipt" v-model="config.first_order_value">
+            <template slot="append">
+              {{ localization.currency_unit }}
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
           <el-table :data="showLines" border>
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
@@ -42,10 +55,15 @@
               }）`"
             >
               <template slot-scope="scope">
-                <el-input
-                  v-model="config.rules[scope.row.express_line_id].value"
-                  type="number"
-                ></el-input>
+                <el-input v-model="config.rules[scope.row.express_line_id].value" type="number">
+                  <template slot="append">
+                    {{
+                      config.rules[scope.row.express_line_id].type === 1
+                        ? '%'
+                        : localization.currency_unit
+                    }}
+                  </template>
+                </el-input>
               </template>
             </el-table-column>
           </el-table>
@@ -117,7 +135,7 @@ export default {
   margin-bottom: 15px;
 }
 .ipt {
-  max-width: 100px !important;
+  max-width: 150px !important;
   margin-bottom: 15px;
 }
 .pagination {
