@@ -1265,6 +1265,14 @@ export default {
     // sortNum(pre, next) {
     //   return pre - next
     // },
+    sortArray(arr) {
+      return arr.reduce((prev, curr) => {
+        const index = prev.findIndex(item => curr < item)
+        return index === -1
+          ? [...prev, curr]
+          : [...prev.slice(0, index), curr, ...prev.slice(index)]
+      }, [])
+    },
     getList() {
       this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
@@ -1370,10 +1378,10 @@ export default {
         res.data.box.forEach(item => {
           let mulArrList = []
           mulArrList.push(Number(item.length), Number(item.width), Number(item.height))
-          mulArrList.sort()
-          let minData = mulArrList[0]
-          let midData = mulArrList[1]
-          let maxData = mulArrList[2]
+          let mulArrData = this.sortArray(mulArrList)
+          let minData = mulArrData[0]
+          let midData = mulArrData[1]
+          let maxData = mulArrData[2]
           item.volumeGirth = maxData + (midData + minData) * 2
         })
         this.boxData = res.data.box
@@ -1385,11 +1393,11 @@ export default {
             Number(res.data.details.width),
             Number(res.data.details.height)
           ]
-          arrList.sort()
-          console.log(arrList, 'arrList')
-          let minData = arrList[0]
-          let midData = arrList[1]
-          let maxData = arrList[2]
+          let arrData = this.sortArray(arrList)
+          console.log(arrData, 'arrData')
+          let minData = arrData[0]
+          let midData = arrData[1]
+          let maxData = arrData[2]
           this.boxData = [
             {
               id: 0,
