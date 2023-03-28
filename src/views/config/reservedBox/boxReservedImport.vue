@@ -2,9 +2,9 @@
   <div class="reservation-import">
     <div class="content">
       <el-row class="row">
-        <el-col :span="2">{{ $t('箱号') }}</el-col>
+        <el-col :span="2">{{ $t('名称') }}</el-col>
         <el-col :span="6">
-          <el-select
+          <!-- <el-select
             v-model="data.system_box_id"
             style="width: 300px"
             clearable
@@ -17,7 +17,8 @@
               :value="item.id"
             >
             </el-option>
-          </el-select>
+          </el-select> -->
+          <el-input v-model="data.name" :placeholder="$t('请输入名称')"></el-input>
         </el-col>
       </el-row>
       <el-row class="row">
@@ -75,7 +76,7 @@
           height="calc(100vh - 550px)"
         >
           <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
-          <el-table-column prop="box_sn" :label="$t('预留箱号')"></el-table-column>
+          <el-table-column prop="box_sn" :label="$t('预留袋号')"></el-table-column>
           <el-table-column prop="clearance_area" :label="$t('通关专区')"></el-table-column>
           <el-table-column prop="customs_broker" :label="$t('报关业者')"></el-table-column>
         </el-table>
@@ -104,13 +105,14 @@ export default {
       fileList: [],
       importFileSuccess: null,
       data: {
-        system_box_id: '',
+        // system_box_id: '',
+        name: '',
         remark: ''
       }
     }
   },
   created() {
-    this.getBoxList()
+    // this.getBoxList()
   },
   methods: {
     getBoxList() {
@@ -179,8 +181,8 @@ export default {
       })
     },
     onSubmit() {
-      if (!this.data.system_box_id) {
-        return this.$message.error(this.$t('请选择箱号'))
+      if (!this.data.name) {
+        return this.$message.error(this.$t('请输入名称'))
       } else if (!this.tableData.length) {
         return this.$message.error(this.$t('请上传模板'))
       }

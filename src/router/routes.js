@@ -1554,7 +1554,7 @@ export default [
             meta: {
               group: '配置',
               level: 2,
-              name: '预留单号'
+              name: '预留订单号'
             }
           },
           {
@@ -1589,7 +1589,7 @@ export default [
             meta: {
               group: '配置',
               level: 2,
-              name: '箱/袋预留号'
+              name: '预留袋号'
             }
           },
           {

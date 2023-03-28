@@ -24,7 +24,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="batch_no" :label="$t('批次号')"></el-table-column>
-      <el-table-column prop="system_box.name" :label="$t('箱名称')"></el-table-column>
+      <el-table-column prop="name" :label="$t('名称')"></el-table-column>
       <el-table-column prop="begin_box_no" :label="$t('开始单号')"></el-table-column>
       <el-table-column prop="end_box_no" :label="$t('结束单号')"></el-table-column>
       <el-table-column prop="count" :label="$t('生成数量')"></el-table-column>
@@ -122,6 +122,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 98%;
     padding: 20px;
     background-color: #fff !important;
     margin-bottom: 20px;
