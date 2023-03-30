@@ -56,7 +56,6 @@
                 <span @click="changeWelcome(3)" v-if="$route.query.register">{{
                   $t('去注册')
                 }}</span>
-                <span @click="changeWelcome(3)" v-else>{{ $t('去注册') }}</span>
               </div>
             </div>
             <el-form>

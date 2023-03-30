@@ -24,7 +24,8 @@ export default new Vuex.Store({
     refund: 0,
     orderListFieldData: [], // 订单列表显示字段
     siderBarImage: '',
-    uid: 0
+    uid: 0,
+    register: ''
   },
   mutations: {
     updateOrderListFieldData(state, data) {
@@ -99,6 +100,9 @@ export default new Vuex.Store({
     },
     saveUid(state, data) {
       state.uid = data
+    },
+    saveParam(state, data) {
+      state.register = data
     }
   },
   actions: {}
