@@ -101,6 +101,7 @@
       <!-- 寄往国家 -->
       <el-table-column :label="$t('寄往国家')" prop="destination_country.name"></el-table-column>
       <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"></el-table-column>
+      <el-table-column :label="$t('包裹备注')" prop="remark"></el-table-column>
       <!-- 入库时间 -->
       <el-table-column :label="$t('入库时间')" prop="in_storage_at"></el-table-column>
       <!-- 提交时间 -->
@@ -122,6 +123,7 @@
         </div>
       </template>
     </el-table>
+    <div>{{ $t('包裹总数') }}: {{ this.applyList.length }}</div>
     <!-- 按预报批次集包弹窗 -->
     <el-dialog :visible.sync="boxDialog" :title="$t('按预报批次集包')" @close="clear" width="74%">
       <search-group
