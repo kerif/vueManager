@@ -148,6 +148,12 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item :label="$t('预留单号模式')">
+        <el-radio-group v-model="landing.auto_sn_mode">
+          <el-radio :label="0">{{ $t('多票多件') }}</el-radio>
+          <el-radio :label="1">{{ $t('一票多件') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -166,7 +172,8 @@ export default {
         push_type: 1,
         third_push_now: 0,
         channel_type: 1,
-        auto_sn_express_id: ''
+        auto_sn_express_id: '',
+        auto_sn_mode: 0
       },
       dockingList: [],
       channelList: [],
@@ -215,6 +222,7 @@ export default {
           this.landing.third_push_now = res.data.third_push_now
           this.landing.channel_type = res.data.channel_type
           this.landing.auto_sn_express_id = res.data.auto_sn_express_id
+          this.landing.auto_sn_mode = res.data.auto_sn_mode
         }
       })
     },
