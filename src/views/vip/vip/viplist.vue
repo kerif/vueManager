@@ -237,9 +237,9 @@
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
-        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+        <!-- <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
           >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-        ></el-button>
+        ></el-button> -->
       </div>
     </div>
     <el-table
@@ -495,7 +495,7 @@ export default {
       sourceList: [],
       clientSourceList: [],
       inviteLoading: false,
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       showLabel: false,
       channelData: []
     }

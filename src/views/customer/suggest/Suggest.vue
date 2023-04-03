@@ -43,11 +43,11 @@
         @search="goSearch"
       >
       </search-group>
-      <div class="filter">
+      <!-- <div class="filter">
         <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
           >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
         ></el-button>
-      </div>
+      </div> -->
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -165,7 +165,7 @@ export default {
       end_date: '',
       status: '',
       show: false,
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       statusData: [
         {
           id: 1,

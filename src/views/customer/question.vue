@@ -44,11 +44,11 @@
         @search="goSearch"
       >
       </search-group>
-      <div class="filter">
+      <!-- <div class="filter">
         <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
           >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
         ></el-button>
-      </div>
+      </div> -->
     </div>
     <div class="question-list" v-for="item in questionList" :key="item.id">
       <div style="display: flex">
@@ -129,7 +129,7 @@ export default {
       featured: '',
       timeList: [],
       show: true,
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       questionList: [],
       editor: null,
       imgSrc: '',
