@@ -46,7 +46,7 @@
       :data="tableData"
       @selection-change="selectionChange"
       v-loading="tableLoading"
-      height="calc(100vh - 270px)"
+      height="calc(100vh - 320px)"
       border
       style="width: 100%; margin-top: 10px"
     >
@@ -870,6 +870,8 @@ export default {
 
 <style lang="scss">
 .declare-container {
+  padding: 10px 15px;
+  background-color: #fff ;
   font-size: 14px;
   .el-dialog__header {
     background-color: #0e102a;

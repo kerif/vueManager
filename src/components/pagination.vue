@@ -103,8 +103,8 @@ export default {
     }
   }
   .right-sider {
-    float: right;
-    width: 70%;
+    // float: right;
+   // width: 70%;
     text-align: right;
     .right-sider-container {
       text-align: right;

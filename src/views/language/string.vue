@@ -12,7 +12,7 @@
         @search="goSearch"
       ></search-group>
     </div>
-    <div style="height: calc(100vh - 270px">
+    <div style="height: calc(100vh - 275px">
       <el-table
         :data="transferData"
         v-loading="tableLoading"
@@ -266,6 +266,8 @@ export default {
 
 <style lang="scss">
 .string-container {
+  padding: 10px 15px;
+  background-color: #fff;
   .headerList {
     overflow: hidden;
     .search-group {

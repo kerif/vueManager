@@ -14,7 +14,7 @@
       @selection-change="selectionChange"
       v-loading="tableLoading"
       ref="table"
-      height="calc(100vh - 275px)"
+      height="calc(100vh - 300px)"
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
@@ -345,6 +345,8 @@ export default {
 
 <style lang="scss">
 .application-list-container {
+  padding: 10px 15px;
+  background-color: #fff !important;
   .tabLength {
     width: 200px !important;
     display: inline-block;

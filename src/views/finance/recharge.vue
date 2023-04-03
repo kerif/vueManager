@@ -152,7 +152,7 @@ export default {
       amount: '',
       voucherChange: [],
       status: '',
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       sumAmount: '',
       statusList: [
         {

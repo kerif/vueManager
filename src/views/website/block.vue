@@ -400,6 +400,8 @@ export default {
 </script>
 <style lang="scss">
 .block-container {
+  background-color: #fff;
+  padding: 15px;
   .tabLength {
     width: 450px !important;
   }

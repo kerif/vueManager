@@ -1,13 +1,5 @@
 <template>
   <div class="picking-list-container">
-    <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
-      <!-- 入库日志 -->
-      <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
-      <!-- 拣货日志 -->
-      <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
-      <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
-      <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
-    </el-tabs>
     <div v-show="hasFilterCondition" class="search">
       <el-form :inline="true" :model="formInline">
         <el-form-item>
@@ -29,6 +21,14 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
+      <!-- 入库日志 -->
+      <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
+      <!-- 拣货日志 -->
+      <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
+      <el-tab-pane :label="$t('盘点记录')" name="4"></el-tab-pane>
+    </el-tabs>
     <div class="select">
       <div>
         <el-button class="btn-main" @click="exportLog">{{ $t('导出日志') }}</el-button>
@@ -53,15 +53,15 @@
             @search="goSearch"
           ></search-group>
         </div>
-        <div class="filter" v-if="activeName !== '4'">
+        <!-- <div class="filter" v-if="activeName !== '4'">
           <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
             >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
           ></el-button>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="clear"></div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 275px)">
       <el-table
         border
         stripe
@@ -235,12 +235,13 @@
           :label="$t('创建时间')"
         ></el-table-column>
       </el-table>
-      <nle-pagination
+     
+    </div>
+    <nle-pagination
         style="margin-top: 5px"
         :pageParams="page_params"
         :notNeedInitQuery="false"
       ></nle-pagination>
-    </div>
     <!-- <div v-else class="noDate">{{$t('暂无数据')}}</div> -->
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -269,7 +270,7 @@ export default {
       imgSrc: '',
       tableLoading: false,
       localization: {},
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       formInline: {
         date: []
       },
@@ -573,6 +574,8 @@ export default {
 
 <style lang="scss">
 .picking-list-container {
+  padding: 10px 15px;
+  background-color: #fff ;
   .waybill-data-list {
     margin-top: 20px;
     background-color: inherit;

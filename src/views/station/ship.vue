@@ -463,7 +463,7 @@ export default {
       // batchId: '',
       urlName: '',
       fileList: [],
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       radio: '',
       type: 1,
       showTmpDrawer: false,

@@ -11,12 +11,12 @@
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px">
+    <div style="height: calc(100vh - 275px">
       <el-table
         :data="rechargeList"
         stripe
         border
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         ref="table"
         class="data-list"
         v-loading="tableLoading"
@@ -237,6 +237,8 @@ export default {
 </script>
 <style lang="scss">
 .single-page-container {
+  padding: 10px 15px;
+  background-color: #fff ;
   .headerList {
     overflow: hidden;
     position: relative;

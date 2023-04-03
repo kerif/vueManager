@@ -20,7 +20,7 @@
         }}</el-button>
       </div>
     </div>
-    <div v-if="status === 1" style="height: calc(100vh - 270px)">
+    <div v-if="status === 1" style="height: calc(100vh - 275px)">
       <el-table
         :data="logisticsList"
         stripe
@@ -456,7 +456,8 @@ export default {
 </script>
 <style lang="scss" scope>
 .since-container {
-  background-color: #f5f5f5 !important;
+  padding: 10px 15px;
+  background-color: #fff !important;
   .headerList {
     overflow: hidden;
   }

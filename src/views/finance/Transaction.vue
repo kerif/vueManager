@@ -166,7 +166,7 @@ export default {
       voucherChange: [],
       recordChange: [],
       linesChange: [],
-      hasFilterCondition: false
+      hasFilterCondition: true
     }
   },
   mixins: [pagination],

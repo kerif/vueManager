@@ -215,7 +215,7 @@ export default {
       deleteNum: [],
       options: [],
       withdrawVisible: false,
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       id: '',
       type: '',
       form: {

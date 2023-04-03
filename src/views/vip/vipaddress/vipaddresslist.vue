@@ -55,7 +55,7 @@
       class="data-list"
       v-loading="tableLoading"
       @selection-change="handleSelectionChange"
-      height="calc(100vh - 275px)"
+      height="calc(100vh - 290px)"
     >
       <el-table-column type="selection"></el-table-column>
       <el-table-column type="index" :index="1"></el-table-column>
@@ -356,6 +356,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.vip-address-container{
+  padding: 10px 15px;
+  background-color: #fff !important;
+}
 .searchGroup {
   float: right;
 }

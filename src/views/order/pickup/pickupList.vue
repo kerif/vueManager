@@ -68,7 +68,7 @@
         :data="dataList"
         @selection-change="onSelectionChange"
         v-loading="tableLoading"
-        height="calc(100vh - 370px)"
+        height="calc(100vh - 395px)"
         class="order-data-list"
       >
         <el-table-column
@@ -382,6 +382,8 @@ export default {
 
 <style lang="scss" scoped>
 .pickup-list-container {
+  padding: 10px 15px;
+  background-color: #fff !important;
   .search-bar {
     display: flex;
     background-color: white;

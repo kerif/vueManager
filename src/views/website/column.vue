@@ -3,13 +3,13 @@
     <div class="select-box">
       <add-btn router="addColumn">{{ $t('新增') }}</add-btn>
     </div>
-    <div style="height: calc(100vh - 270px">
+    <div style="height: calc(100vh - 275px">
       <el-table
         :data="columnList"
         stripe
         border
         class="data-list"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         ref="table"
         @expand-change="onExpand"
         v-loading="tableLoading"
@@ -340,6 +340,8 @@ export default {
 
 <style lang="scss">
 .column-container {
+  padding: 10px 15px;
+  background-color: #fff;
   .select-box {
     overflow: hidden;
     // h4 {

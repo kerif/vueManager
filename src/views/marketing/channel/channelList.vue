@@ -17,12 +17,12 @@
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 300px)">
       <el-table
         :data="vipGroupList"
         stripe
         border
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 300px)"
         class="data-list"
         ref="table"
         v-loading="tableLoading"
@@ -368,6 +368,8 @@ export default {
 </script>
 <style lang="scss">
 .channel-container {
+  padding: 10px 15px;
+  background-color: #fff;
   overflow: hidden;
   .searchGroup {
     width: 21.2%;

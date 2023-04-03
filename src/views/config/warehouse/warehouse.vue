@@ -16,13 +16,13 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 275px)">
       <el-table
         :data="vipGroupList"
         stripe
         border
         ref="table"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         class="data-list country"
         v-loading="tableLoading"
         @selection-change="selectionChange"
@@ -336,6 +336,8 @@ export default {
 </script>
 <style lang="scss">
 .warehouse-container {
+  padding: 10px 15px;
+  background-color: #fff !important;
   .headerList {
     display: flex;
     justify-content: space-between;

@@ -1,11 +1,5 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
-      <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="-1"></el-tab-pane>
-      <el-tab-pane :label="`${$t('待付款')}(${statusList['1'] || 0})`" name="1"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已付款')}(${statusList['10'] || 0})`" name="10"></el-tab-pane>
-      <el-tab-pane :label="`${$t('作废')}(${statusList['99'] || 0})`" name="99"></el-tab-pane>
-    </el-tabs>
     <div class="order-replenishment-search" v-show="hasFilterCondition">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item prop="state">
@@ -57,6 +51,12 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
+      <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="-1"></el-tab-pane>
+      <el-tab-pane :label="`${$t('待付款')}(${statusList['1'] || 0})`" name="1"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已付款')}(${statusList['10'] || 0})`" name="10"></el-tab-pane>
+      <el-tab-pane :label="`${$t('作废')}(${statusList['99'] || 0})`" name="99"></el-tab-pane>
+    </el-tabs>
     <div style="display: flex; margin-top: 10px">
       <div style="flex: 1">
         <el-button type="primary" size="small" @click="addSupplement">{{
@@ -178,7 +178,7 @@ export default {
     return {
       activeName: '-1',
       showConfig: false,
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       form: {
         checkList: []
       },

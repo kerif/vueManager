@@ -1,5 +1,10 @@
 <template>
   <div class="order-list-container">
+    <order-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      v-on:submit="goMatch"
+    ></order-list-search>
     <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane
@@ -13,11 +18,6 @@
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
       <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
     </el-tabs>
-    <order-list-search
-      v-show="hasFilterCondition"
-      :searchFieldData="searchFieldData"
-      v-on:submit="goMatch"
-    ></order-list-search>
     <div class="header-range">
       <div class="header-btns">
         <el-button
@@ -152,7 +152,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)" v-if="activeName !== '7'">
+    <div style="height: calc(100vh - 275px)" v-if="activeName !== '7'">
       <el-table
         border
         stripe
@@ -160,7 +160,7 @@
         :data="orderData"
         @selection-change="selectionChange"
         v-loading="tableLoading"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         class="order-data-list"
       >
         <el-table-column
@@ -576,7 +576,7 @@ export default {
       deleteNum: [],
       countData: {},
       urlExcel: '',
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       sumData: {},
       ownerData: [],
       searchFieldData: {

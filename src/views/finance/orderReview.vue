@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 275px)">
       <el-table
         v-if="reviewData.length && this.activeName === '0'"
         class="data-list"
@@ -541,6 +541,8 @@ export default {
 
 <style lang="scss">
 .order-review-container {
+  padding: 10px 15px;
+  background-color: #fff ;
   .tabLength {
     width: 450px !important;
     display: inline-block;

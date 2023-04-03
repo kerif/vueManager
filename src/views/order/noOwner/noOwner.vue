@@ -212,7 +212,7 @@ export default {
       show: false,
       labelId: '',
       imgSrc: '',
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       express_num: '',
       deleteNum: ''
     }

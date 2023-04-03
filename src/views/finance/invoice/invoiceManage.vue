@@ -102,4 +102,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.invoice-container{
+  padding: 10px 15px;
+  background-color: #fff ;
+}
+</style>

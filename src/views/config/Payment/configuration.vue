@@ -371,6 +371,8 @@ export default {
 
 <style lang="scss" scoped>
 .configuration-container {
+  padding: 10px 15px;
+  background-color: #fff;
   .save-btn {
     color: #fff;
     background-color: #3540a5;

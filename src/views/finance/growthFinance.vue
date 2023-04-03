@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="growthFinance">
     <div class="searchGroup">
       <search-group
         :placeholder="$t('请输入关键字')"
@@ -91,6 +91,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.growthFinance{
+  padding: 10px 15px;
+  background-color: #fff;
+}
 .searchGroup {
   display: flex;
   justify-content: flex-end;

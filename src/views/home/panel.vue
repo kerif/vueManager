@@ -1123,7 +1123,7 @@ export default {
         },
         {
           name: this.$t('物流查询'),
-          path: '/config/tracking-services',
+          path: '/station/tracking',
           icon: 'Recruitment'
         },
         {

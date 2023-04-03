@@ -1,5 +1,11 @@
 <template>
   <div class="way-list-container">
+    <waybill-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      @info="getVal"
+      v-on:submit="goMatch"
+    ></waybill-list-search>
     <el-tabs v-model="activeName" class="tab-length" stretch @tab-click="onTabChange">
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane :label="`${$t('待处理')} (${countData.pending || 0})`" name="1"></el-tab-pane>
@@ -13,12 +19,6 @@
       ></el-tab-pane>
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
-    <waybill-list-search
-      v-show="hasFilterCondition"
-      :searchFieldData="searchFieldData"
-      @info="getVal"
-      v-on:submit="goMatch"
-    ></waybill-list-search>
     <div class="header-range">
       <div v-if="oderData.length && ['1', '2', '3', '4', '5', '6'].includes(activeName)">
         <el-button class="btn-yellow" v-if="activeName === '1'" @click="oneBatch" size="small">{{
@@ -1278,7 +1278,7 @@ export default {
         sale_id: '',
         customer_id: ''
       },
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       page_params: {
         size: 20
       },

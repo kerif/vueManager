@@ -42,13 +42,13 @@
       </div>
       <el-button type="primary" size="small" @click="onNew">{{ $t('新用户福利') }}</el-button>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 320px)">
       <el-table
         class="data-list"
         border
         stripe
         v-loading="tableLoading"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 320px)"
         ref="table"
         :data="voucherData"
         @selection-change="onSelectChange"
@@ -787,6 +787,8 @@ export default {
 
 <style lang="scss">
 .voucher-container {
+  padding: 0px 15px;
+  background-color: #fff;
   .searchGroup {
     width: 21.2%;
     float: right;
