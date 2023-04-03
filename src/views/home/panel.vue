@@ -1,7 +1,613 @@
 <template>
   <div class="panel-container">
+    <div class="panel-hint">
+      <div><strong>{{ $t('欢迎使用海鸥集运系统') }}</strong></div>
+      <div class="flex box-size">
+        <div>
+          <i class="el-icon-time time" />
+          <span><span>{{ $t('北京时间') }}</span>: {{ cnDate }}</span>
+        </div>
+        <div>
+          <i class="el-icon-time time" />
+          <span><span>{{ $t('美东时间') }}</span>: {{ usDate }}</span>
+        </div>
+        <div>
+          <i class="el-icon-time time" />
+          <span><span>{{ $t('欧州中部时间') }}</span>:{{ euDate }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- 顶部快捷方式 -->
+    <div class="top-quick">
+      <div style="cursor: pointer;" v-for="(item,index) in quickList" :key="index" @click="$router.push({ path:item.path })">
+        <img :src="require(`@/assets/${item.icon}.png`)" alt="" />
+        <div><strong>{{ item.name }}</strong></div>
+      </div>
+    </div>
+    <div style="margin-bottom: 16px;">
+      <el-row>
+        <el-col :span="16" style="padding-right: 16px">
+          <div>
+            <el-row :gutter="20">
+              <el-col :span="6" style="padding-right: 8px;">
+                <div class="grid-content">
+                  <div class="flex">
+                    <div class="content-size">{{ $t('待签收包裹') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div class="box-size information">
+                    <div>{{ $t('无人认领') }}:0</div>
+                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6" style="padding-left: 6px;">
+                <div class="grid-content">
+                  <div class="flex">
+                    <div class="content-size">{{ $t('待打包包裹') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div class="box-size information">
+                    <div>{{ $t('无人认领') }}:0</div>
+                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6" style="padding-left: 6px;">
+                <div class="grid-content">
+                  <div class="flex">
+                    <div class="content-size">{{ $t('待发货包裹') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div class="box-size information">
+                    <div>{{ $t('无人认领') }}:0</div>
+                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6" style="padding-left: 6px;">
+                <div class="grid-content">
+                  <div class="flex">
+                    <div class="content-size">{{ $t('待财务审核') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div class="box-size information">
+                    <div>{{ $t('无人认领') }}:0</div>
+                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+        <!-- 登录信息 -->
+        <el-col :span="8">
+          <div class="login-information">
+            <div class="flex">
+              <div>
+                <div style="display: flex;">
+                  <div style="margin-right: 20px;">
+                    <span class="mos">M</span>
+                  </div>
+                  <div>
+                    <div class="content-size2">MOS</div>
+                    <div class="content-size">{{ $store.state.userName }}</div>
+                  </div>
+                </div>
+                <div class="box-size" style="margin-top: 10px;">
+                  <div>
+                    {{ $t('上次登录时间') }}:2023-03-14 17:12:56
+                  </div>
+                  <div style="margin-top: 5px;">
+                    {{ $t('上次登录IP') }}:168.102.1.1
+                  </div>
+                </div>
+              </div>
+              <div>
+                
+              </div>
+              <div style="margin-top: 10px;">
+                <div class="login-information-count">{{ $t('修改个人资料') }}</div>
+                <div class="login-information-count" @click="$router.push({ name:'reset-password' })">{{ $t('修改密码') }}</div>
+                <div class="login-information-count">{{ $t('注销账号') }}</div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 实况概括 -->
+    <div style="margin-bottom: 16px;">
+      <el-row>
+        <el-col :span="16" style="padding-right: 16px">
+          <div class="title">
+            <div class="flex" style="margin-bottom: 15px;">
+              <div>
+                <span class="content-size">{{ $t('实况概括') }}</span>
+                <span class="box-size update-time">{{$t('更新于')}}2023-03-14 17:12:56</span>
+              </div>
+              <div>
+                <span class="box-size nav-Factual-generalization">
+                  <img src="@/assets/conceal.png" class="Factual-generalization-img" alt="">
+                  {{ $t('隐藏数据') }}
+                </span>
+
+                <span class="box-size nav-Factual-generalization">
+                  <img src="@/assets/copy.png" class="Factual-generalization-imgs" alt="">
+                  {{ $t('复制数据') }}
+                </span>
+              </div>
+            </div>
+            <div class="Factual-generalization-content">
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('今日新增用户') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('本月新增用户') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('今日收入') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('今日优惠') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('今日支付金额') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size">{{ $t('今日充值金额') }}</div>
+                    <div class="content-size2">1000</div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size">{{ $t('昨日') }}:0</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size"></div>
+                    <div class="content-size2"></div>
+                  </div>
+                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
+                    <div class="box-size"></div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size"></div>
+                    <div class="content-size2"></div>
+                  </div>
+                  <div style="padding-right: 10px;">
+                    <div class="box-size"></div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+        <!-- 今日产能 -->
+        <el-col :span="8">
+          <div class="title">
+            <div class="flex" style="margin-bottom: 15px;">
+              <div>
+                <span class="content-size">{{ $t('今日产能') }}</span>
+                <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+              </div>
+            </div>
+            <div class="capacity">
+              <div class="capacity-item" style="background-color: #EFF0FF;">
+                <div class="content-size">{{ $t('签收') }}</div>
+                <div class="content-size2">10000</div>
+              </div>
+
+              <div class="capacity-item">
+                <div class="content-size">{{ $t('上架') }}</div>
+                <div class="content-size2">10000</div>
+              </div>
+
+              <div class="capacity-item">
+                <div class="content-size">{{ $t('打包') }}</div>
+                <div class="content-size2">10000</div>
+              </div>
+
+              <div class="capacity-item">
+                <div class="content-size">{{ $t('出库') }}</div>
+                <div class="content-size2">10000</div>
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 已入库包裹 -->
+    <div style="margin-bottom: 16px;">
+      <el-row>
+        <el-col :span="16" style="padding-right: 16px">
+          <div style="height: 480px;">
+            <div class="title">
+              <div class="flex" style="margin-bottom: 15px;">
+                <div>
+                  <span class="content-size">{{
+                    status === 2 ? $t('已入库包裹') : status === 3 ? $t('已拣货包裹') : $t('已发货包裹')
+                  }}</span>
+                  <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+                </div>
+                <div style="font-size: 14px;">
+                  <span v-for="item in getDatasList" :key="item.value" :class="scope==item.value?'parcelData parcelDatas':'parcelData'" @click="getDatasr(item.value)">{{ item.name }}</span>
+
+                  <!-- <el-select v-model="scope" @change="getDatas" :placeholder="$t('请选择')">
+                <el-option :value="1" :label="$t('近一周')"></el-option>
+                <el-option :value="2" :label="$t('近一月')"></el-option>
+                <el-option :value="3" :label="$t('近半年')"></el-option>
+                <el-option :value="4" :label="$t('全年')"></el-option>
+              </el-select> -->
+                </div>
+                <div>
+                  <span class="box-size subheading" @click="$router.push({name:'orderlist'})">
+                    {{ $t('查看') }}
+                    <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                  </span>
+                </div>
+              </div>
+              <!-- 面板数据 -->
+              <div class="panel-box main-item">
+                <div>
+                  <div class="echarts" id="myChart"></div>
+                  <div class="type-list">
+                    <div :class="['type-item', status === 2 ? 'select' : '']" @click="onStatus(2)">
+                      {{ $t('已入库包裹') }}
+                    </div>
+                    <div :class="['type-item', status === 3 ? 'select' : '']" @click="onStatus(3)">
+                      {{ $t('已拣货包裹') }}
+                    </div>
+                    <div :class="['type-item', status === 5 ? 'select' : '']" @click="onStatus(5)">
+                      {{ $t('已发货包裹') }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12" style="padding-right: 16px">
+              <div class="dataOverview">
+                <div class="Factual-generalization">
+                  <div class="title">
+                    <div class="flex" style="margin-bottom: 15px;">
+                      <div>
+                        <span class="content-size">{{ $t('实况概括') }}</span>
+                      </div>
+                      <div> 
+                        <span class="box-size subheading" @click="$router.push({name:'suggestlist'})">
+                          {{ $t('去处理') }}
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="capacity-item">
+                        <div class="content-size">{{ $t('投诉数') }}</div>
+                        <div class="content-size2" style="margin-top: 10px;">10 <span style="font-size: 15px;color: #FF4C42;">（{{$t('未处理')}}10）</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="Order-evaluation">
+                  <div class="title">
+                    <div class="flex" style="margin-bottom: 15px;">
+                      <div>
+                        <span class="content-size">{{ $t('订单评价') }}</span>
+                      </div>
+                      <div>
+                        <span class="box-size subheading" @click="$router.push({name:'evaluation'})">
+                          {{ $t('去处理') }}
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                        </span>
+                      </div>
+                    </div>
+                    <!-- 订单评价 -->
+                    <div>
+                      <div class="charts-order-rate" id="orderRate"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </el-col>
+            <!-- 问题件列表 -->
+            <el-col :span="12">
+              <div class="issue-List">
+                <div class="title">
+                  <div class="flex" style="margin-bottom: 20px;">
+                    <div>
+                      <span class="content-size">{{ $t('问题件列表') }}</span>
+                    </div>
+                    <div>
+                      <span class="box-size subheading" @click="$router.push({name:'wayBillList'})">
+                        {{ $t('去处理') }}
+                        <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                      </span>
+                    </div>
+                  </div>
+                  <div style="overflow-x: hidden;height: 380px;">
+                    <div class="issue-List-item">
+                      <div>{{ $t('会员编号') }}：102908</div>
+                      <div>{{ $t('包裹号') }}：SF1287782187271</div>
+                      <div>{{ $t('货物状态') }}：破碎</div>
+                      <div>{{ $t('问题描述') }}：有个杯子碎了</div>
+                      <div>{{ $t('提交时间') }}：2023-03-15 10:58:32</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!-- 注册统计 -->
+    <div style="margin-bottom: 16px;">
+      <el-row>
+        <el-col :span="16" style="padding-right: 16px">
+          <div style="height: 480px;">
+            <div class="title">
+              <div class="flex" style="margin-bottom: 15px;">
+                <div>
+                  <span class="content-size">{{ $t('注册统计') }}</span>
+                  <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+                </div>
+                <div>
+                  <span class="box-size subheading" @click="$router.push({name:'reportList'})">
+                    {{ $t('查看') }}
+                    <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                  </span>
+                </div>
+              </div>
+              <!-- 面板数据 -->
+              <div class="panel-box main-item">
+                <div>
+                  <el-table :data="tableData" style="width: 100%;" border height="calc(480px - 70px)">
+                    <el-table-column type="index" width="50"></el-table-column>
+                    <el-table-column prop="date" :label="$t('统计日期')" width="180">
+                    </el-table-column>
+                    <el-table-column prop="quantity" :label="$t('注册用户数')" width="180">
+                    </el-table-column>
+                    <el-table-column prop="quantity" :label="$t('邮箱激活数')">
+                    </el-table-column>
+                    <el-table-column prop="quantity" :label="$t('手机号激活数')">
+                    </el-table-column>
+                    <el-table-column prop="quantity" :label="$t('预报量')">
+                    </el-table-column>
+                    <el-table-column prop="quantity" :label="$t('转化率')+'%'">
+                    </el-table-column>
+                  </el-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <el-row>
+            <el-col :span="12" style="padding-right: 16px">
+              <div class="statistical-data">
+                <div class="discount-coupon">
+                  <div class="title">
+                    <div class="flex" style="margin-bottom: 15px;">
+                      <div>
+                        <span class="content-size">{{ $t('优惠券') }}</span>
+                      </div>
+                      <div>
+                        <span class="box-size subheading" @click="$router.push({name:'newUser'})">
+                          {{ $t('查看') }}
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="capacity-item">
+                        <div class="charts-discount-coupon" id="discountCoupon">
+                          <div class="definable-echarts">
+                            <div style="width: 20%;background-color: #C5C5CE;"></div>
+                            <div style="width: 50%;background-color: #00BC4B;"></div>
+                            <div style="width: 10%;background-color: #6ED183;"></div>
+                            <div style="width: 20%;background-color: #C3EBCA;"></div>
+                          </div>
+                          <div class="definable-echarts-data">
+                            <div class="definable-echarts-item" v-for="item in discountCouponData" :key="item.name">
+                              <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                              <div>
+                                <div class="definable-echarts-name">{{ item.name }}</div>
+                                <div class="definable-echarts-quantity">{{ item.quantity }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="shipping-space">
+                  <div class="title">
+                    <div class="flex" style="margin-bottom: 15px;">
+                      <div>
+                        <span class="content-size">{{ $t('仓位使用') }}</span>
+                      </div>
+                      <div>
+                        <span class="box-size subheading" @click="$router.push({name:'goodsAllocation'})">
+                          {{ $t('查看') }}
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                        </span>
+                      </div>
+                    </div>
+                    <!-- 仓位使用 -->
+                    <div class="freight-space">
+                      <div class="definable-echarts">
+                        <div style="width: 50%;background-color: #00BC4B;"></div>
+                        <div style="width: 50%;background-color: #C3EBCA;"></div>
+                      </div>
+                      <div class="definable-echarts-data">
+                        <div class="definable-echarts-item" style="margin-top: 15px;" v-for="item in freightSpaceData" :key="item.name">
+                          <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                          <div>
+                            <div class="definable-echarts-name">{{ item.name }}</div>
+                            <div class="definable-echarts-quantity">{{ item.quantity }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="definable-echarts">
+                        <div style="width: 40%;background-color: #FF3C31;"></div>
+                        <div style="width: 60%;background-color: #E8EAEC;"></div>
+                      </div>
+
+                      <div class="definable-echarts-data">
+                        <div class="definable-echarts-item" style="margin-top: 15px;" v-for="item in freightSpaceDatas" :key="item.name">
+                          <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                          <div>
+                            <div class="definable-echarts-name">{{ item.name }}</div>
+                            <div class="definable-echarts-quantity">{{ item.quantity }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="statistical-data">
+                <div class="discount-coupon">
+                  <div class="title">
+                    <div class="flex" style="margin-bottom: 15px;">
+                      <div>
+                        <span class="content-size">{{ $t('更新日志') }}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="system-notice">
+                        <ul class="notice">
+                          <li style="cursor: pointer;display: flex;justify-content: space-between;" @click="$router.push({ name: 'systemNotice', params: { id: item.id } })" v-for="item in items" :key="item.id">
+                            <div> {{ item.title }}</div>
+                            <div class="box-size subheading">
+                              {{ $t('查看') }}
+                              <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="shipping-space">
+                  <div class="download-management">
+                    <!-- 下载管理 -->
+                    <div style="display: flex;padding: 10px 0px;cursor: pointer" @click="goManual('software')">
+                      <div style="margin-right: 10px;">
+                        <img src="@/assets/download-management.png" alt="">
+                      </div>
+                      <div>
+                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('终端软件下载') }}</strong></div>
+                        <div class="box-size">{{ $t('使用手机、桌面端集运业务') }}</div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex;padding: 10px 0px;cursor: pointer" @click="goManual('help')">
+                      <div style="margin-right: 10px;">
+                        <img src="@/assets/operation-manual.png" alt="">
+                      </div>
+                      <div>
+                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('操作手册') }}</strong></div>
+                        <div class="box-size">{{ $t('海鸥集运系统操作使用手册') }}</div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex;padding: 10px 0px;">
+                      <div style="margin-right: 10px;">
+                        <img src="@/assets/attention.png" alt="">
+                      </div>
+                      <div>
+                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('关注【通晓科技】') }}</strong></div>
+                        <div class="box-size">{{ $t('分享操作技巧、集运运营干货') }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
+
     <!-- 本月统计数据 -->
-    <el-row>
+    <!-- <el-row>
       <el-col :span="6" style="padding-right: 5px">
         <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
           <div class="box-header box-user">
@@ -86,15 +692,12 @@
           </div>
         </div>
       </el-col>
-    </el-row>
-    <div style="margin-top: 10px">
+    </el-row> -->
+    <!-- <div style="margin-top: 10px">
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="wait-content">
-            <div
-              style="cursor: pointer"
-              @click="$router.push({ name: 'orderlist', query: { activeName: '1' } })"
-            >
+            <div style="cursor: pointer" @click="$router.push({ name: 'orderlist', query: { activeName: '1' } })">
               <div class="wait-sty">
                 <i class="iconfont icon-icon_rukou icon-weight"></i>
                 <span class="wait-font">{{ $t('待入库包裹') }}</span>
@@ -103,30 +706,21 @@
                 count.package_wait_in_storage ? count.package_wait_in_storage : 0
               }}</span>
             </div>
-            <div
-              style="cursor: pointer"
-              @click="$router.push({ name: 'wayBillList', query: { activeName: '1' } })"
-            >
+            <div style="cursor: pointer" @click="$router.push({ name: 'wayBillList', query: { activeName: '1' } })">
               <div class="wait-sty">
                 <i class="iconfont icon-huowudui icon-weight"></i>
                 <span class="wait-font">{{ $t('待打包订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_pick ? count.order_wait_pick : 0 }}</span>
             </div>
-            <div
-              style="cursor: pointer"
-              @click="$router.push({ name: 'wayBillList', query: { activeName: '3' } })"
-            >
+            <div style="cursor: pointer" @click="$router.push({ name: 'wayBillList', query: { activeName: '3' } })">
               <div class="wait-sty">
                 <i class="iconfont icon-icon_fabu icon-weight"></i>
                 <span class="wait-font">{{ $t('待发货订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_ship ? count.order_wait_ship : 0 }}</span>
             </div>
-            <div
-              style="cursor: pointer"
-              @click="$router.push({ name: 'orderReview', query: { activeName: '0' } })"
-            >
+            <div style="cursor: pointer" @click="$router.push({ name: 'orderReview', query: { activeName: '0' } })">
               <div class="wait-sty">
                 <i class="iconfont icon-tianshenpi icon-weight"></i>
                 <span class="wait-font">{{ $t('待审核付款') }}</span>
@@ -142,11 +736,6 @@
                 count.suggestion_wait_deal ? count.suggestion_wait_deal : 0
               }}</span>
             </div>
-            <!-- package_wait_in_storage
-          order_wait_pick
-          order_wait_ship
-          order_wait_audit
-          suggestion_wait_deal -->
           </div>
         </el-col>
         <el-col :span="12" style="padding-left: 1px">
@@ -154,37 +743,22 @@
             <div class="order-main">
               <div class="search-sty">
                 <el-select v-model="expressType" :placeholder="$t('请选择')">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
+                  <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </div>
-              <el-input
-                class="input-button"
-                v-if="expressType"
-                v-model="expressNumber"
-                @keyup.enter.native="goExpress"
-              >
-                <el-button
-                  style="color: #ccc; background-color: #3540a5; border-radius: 0"
-                  slot="append"
-                  @click.native="goExpress"
-                  >{{ $t('物流查询') }}</el-button
-                >
+              <el-input class="input-button" v-if="expressType" v-model="expressNumber" @keyup.enter.native="goExpress">
+                <el-button style="color: #ccc; background-color: #3540a5; border-radius: 0" slot="append" @click.native="goExpress">{{ $t('物流查询') }}</el-button>
               </el-input>
             </div>
           </div>
         </el-col>
       </el-row>
-    </div>
-    <el-row :gutter="20" class="package-chart" type="flex">
-      <el-col :span="13" style="height: 100%; padding-right: 0 !important">
-        <!-- 面板数据 -->
-        <div class="panel-box main-item">
+    </div> -->
+    <!-- <el-row :gutter="20" class="package-chart" type="flex">
+      <el-col :span="13" style="height: 100%; padding-right: 0 !important"> -->
+    <!-- 面板数据 -->
+    <!-- <div class="panel-box main-item">
           <div class="show-box">
             <div class="show-list">
               <span class="package-text">{{
@@ -341,28 +915,17 @@
           }}</span>
           <div class="system-notice">
             <ul class="notice">
-              <li
-                style="cursor: pointer"
-                @click="$router.push({ name: 'systemNotice', params: { id: item.id } })"
-                v-for="item in items"
-                :key="item.id"
-              >
+              <li style="cursor: pointer" @click="$router.push({ name: 'systemNotice', params: { id: item.id } })" v-for="item in items" :key="item.id">
                 {{ item.title }}
               </li>
             </ul>
           </div>
         </div>
       </el-col>
-    </el-row>
-    <el-dialog
-      :visible.sync="showTips"
-      :title="$t('系统配置助手')"
-      class="dialog-start-loading"
-      width="45%"
-    >
+    </el-row> -->
+    <el-dialog :visible.sync="showTips" :title="$t('系统配置助手')" class="dialog-start-loading" width="45%">
       <div class="loading-top">
-        <span>{{ $t('亲爱的用户') }}</span
-        ><br />
+        <span>{{ $t('亲爱的用户') }}</span><br />
         <span>{{ $t('首次系统使用需要完成以下配置才能正常上线运营') }}</span>
       </div>
       <div class="loading-bottom">
@@ -390,11 +953,7 @@
             <div style="padding-left: 2em">{{ $t('跟踪进度') }}</div>
           </div>
           <ul class="result-list">
-            <li
-              :class="{ 'last-finish': index === 0 }"
-              v-for="(item, index) in TrackingData"
-              :key="index"
-            >
+            <li :class="{ 'last-finish': index === 0 }" v-for="(item, index) in TrackingData" :key="index">
               <div class="time">{{ item.ftime }}</div>
               <div class="dot">
                 <span class="out-dot dot-box"> </span>
@@ -412,14 +971,7 @@
     </el-dialog>
     <!-- 操作手册下载 -->
     <el-dialog :visible.sync="helpVisible" :title="$t('操作手册下载')" width="60%">
-      <div
-        v-for="(item, index) in helpData"
-        :key="index"
-        class="book-sty"
-        @click="chooseManual(item)"
-        @mouseover="changeSty($event)"
-        @mouseleave="removeSty($event)"
-      >
+      <div v-for="(item, index) in helpData" :key="index" class="book-sty" @click="chooseManual(item)" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
         <div style="padding-top: 10px">
           <div>
             <img src="../../assets/book.jpg" />
@@ -434,12 +986,7 @@
     </el-dialog>
     <!-- 软件下载 -->
     <el-dialog :visible.sync="appVisible" :title="$t('软件下载')" width="60%">
-      <div
-        class="book-sty"
-        @click="uploadDesktop"
-        @mouseover="changeSty($event)"
-        @mouseleave="removeSty($event)"
-      >
+      <div class="book-sty" @click="uploadDesktop" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
         <p>{{ $t('集运系统仓库桌面软件') }}</p>
         <div>
           <div>
@@ -451,12 +998,7 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <div
-        class="book-sty"
-        @click="uploadAndroid"
-        @mouseover="changeApp($event)"
-        @mouseleave="removeSty($event)"
-      >
+      <div class="book-sty" @click="uploadAndroid" @mouseover="changeApp($event)" @mouseleave="removeSty($event)">
         <p>{{ $t('集运系统运营APP（安卓版）') }}</p>
         <div>
           <div @mouseover="getImg('android')">
@@ -469,12 +1011,7 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <div
-        class="book-sty"
-        @click="uploadIos"
-        @mouseover="changeSty($event)"
-        @mouseleave="removeSty($event)"
-      >
+      <div class="book-sty" @click="uploadIos" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
         <p>{{ $t('集运系统运营APP（iOS版）') }}</p>
         <div>
           <div @mouseover="getImg('ios')">
@@ -487,14 +1024,9 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <el-dialog
-        width="30%"
-        :title="
+      <el-dialog width="30%" :title="
           uplodaStatus === 'ios' ? $t('集运系统运营APP（iOS版）') : $t('集运系统运营APP（安卓版）')
-        "
-        :visible.sync="innerVisible"
-        append-to-body
-      >
+        " :visible.sync="innerVisible" append-to-body>
         <div style="text-align: center">
           <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
           <div v-else>
@@ -515,10 +1047,15 @@
 import echarts from 'echarts'
 import dialog from '@/components/dialog'
 import { formatWeek, formatMonth } from '@/utils'
+import string from '../language/string.vue'
 export default {
+  components: { string },
   name: 'panel',
   data() {
     return {
+      cnDate: '',
+      usDate: '',
+      euDate: '',
       user: {
         current_month: 0,
         total: 0
@@ -542,6 +1079,8 @@ export default {
       myChart: '',
       status: 2,
       option: '',
+      orderRateOption: '',
+      orderRateChart: '',
       cakeOption: '',
       showTips: false,
       updateProp: [],
@@ -575,7 +1114,135 @@ export default {
       optionsHelp: {},
       appVisible: false,
       innerVisible: false,
-      uplodaStatus: ''
+      uplodaStatus: '',
+      quickList: [
+        {
+          name: this.$t('运费试算'),
+          path: '/order/freight',
+          icon: 'trialFreight'
+        },
+        {
+          name: this.$t('物流查询'),
+          path: '/config/tracking-services',
+          icon: 'Recruitment'
+        },
+        {
+          name: this.$t('包裹列表'),
+          path: '/order/orderlist',
+          icon: 'waybill_list'
+        },
+        {
+          name: this.$t('快速入库'),
+          path: '/station/storage',
+          icon: 'home_storage'
+        },
+        {
+          name: this.$t('订单列表'),
+          path: '/order/waybill_list',
+          icon: 'waybill_list (2)'
+        },
+        {
+          name: this.$t('公告管理'),
+          path: '/customer/Public',
+          icon: 'Public'
+        },
+        {
+          name: this.$t('用户福利'),
+          path: '/marketing/new',
+          icon: 'Userwelfare'
+        },
+        {
+          name: this.$t('仓位概览'),
+          path: '/goodsAllocation/echarts',
+          icon: 'goodsAllocation'
+        },
+        {
+          name: this.$t('评价管理'),
+          path: '/customer/evaluation',
+          icon: 'evaluation'
+        }
+      ],
+      getDatasList: [
+        {
+          name: this.$t('近一周'),
+          value: 1
+        },
+        {
+          name: this.$t('近一月'),
+          value: 2
+        },
+        {
+          name: this.$t('近半年'),
+          value: 3
+        },
+        {
+          name: this.$t('全年'),
+          value: 4
+        }
+      ],
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        quantity: 32
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        quantity: 23
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        quantity: 32
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        quantity: 32
+      }],
+      discountCouponData: [
+        {
+          name: this.$t('已生成'),
+          quantity: 1000,
+          color: '#C3EBCA'
+        },
+        {
+          name: this.$t('已发放'),
+          quantity: 10000,
+          color: '#6ED183'
+        },
+        {
+          name: this.$t('已使用'),
+          quantity: 10000,
+          color: '#00BC4B'
+        },
+        {
+          name: this.$t('已过期'),
+          quantity: 10000,
+          color: '#C5C5CE'
+        }
+      ],
+      freightSpaceData: [
+        {
+          name: this.$t('已生成仓位'),
+          quantity: 10000,
+          color: '#6ED183'
+        },
+        {
+          name: this.$t('已使用仓位'),
+          quantity: 10000,
+          color: '#00BC4B'
+        }
+      ],
+      freightSpaceDatas: [
+        {
+          name: this.$t('已上架包裹'),
+          quantity: 10000,
+          color: '#E8EAEC'
+        },
+        {
+          name: this.$t('已超期包裹'),
+          quantity: 5000,
+          color: '#FF3C31'
+        }
+      ]
       // systemData: []
     }
   },
@@ -584,10 +1251,17 @@ export default {
     this.getDatas()
     this.getStatus() // 获取是否显示弹窗
     this.getSystem()
-    this.getPie()
+    // this.getPie()
     this.checkExpired()
+    this.getOrderEvaluationPie()
   },
   mounted() {
+    window.setInterval(() => {
+      this.getZoneTime(8)
+      this.getZoneTime(-5)
+      this.getZoneTime(1)
+    }, 1000)
+
     this.myChart = echarts.init(document.getElementById('myChart'))
     // window.onresize = this.myChart.resize
     this.option = {
@@ -631,20 +1305,31 @@ export default {
       //   fontWeight: 'bold'
       // }
     }
-    // 包裹饼图
-    this.cakeChart = echarts.init(document.getElementById('chartsFirst'))
-    // window.onresize = this.cakeChart.resize
-    this.cakeOption = {
+    // 订单评价饼图
+    this.orderRateChart = echarts.init(document.getElementById('orderRate'))
+    this.orderRateOption = {
       backgroundColor: '#ffffff',
-      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+      color: ['#F7BF17', '#00BC4B', '#F69999', '#FF3C31'],
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
       }
     }
+    // 包裹饼图
+    // this.cakeChart = echarts.init(document.getElementById('chartsFirst'))
+    // // window.onresize = this.cakeChart.resize
+    // this.cakeOption = {
+    //   backgroundColor: '#ffffff',
+    //   color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+    //   tooltip: {
+    //     trigger: 'item',
+    //     formatter: '{a} <br/>{b}: {c} ({d}%)'
+    //   }
+    // }
     window.addEventListener('resize', () => {
       this.myChart.resize()
-      this.cakeChart.resize()
+      //this.cakeChart.resize()
+      this.orderRateChart.resize()
     })
   },
   computed: {
@@ -656,6 +1341,44 @@ export default {
     }
   },
   methods: {
+    formDate(val) {
+      if (val < 10) {
+        return '0' + val
+      } else {
+        return val
+      }
+    },
+    getZoneTime(offset) {
+      const formDate = this.formDate
+      // 取本地时间
+      var localtime = new Date()
+      // 取本地毫秒数
+      var localmesc = localtime.getTime()
+      var localOffset = localtime.getTimezoneOffset() * 60000
+      var utc = localOffset + localmesc
+      // 得到指定时区时间
+      var calctime = utc + 3600000 * offset
+      var nd = new Date(calctime)
+      const year = nd.getFullYear()
+      const month = nd.getMonth() + 1
+      const day = nd.getDate()
+      const hours = nd.getHours()
+      const minutes = nd.getMinutes()
+      const seconds = nd.getSeconds()
+      if (offset === 8) {
+        this.cnDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
+          hours
+        )}:${formDate(minutes)}:${formDate(seconds)}`
+      } else if (offset === 1) {
+        this.euDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
+          hours
+        )}:${formDate(minutes)}:${formDate(seconds)}`
+      } else {
+        this.usDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
+          hours
+        )}:${formDate(minutes)}:${formDate(seconds)}`
+      }
+    },
     //检查系统是否快过期
     checkExpired() {
       dialog({ type: 'systemExpired' })
@@ -757,6 +1480,67 @@ export default {
           }
         })
     },
+    getDatasr(val) {
+      this.scope = val
+      this.getDatas()
+    },
+    //获取优惠券图
+    // getDiscountCouponChart() {
+
+    // },
+    //订单评价饼图
+    getOrderEvaluationPie() {
+      this.$nextTick(() => {
+        this.orderRateOption.legend = {
+          top: 'bottom',
+          textStyle: {
+            fontSize: 12
+          },
+          itemWidth: 10,
+          data: [
+            this.$t('五星'),
+            this.$t('四星'),
+            this.$t('三星'),
+            this.$t('三星以下')
+          ]
+        }
+        this.orderRateOption.series = [
+          {
+            name: '订单评价概览',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '20',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: true
+            },
+            data: [
+              { value: 1048, name: '五星' },
+              { value: 735, name: '四星' },
+              { value: 580, name: '三星' },
+              { value: 484, name: '三星以下' }
+            ]
+          }
+        ]
+        this.orderRateChart.setOption(this.orderRateOption)
+      })
+
+    },
     // 包裹饼图数据
     getPie() {
       let params = {
@@ -819,6 +1603,7 @@ export default {
             }
           ]
           this.cakeChart.setOption(this.cakeOption)
+
         }
       })
     },
@@ -997,6 +1782,256 @@ export default {
 </script>
 <style lang="scss">
 .panel-container {
+  .panel-hint {
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .definable-echarts {
+    width: 100%;
+    height: 16px;
+    background-color: #efffff;
+    display: flex;
+    margin-top: 20px;
+  }
+  .definable-echarts-data {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 2;
+    justify-content: space-between;
+    .definable-echarts-item {
+      margin-top: 30px;
+      display: flex;
+      width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .definable-echarts-type {
+        width: 16px;
+        height: 16px;
+        background-color: #c3ebca;
+        margin-top: 10px;
+        margin-right: 10px;
+      }
+      .definable-echarts-name {
+        font-size: 10px;
+        color: #c5c5ce;
+      }
+      .definable-echarts-quantity {
+        font-size: 16px;
+        margin-top: 5px;
+      }
+    }
+  }
+  .statistical-data {
+    height: 480px;
+    .discount-coupon {
+      height: 231px;
+      margin-bottom: 16px;
+      background-color: #ffffff;
+    }
+    .shipping-space {
+      height: 231px;
+      background-color: #ffffff;
+    }
+    .download-management {
+      padding: 20px 15px;
+      white-space: nowrap;
+      overflow-y: hidden;
+      text-overflow: ellipsis;
+    }
+    .system-notice {
+      padding: 5px 0;
+      background-color: #fff;
+      overflow-x: hidden;
+      height: 150px;
+      .notice {
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        li {
+          padding: 5px;
+          list-style: none;
+          font-size: 14px;
+          border-bottom: 1px solid #f6f6f6;
+        }
+      }
+    }
+  }
+  .dataOverview {
+    height: 480px;
+    .Factual-generalization {
+      margin-bottom: 16px;
+      height: 140px;
+      background-color: #ffffff;
+    }
+    .Order-evaluation {
+      height: 322px;
+    }
+  }
+  .login-information {
+    background-color: #4c5be7;
+    color: #ffffff;
+    padding: 5px 15px;
+    height: 135px;
+    .mos {
+      padding: 5px 12px;
+      font-size: 40px;
+      background-color: #ffffff !important;
+      border-radius: 50%;
+      color: #17233d;
+      font-weight: bold;
+    }
+  }
+  .title {
+    padding: 15px;
+    background-color: #ffffff;
+    .update-time {
+      margin-left: 20px;
+    }
+  }
+  .subheading {
+    position: relative;
+    margin-right: 15px;
+    cursor: pointer;
+    .subheading-icon {
+      position: absolute;
+      top: 0px;
+    }
+  }
+  .issue-List {
+    height: 480px !important;
+    background-color: #ffffff;
+    .issue-List-item {
+      background-color: #eff0ff;
+      padding: 0px 8px;
+      font-size: 14px;
+      border-radius: 3px;
+      color: #17233d;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .issue-List-item div {
+      margin-bottom: 5px;
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 0px !important;
+  }
+  .nav-Factual-generalization {
+    margin-left: 28px;
+    position: relative;
+    cursor: pointer;
+    .Factual-generalization-img {
+      position: absolute;
+      top: 0px;
+      right: 60px;
+    }
+    .Factual-generalization-imgs {
+      position: absolute;
+      top: -1px;
+      right: 55px;
+    }
+  }
+  .Factual-generalization-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 4;
+    justify-content: space-between;
+    .Factual-generalization-item {
+      padding: 20px;
+      flex-basis: calc(20%);
+    }
+  }
+  .capacity {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 2;
+    justify-content: space-between;
+    .capacity-item {
+      padding: 20px;
+      flex-basis: calc(40%);
+    }
+  }
+  .login-information-count {
+    padding: 2px 15px;
+    border: #ffffff 1px solid;
+    text-align: center;
+    margin-bottom: 15.5px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .content-size {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .content-size2 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  .parcelData {
+    cursor: pointer;
+    margin-right: 24px;
+  }
+  .parcelDatas {
+    color: #4c5be7;
+  }
+  .charts-order-rate {
+    height: 255px;
+    background-color: #ffffff;
+  }
+  .charts-discount-coupon {
+    height: 160px;
+  }
+  .freight-space {
+    height: 160px;
+  }
+  @media screen and (max-width: 1600px) {
+    .content-size {
+      font-size: 16px !important;
+      font-weight: bold;
+    }
+    .content-size2 {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .issue-List-item {
+      font-size: 10px !important;
+    }
+    .notice li {
+      font-size: 10px !important;
+      text-overflow: ellipsis;
+    }
+  }
+  .information {
+    margin-top: 20px;
+  }
+  .top-quick {
+    padding: 20px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .grid-content {
+    background-color: #ffffff;
+    padding: 20px;
+    height: 105px;
+  }
+  .flex {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  .box-size {
+    font-size: 13px;
+    color: #adb2b8;
+  }
   .main-item {
     background-color: #fff;
   }
@@ -1138,7 +2173,7 @@ export default {
   }
   .echarts {
     width: 85%;
-    height: 440px;
+    height: 405px;
     display: inline-block;
   }
   .type-list {
@@ -1417,6 +2452,7 @@ export default {
       height: 300px;
     }
   }
+
   .bottom {
     margin-top: 20px;
     .process,
@@ -1427,11 +2463,11 @@ export default {
       height: 150px;
       background-color: #fff;
       overflow: auto;
-      .title {
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-      }
+      // .title {
+      //   font-size: 16px;
+      //   font-weight: bold;
+      //   cursor: pointer;
+      // }
       .process-content {
         padding: 5px 0;
         display: flex;
@@ -1520,7 +2556,7 @@ export default {
 }
 @media screen and (max-width: 1596px) {
   .echarts {
-    height: 460px !important;
+    height: 410px !important;
   }
 }
 @media screen and (max-width: 1396px) {

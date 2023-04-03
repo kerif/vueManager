@@ -90,7 +90,7 @@ export default {
   }
   .el-main > div {
     background-color: #f5f5f5;
-    padding: 20px;
+    padding:0px 20px 20px 20px;
   }
   .isCollapses {
     left: 0px !important;

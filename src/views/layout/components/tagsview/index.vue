@@ -239,6 +239,7 @@ export default {
       display: flex;
     }
     .tags-view-item {
+      border-radius: 8px 8px 0px 0px ;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -265,6 +266,7 @@ export default {
         background-color: #3540a5;
         color: #fff;
         border-color: #3540a5;
+        border-radius: 8px 8px 0px 0px ;
         &::before {
           content: '';
           background: #fff;

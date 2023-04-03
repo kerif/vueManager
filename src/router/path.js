@@ -96,6 +96,8 @@ const partitionList = loadonDemand('config/line/partition')
 const channelLine = loadonDemand('config/line/channel')
 // 渠道 新增
 const channelLineAdd = loadonDemand('config/line/channelSet')
+// 面单配置列表
+const FaceSingleList = loadonDemand('config/expressSheet/FaceSingleList')
 // 配置 添加、修改路线
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 // 配置 路线 其余费用
@@ -104,6 +106,10 @@ const othersCost = loadonDemand('config/line/otherCost')
 const IconAdd = loadonDemand('config/line/IconAdd')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
+// 配置 仓位概览
+const GoodsAllocation = loadonDemand('config/goodsAllocation/echarts')
+// 配置 仓位细节
+const GoodsAllocationDetail = loadonDemand('config/goodsAllocation/placeDetail')
 // 配置 添加、修改仓库地址
 const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
 // 配置 仓库地址 仓位管理
@@ -2514,6 +2520,17 @@ export default [
               group: '基础配置',
               name: '基础配置'
             }
+          },
+          {
+            path: '/config/FaceSingleList',
+            name: 'FaceSingleList',
+            component: FaceSingleList,
+            id: 607,
+            meta: {
+              level: 2,
+              group: '基础配置',
+              name: '面单配置'
+            }
           }
         ]
       },
@@ -2606,6 +2623,28 @@ export default [
               level: 2,
               group: '数据概览',
               name: '营销报表'
+            }
+          },
+          {
+            path: '/goodsAllocation/echarts',
+            name: 'goodsAllocation',
+            component: GoodsAllocation,
+            id: 804,
+            meta: {
+              level: 2,
+              group: '数据概览',
+              name: '仓位概览'
+            }
+          },
+          {
+            path: '/goodsAllocation/placeDetail',
+            name: 'placeDetail',
+            component: GoodsAllocationDetail,
+            id: 804,
+            meta: {
+              level: 3,
+              group: '数据概览',
+              name: '货架详细'
             }
           }
         ]
