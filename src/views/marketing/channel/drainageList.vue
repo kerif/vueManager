@@ -190,7 +190,7 @@ export default {
     }
   }
   .poster-right {
-    width: calc(100%-430px);
+    width: calc(100% - 430px);
     width: -moz-calc(100% - 430px);
     width: -webkit-calc(100% - 430px);
     vertical-align: top;

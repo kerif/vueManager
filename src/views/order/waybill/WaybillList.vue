@@ -543,7 +543,7 @@
             >
               <el-table-column type="selection"></el-table-column>
               <!-- 客户ID -->
-              <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+              <el-table-column :label="$t('客户ID222')" prop="user_id"></el-table-column>
               <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
               <!-- 订单号 -->
               <el-table-column :label="$t('订单号')">
@@ -964,7 +964,7 @@
         <el-button @click="goCreated">{{ $t('批量改支付方式') }}</el-button>
       </div>
       <el-table :data="boxDialogData" border style="width: 100%">
-        <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+        <el-table-column prop="user_id" :label="$t('客户ID2222')"> </el-table-column>
         <el-table-column prop="order_sn" :label="$t('订单号')"> </el-table-column>
         <el-table-column prop="express_line.cn_name" :label="$t('线路名称')"> </el-table-column>
         <el-table-column :label="$t('支付方式')">
@@ -1688,6 +1688,7 @@ export default {
           })
         }
       })
+      console.log(this.oderData,'oderDataoderData')
     },
     // 导出清单
     uploadList() {
