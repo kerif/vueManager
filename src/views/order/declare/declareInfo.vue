@@ -51,7 +51,13 @@
       style="width: 100%; margin-top: 10px"
     >
       <el-table-column type="selection" label="#" width="60"> </el-table-column>
-      <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+      <el-table-column prop="user_id" :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span
+          ><span v-if="$store.state.uid === 1"> (</span>{{ scope.row.user_id
+          }}<span v-if="$store.state.uid === 1">)</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="user_name" :label="$t('客户昵称')"> </el-table-column>
       <el-table-column :label="$t('订单号')">
         <template slot-scope="scope">
@@ -184,6 +190,11 @@
               <el-input v-model="scope.row.material"></el-input>
             </template>
           </el-table-column>
+          <el-table-column :label="$t('重量')">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.weight"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
               <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
@@ -259,7 +270,7 @@
               <el-input
                 :placeholder="$t('请输入')"
                 class="input-sty"
-                v-model="ruleForm.agent_amount"
+                v-model="item.agent_amount"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -314,6 +325,11 @@
             <el-table-column :label="$t('材质')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.material"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('重量')">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.weight"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('数量')">
@@ -684,6 +700,10 @@ export default {
       this.infoData.push({
         cn_name: '',
         en_name: '',
+        sku: '',
+        hs_code: '',
+        material: '',
+        weight: '',
         quantity: '',
         unit: '',
         unit_value: '',
@@ -695,6 +715,10 @@ export default {
       items.push({
         cn_name: '',
         en_name: '',
+        sku: '',
+        hs_code: '',
+        material: '',
+        weight: '',
         quantity: '',
         unit: '',
         unit_value: '',

@@ -25,7 +25,9 @@ export default new Vuex.Store({
     orderListFieldData: [], // 订单列表显示字段
     siderBarImage: '',
     menuTitleId: 0,
-    menuTitle: ''
+    menuTitle: '',
+    uid: 0 ,
+    register: ''
   },
   mutations: {
     updateOrderListFieldData(state, data) {
@@ -113,6 +115,12 @@ export default new Vuex.Store({
       if (localStorage.getItem('language')) {
         localStorage.removeItem('language')
       }
+    },
+    saveUid(state, data) {
+      state.uid = data
+    },
+    saveParam(state, data) {
+      state.register = data
     }
   },
   actions: {}

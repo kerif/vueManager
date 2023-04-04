@@ -60,10 +60,10 @@
             <div style="width: 260px">
               <div>Aestron</div>
               <el-form :model="ruleForm.aestron">
-                <el-form-item label="sender_id">
+                <el-form-item label="SenderId">
                   <el-input
                     class="ipt"
-                    placeholder="请输入sender_id"
+                    placeholder="请输入SenderId,只允许输入数字或者字母"
                     v-model="ruleForm.aestron.sender_id"
                     @input="
                       ruleForm.aestron.sender_id = ruleForm.aestron.sender_id.replace(
@@ -73,17 +73,17 @@
                     "
                   ></el-input>
                 </el-form-item>
-                <el-form-item label="app_id">
+                <el-form-item label="AppId">
                   <el-input
-                    placeholder="请输入app_id"
+                    placeholder="请输入AppId"
                     class="ipt"
                     v-model="ruleForm.aestron.app_id"
                   ></el-input>
                 </el-form-item>
-                <el-form-item label="certificate">
+                <el-form-item label="Certificate">
                   <el-input
                     class="ipt"
-                    placeholder="请输入certificate"
+                    placeholder="请输入Certificate"
                     v-model="ruleForm.aestron.certificate"
                   ></el-input>
                 </el-form-item>
@@ -101,7 +101,7 @@
               <el-form-item :label="$t('国际')">
                 <el-radio-group v-model="ruleForm.area_intl_platform">
                   <el-radio :label="1">{{ $t('聚合') }}</el-radio>
-                  <el-radio :label="2">aestron</el-radio>
+                  <el-radio :label="2">Aestron</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-form>
@@ -125,6 +125,21 @@
     <div v-if="ruleForm.type === 2">
       <h2 class="template-sty">{{ $t('短信模版系统内') }}</h2>
       <!-- <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button> -->
+      <div class="template-box">
+        <div class="template-main">
+          <div class="template-icon">
+            <i class="el-icon-warning tip-icon"></i>
+          </div>
+          <div class="template-msg">
+            {{
+              $t(
+                '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+              )
+            }}<br />
+            {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+          </div>
+        </div>
+      </div>
       <div class="svs-template">
         <el-row :gutter="20">
           <el-col :span="10" v-for="item in smsData" :key="item.id">
@@ -165,20 +180,37 @@
       <div style="padding: 0 20px">
         <el-tabs v-model="activeName" @tab-click="handleClick(2)">
           <el-tab-pane :label="$t('聚合')" name="0"></el-tab-pane>
-          <el-tab-pane label="aestron" name="1"></el-tab-pane>
+          <el-tab-pane label="Aestron" name="1"></el-tab-pane>
         </el-tabs>
-        <div class="svs-template" v-if="activeName === '0'">
-          <el-form :model="ruleForm" label-width="130px">
-            <el-row>
-              <el-col :span="10" v-for="item in customerData" :key="item.id">
-                <el-form-item :label="item.type_name">
-                  <el-input class="input-sty" v-model="item.template_id"></el-input>
-                  <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-          <div class="template-main">
+        <div v-if="activeName === '0'">
+          <div class="template-box">
+            <div class="template-main">
+              <div class="template-icon">
+                <i class="el-icon-warning tip-icon"></i>
+              </div>
+              <div class="template-msg">
+                {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
+                {{
+                  $t(
+                    '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+                  )
+                }}<br />
+                {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+              </div>
+            </div>
+          </div>
+          <div class="svs-template">
+            <el-form :model="ruleForm" label-width="130px">
+              <el-row>
+                <el-col :span="10" v-for="item in customerData" :key="item.id">
+                  <el-form-item :label="item.type_name">
+                    <el-input class="input-sty" v-model="item.template_id"></el-input>
+                    <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <!-- <div class="template-main">
             <div class="template-icon">
               <i class="el-icon-warning code-sty"></i>
             </div>
@@ -191,9 +223,25 @@
               }}<br />
               {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
             </div>
+          </div> -->
           </div>
         </div>
         <div v-else>
+          <div class="template-box">
+            <div class="template-main">
+              <div class="template-icon">
+                <i class="el-icon-warning tip-icon"></i>
+              </div>
+              <div class="template-msg">
+                {{
+                  $t(
+                    '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+                  )
+                }}<br />
+                {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+              </div>
+            </div>
+          </div>
           <el-table :data="tableData" border>
             <el-table-column type="index"></el-table-column>
             <el-table-column :label="$t('类型')" prop="type_name"></el-table-column>
@@ -204,6 +252,8 @@
                   @change="changeStart(scope.row.id, scope.row.status)"
                   :active-text="$t('开')"
                   :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   inactive-color="gray"
                 >
@@ -687,6 +737,12 @@ export default {
     width: 160px;
     margin-bottom: 20px;
   }
+  .template-box {
+    width: 800px;
+    padding: 10px;
+    margin: 20px 0;
+    background-color: #fef0f0;
+  }
   .template-main {
     .template-icon {
       display: inline-block;
@@ -696,8 +752,12 @@ export default {
     .template-msg {
       display: inline-block;
       font-size: 14px;
-      color: #ccc;
+      // color: #ccc;
+      color: red;
       vertical-align: middle;
+    }
+    .tip-icon {
+      color: red;
     }
   }
   .red-title {

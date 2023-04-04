@@ -160,6 +160,7 @@ export default {
                   type: ele.data.type,
                   mode: ele.data.mode,
                   value: ele.data.value,
+                  first_order_value: ele.data.first_order_value,
                   rules
                 }
                 this.$set(this.params.configs, [ele.data.level - 1], params)

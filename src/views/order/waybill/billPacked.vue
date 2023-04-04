@@ -900,14 +900,13 @@ export default {
           type: 'presetPackBox'
         },
         data => {
-          let { id, length, width, height, weight } = JSON.parse(JSON.stringify(data))
+          let { id, length, width, height } = JSON.parse(JSON.stringify(data))
           if (type === 'single') {
             this.user.length = length
             this.user.width = width
             this.user.height = height
             this.boxId = id
           } else {
-            this.user.box[index].weight = weight
             this.user.box[index].length = length
             this.user.box[index].width = width
             this.user.box[index].height = height
@@ -1131,20 +1130,6 @@ export default {
             price: item.price
           }
         })
-      if (this.user.box.length && this.user.box.length > 1) {
-        this.user.box_type = 2
-        delete this.user.width,
-          delete this.user.height,
-          delete this.user.length,
-          delete this.user.weight
-      } else if (this.user.box.length && this.user.box.length === 1) {
-        this.user.box_type = 1
-        this.user.width = this.user.box[0].width
-        this.user.height = this.user.box[0].height
-        this.user.length = this.user.box[0].length
-        this.user.weight = this.user.box[0].weight
-        delete this.user.box
-      }
       if (this.user.box_type === 1) {
         this.user.system_box_id = this.boxId
       }
@@ -1163,8 +1148,25 @@ export default {
       this.user.unit_price = this.user.unit_price || ''
       let res = {}
       if (type === 1) {
-        let params = {
+        let params = {}
+        if (this.user.box.length && this.user.box.length === 1) {
+          this.user.box_type = 1
+        } else {
+          this.user.box_type = 2
+        }
+        params = {
           ...this.user
+        }
+        if (this.user.box.length && this.user.box.length === 1) {
+          this.user.box_type = 1
+          params.width = this.user.box[0].width
+          params.height = this.user.box[0].height
+          params.length = this.user.box[0].length
+          params.weight = this.user.box[0].weight
+          delete params.box
+        } else if (this.user.box.length && this.user.box.length > 1) {
+          this.user.box_type = 2
+          delete params.width, delete params.height, delete params.length, delete params.weight
         }
         params.declare = {
           items: [],
@@ -1178,12 +1180,28 @@ export default {
         res = await this.$request.saveOrderData(this.$route.params.id, params)
       } else {
         let params = {}
+        if (this.user.box.length && this.user.box.length === 1) {
+          this.user.box_type = 1
+        } else {
+          this.user.box_type = 2
+        }
         params = {
           ...this.user
         }
         params.declare = {
           items: [],
           tax_number: ''
+        }
+        if (this.user.box.length && this.user.box.length === 1) {
+          this.user.box_type = 1
+          params.width = this.user.box[0].width
+          params.height = this.user.box[0].height
+          params.length = this.user.box[0].length
+          params.weight = this.user.box[0].weight
+          delete params.box
+        } else if (this.user.box.length && this.user.box.length > 1) {
+          this.user.box_type = 2
+          delete params.width, delete params.height, delete params.length, delete params.weight
         }
         params.declare.items = this.items
         params.declare.tax_number = this.infoForm.tax_number
@@ -1193,17 +1211,17 @@ export default {
         if (this.is_checked) {
           params.final_price = this.final_price || ''
         }
-        if (this.user.box_type === 1) {
-          params.width = this.user.width || ''
-          params.height = this.user.height || ''
-          params.length = this.user.length || ''
-          params.weight = this.user.weight || ''
-        } else {
-          params.width = ''
-          params.height = ''
-          params.length = ''
-          params.weight = ''
-        }
+        // if (this.user.box_type === 1) {
+        //   params.width = this.user.width || ''
+        //   params.height = this.user.height || ''
+        //   params.length = this.user.length || ''
+        //   params.weight = this.user.weight || ''
+        // } else {
+        //   params.width = ''
+        //   params.height = ''
+        //   params.length = ''
+        //   params.weight = ''
+        // }
         res = await this.$request.saveOrderPack(
           this.$route.params.id,
           params
@@ -1418,10 +1436,10 @@ export default {
         this._onTotalWeight()
         this.unitVolume()
       } else {
-        this.user.weight = this.PackageData[0].package_weight
-        this.user.length = this.PackageData[0].length
-        this.user.width = this.PackageData[0].width
-        this.user.height = this.PackageData[0].height
+        this.user.box[0].weight = this.PackageData[0].package_weight
+        this.user.box[0].length = this.PackageData[0].length
+        this.user.box[0].width = this.PackageData[0].width
+        this.user.box[0].height = this.PackageData[0].height
       }
     },
     // 获取全部线路详情

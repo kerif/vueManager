@@ -102,6 +102,8 @@ const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 const othersCost = loadonDemand('config/line/otherCost')
 // 配置 添加、修改icon
 const IconAdd = loadonDemand('config/line/IconAdd')
+// 配置 偏远地区设置
+const RemoteAreas = loadonDemand('config/RemoteAreas/remoteSetting')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 配置 添加、修改仓库地址
@@ -164,6 +166,20 @@ const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
+// 快速入库下单
+const warehouseOrder = loadonDemand('station/warehouseOrder')
+// 配置 预报单号
+const reservationNo = loadonDemand('config/reservationNo/reservationNoList')
+// 配置 预报单号详情
+const reservationNoDetail = loadonDemand('config/reservationNo/reservationNoDetail')
+// 配置 预报单号导入清单
+const reservationNoImport = loadonDemand('config/reservationNo/import')
+// 配置 箱/袋预留号管理
+const boxReservedNum = loadonDemand('config/reservedBox/boxReservedNum')
+// 配置 箱/袋预留号管理 详情
+const boxReservedDetail = loadonDemand('config/reservedBox/boxReservedDetail')
+// 配置 导入
+const boxReservedImport = loadonDemand('config/reservedBox/boxReservedImport')
 // 自提点 转运包裹管理
 const PackageManagement = loadonDemand('pick/packageMana')
 // 自提点 仓位管理
@@ -220,6 +236,8 @@ const Billpacked = loadonDemand('order/waybill/billPacked')
 const Freight = loadonDemand('order/freight/freight')
 // 订单 运费查询 路线详情
 const freightDetail = loadonDemand('order/freight/freightDetail')
+// 偏远地区查询
+const remoteSearch = loadonDemand('order/remote/remoteSearch')
 // 订单 申报信息
 const declareInfo = loadonDemand('order/declare/declareInfo')
 // 订单 包裹订单概览
@@ -262,6 +280,8 @@ const imageSet = loadonDemand('marketing/imageSet')
 // const imageSet2 = loadonDemand('marketing/imageSet2')
 // 营销管理 弹窗广告管理
 const advertiseList = loadonDemand('marketing/advertise/advertiseList')
+// 营销管理 chatgpt 文案
+const AiAssistant = loadonDemand('marketing/ai/index')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -913,6 +933,17 @@ export default [
             }
           },
           {
+            path: '/order/remote/remoteSearch',
+            name: 'remoteSearch',
+            component: remoteSearch,
+            id: 409,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '偏远地区查询'
+            }
+          },
+          {
             path: '/order/declareInfo',
             name: 'declareInfo',
             component: declareInfo,
@@ -954,12 +985,23 @@ export default [
         id: 500,
         children: [
           {
+            path: '/station/warehouseOrder',
+            name: 'warehouseOrder',
+            component: warehouseOrder,
+            id: 501,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '快速入库下单'
+            }
+          },
+          {
             path: '/station/storage',
             name: 'storageContainer',
             component: Storage,
             id: 501,
             meta: {
-              level: 2,
+              level: 3,
               group: '货站',
               name: '包裹快速入库'
             }
@@ -1307,6 +1349,17 @@ export default [
             }
           },
           {
+            path: '/config/remoteAreas',
+            component: RemoteAreas,
+            name: 'RemoteAreas',
+            id: 609,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '偏远地区设置'
+            }
+          },
+          {
             path: '/config/warehouse',
             component: WareHouse,
             name: 'warehouse',
@@ -1491,6 +1544,76 @@ export default [
               group: '配置',
               name: '邮件通知配置',
               parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/reservationNo',
+            name: 'reservationNo',
+            component: reservationNo,
+            id: 607,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '预留订单号'
+            }
+          },
+          {
+            path: '/config/reservationNo/detail',
+            component: reservationNoDetail,
+            name: 'reservationNoDetail',
+            id: 607,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '预留订单号详情',
+              parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservationNo/import',
+            component: reservationNoImport,
+            name: 'reservationNoImport',
+            id: 607,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '导入清单',
+              parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedNum',
+            name: 'boxReservedNum',
+            component: boxReservedNum,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '预留袋号'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedDetail',
+            name: 'boxReservedDetail',
+            component: boxReservedDetail,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '详情',
+              parent: '/config/reservedBox'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedImport',
+            name: 'boxReservedImport',
+            component: boxReservedImport,
+            id: 608,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '导入',
+              parent: '/config/reservedBox'
             }
           },
           {
@@ -1916,7 +2039,7 @@ export default [
             }
           },
           {
-            path: '/marketing/new/ordinary/:type',
+            path: '/marketing/new/ordinary',
             name: 'ordinary',
             component: ordinary,
             id: 801,
@@ -2172,6 +2295,17 @@ export default [
               group: '营销管理',
               name: '弹窗广告管理',
               parent: '/marketing/advertising'
+            }
+          },
+          {
+            path: '/marketing/ai_assistant',
+            name: 'aiAssistant',
+            component: AiAssistant,
+            id: 807,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: 'AI内容助手'
             }
           }
           // {

@@ -79,8 +79,13 @@
         ></el-table-column>
         <el-table-column :label="$t('预约单号')" prop="sn" show-overflow-tooltip></el-table-column>
 
-        <el-table-column :label="$t('会员ID')" prop="user_id" width="150"></el-table-column>
-
+        <el-table-column :label="$t('会员ID')" prop="user_id" width="150">
+          <template slot-scope="scope">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('状态')" prop="status" width="150">
           <template slot-scope="scope">
             {{ getStatusName(scope.row.status) }}
@@ -101,13 +106,13 @@
         ></el-table-column>
         <el-table-column
           :label="$t('取件姓名')"
-          prop="address.name"
+          prop="address.receiver_name"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('取件城市')"
-          prop="address.city"
+          prop="address.sub_area.name"
           width="150"
           show-overflow-tooltip
         ></el-table-column>
@@ -202,6 +207,7 @@ export default {
     },
     onSearch() {
       this.page_params.page = 1
+      this.getCounts()
       this.getList()
     },
     onTabChange() {
@@ -249,7 +255,13 @@ export default {
       }).then(() => {
         this.$request.pickupDelete({ ids: ids }).then(res => {
           if (res.ret) {
-            this.getPickupDetail()
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.getCounts()
           } else {
             this.$message({
               message: res.msg,
@@ -345,9 +357,10 @@ export default {
       const searchData = this.searchFormData
       params = {
         ...params,
-        ...searchData,
         created_begin: searchData.created_at ? searchData.created_at[0] : '',
-        created_end: searchData.created_at ? searchData.created_at[1] : ''
+        created_end: searchData.created_at ? searchData.created_at[1] : '',
+        pickup_begin: searchData.pickup_at ? searchData.pickup_at[0] : '',
+        pickup_end: searchData.pickup_at ? searchData.pickup_at[1] : ''
       }
       return params
     },

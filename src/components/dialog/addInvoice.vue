@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -110,7 +111,16 @@ export default {
     },
     // 创建发货单
     goCreated() {
-      this.innerVisible = true
+      // this.innerVisible = true
+      dialog(
+        {
+          type: 'invoiceList'
+        },
+        () => {
+          this.show = true
+          this.getUser()
+        }
+      )
       this.show = false
     },
     // 创建发货单 取消

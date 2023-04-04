@@ -619,7 +619,7 @@
                 v-loading="tableLoading"
                 ref="table"
               >
-                <el-table-column :label="$t('箱号')" type="index" width="50"></el-table-column>
+                <el-table-column :label="$t('序号')" type="index" width="50"></el-table-column>
                 <el-table-column :label="$t('包裹号')">
                   <template slot-scope="scope">
                     <span v-for="(item, index) in scope.row.packages" :key="index">
@@ -634,6 +634,7 @@
                 <el-table-column :label="$t('体积周长')" prop="volumeGirth"></el-table-column>
                 <el-table-column :label="$t('体积重')" prop="volume_weight"></el-table-column>
                 <el-table-column :label="$t('实重')" prop="weight"></el-table-column>
+                <el-table-column :label="$t('箱号')" prop="sn"></el-table-column>
                 <el-table-column :label="$t('承运单号')" prop="logistics_sn"></el-table-column>
               </el-table>
               <el-row class="size">
@@ -1261,6 +1262,17 @@ export default {
         if (res.ret) this.groupDataList = res.data
       })
     },
+    // sortNum(pre, next) {
+    //   return pre - next
+    // },
+    sortArray(arr) {
+      return arr.reduce((prev, curr) => {
+        const index = prev.findIndex(item => curr < item)
+        return index === -1
+          ? [...prev, curr]
+          : [...prev.slice(0, index), curr, ...prev.slice(index)]
+      }, [])
+    },
     getList() {
       this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
@@ -1364,53 +1376,28 @@ export default {
           }
         ]
         res.data.box.forEach(item => {
-          let maxData = Math.max(item.length, item.width, item.height)
-          let minData = Math.min(item.length, item.width, item.height)
-          let midData
-          if (
-            (item.length > minData && item.length < maxData) ||
-            (item.length === minData && item.length === maxData)
-          ) {
-            midData = item.length
-          } else if (
-            (item.width > minData && item.width < maxData) ||
-            (item.width === minData && item.width === maxData)
-          ) {
-            midData = item.width
-          } else if (
-            (item.height > minData && item.height < maxData) ||
-            (item.height === minData && item.height === maxData)
-          ) {
-            midData = item.height
-          }
-          console.log(maxData, midData, minData, 'data')
+          let mulArrList = []
+          mulArrList.push(Number(item.length), Number(item.width), Number(item.height))
+          let mulArrData = this.sortArray(mulArrList)
+          let minData = mulArrData[0]
+          let midData = mulArrData[1]
+          let maxData = mulArrData[2]
           item.volumeGirth = maxData + (midData + minData) * 2
         })
         this.boxData = res.data.box
         this.userId = res.data.user_id
         //如果是单箱出库
         if (this.form.box_type === 1) {
-          let maxData = Math.max(
-            res.data.details.length,
-            res.data.details.width,
-            res.data.details.height
-          )
-          let minData = Math.min(
-            res.data.details.length,
-            res.data.details.width,
-            res.data.details.height
-          )
-          console.log(maxData, minData)
-          let value =
-            res.data.details.length > res.data.details.width
-              ? res.data.details.length
-              : res.data.details.width
-          let midData
-          if (value > res.data.details.height) {
-            midData = res.data.details.height
-          } else {
-            midData = value
-          }
+          let arrList = [
+            Number(res.data.details.length),
+            Number(res.data.details.width),
+            Number(res.data.details.height)
+          ]
+          let arrData = this.sortArray(arrList)
+          console.log(arrData, 'arrData')
+          let minData = arrData[0]
+          let midData = arrData[1]
+          let maxData = arrData[2]
           this.boxData = [
             {
               id: 0,
@@ -1708,7 +1695,7 @@ export default {
       let params = {
         order_ids: this.$route.params.id,
         is_member: Number(this.is_member),
-        reamrk: this.logisticsRemark,
+        remark: this.logisticsRemark,
         created_at: this.created_at
       }
       if (this.modeData.map(item => item.id).includes(this.logist.logistics_type_id)) {

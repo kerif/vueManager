@@ -2,6 +2,7 @@ export default [
   {
     id: 'user_id',
     name: '客户ID',
+    width: '150',
     checked: true
   },
   {
@@ -174,6 +175,12 @@ export default [
   {
     id: 'created_at', // 1,2,3,4
     name: '',
+    width: '160',
+    checked: true
+  },
+  {
+    id: 'phone',
+    name: '收货人电话',
     width: '160',
     checked: true
   }

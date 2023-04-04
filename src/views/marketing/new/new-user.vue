@@ -106,7 +106,7 @@
                 $t('管理')
               }}</el-button>
             </div>
-            <div class="bottom-right">
+            <div class="bottom-right" v-if="item.type !== 7 && item.type !== 8">
               <el-switch
                 class="switch-sty"
                 @change="changeOnline(item.type, item.status)"
@@ -208,16 +208,10 @@ export default {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type }, query: { type } })
         // this.$router.push({ name: 'ordinary', params: { type: type } })
-      } else if (
-        type === 1 ||
-        type === 2 ||
-        type === 3 ||
-        type === 5 ||
-        type === 6 ||
-        type === 7 ||
-        type === 8
-      ) {
-        this.$router.push({ name: 'ordinary', params: { type: type } })
+      } else if (type === 1 || type === 2 || type === 3 || type === 5 || type === 6) {
+        this.$router.push({ name: 'ordinary', query: { type: JSON.stringify(type) } })
+      } else if (type === 7 || type === 8) {
+        this.$router.push({ name: 'addVoucher', params: { type: type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: type } })
       }

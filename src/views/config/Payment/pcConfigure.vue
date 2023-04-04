@@ -110,6 +110,12 @@
           <el-button slot="reference" @click="goOauth">{{ $t('配置') }}</el-button>
         </el-popover>
       </el-form-item>
+      <el-form-item :label="$t('客服时间')">
+        <el-input v-model="setForm.customer_time"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('客服链接')">
+        <el-input v-model="setForm.customer_url"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('小程序码')" class="updateChe">
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
@@ -216,7 +222,9 @@ export default {
         app_id: '',
         icp: '',
         token: '',
-        aes_key: ''
+        aes_key: '',
+        customer_time: '',
+        customer_url: ''
       },
       visibleOauth: false,
       oauthData: {

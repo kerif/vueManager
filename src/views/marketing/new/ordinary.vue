@@ -14,16 +14,14 @@
       v-if="activeName === '0'"
     >
       <el-form-item :label="$t('种类')">
-        <span v-if="$route.params.type === 1">{{ $t('新用户送券') }} - {{ $t('抵现券') }}</span>
-        <span v-if="$route.params.type === 2">{{ $t('邀请新人送券') }} - {{ $t('抵现券') }}</span>
-        <span v-if="$route.params.type === 3">{{ $t('被邀请人送券') }} - {{ $t('抵现券') }}</span>
+        <span v-if="type === 1">{{ $t('新用户送券') }} - {{ $t('抵现券') }}</span>
+        <span v-if="type === 2">{{ $t('邀请新人送券') }} - {{ $t('抵现券') }}</span>
+        <span v-if="type === 3">{{ $t('被邀请人送券') }} - {{ $t('抵现券') }}</span>
         <!-- <span v-if="$route.params.type === 4">{{ $t('下单返券') }} - {{ $t('抵现券') }}</span> -->
-        <span v-if="$route.params.type === 5"
-          >{{ $t('关注公众号领券') }} - {{ $t('抵现券') }}
-        </span>
-        <span v-if="$route.params.type === 6">{{ $t('生日券') }} - {{ $t('抵现券') }} </span>
-        <span v-if="$route.params.type === 7">{{ $t('普通券') }} - {{ $t('抵现券') }} </span>
-        <span v-if="$route.params.type === 8">{{ $t('用户抢券') }} - {{ $t('抵现券') }} </span>
+        <span v-if="type === 5">{{ $t('关注公众号领券') }} - {{ $t('抵现券') }} </span>
+        <span v-if="type === 6">{{ $t('生日券') }} - {{ $t('抵现券') }} </span>
+        <span v-if="type === 7">{{ $t('普通券') }} - {{ $t('抵现券') }} </span>
+        <span v-if="type === 8">{{ $t('用户抢券') }} - {{ $t('抵现券') }} </span>
       </el-form-item>
       <el-form-item :label="$t('券名称')" prop="name">
         <el-input
@@ -32,7 +30,7 @@
           :placeholder="$t('请输入券名称')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('金额')" prop="amount" v-if="$route.params.type !== 4">
+      <el-form-item :label="$t('金额')" prop="amount" v-if="type !== 4">
         <el-input
           class="input-sty"
           v-model="ruleForm.amount"
@@ -46,11 +44,7 @@
           :placeholder="$t('请输入最低消费金额')"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('生效时间')"
-        prop="effected_at"
-        v-if="$route.params.type === 7 || $route.params.type === 8"
-      >
+      <el-form-item :label="$t('生效时间')" prop="effected_at" v-if="type === 7 || type === 8">
         <el-date-picker
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="ruleForm.effected_at"
@@ -60,11 +54,7 @@
           :placeholder="$t('请输入生效时间')"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item
-        :label="$t('失效时间')"
-        prop="expired_at"
-        v-if="$route.params.type === 7 || $route.params.type === 8"
-      >
+      <el-form-item :label="$t('失效时间')" prop="expired_at" v-if="type === 7 || type === 8">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -81,13 +71,8 @@
         </el-input>
       </el-form-item> -->
       <el-form-item
-        :label="$route.params.type === 5 ? $t('有效期') : $t('有效时长')"
-        v-if="
-          $route.params.type === 2 ||
-          $route.params.type === 3 ||
-          $route.params.type === 5 ||
-          $route.params.type === 6
-        "
+        :label="type === 5 ? $t('有效期') : $t('有效时长')"
+        v-if="type === 2 || type === 3 || type === 5 || type === 6"
         prop="days"
       >
         <el-input
@@ -96,7 +81,7 @@
           v-model="ruleForm.days"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('有效期')" prop="radio" v-if="$route.params.type === 1">
+      <el-form-item :label="$t('有效期')" prop="radio" v-if="type === 1">
         <el-radio-group v-model="ruleForm.radio">
           <div style="margin: 0 0 10px 0">
             <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
@@ -188,17 +173,13 @@
           v-model="ruleForm.max_coupon_amount"
         ></el-input>
       </el-form-item> -->
-      <el-form-item
-        :label="$t('获券条件')"
-        prop="trigger_condition"
-        v-if="$route.params.type === 2"
-      >
+      <el-form-item :label="$t('获券条件')" prop="trigger_condition" v-if="type === 2">
         <el-radio-group v-model="ruleForm.trigger_condition">
           <el-radio :label="1">{{ $t('新用户支付一笔订单') }}</el-radio>
           <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('抢券时间')" v-if="$route.params.type === 8">
+      <el-form-item :label="$t('抢券时间')" v-if="type === 8">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -209,29 +190,21 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item
-        :label="$t('单人限领数量')"
-        prop="share_each_count"
-        v-if="$route.params.type === 8"
-      >
+      <el-form-item :label="$t('单人限领数量')" prop="share_each_count" v-if="type === 8">
         <el-input
           class="input-sty"
           :placeholder="$t('请输入单人限领数量')"
           v-model="ruleForm.share_each_count"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('放券总数')"
-        prop="share_total_count"
-        v-if="$route.params.type === 8"
-      >
+      <el-form-item :label="$t('放券总数')" prop="share_total_count" v-if="type === 8">
         <el-input
           class="input-sty"
           :placeholder="$t('请输入放券总数')"
           v-model="ruleForm.share_total_count"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('后台投放不计入总数')" v-if="$route.params.type === 8">
+      <el-form-item :label="$t('后台投放不计入总数')" v-if="type === 8">
         <el-radio-group v-model="ruleForm.ignore_launch_count">
           <el-radio :label="1">{{ $t('是') }}</el-radio>
           <el-radio :label="0">{{ $t('否') }}</el-radio>
@@ -257,16 +230,14 @@
       ref="form"
     >
       <el-form-item :label="$t('种类')">
-        <span v-if="$route.params.type === 1">{{ $t('新用户送券') }} - {{ $t('抵重券') }}</span>
-        <span v-if="$route.params.type === 2">{{ $t('邀请新人送券') }} - {{ $t('抵重券') }}</span>
-        <span v-if="$route.params.type === 3">{{ $t('被邀请人送券') }} - {{ $t('抵重券') }}</span>
+        <span v-if="type === 1">{{ $t('新用户送券') }} - {{ $t('抵重券') }}</span>
+        <span v-if="type === 2">{{ $t('邀请新人送券') }} - {{ $t('抵重券') }}</span>
+        <span v-if="type === 3">{{ $t('被邀请人送券') }} - {{ $t('抵重券') }}</span>
         <!-- <span v-if="this.$route.params.type === 4">{{ $t('下单返券') }} - {{ $t('抵重券') }}</span> -->
-        <span v-if="$route.params.type === 5"
-          >{{ $t('关注公众号领券') }} - {{ $t('抵重券') }}
-        </span>
-        <span v-if="$route.params.type === 6">{{ $t('生日券') }} - {{ $t('抵重券') }} </span>
-        <span v-if="$route.params.type === 7">{{ $t('普通券') }} - {{ $t('抵重券') }} </span>
-        <span v-if="$route.params.type === 8">{{ $t('用户抢券') }} - {{ $t('抵重券') }} </span>
+        <span v-if="type === 5">{{ $t('关注公众号领券') }} - {{ $t('抵重券') }} </span>
+        <span v-if="type === 6">{{ $t('生日券') }} - {{ $t('抵重券') }} </span>
+        <span v-if="type === 7">{{ $t('普通券') }} - {{ $t('抵重券') }} </span>
+        <span v-if="type === 8">{{ $t('用户抢券') }} - {{ $t('抵重券') }} </span>
       </el-form-item>
       <el-form-item :label="$t('券名称')" prop="name">
         <el-input
@@ -278,14 +249,7 @@
       <el-form-item
         :label="$t('可抵重量')"
         prop="weight"
-        v-if="
-          $route.params.type === 1 ||
-          $route.params.type === 2 ||
-          $route.params.type === 3 ||
-          $route.params.type === 6 ||
-          $route.params.type === 7 ||
-          $route.params.type === 8
-        "
+        v-if="type === 1 || type === 2 || type === 3 || type === 6 || type === 7 || type === 8"
       >
         <el-input
           class="input-sty"
@@ -293,7 +257,7 @@
           :placeholder="$t('请输入可抵重量')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('重量')" prop="weight" v-if="$route.params.type === 5">
+      <el-form-item :label="$t('重量')" prop="weight" v-if="type === 5">
         <el-input
           class="input-sty"
           v-model="form.weight"
@@ -307,11 +271,7 @@
           :placeholder="$t('请输入最低消费重量')"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('生效时间')"
-        prop="effected_at"
-        v-if="$route.params.type === 7 || $route.params.type === 8"
-      >
+      <el-form-item :label="$t('生效时间')" prop="effected_at" v-if="type === 7 || type === 8">
         <el-date-picker
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="form.effected_at"
@@ -321,11 +281,7 @@
           :placeholder="$t('请输入生效时间')"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item
-        :label="$t('失效时间')"
-        prop="expired_at"
-        v-if="$route.params.type === 7 || $route.params.type === 8"
-      >
+      <el-form-item :label="$t('失效时间')" prop="expired_at" v-if="type === 7 || type === 8">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -337,13 +293,8 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item
-        :label="$route.params.type === 5 ? $t('有效期') : $t('有效时长')"
-        v-if="
-          $route.params.type === 2 ||
-          $route.params.type === 3 ||
-          $route.params.type === 5 ||
-          $route.params.type === 6
-        "
+        :label="type === 5 ? $t('有效期') : $t('有效时长')"
+        v-if="type === 2 || type === 3 || type === 5 || type === 6"
         prop="days"
       >
         <el-input
@@ -352,16 +303,16 @@
           v-model="form.days"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('有效期')" prop="radio" v-if="$route.params.type === 1">
-        <el-radio-group v-model="ruleForm.radio">
+      <el-form-item :label="$t('有效期')" prop="radio" v-if="type === 1">
+        <el-radio-group v-model="form.radio">
           <div style="margin: 0 0 10px 0">
             <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
-            <el-input v-model="ruleForm.days" style="width: 340px"></el-input>
+            <el-input v-model="form.days" style="width: 340px"></el-input>
           </div>
           <div>
             <el-radio :label="2">{{ $t('具体日期范围') }}</el-radio>
             <el-date-picker
-              v-model="ruleForm.begin_at"
+              v-model="form.begin_at"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
@@ -370,7 +321,7 @@
             </el-date-picker>
             &nbsp;&nbsp;<span style="display: inline-block; width: 10px">-</span>&nbsp;&nbsp;
             <el-date-picker
-              v-model="ruleForm.end_at"
+              v-model="form.end_at"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               type="date"
@@ -396,17 +347,13 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item
-        :label="$t('获券条件')"
-        prop="trigger_condition"
-        v-if="$route.params.type === 2"
-      >
-        <el-radio-group v-model="ruleForm.trigger_condition">
+      <el-form-item :label="$t('获券条件')" prop="trigger_condition" v-if="type === 2">
+        <el-radio-group v-model="form.trigger_condition">
           <el-radio :label="1">{{ $t('新用户支付一笔订单') }}</el-radio>
           <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('抢券时间')" v-if="$route.params.type === 8">
+      <el-form-item :label="$t('抢券时间')" v-if="type === 8">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -417,29 +364,21 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item
-        :label="$t('单人限领数量')"
-        prop="share_each_count"
-        v-if="$route.params.type === 8"
-      >
+      <el-form-item :label="$t('单人限领数量')" prop="share_each_count" v-if="type === 8">
         <el-input
           class="input-sty"
           :placeholder="$t('请输入单人限领数量')"
           v-model="form.share_each_count"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('放券总数')"
-        prop="share_total_count"
-        v-if="$route.params.type === 8"
-      >
+      <el-form-item :label="$t('放券总数')" prop="share_total_count" v-if="type === 8">
         <el-input
           class="input-sty"
           :placeholder="$t('请输入放券总数')"
           v-model="form.share_total_count"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('后台投放不计入总数')" v-if="$route.params.type === 8">
+      <el-form-item :label="$t('后台投放不计入总数')" v-if="type === 8">
         <el-radio-group v-model="form.ignore_launch_count">
           <el-radio :label="1">{{ $t('是') }}</el-radio>
           <el-radio :label="0">{{ $t('否') }}</el-radio>
@@ -503,12 +442,14 @@ export default {
         ignore_launch_count: 0,
         radio: 1,
         begin_at: '',
+        end_at: '',
         trigger_condition: 1
       },
       timeList: [],
       timeData: [],
       localization: {},
       languageData: [],
+      type: '',
       options: [
         {
           id: 1,
@@ -570,6 +511,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.type) {
+      this.type = JSON.parse(this.$route.query.type)
+    }
     this.getLanguageList()
   },
   methods: {
@@ -577,6 +521,7 @@ export default {
       dialog({ type: 'lineChoose' }, data => {
         this.lineName = data
         this.ruleForm.express_line_ids = data.map(item => item.id)
+        this.form.express_line_ids = data.map(item => item.id)
       })
     },
     handleClick(tab) {
@@ -612,14 +557,14 @@ export default {
             params.coupon_type = 2
           }
 
-          this.$request.addNew(this.$route.params.type, params).then(res => {
+          this.$request.addNew(this.type, params).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.$router.push({ name: 'voucher', params: { type: this.$route.params.type } })
+              this.$router.push({ name: 'new', params: { type: this.type } })
             } else {
               this.$message({
                 message: res.msg,

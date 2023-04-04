@@ -20,9 +20,11 @@
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id">
         <template slot-scope="scope">
-          <el-button type="text" @click="viewProfile(scope.row.user_id)">{{
-            scope.row.user_id
-          }}</el-button>
+          <el-button type="text" @click="viewProfile(scope.row.user_id)">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span
+            ><span v-if="$store.state.uid === 1">(</span> {{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span></el-button
+          >
         </template>
       </el-table-column>
       <!-- 客户昵称 -->

@@ -27,6 +27,14 @@
             type="primary"
             >入库</el-button
           >
+          <el-button
+            size="small"
+            icon="el-icon-receiving"
+            v-if="form.status === 1"
+            @click.native="onStorage(form.id)"
+            type="primary"
+            >{{ $t('入库下单') }}</el-button
+          >
 
           <el-button
             size="small"
@@ -643,6 +651,9 @@ export default {
     },
     storage(id) {
       this.$router.push({ name: 'editStorage', params: { id: id } })
+    },
+    onStorage(id) {
+      this.$router.push({ name: 'warehouseOrder', query: { id } })
     },
     // 入库日志
     goLogs(expressNum) {

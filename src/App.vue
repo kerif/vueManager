@@ -12,6 +12,7 @@ export default {
     }
   },
   created() {
+    this.getInitUserId()
     if (location.hostname) {
       this.getInit()
     }
@@ -28,6 +29,13 @@ export default {
           changeFavicon(iconUrl)
         }
         this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
+      })
+    },
+    getInitUserId() {
+      this.$request.initUserId().then(res => {
+        if (res.ret) {
+          this.$store.commit('saveUid', res.data.user_uid)
+        }
       })
     }
   }

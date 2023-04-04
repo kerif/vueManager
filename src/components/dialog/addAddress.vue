@@ -201,7 +201,16 @@ export default {
                           : item.areas.map(item => {
                               return {
                                 value: item.id,
-                                label: item.name
+                                label: item.name,
+                                children:
+                                  item.areas < 1
+                                    ? undefined
+                                    : item.areas.map(item => {
+                                        return {
+                                          value: item.id,
+                                          label: item.name
+                                        }
+                                      })
                               }
                             })
                     }
@@ -234,7 +243,8 @@ export default {
               user_id: this.ruleForm.user_id.substring(0, 6),
               country_id: this.ruleForm.country_id[0],
               area_id: this.ruleForm.country_id[1] ? this.ruleForm.country_id[1] : '',
-              sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : ''
+              sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : '',
+              low_area_id: this.ruleForm.country_id[3] ? this.ruleForm.country_id[3] : ''
             })
             .then(res => {
               console.log(res)
