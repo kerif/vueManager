@@ -127,6 +127,7 @@ export default {
 <style lang="scss" scoped>
 .agency-list-container {
   background-color: white;
+  padding: 20px;
   .headline {
     margin-top: 20px;
     .searchBtn {

@@ -153,6 +153,7 @@ export default {
   margin-top: 25px;
   padding: 0 15px;
   justify-content: space-between;
+  cursor: pointer;
   .menu-title {
     font-size: 18px;
     color: #17233d;

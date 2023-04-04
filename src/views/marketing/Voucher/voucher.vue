@@ -42,13 +42,13 @@
       </div>
       <el-button type="primary" size="small" @click="onNew">{{ $t('新用户福利') }}</el-button>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 320px)">
       <el-table
         class="data-list"
         border
         stripe
         v-loading="tableLoading"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 320px)"
         ref="table"
         :data="voucherData"
         @selection-change="onSelectChange"
@@ -56,9 +56,14 @@
         <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
         <el-table-column type="index" width="50"></el-table-column>
         <!-- 优惠券名称 -->
-        <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('优惠券名称')" prop="name" width="160"></el-table-column>
         <!-- 类型 -->
-        <el-table-column :label="$t('类型')" prop="type" width="180"></el-table-column>
+        <el-table-column :label="$t('类型')" prop="type" width="100"></el-table-column>
+        <el-table-column :label="$t('折扣类型')" prop="discount_type">
+          <template slot-scope="scope">
+            <span>{{ scope.row.discount_type === 0 ? $t('抵现券') : $t('抵重券') }}</span>
+          </template>
+        </el-table-column>
         <!-- 金额 -->
         <el-table-column
           :label="$t('金额') + this.localization.currency_unit"
@@ -76,6 +81,7 @@
             <span v-if="scope.row.status === 1">{{ $t('未开始') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('进行中') }}</span>
             <span v-if="scope.row.status === 3">{{ $t('已失效') }}</span>
+            <span v-if="scope.row.status === 4">{{ $t('已作废') }}</span>
           </template>
         </el-table-column>
         <!-- 使用范围 -->
@@ -787,6 +793,8 @@ export default {
 
 <style lang="scss">
 .voucher-container {
+  padding: 0px 15px;
+  background-color: #fff;
   .searchGroup {
     width: 21.2%;
     float: right;

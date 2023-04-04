@@ -46,6 +46,7 @@
           :placeholder="$t('请选择区域')"
           filterable
           :disabled="!ruleForm.child_id"
+          @change="refreshData"
           clearable
         >
           <el-option v-for="item in subData" :key="item.id" :label="item.name" :value="item.id">
@@ -295,6 +296,9 @@ export default {
     init() {
       this.getString()
       this.getCountry()
+    },
+    refreshData() {
+      this.$forceUpdate()
     }
   }
 }

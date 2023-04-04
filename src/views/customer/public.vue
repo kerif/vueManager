@@ -30,7 +30,7 @@
        </el-select> -->
       </search-group>
     </div>
-    <div style="height: calc(100vh - 270px">
+    <div style="height: calc(100vh - 275px">
       <el-table
         :data="transactionList"
         stripe
@@ -38,7 +38,7 @@
         class="data-list"
         v-loading="tableLoading"
         ref="table"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         @selection-change="selectionChange"
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -272,6 +272,8 @@ export default {
 </script>
 <style lang="scss">
 .public-list-container {
+  padding: 10px 15px;
+  background-color: #fff !important;
   .searchGroup {
     overflow: hidden;
     display: flex;

@@ -43,11 +43,11 @@
         @search="goSearch"
       >
       </search-group>
-      <!-- <div class="filter">
+      <div class="filter">
         <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
           >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
         ></el-button>
-      </div> -->
+      </div>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -304,6 +304,7 @@ export default {
   background: rgba(0, 0, 0, 0.3);
 }
 .suggest-list-container {
+  background-color: #fff ;
   .el-dialog__body {
     .img_box {
       text-align: center;
@@ -329,6 +330,8 @@ export default {
   .searchGroup {
     display: flex;
     justify-content: flex-end;
+    padding: 10px 0px;
+    background-color: #f5f5f5;
     .search-group {
       width: 21.5%;
       margin-right: 10px;

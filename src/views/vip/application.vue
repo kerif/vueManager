@@ -14,15 +14,17 @@
       @selection-change="selectionChange"
       v-loading="tableLoading"
       ref="table"
-      height="calc(100vh - 275px)"
+      height="calc(100vh - 300px)"
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id">
         <template slot-scope="scope">
-          <el-button type="text" @click="viewProfile(scope.row.user_id)">{{
-            scope.row.user_id
-          }}</el-button>
+          <el-button type="text" @click="viewProfile(scope.row.user_id)">
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span
+            ><span v-if="$store.state.uid === 1">(</span> {{ scope.row.user_id
+            }}<span v-if="$store.state.uid === 1">)</span></el-button
+          >
         </template>
       </el-table-column>
       <!-- 客户昵称 -->
@@ -345,6 +347,8 @@ export default {
 
 <style lang="scss">
 .application-list-container {
+  padding: 10px 15px;
+  background-color: #fff !important;
   .tabLength {
     width: 200px !important;
     display: inline-block;

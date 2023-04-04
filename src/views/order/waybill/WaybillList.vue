@@ -1,5 +1,11 @@
 <template>
   <div class="way-list-container">
+    <waybill-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      @info="getVal"
+      v-on:submit="goMatch"
+    ></waybill-list-search>
     <el-tabs v-model="activeName" class="tab-length" stretch @tab-click="onTabChange">
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane :label="`${$t('待处理')} (${countData.pending || 0})`" name="1"></el-tab-pane>
@@ -13,12 +19,6 @@
       ></el-tab-pane>
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
-    <waybill-list-search
-      v-show="hasFilterCondition"
-      :searchFieldData="searchFieldData"
-      @info="getVal"
-      v-on:submit="goMatch"
-    ></waybill-list-search>
     <div class="header-range">
       <div v-if="oderData.length && ['1', '2', '3', '4', '5', '6'].includes(activeName)">
         <el-button class="btn-yellow" v-if="activeName === '1'" @click="oneBatch" size="small">{{
@@ -228,7 +228,12 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <template v-if="item.id === 'order_sn'">
+              <template v-if="item.id === 'user_id'">
+                <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+                <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+                }}<span v-if="$store.state.uid === 1">)</span>
+              </template>
+              <template v-else-if="item.id === 'order_sn'">
                 <el-button @click="details(scope.row.id, activeName)" type="text">{{
                   scope.row.order_sn
                 }}</el-button>
@@ -350,6 +355,9 @@
               </template>
               <template v-else-if="item.id === 'exceptional_operator'">
                 <span>{{ scope.row.exceptional_operator }}</span>
+              </template>
+              <template v-else-if="item.id === 'phone'">
+                <span>{{ scope.row.address && scope.row.address.phone }}</span>
               </template>
               <template v-else-if="item.id === 'address_type'">
                 <span>{{ scope.row.address_type }}</span>
@@ -1278,7 +1286,7 @@ export default {
         sale_id: '',
         customer_id: ''
       },
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       page_params: {
         size: 20
       },
@@ -1360,7 +1368,8 @@ export default {
         'sale_name',
         'customer_name',
         'weight',
-        'fee'
+        'fee',
+        'phone'
       ]
       this.checkColumn = []
       this.tableColumn.forEach(item => {

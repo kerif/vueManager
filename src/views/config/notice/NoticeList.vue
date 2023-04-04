@@ -18,7 +18,7 @@
       </div>
       <div class="clear"></div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 275px)">
       <el-table
         class="data-list"
         stripe
@@ -27,7 +27,7 @@
         @selection-change="selectionChange"
         ref="table"
         v-loading="tableLoading"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
       >
         <el-table-column type="selection"></el-table-column>
         <el-table-column :label="$t('标题')" prop="title" width="500">
@@ -256,7 +256,8 @@ export default {
 
 <style lang="scss">
 .notice-list-container {
-  background-color: #f5f5f5 !important;
+  padding: 10px 15px;
+  background-color: #fff !important;
   .copy-sty {
     display: flex;
     justify-content: space-between;

@@ -11,7 +11,12 @@
       </el-form-item>
       <!-- 联系邮箱 -->
       <el-form-item :label="$t('联系邮箱')">
-        <span class="right-padding">{{ email }}</span>
+        <!-- <span class="right-padding">{{ email }}</span> -->
+        <el-input
+          v-model="ruleForm.email"
+          :placeholder="$t('请输入邮箱')"
+          class="input-sty"
+        ></el-input>
       </el-form-item>
       <el-form-item :label="$t('佣金模版')">
         <el-select style="margin-left: 50px" v-model="ruleForm.template_id" placeholder="请选择">
@@ -56,7 +61,8 @@ export default {
       ruleForm: {
         commission: '',
         remark: '',
-        template_id: ''
+        template_id: '',
+        email: ''
       },
       email: '',
       phone: '',
@@ -113,6 +119,7 @@ export default {
       this.show = false
     },
     init() {
+      this.ruleForm.email = this.email
       this.getTemplate()
     }
   }

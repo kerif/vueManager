@@ -266,11 +266,15 @@ export default {
     },
     // 获取模板的分区个数
     getTmp() {
-      this.$request.lineRegion().then(res => {
-        if (res.ret) {
-          this.tmpData = res.data
-        }
-      })
+      this.$request
+        .lineRegion({
+          size: 100
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tmpData = res.data
+          }
+        })
     },
     //选用预设分区表
     selectPartition() {

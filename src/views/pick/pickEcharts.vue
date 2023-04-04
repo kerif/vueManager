@@ -2,7 +2,13 @@
   <div class="pick-echarts-container">
     <div class="echarts-main">
       <h3 class="auto-sty">{{ $t('自提点信息') }}</h3>
-      <el-select @change="changePick" v-model="XStationId" clearable placeholder="请选择">
+      <el-select
+        @change="changePick"
+        v-model="XStationId"
+        filterable
+        clearable
+        placeholder="请选择"
+      >
         <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
         </el-option>
       </el-select>

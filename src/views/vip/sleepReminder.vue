@@ -161,7 +161,7 @@ export default {
       // batchId: '',
       urlName: '',
       fileList: [],
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       radio: '',
       no_order_days: '',
       no_login_days: ''

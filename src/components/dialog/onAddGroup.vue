@@ -567,10 +567,22 @@ export default {
         express_line_id: '',
         days: '',
         is_public: 0,
+        region_id: '',
         images: [],
         country: '',
-        remark: ''
+        remark: '',
+        address: {
+          receiver_name: '',
+          country_id: '',
+          area_id: '',
+          sub_area_id: ''
+        },
+        express_line: {}
       }
+      this.stationName = ''
+      this.contact_info = ''
+      this.country_name = ''
+      this.address = ''
     },
     clearSecond() {
       this.chooseId = ''

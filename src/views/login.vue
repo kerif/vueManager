@@ -53,7 +53,7 @@
                 ><strong>{{ $t('欢迎使用') }}</strong></span
               >
               <div class="go-sty">
-                <span @click="changeWelcome(3)" v-if="this.$route.query.register">{{
+                <span @click="changeWelcome(3)" v-if="$route.query.register">{{
                   $t('去注册')
                 }}</span>
               </div>

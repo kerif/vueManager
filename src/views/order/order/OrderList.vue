@@ -1,5 +1,10 @@
 <template>
   <div class="order-list-container">
+    <order-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      v-on:submit="goMatch"
+    ></order-list-search>
     <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane
@@ -13,11 +18,6 @@
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
       <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
     </el-tabs>
-    <order-list-search
-      v-show="hasFilterCondition"
-      :searchFieldData="searchFieldData"
-      v-on:submit="goMatch"
-    ></order-list-search>
     <div class="header-range">
       <div class="header-btns">
         <el-button
@@ -152,7 +152,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)" v-if="activeName !== '7'">
+    <div style="height: calc(100vh - 275px)" v-if="activeName !== '7'">
       <el-table
         border
         stripe
@@ -160,7 +160,7 @@
         :data="orderData"
         @selection-change="selectionChange"
         v-loading="tableLoading"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 275px)"
         class="order-data-list"
       >
         <el-table-column
@@ -174,11 +174,15 @@
           :label="$t('客户ID')"
           v-if="activeName !== '7'"
           key="user_id"
-          width="120"
+          width="160"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+            <span
+              ><span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+              }}<span v-if="$store.state.uid === 1">)</span>---{{ scope.row.user_name }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -391,6 +395,12 @@
                   <!-- 入库 -->
                   <span v-if="activeName === '1' || scope.row.status === 1">{{ $t('入库') }}</span>
                 </el-dropdown-item>
+                <el-dropdown-item @click.native="onStorage(scope.row.id)">
+                  <!-- 入库 -->
+                  <span v-if="activeName === '1' || scope.row.status === 1">{{
+                    $t('入库下单')
+                  }}</span>
+                </el-dropdown-item>
                 <el-dropdown-item @click.native="goExpress(scope.row.express_num)">
                   <span
                     v-if="['1', '2'].includes(activeName) && [1, 2].includes(scope.row.status)"
@@ -399,6 +409,9 @@
                 </el-dropdown-item>
                 <el-dropdown-item @click.native="returnWarehouse(scope.row.id)">
                   <span v-if="activeName === '2'">{{ $t('退回未入库') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="onUnclaimed(scope.row.id)">
+                  <span v-if="activeName === '2'">{{ $t('退回无人认领') }}</span>
                 </el-dropdown-item>
                 <el-dropdown-item @click.native="onLogs(scope.row.express_num)">
                   <span
@@ -465,6 +478,7 @@
             >
               <i class="el-icon-copy-document"></i>
             </span>
+            <span class="seer" v-if="scope.row.source === 3">{{ $t('先知') }}</span>
           </template>
         </el-table-column>
         <!-- 包裹编码 -->
@@ -539,6 +553,7 @@
     <batch-modify
       :showBatch="showBatch"
       :deleteNum="deleteNum"
+      :isFresh="isFresh"
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
@@ -576,7 +591,7 @@ export default {
       deleteNum: [],
       countData: {},
       urlExcel: '',
-      hasFilterCondition: false,
+      hasFilterCondition: true,
       sumData: {},
       ownerData: [],
       searchFieldData: {
@@ -595,7 +610,8 @@ export default {
       },
       showBatch: false,
       packageData: [],
-      trackId: ''
+      trackId: '',
+      isFresh: true
     }
   },
   activated() {
@@ -756,6 +772,9 @@ export default {
     storage(id) {
       this.$router.push({ name: 'editStorage', params: { id: id } })
     },
+    onStorage(id) {
+      this.$router.push({ name: 'warehouseOrder', query: { id } })
+    },
     // 已入库编辑
     editWarehoused(id) {
       this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
@@ -914,6 +933,29 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.returnBack(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    onUnclaimed(id) {
+      this.$confirm(this.$t('您是否确认将该包裹退回无人认领状态'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.ReturnUnclaimed(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

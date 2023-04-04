@@ -67,6 +67,7 @@
         <el-table-column prop="package_name" :label="$t('物品名称')"></el-table-column>
         <el-table-column prop="destination_country.cn_name" :label="$t('寄送国家')" width="180">
         </el-table-column>
+        <el-table-column prop="warehouse.warehouse_name" :label="$t('仓库')"></el-table-column>
         <el-table-column :label="$t('包裹属性')">
           <template slot-scope="scope">
             <span v-for="item in scope.row.props" :key="item.id">
@@ -118,6 +119,9 @@ export default {
     showBatch: {
       type: Boolean,
       default: false
+    },
+    isFresh: {
+      type: Boolean
     },
     deleteNum: {
       type: Array
@@ -190,7 +194,11 @@ export default {
               type: 'success'
             })
             this.$emit('passVal', false)
-            this.$parent.getList()
+            if (this.isFresh) {
+              this.$parent.getList()
+            } else {
+              this.$parent.search()
+            }
           } else {
             this.$notify({
               title: this.$t('操作失败'),

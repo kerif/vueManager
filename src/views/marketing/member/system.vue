@@ -35,5 +35,6 @@ export default {
 <style scoped>
 .system {
   background-color: #fff;
+  padding: 0px 15px;
 }
 </style>

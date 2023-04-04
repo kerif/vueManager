@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="growthFinance">
     <div class="searchGroup">
       <search-group
         :placeholder="$t('请输入关键字')"
@@ -10,7 +10,13 @@
     </div>
     <el-table :data="tableData" border style="width: 100%; margin-bottom: 10px">
       <el-table-column type="index" width="40"> </el-table-column>
-      <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+      <el-table-column prop="user_id" :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+          <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+          }}<span v-if="$store.state.uid === 1">)</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="user_name" :label="$t('用户名')"> </el-table-column>
       <el-table-column prop="status" :label="$t('状态')">
         <template slot-scope="scope">
@@ -91,6 +97,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.growthFinance{
+  padding: 10px 15px;
+  background-color: #fff;
+}
 .searchGroup {
   display: flex;
   justify-content: flex-end;

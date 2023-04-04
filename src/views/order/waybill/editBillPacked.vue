@@ -755,10 +755,10 @@ export default {
         this._onTotalWeight()
         this.unitVolume()
       } else {
-        this.user.weight = this.PackageData[0].package_weight
-        this.user.length = this.PackageData[0].length
-        this.user.width = this.PackageData[0].width
-        this.user.height = this.PackageData[0].height
+        this.user.box[0].weight = this.PackageData[0].package_weight
+        this.user.box[0].length = this.PackageData[0].length
+        this.user.box[0].width = this.PackageData[0].width
+        this.user.box[0].height = this.PackageData[0].height
       }
     },
     handleSelectionChange(val) {

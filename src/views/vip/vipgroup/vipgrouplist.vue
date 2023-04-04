@@ -31,7 +31,7 @@
         ref="table"
         class="data-list"
         v-loading="tableLoading"
-        height="calc(100vh - 275px)"
+        height="calc(100vh - 320px)"
         @selection-change="selectionChange"
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -330,6 +330,8 @@ export default {
 </script>
 <style lang="scss">
 .vipgroup-list-container {
+  background-color: #fff;
+  padding: 15px;
   .select-box {
     overflow: hidden;
     display: inline-block;

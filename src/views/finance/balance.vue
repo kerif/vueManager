@@ -212,6 +212,7 @@ export default {
 <style lang="scss">
 .balance-container {
   background-color: #fff !important;
+  padding: 20px;
   .tips-box {
     padding: 20px;
     line-height: 30px;

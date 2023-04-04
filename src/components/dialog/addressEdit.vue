@@ -159,6 +159,9 @@ export default {
           if (res.data.sub_area_id) {
             this.form.country_id.push(+res.data.sub_area_id)
           }
+          if (res.data.low_area && res.data.low_area.id) {
+            this.form.country_id.push(+res.data.low_area.id)
+          }
           this.form.door_no = res.data.door_no
           this.form.province = res.data.province
           this.form.city = res.data.city
@@ -184,7 +187,8 @@ export default {
         ...this.form,
         country_id: this.form.country_id[0],
         area_id: this.form.country_id[1] || '',
-        sub_area_id: this.form.country_id[2] || ''
+        sub_area_id: this.form.country_id[2] || '',
+        low_area_id: this.form.country_id[3] || ''
       }
       this.$request.updateSingleAddress(this.id, param).then(res => {
         if (res.ret) {
@@ -220,7 +224,15 @@ export default {
                         ? item2.areas.map(item3 => {
                             return {
                               value: item3.id,
-                              label: item3.name
+                              label: item3.name,
+                              children: item3.areas.length
+                                ? item3.areas.map(item4 => {
+                                    return {
+                                      value: item4.id,
+                                      label: item4.name
+                                    }
+                                  })
+                                : []
                             }
                           })
                         : []

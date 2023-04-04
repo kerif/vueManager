@@ -1,154 +1,191 @@
 <template>
   <div class="vip-list-container">
-    <div class="advanced-search" v-if="hasFilterCondition">
+    <div class="advanced-search">
       <div class="search-item">
-        <div>{{ $t('VIP等级') }}</div>
-        <el-select v-model="searchParams.level_id" :placeholder="$t('请选择VIP等级')" clearable>
-          <el-option v-for="item in gradeList" :key="item.id" :value="item.id" :label="item.name">
-          </el-option>
-        </el-select>
+        <div>
+          <div class="search-content">{{ $t('VIP等级') }}</div>
+          <el-select v-model="searchParams.level_id" :placeholder="$t('请选择VIP等级')" clearable>
+            <el-option v-for="item in gradeList" :key="item.id" :value="item.id" :label="item.name">
+            </el-option>
+          </el-select>
+        </div>
       </div>
       <div class="search-item">
-        <div>{{ $t('客户组') }}</div>
-        <el-select v-model="searchParams.user_group_id" clearable :placeholder="$t('请选择客户组')">
-          <el-option
-            v-for="item in groupList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name_cn"
+        <div>
+          <div class="search-content">{{ $t('客户组') }}</div>
+          <el-select v-model="searchParams.user_group_id" clearable :placeholder="$t('请选择客户组')">
+            <el-option
+              v-for="item in groupList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name_cn"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="search-item">
+        <div>
+          <div class="search-content">{{ $t('所属客服') }}</div>
+          <el-select v-model="searchParams.customer_id" clearable :placeholder="$t('请选择所属客服')">
+            <el-option
+              v-for="item in customerList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="search-item">
+        <div>
+          <div class="search-content">{{ $t('客户来源') }}</div>
+          <el-select v-model="searchParams.user_source" clearable :placeholder="$t('请选择客户来源')">
+            <el-option
+              v-for="item in sourceList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="search-item">
+        <div>
+          <div class="search-content">{{ $t('搜索') }}</div>
+          <div class="searchGroup">
+            <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+          </div>
+        </div>
+      </div>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('所属销售') }}</div>
+          <el-select v-model="searchParams.sale_id" clearable :placeholder="$t('请选择所属销售')">
+            <el-option v-for="item in saleList" :key="item.id" :value="item.id" :label="item.name">
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('邀请人') }}</div>
+          <el-select
+            v-model="searchParams.invite_id"
+            filterable
+            remote
+            clearable
+            :placeholder="$t('请输入邀请人')"
+            :remote-method="inviteMethod"
+            :loading="inviteLoading"
           >
-          </el-option>
-        </el-select>
+            <el-option v-for="item in inviteList" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <div class="search-item">
-        <div>{{ $t('所属客服') }}</div>
-        <el-select v-model="searchParams.customer_id" clearable :placeholder="$t('请选择所属客服')">
-          <el-option
-            v-for="item in customerList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name"
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('余额范围') }}</div>
+            <el-input
+              v-model="searchParams.min_balance"
+              :placeholder="$t('请输入最小余额')"
+              clearable
+              style="width: 35%"
+            ></el-input>
+            -
+            <el-input
+              v-model="searchParams.max_balance"
+              :placeholder="$t('请输入最大余额')"
+              clearable
+              style="width: 35%"
+            ></el-input>
+        </div>
+      </div>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('积分范围') }}</div>
+          <el-input
+            v-model="searchParams.min_point"
+            :placeholder="$t('请输入最小积分')"
+            clearable
+            style="width: 35%"
+          ></el-input>
+          -
+          <el-input
+            v-model="searchParams.max_point"
+            :placeholder="$t('请输入最大积分')"
+            clearable
+            style="width: 35%"
+          ></el-input>
+        </div>
+      </div>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('订单数范围') }}</div>
+          <el-input
+            v-model="searchParams.min_order_count"
+            :placeholder="$t('请输入最小订单数')"
+            clearable
+            style="width: 35%"
+          ></el-input>
+          -
+          <el-input
+            v-model="searchParams.max_order_count"
+            :placeholder="$t('请输入最大订单数')"
+            clearable
+            style="width: 35%"
+          ></el-input>
+        </div>
+      </div>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('注册时间') }}</div>
+          <el-date-picker
+            style="width: 90%;"
+            v-model="searchTime"
+            type="daterange"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始日期')"
+            :end-placeholder="$t('结束日期')"
           >
-          </el-option>
-        </el-select>
+          </el-date-picker>
+        </div>
       </div>
-      <div class="search-item">
-        <div>{{ $t('所属销售') }}</div>
-        <el-select v-model="searchParams.sale_id" clearable :placeholder="$t('请选择所属销售')">
-          <el-option v-for="item in saleList" :key="item.id" :value="item.id" :label="item.name">
-          </el-option>
-        </el-select>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('最后登录时间') }}</div>
+          <el-date-picker
+            style="width: 90%;"
+            v-model="loginTime"
+            type="daterange"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始日期')"
+            :end-placeholder="$t('结束日期')"
+          ></el-date-picker>
+        </div>
       </div>
-      <div class="search-item">
-        <div>{{ $t('邀请人') }}</div>
-        <el-select
-          v-model="searchParams.invite_id"
-          filterable
-          remote
-          clearable
-          :placeholder="$t('请输入邀请人')"
-          :remote-method="inviteMethod"
-          :loading="inviteLoading"
-        >
-          <el-option v-for="item in inviteList" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
+      <div class="search-item" v-if="hasFilterCondition">
+        <div>
+          <div class="search-content">{{ $t('渠道来源') }}</div>
+          <el-select v-model="searchParams.channel_id" clearable>
+            <el-option
+              v-for="item in channelData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
-      <div class="search-item">
-        <div>{{ $t('余额范围') }}</div>
-        <el-input
-          v-model="searchParams.min_balance"
-          :placeholder="$t('请输入最小余额')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-        -
-        <el-input
-          v-model="searchParams.max_balance"
-          :placeholder="$t('请输入最大余额')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('积分范围') }}</div>
-        <el-input
-          v-model="searchParams.min_point"
-          :placeholder="$t('请输入最小积分')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-        -
-        <el-input
-          v-model="searchParams.max_point"
-          :placeholder="$t('请输入最大积分')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('订单数范围') }}</div>
-        <el-input
-          v-model="searchParams.min_order_count"
-          :placeholder="$t('请输入最小订单数')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-        -
-        <el-input
-          v-model="searchParams.max_order_count"
-          :placeholder="$t('请输入最大订单数')"
-          clearable
-          style="width: 35%"
-        ></el-input>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('注册时间') }}</div>
-        <el-date-picker
-          v-model="searchTime"
-          type="daterange"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')"
-        >
-        </el-date-picker>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('客户来源') }}</div>
-        <el-select v-model="searchParams.user_source" clearable :placeholder="$t('请选择客户来源')">
-          <el-option
-            v-for="item in sourceList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('最后登录时间') }}</div>
-        <el-date-picker
-          v-model="loginTime"
-          type="daterange"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')"
-        ></el-date-picker>
-      </div>
-      <div class="search-item">
-        <div>{{ $t('渠道来源') }}</div>
-        <el-select v-model="searchParams.channel_id" clearable>
-          <el-option
-            v-for="item in channelData"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="search-item">
+      <div class="search-item"></div>
+      <div class="search-item" v-if="!hasFilterCondition"></div>
+      <div class="search-item" v-if="!hasFilterCondition"> </div>
+      <div class="search-item" v-if="hasFilterCondition">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
       </div>
@@ -192,12 +229,6 @@
         </div>
       </div>
       <div class="addUser">
-        <search-select
-          :selectArr="clientSourceList"
-          v-model="page_params.user_source"
-          @search="onSource"
-        >
-        </search-select>
         <!-- <el-select
           v-model="page_params.source"
           :placeholder="$t('客户来源')"
@@ -214,12 +245,12 @@
         <add-btn style="margin-right: 10px" size="small" plain @click.native="addUser">{{
           $t('添加客户')
         }}</add-btn>
-        <search-select
+        <!-- <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
           @search="onGroupChange"
         >
-        </search-select>
+        </search-select> -->
         <!-- <el-select
           v-model="page_params.group"
           clearable
@@ -234,12 +265,9 @@
           >
           </el-option>
         </el-select> -->
-        <div class="searchGroup">
-          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-        </div>
-        <!-- <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
           >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-        ></el-button> -->
+        ></el-button>
       </div>
     </div>
     <el-table
@@ -250,13 +278,17 @@
       v-loading="tableLoading"
       :data="vipList"
       @selection-change="selectionChange"
-      height="calc(100vh - 270px)"
+      height="calc(100vh - 275px)"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
-      <el-table-column :label="$t('客户ID')">
+      <el-table-column :label="$t('客户ID')" width="160">
         <template slot-scope="scope">
-          <el-button @click="viewProfile(scope.row.id)" type="text">{{ scope.row.id }}</el-button>
+          <el-button @click="viewProfile(scope.row.id)" type="text">
+            <span v-if="$store.state.uid === 1">{{ scope.row.uid }}</span>
+            <span v-if="$store.state.uid === 1">(</span>{{ scope.row.id
+            }}<span v-if="$store.state.uid === 1">)</span></el-button
+          >
           <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
@@ -495,7 +527,7 @@ export default {
       sourceList: [],
       clientSourceList: [],
       inviteLoading: false,
-      hasFilterCondition: true,
+      hasFilterCondition: false,
       showLabel: false,
       channelData: []
     }
@@ -1028,7 +1060,7 @@ export default {
 .vip-list-container {
   .advanced-search {
     display: grid;
-    gap: 20px;
+    gap: 15px;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     padding: 20px;
     margin-bottom: 20px;
@@ -1039,6 +1071,14 @@ export default {
       display: flex;
       gap: 10px;
       align-items: center;
+      .search-content{
+        margin-bottom: 5px;
+      }
+    }
+  }
+  @media screen and (max-width: 1536px) {
+    .advanced-search{
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
   }
   .balance {
@@ -1078,7 +1118,8 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    margin-bottom: 10px;
+    padding: 10px 0;
+    background-color: #fff;
     float: left;
     display: flex;
     align-items: center;

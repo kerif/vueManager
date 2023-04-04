@@ -44,7 +44,7 @@
     <!-- 表格 -->
     <div class="data-list">
       <el-table :data="allData" border style="width: 100%">
-        <el-table-column type="index" :label="$t('#')" width="80"> </el-table-column>
+        <el-table-column type="index" :label="$t('#')" width="70"> </el-table-column>
         <el-table-column prop="order_sn" :label="$t('订单号')" width="160"> </el-table-column>
         <el-table-column prop="order_status" :label="$t('订单状态')">
           <template slot-scope="scope">
@@ -59,7 +59,7 @@
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="type" :label="$t('发票类型')" width="160">
+        <el-table-column prop="type" :label="$t('发票类型')" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('普通纸质发票') }}</span>
           </template>

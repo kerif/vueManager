@@ -3,14 +3,14 @@
     <el-form label-position="top">
       <el-form-item :label="$t('标题')">
         <el-row>
-          <el-col :span="10"
+          <el-col :span="10" :sm="24"
             ><el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input
           ></el-col>
         </el-row>
       </el-form-item>
       <el-form-item :label="$t('文章分类')">
         <el-row>
-          <el-col :span="10">
+          <el-col :span="10" :sm="24">
             <el-radio-group v-model="params.type_id" class="type-sty">
               <el-radio v-for="item in updateProp" :key="item.id" :label="item.id"
                 >{{ item.name }}
@@ -21,7 +21,7 @@
       </el-form-item>
       <el-form-item :label="$t('封面图')" class="updateChe">
         <el-row>
-          <el-col :span="6">
+          <el-col :span="6" :sm="10">
             <span class="img-item" v-for="(item, index) in customerList" :key="index">
               <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
               <span class="model-box"></span>
@@ -46,7 +46,7 @@
       </el-form-item>
       <el-form-item :label="$t('内容')">
         <el-row>
-          <el-col :span="20">
+          <el-col :span="20" :sm="24">
             <editor :content="params.content" @submit="saveNotice" />
           </el-col>
         </el-row>
@@ -72,10 +72,39 @@ export default {
       editor: null
     }
   },
+  props: {
+    isComponent: {
+      type: Boolean,
+      default: false
+    },
+    isClose: {
+      type: Boolean,
+      default: false
+    },
+    content: String
+  },
+  watch: {
+    isClose(value) {
+      if (value) {
+        this.params = {
+          title: '',
+          type_id: '',
+          cover: [],
+          content: ''
+        }
+      } else {
+        this.params.content = this.content
+      }
+    }
+  },
   created() {
     this.getTypes()
-    if (this.$route.params.id) {
-      this.getList()
+    if (this.isComponent) {
+      this.params.content = this.content
+    } else {
+      if (this.$route.params.id) {
+        this.getList()
+      }
     }
   },
   methods: {
@@ -103,7 +132,7 @@ export default {
       } else {
         this.params.cover = []
       }
-      if (!this.$route.params.id) {
+      if (this.isComponent || !this.$route.params.id) {
         // 如果是新增状态
         this.$request.saveNotice(this.params).then(res => {
           if (res.ret) {
@@ -112,7 +141,12 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({ name: 'noticelist' })
+            if (this.isComponent) {
+              // 文章页面作为组件引入
+              this.$emit('confirm')
+            } else {
+              this.$router.push({ name: 'noticelist' })
+            }
           } else {
             this.$message({
               message: res.msg,

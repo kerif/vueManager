@@ -31,16 +31,20 @@
         <el-col :span="12">
           <el-card class="card-box" shadow="never">
             <div slot="header" class="clearfix">
-              <h5>取件地址</h5>
+              <h5>{{ $t('取件地址') }}</h5>
             </div>
             <div class="address-info">
               <div class="address-contact-info" v-if="pickupInfo.address">
-                <span class="address-contact-fullname"> {{ pickupInfo.address.name }}</span>
+                <span class="address-contact-fullname">
+                  {{ pickupInfo.address.receiver_name }}</span
+                >
                 <span class="address-contact-phone"> {{ pickupInfo.address.phone }}</span>
                 <br />
                 <div class="address-contact-address">
-                  {{ pickupInfo.address.province }}{{ pickupInfo.address.city
-                  }}{{ pickupInfo.address.distinct }}{{ pickupInfo.address.address }}
+                  {{ pickupInfo.address.country_name }}
+                  {{ pickupInfo.address.area && pickupInfo.address.area.name
+                  }}{{ pickupInfo.address.sub_area && pickupInfo.address.sub_area.name
+                  }}{{ pickupInfo.address.street }}{{ pickupInfo.address.door_no }}
                 </div>
               </div>
             </div>
@@ -67,7 +71,7 @@
               <el-row>
                 <el-col :span="12">{{ $t('寄往国家/地区') }}</el-col>
                 <el-col :span="12" class="right-text">{{
-                  pickupInfo.country && pickupInfo.country.name
+                  pickupInfo.country ? pickupInfo.country.name : $t('待定')
                 }}</el-col>
               </el-row>
               <el-row>
@@ -85,10 +89,10 @@
               </el-row>
               <el-row>
                 <el-col :span="12">{{ $t('物品照片与备注') }}</el-col>
-                <el-col :span="12" class="text-right">
-                  <span>{{ pickupInfo.remark }}</span>
+                <el-col :span="12" class="right-text">
+                  <span style="display: inline-block">{{ pickupInfo.remark }}</span>
                   <div v-for="(item, index) in pickupInfo.images" :key="index">
-                    <img :src="item" alt="" />
+                    <img :src="`${$baseUrl.IMAGE_URL}${item}`" alt="" class="img" />
                   </div>
                 </el-col>
               </el-row>
@@ -259,6 +263,9 @@ export default {
   .btn-group {
     padding-top: 20px;
     text-align: right;
+  }
+  .img {
+    width: 100px;
   }
 }
 </style>
