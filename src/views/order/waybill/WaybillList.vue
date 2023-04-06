@@ -211,6 +211,7 @@
         :data="oderData"
         @selection-change="onSelectChange"
         height="calc(100vh - 270px)"
+        :header-cell-style="{ 'text-align': 'center' }"
       >
         <el-table-column
           width="55"
@@ -228,6 +229,32 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
+              <template v-if="item.id === 'place_order_customer'">
+                <div class="place_order_customer">
+                  <div class="customer-code">
+                    {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
+                      scope.row.user_uid
+                    }}</span>
+                    <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+                    }}<span v-if="$store.state.uid === 1">)</span>
+                  </div>
+                  <div class="customer-code">
+                    ID:<span v-if="$store.state.uid === 1">{{
+                      scope.row.user_uid
+                    }}</span>
+                    <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+                    }}<span v-if="$store.state.uid === 1">)</span>
+                  </div>
+                  <div class="username">
+                    {{ $t('昵称') }}:<span v-if="$store.state.uid === 1">{{
+                      scope.row.user_uid
+                    }}</span>
+                    <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
+                    }}<span v-if="$store.state.uid === 1">)</span>
+                  </div>
+                </div>
+
+              </template>
               <template v-if="item.id === 'user_id'">
                 <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
                 <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
@@ -551,7 +578,7 @@
             >
               <el-table-column type="selection"></el-table-column>
               <!-- 客户ID -->
-              <el-table-column :label="$t('客户ID222')" prop="user_id"></el-table-column>
+              <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
               <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
               <!-- 订单号 -->
               <el-table-column :label="$t('订单号')">
@@ -1286,7 +1313,7 @@ export default {
         sale_id: '',
         customer_id: ''
       },
-      hasFilterCondition: true,
+      hasFilterCondition: false,
       page_params: {
         size: 20
       },
@@ -1343,6 +1370,7 @@ export default {
               width: item.width,
               checked: Boolean(+item.checked)
             }))
+            this.tableColumn = JSON.parse(JSON.stringify(columnData))
           } else {
             this.tableColumn = JSON.parse(JSON.stringify(columnData))
           }
@@ -1352,26 +1380,37 @@ export default {
       })
     },
     handleColumn() {
+      // const column = [
+      //   'user_id',
+      //   'user_name',
+      //   'user_member_level',
+      //   'order_sn',
+      //   'code',
+      //   'express_line',
+      //   'receiver_name',
+      //   'country_name',
+      //   'address_type',
+      //   'package_count',
+      //   'declare_value',
+      //   'agent',
+      //   'sale_name',
+      //   'customer_name',
+      //   'weight',
+      //   'fee',
+      //   'phone',
+      //   'abc'
+      // ]
       const column = [
-        'user_id',
-        'user_name',
-        'user_member_level',
-        'order_sn',
-        'code',
-        'express_line',
-        'receiver_name',
-        'country_name',
-        'address_type',
-        'package_count',
-        'declare_value',
-        'agent',
-        'sale_name',
-        'customer_name',
-        'weight',
-        'fee',
-        'phone'
+        'place_order_customer',
+        'order_info',
+        'pay_info',
+        'address_info',
+        'outbound_info',
+        'docking_staff',
+        'order_time'
       ]
       this.checkColumn = []
+      console.log(this.tableColumn, 'tableColumntableColumn')
       this.tableColumn.forEach(item => {
         if (item.id === 'weight') {
           item.name = this.$t('实际重量') + this.localization.weight_unit
@@ -1389,12 +1428,12 @@ export default {
             }
             if (
               [
-                ...column,
-                'updated_at',
-                'packed_at',
-                'signed_at',
-                'exceptional_at',
-                'third_tracking_status_name'
+                ...column
+                // 'updated_at',
+                // 'packed_at',
+                // 'signed_at',
+                // 'exceptional_at',
+                // 'third_tracking_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1410,7 +1449,7 @@ export default {
             if (item.id === 'updated_at') {
               item.name = this.timeLabel
             }
-            if ([...column, 'is_saved', 'updated_at', 'packed_at'].includes(item.id)) {
+            if ([...column].includes(item.id)) {
               this.checkColumn.push(item)
             }
             break
@@ -1418,7 +1457,7 @@ export default {
             if (item.id === 'updated_at') {
               item.name = this.timeLabel
             }
-            if ([...column, 'updated_at', 'packed_at', 'boxes_count'].includes(item.id)) {
+            if ([...column].includes(item.id)) {
               this.checkColumn.push(item)
             }
             break
@@ -1431,17 +1470,17 @@ export default {
             }
             if (
               [
-                ...column,
-                'payment_type_name',
-                'logistics_company',
-                'logistics_sn',
-                'coupon_amount',
-                'updated_at',
-                'packed_at',
-                'shipment_sn',
-                'boxes_count',
-                'third_tracking_status_name',
-                'created_at'
+                ...column
+                // 'payment_type_name',
+                // 'logistics_company',
+                // 'logistics_sn',
+                // 'coupon_amount',
+                // 'updated_at',
+                // 'packed_at',
+                // 'shipment_sn',
+                // 'boxes_count',
+                // 'third_tracking_status_name',
+                // 'created_at'
                 // 'pack_status_name'
               ].includes(item.id)
             ) {
@@ -1454,15 +1493,15 @@ export default {
             }
             if (
               [
-                ...column,
-                'payment_type_name',
-                'logistics_company',
-                'logistics_sn',
-                'coupon_amount',
-                'updated_at',
-                'shipment_sn',
-                'boxes_count',
-                'third_tracking_status_name'
+                ...column
+                // 'payment_type_name',
+                // 'logistics_company',
+                // 'logistics_sn',
+                // 'coupon_amount',
+                // 'updated_at',
+                // 'shipment_sn',
+                // 'boxes_count',
+                // 'third_tracking_status_name'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1471,13 +1510,13 @@ export default {
           case '5':
             if (
               [
-                ...column,
-                'payment_type_name',
-                'logistics_company',
-                'logistics_sn',
-                'coupon_amount',
-                'signed_at',
-                'shipment_sn'
+                ...column
+                // 'payment_type_name',
+                // 'logistics_company',
+                // 'logistics_sn',
+                // 'coupon_amount',
+                // 'signed_at',
+                // 'shipment_sn'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1495,24 +1534,24 @@ export default {
             }
             if (
               [
-                ...column,
-                'status_name',
-                'updated_at',
-                'payment_type_name',
-                'logistics_company',
-                'logistics_sn',
-                'coupon_amount',
-                'packed_at',
-                'exceptional_at',
-                'exceptional_operator',
-                'shipment_sn'
+                ...column
+                // 'status_name',
+                // 'updated_at',
+                // 'payment_type_name',
+                // 'logistics_company',
+                // 'logistics_sn',
+                // 'coupon_amount',
+                // 'packed_at',
+                // 'exceptional_at',
+                // 'exceptional_operator',
+                // 'shipment_sn'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
             }
             break
           case '19':
-            if ([...column, 'logistics_company', 'logistics_sn'].includes(item.id)) {
+            if ([...column].includes(item.id)) {
               this.checkColumn.push(item)
             }
             break
@@ -1520,7 +1559,9 @@ export default {
             break
         }
       })
+      console.log(this.checkColumn, 'checkColumncheckColumn')
       this.checkColumn.forEach(item => {
+        console.log(item)
         if (item.checked) {
           if (!this.sortResult.includes(item.id)) {
             this.sortResult.push(item.id)
@@ -1697,7 +1738,7 @@ export default {
           })
         }
       })
-      console.log(this.oderData,'oderDataoderData')
+      console.log(this.oderData, 'oderDataoderData')
     },
     // 导出清单
     uploadList() {
@@ -2765,6 +2806,14 @@ export default {
   .waybill-data-list {
     background-color: inherit;
     overflow-y: auto !important;
+    .place_order_customer {
+      .customer-code {
+        font-weight: bold;
+      }
+      .username{
+
+      }
+    }
   }
   .tab-length {
     width: 950px !important;

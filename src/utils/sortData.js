@@ -1,7 +1,7 @@
 export default [
   {
     id: 'user_id',
-    name: '客户ID',
+    name: '客户ID222',
     width: '150',
     checked: true
   },
@@ -182,6 +182,48 @@ export default [
     id: 'phone',
     name: '收货人电话',
     width: '160',
+    checked: true
+  },
+  {
+    id: 'place_order_customer',
+    name: '下单客户',
+    width: '160',
+    checked: true
+  },
+  {
+    id: 'order_info',
+    name: '订单信息',
+    width: '300',
+    checked: true
+  },
+  {
+    id: 'pay_info',
+    name: '支付信息',
+    width: '250',
+    checked: true
+  },
+  {
+    id: 'address_info',
+    name: '收货信息',
+    width: '250',
+    checked: true
+  },
+  {
+    id: 'outbound_info',
+    name: '出库信息',
+    width: '250',
+    checked: true
+  },
+  {
+    id: 'docking_staff',
+    name: '对接工作人员',
+    width: '160',
+    checked: true
+  },
+  {
+    id: 'order_time',
+    name: '时间',
+    width: '200',
     checked: true
   }
   // {

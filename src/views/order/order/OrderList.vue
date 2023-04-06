@@ -162,6 +162,7 @@
         v-loading="tableLoading"
         height="calc(100vh - 275px)"
         class="order-data-list"
+        :header-cell-style="{ 'text-align': 'center' }"
       >
         <el-table-column
           v-if="activeName !== '7'"
@@ -171,26 +172,30 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          :label="$t('客户ID')"
+          :label="$t('客户')"
           v-if="activeName !== '7'"
           key="user_id"
           width="160"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
-            <span
-              ><span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
-              }}<span v-if="$store.state.uid === 1">)</span>---{{ scope.row.user_name }}</span
-            >
+            <div class="customer">
+              <div class="user-id">
+                <span>ID：</span>
+                <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
+                <span>{{ scope.row.user_id }}</span>
+              </div>
+              <div>
+                <span>{{ $t('昵称') }}：</span>
+                <span>{{ scope.row.user_name }}</span>
+              </div>
+              <div>
+                <span>{{ $t('会员等级') }}：</span>
+                <span>{{ scope.row.user_member_level }}</span>
+              </div>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="$t('会员等级')"
-          prop="user_member_level"
-          key="user_member_level"
-          v-if="activeName !== '7'"
-        ></el-table-column>
         <el-table-column
           v-if="activeName !== '7'"
           :label="$t('快递单号')"
@@ -198,28 +203,91 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-button
-              v-if="activeName === '2'"
-              :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"
-              @click="oderDetails(scope.row.id)"
-              type="text"
-              >{{ scope.row.express_num }}
-            </el-button>
-            <el-button v-else @click="oderDetails(scope.row.id)" type="text"
-              >{{ scope.row.express_num }}
-            </el-button>
-            <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>
-            <span
-              :title="$t('复制单号')"
-              class="copy-number"
-              @click="copyNumber(scope.row.express_num)"
-            >
-              <i class="el-icon-copy-document"></i>
-            </span>
-            <span class="seer" v-if="scope.row.source === 3">先知</span>
+            <div class="express">
+              <div class="express-top">
+                <div>
+                  <div>
+                    <el-button
+                      v-if="activeName === '2'"
+                      :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"
+                      @click="oderDetails(scope.row.id)"
+                      type="text"
+                      >{{ scope.row.express_num }}
+                    </el-button>
+                    <el-button v-else @click="oderDetails(scope.row.id)" type="text"
+                      >{{ scope.row.express_num }}
+                    </el-button>
+                  </div>
+                  <span v-if="scope.row.code != ''" style="color: #66666"
+                    >({{ scope.row.code }})</span
+                  >
+                </div>
+                <span
+                  :title="$t('复制单号')"
+                  class="copy-number"
+                  @click="copyNumber(scope.row.express_num)"
+                >
+                  <i class="el-icon-copy-document"></i>
+                </span>
+              </div>
+              <div class="express-bottom">
+                <!--                <span class="seer" v-show="scope.row.source === 3">先知</span>-->
+                <span class="seer">先知</span>
+                <img class="beizhu-img" src="@/assets/beizhu.png" @click="goRemark(scope.row)" />
+              </div>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('状态')" key="status" v-if="activeName !== '7'">
+        <el-table-column :label="$t('收发区域')" key="address" width="180">
+          <template slot-scope="scope">
+            <div class="address">
+              <div class="address-line">
+                <img style="width: 20px; height: 20px; margin-right: 10px" src="@/assets/ji.png" />
+                {{ scope.row.warehouse.warehouse_name }}
+              </div>
+              <div class="address-line">
+                <img
+                  style="width: 20px; height: 20px; margin-right: 10px"
+                  src="@/assets/shou.png"
+                />{{ scope.row.destination_country ? scope.row.destination_country.cn_name : '' }}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('清单')" key="inventory" width="300">
+          <template slot-scope="scope">
+            <div class="inventory">
+              <div>
+                <span class="tip">{{ $t('品名') }}：</span>{{ scope.row.package_name }}
+              </div>
+              <div class="inventory-line">
+                <div>
+                  <span class="tip">{{ $t('商品数量') }}：</span>{{ scope.row.qty }}
+                </div>
+                <div>
+                  <span class="tip">{{ $t('商品分类') }}：</span
+                  ><span v-for="item in scope.row.categories" :key="item.id">
+                    {{ item.name_cn }}
+                  </span>
+                </div>
+              </div>
+              <div class="inventory-line">
+                <div>
+                  <span class="tip">{{ $t('物品价值') }}：</span
+                  ><span>{{ scope.row.package_value }}</span>
+                </div>
+                <div>
+                  <span class="tip">{{ $t('物品属性') }}：</span
+                  ><span v-for="item in scope.row.props" :key="item.id"
+                    >
+                    {{ item.cn_name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('状态')" width="100" align="center" key="status" v-if="activeName !== '7'">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
@@ -249,6 +317,52 @@
             </el-tooltip>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('入库信息')" key="putStorage" width="300">
+          <template slot-scope="scope">
+            <div class="put-storage">
+              <div>
+                <span class="tip">{{ $t('重量') }}({{ localization.weight_unit }})：</span
+                >{{ scope.row.package_weight }}
+              </div>
+              <div class='put-storage-center'>
+                <div>
+                  <span class="tip">{{ $t('体积') }}(m³)：</span>
+                  {{
+                    (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)
+                  }}
+                </div>
+                <div>
+                  <span class="tip">{{ $t('长宽高') }}({{ localization.length_unit }})：</span
+                  >{{ scope.row.dimension }}
+                </div>
+              </div>
+              <div class="bottom">
+                <div>
+                  <span class="tip">{{ $t('货位') }}：</span>{{ scope.row.location }}
+                </div>
+                <img style="width: 20px; height: 20px;" src="@/assets/pic.png" />
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('时间')" key="time" width="250">
+          <template slot-scope="scope">
+            <div class="time">
+              <div>
+                <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.received_at }}
+              </div>
+              <div>
+                <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.received_at }}
+              </div>
+              <div>
+                <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.received_at }}
+              </div>
+              <div>
+                <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.received_at }}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="$t('物流状态')"
           prop="third_tracking_status_name"
@@ -262,122 +376,122 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="$t('物品名称')"
-          prop="package_name"
-          key="package_name"
-          width="150"
-          v-if="activeName !== '7'"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-          :label="$t('物品价值') + localization.currency_unit"
-          v-if="activeName !== '7'"
-          prop="package_value"
-          key="package_value"
-        ></el-table-column>
-        <el-table-column
-          :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"
-          v-if="activeName !== '7'"
-          prop="unit_value"
-          key="unit_value"
-          min-width="100"
-        ></el-table-column>
-        <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">
-          <template slot-scope="scope">
-            <span v-for="item in scope.row.props" :key="item.id">
-              {{ item.cn_name }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('物品重量')"
-          key="package_weight"
-          v-if="['2', '3', '4', '5'].includes(activeName)"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('商品数量')"
-          prop="qty"
-          key="qty"
-          v-if="['1', '2'].includes(activeName)"
-        ></el-table-column>
-        <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">
-          <template slot-scope="scope">
-            <span>{{
-              (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)
-            }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('商品分类')"
-          prop="categories"
-          key="categories"
-          v-if="['1', '2'].includes(activeName)"
-        >
-          <template slot-scope="scope">
-            <span v-for="item in scope.row.categories" :key="item.id">
-              {{ item.name_cn }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('寄往国家')"
-          prop="destination_country.cn_name"
-          key="destination_country.cn_name"
-          v-if="activeName !== '7'"
-        ></el-table-column>
-        <el-table-column
-          :label="$t('仓库')"
-          prop="warehouse.warehouse_name"
-          key="warehouse.warehouse_name"
-          v-if="activeName !== '7'"
-          width="155"
-        >
-        </el-table-column>
-        <el-table-column
-          :label="$t('规格(长宽高cm)')"
-          prop="dimension"
-          key="dimension"
-          width="120px"
-          v-if="activeName === '2'"
-        ></el-table-column>
-        <el-table-column
-          :label="$t('存放货位')"
-          key="location"
-          width="120px"
-          v-if="activeName === '2' || activeName === '3'"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.location }}</span>
-            <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('入库时间')"
-          width="155"
-          prop="in_storage_at"
-          key="in_storage_at"
-          v-if="activeName === '2' || activeName === '3'"
-        ></el-table-column>
-        <el-table-column
-          :label="$t('签收时间')"
-          width="155"
-          prop="received_at"
-          key="received_at"
-          v-if="['0', '1', '2'].includes(activeName)"
-        ></el-table-column>
-        <el-table-column
-          :label="$t('提交时间')"
-          prop="created_at"
-          v-if="activeName !== '7'"
-          key="created_at"
-          width="155"
-        >
-        </el-table-column>
+        <!--        <el-table-column-->
+        <!--          :label="$t('物品名称')"-->
+        <!--          prop="package_name"-->
+        <!--          key="package_name"-->
+        <!--          width="150"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--          show-overflow-tooltip-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('物品价值') + localization.currency_unit"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--          prop="package_value"-->
+        <!--          key="package_value"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--          prop="unit_value"-->
+        <!--          key="unit_value"-->
+        <!--          min-width="100"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <span v-for="item in scope.row.props" :key="item.id">-->
+        <!--              {{ item.cn_name }}-->
+        <!--            </span>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('物品重量')"-->
+        <!--          key="package_weight"-->
+        <!--          v-if="['2', '3', '4', '5'].includes(activeName)"-->
+        <!--        >-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('商品数量')"-->
+        <!--          prop="qty"-->
+        <!--          key="qty"-->
+        <!--          v-if="['1', '2'].includes(activeName)"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <span>{{-->
+        <!--              (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)-->
+        <!--            }}</span>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('商品分类')"-->
+        <!--          prop="categories"-->
+        <!--          key="categories"-->
+        <!--          v-if="['1', '2'].includes(activeName)"-->
+        <!--        >-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <span v-for="item in scope.row.categories" :key="item.id">-->
+        <!--              {{ item.name_cn }}-->
+        <!--            </span>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('寄往国家')"-->
+        <!--          prop="destination_country.cn_name"-->
+        <!--          key="destination_country.cn_name"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('仓库')"-->
+        <!--          prop="warehouse.warehouse_name"-->
+        <!--          key="warehouse.warehouse_name"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--          width="155"-->
+        <!--        >-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('规格(长宽高cm)')"-->
+        <!--          prop="dimension"-->
+        <!--          key="dimension"-->
+        <!--          width="120px"-->
+        <!--          v-if="activeName === '2'"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('存放货位')"-->
+        <!--          key="location"-->
+        <!--          width="120px"-->
+        <!--          v-if="activeName === '2' || activeName === '3'"-->
+        <!--        >-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <span>{{ scope.row.location }}</span>-->
+        <!--            <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('入库时间')"-->
+        <!--          width="155"-->
+        <!--          prop="in_storage_at"-->
+        <!--          key="in_storage_at"-->
+        <!--          v-if="activeName === '2' || activeName === '3'"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('签收时间')"-->
+        <!--          width="155"-->
+        <!--          prop="received_at"-->
+        <!--          key="received_at"-->
+        <!--          v-if="['0', '1', '2'].includes(activeName)"-->
+        <!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          :label="$t('提交时间')"-->
+        <!--          prop="created_at"-->
+        <!--          v-if="activeName !== '7'"-->
+        <!--          key="created_at"-->
+        <!--          width="155"-->
+        <!--        >-->
+        <!--        </el-table-column>-->
         <el-table-column
           :label="$t('操作')"
           fixed="right"
@@ -441,6 +555,294 @@
           </template>
         </el-table-column>
       </el-table>
+      <!--      <el-table-->
+      <!--        border-->
+      <!--        stripe-->
+      <!--        ref="table"-->
+      <!--        :data="orderData"-->
+      <!--        @selection-change="selectionChange"-->
+      <!--        v-loading="tableLoading"-->
+      <!--        height="calc(100vh - 275px)"-->
+      <!--        class="order-data-list"-->
+      <!--      >-->
+      <!--        <el-table-column-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"-->
+      <!--          :key="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"-->
+      <!--          width="55"-->
+      <!--          align="center"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('客户ID')"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          key="user_id"-->
+      <!--          width="160"-->
+      <!--          show-overflow-tooltip-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>-->
+      <!--            <span-->
+      <!--              ><span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id-->
+      <!--              }}<span v-if="$store.state.uid === 1">)</span>-&#45;&#45;{{ scope.row.user_name }}</span-->
+      <!--            >-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('会员等级')"-->
+      <!--          prop="user_member_level"-->
+      <!--          key="user_member_level"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          :label="$t('快递单号')"-->
+      <!--          key="express_num"-->
+      <!--          width="180"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <el-button-->
+      <!--              v-if="activeName === '2'"-->
+      <!--              :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"-->
+      <!--              @click="oderDetails(scope.row.id)"-->
+      <!--              type="text"-->
+      <!--              >{{ scope.row.express_num }}-->
+      <!--            </el-button>-->
+      <!--            <el-button v-else @click="oderDetails(scope.row.id)" type="text"-->
+      <!--              >{{ scope.row.express_num }}-->
+      <!--            </el-button>-->
+      <!--            <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>-->
+      <!--            <span-->
+      <!--              :title="$t('复制单号')"-->
+      <!--              class="copy-number"-->
+      <!--              @click="copyNumber(scope.row.express_num)"-->
+      <!--            >-->
+      <!--              <i class="el-icon-copy-document"></i>-->
+      <!--            </span>-->
+      <!--            <span class="seer" v-if="scope.row.source === 3">先知</span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column :label="$t('状态')" key="status" v-if="activeName !== '7'">-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>-->
+      <!--            <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>-->
+      <!--            <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>-->
+      <!--            <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>-->
+      <!--            <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>-->
+      <!--            &lt;!&ndash; <span v-if="scope.row.status === 999">{{ $t('无人认领') }}</span> &ndash;&gt;-->
+
+      <!--            <el-tooltip-->
+      <!--              v-if="scope.row.status === 1 && scope.row.is_warning === 1"-->
+      <!--              class="item"-->
+      <!--              effect="dark"-->
+      <!--              :content="$t('丢包预警')"-->
+      <!--              placement="top-start"-->
+      <!--            >-->
+      <!--              <i class="el-icon-warning" style="color: red"></i>-->
+      <!--            </el-tooltip>-->
+
+      <!--            <el-tooltip-->
+      <!--              v-if="scope.row.is_exceptional === 1"-->
+      <!--              class="item"-->
+      <!--              effect="dark"-->
+      <!--              :content="scope.row.exceptional_remark"-->
+      <!--              placement="top-start"-->
+      <!--            >-->
+      <!--              <i class="el-icon-wind-power" style="color: red"></i>-->
+      <!--            </el-tooltip>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('物流状态')"-->
+      <!--          prop="third_tracking_status_name"-->
+      <!--          key="third_tracking_status_name"-->
+      <!--          v-if="activeName === '1'"-->
+      <!--          width="150"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <el-button type="text" class="copy-number" @click="packageTrack(scope.row.id)">{{-->
+      <!--              scope.row.third_tracking_status_name-->
+      <!--            }}</el-button>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('物品名称')"-->
+      <!--          prop="package_name"-->
+      <!--          key="package_name"-->
+      <!--          width="150"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          show-overflow-tooltip-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('物品价值') + localization.currency_unit"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          prop="package_value"-->
+      <!--          key="package_value"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          prop="unit_value"-->
+      <!--          key="unit_value"-->
+      <!--          min-width="100"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span v-for="item in scope.row.props" :key="item.id">-->
+      <!--              {{ item.cn_name }}-->
+      <!--            </span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('物品重量')"-->
+      <!--          key="package_weight"-->
+      <!--          v-if="['2', '3', '4', '5'].includes(activeName)"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('商品数量')"-->
+      <!--          prop="qty"-->
+      <!--          key="qty"-->
+      <!--          v-if="['1', '2'].includes(activeName)"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span>{{-->
+      <!--              (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)-->
+      <!--            }}</span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('商品分类')"-->
+      <!--          prop="categories"-->
+      <!--          key="categories"-->
+      <!--          v-if="['1', '2'].includes(activeName)"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span v-for="item in scope.row.categories" :key="item.id">-->
+      <!--              {{ item.name_cn }}-->
+      <!--            </span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('寄往国家')"-->
+      <!--          prop="destination_country.cn_name"-->
+      <!--          key="destination_country.cn_name"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('仓库')"-->
+      <!--          prop="warehouse.warehouse_name"-->
+      <!--          key="warehouse.warehouse_name"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          width="155"-->
+      <!--        >-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('规格(长宽高cm)')"-->
+      <!--          prop="dimension"-->
+      <!--          key="dimension"-->
+      <!--          width="120px"-->
+      <!--          v-if="activeName === '2'"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('存放货位')"-->
+      <!--          key="location"-->
+      <!--          width="120px"-->
+      <!--          v-if="activeName === '2' || activeName === '3'"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <span>{{ scope.row.location }}</span>-->
+      <!--            <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('入库时间')"-->
+      <!--          width="155"-->
+      <!--          prop="in_storage_at"-->
+      <!--          key="in_storage_at"-->
+      <!--          v-if="activeName === '2' || activeName === '3'"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('签收时间')"-->
+      <!--          width="155"-->
+      <!--          prop="received_at"-->
+      <!--          key="received_at"-->
+      <!--          v-if="['0', '1', '2'].includes(activeName)"-->
+      <!--        ></el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('提交时间')"-->
+      <!--          prop="created_at"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          key="created_at"-->
+      <!--          width="155"-->
+      <!--        >-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column-->
+      <!--          :label="$t('操作')"-->
+      <!--          fixed="right"-->
+      <!--          v-if="activeName !== '7'"-->
+      <!--          key="operator"-->
+      <!--          width="116px"-->
+      <!--        >-->
+      <!--          <template slot-scope="scope">-->
+      <!--            <el-dropdown>-->
+      <!--              <el-button type="primary" plain>-->
+      <!--                {{ $t('操作') }}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+      <!--              </el-button>-->
+      <!--              <el-dropdown-menu slot="dropdown">-->
+      <!--                <el-dropdown-item @click.native="storage(scope.row.id)">-->
+      <!--                  &lt;!&ndash; 入库 &ndash;&gt;-->
+      <!--                  <span v-if="activeName === '1' || scope.row.status === 1">{{ $t('入库') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="onStorage(scope.row.id)">-->
+      <!--                  &lt;!&ndash; 入库 &ndash;&gt;-->
+      <!--                  <span v-if="activeName === '1' || scope.row.status === 1">{{-->
+      <!--                    $t('入库下单')-->
+      <!--                  }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="goExpress(scope.row.express_num)">-->
+      <!--                  <span-->
+      <!--                    v-if="['1', '2'].includes(activeName) && [1, 2].includes(scope.row.status)"-->
+      <!--                    >{{ $t('单号追踪') }}</span-->
+      <!--                  >-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="returnWarehouse(scope.row.id)">-->
+      <!--                  <span v-if="activeName === '2'">{{ $t('退回未入库') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="onUnclaimed(scope.row.id)">-->
+      <!--                  <span v-if="activeName === '2'">{{ $t('退回无人认领') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="onLogs(scope.row.express_num)">-->
+      <!--                  <span-->
+      <!--                    v-if="-->
+      <!--                      ['0', '2', '3', '4', '5'].includes(activeName) &&-->
+      <!--                      [2, 3, 4, 5, 6].includes(scope.row.status)-->
+      <!--                    "-->
+      <!--                    >{{ $t('入库日志') }}</span-->
+      <!--                  >-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="editWarehoused(scope.row.id)">-->
+      <!--                  <span v-if="activeName === '2' || scope.row.status === 2">{{ $t('编辑') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="fastClosing(scope.row.user_id)">-->
+      <!--                  <span v-if="activeName === '2'">{{ $t('快速合箱') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="invalidLog(scope.row.id)">-->
+      <!--                  <span v-if="activeName === '6'">{{ $t('日志') }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--                <el-dropdown-item @click.native="getLabel(scope.row.id)">-->
+      <!--                  <span size="small" v-if="activeName === '2' || scope.row.status === 2">{{-->
+      <!--                    $t('打印标签')-->
+      <!--                  }}</span>-->
+      <!--                </el-dropdown-item>-->
+      <!--              </el-dropdown-menu>-->
+      <!--            </el-dropdown>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--      </el-table>-->
       <nle-pagination
         style="margin-top: 5px"
         :pageParams="page_params"
@@ -591,7 +993,7 @@ export default {
       deleteNum: [],
       countData: {},
       urlExcel: '',
-      hasFilterCondition: true,
+      hasFilterCondition: false,
       sumData: {},
       ownerData: [],
       searchFieldData: {
@@ -635,6 +1037,11 @@ export default {
   },
   mounted() {},
   methods: {
+    goRemark(item) {
+      dialog({ type: 'packpageRemark', id: item.id }, () => {
+        console.log('cnm')
+      })
+    },
     initSize() {
       if (localStorage.getItem('package_size')) {
         this.page_params.size = Number(localStorage.getItem('package_size'))
@@ -1204,7 +1611,6 @@ export default {
   .seer {
     padding: 2px;
     width: 40px;
-    margin-left: 5px;
     display: block;
     text-align: center;
     line-height: 15px;
@@ -1212,6 +1618,7 @@ export default {
     color: #f7aa47;
     font-size: 10px;
     border-radius: 5px;
+    margin-top: 6px;
   }
   .remark-text {
     font-size: 14px;
@@ -1238,12 +1645,73 @@ export default {
   }
   .order-data-list {
     background-color: inherit;
+    .customer {
+      .user-id {
+        font-weight: 600;
+      }
+    }
+    .express {
+      button {
+        padding: 0;
+      }
+      .express-top {
+        display: flex;
+        align-items: center;
+      }
+      .express-bottom {
+        margin-top: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .beizhu-img {
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+        }
+      }
+    }
+    .address {
+      font-weight: bold;
+      .address-line {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+      }
+    }
+    .inventory {
+      .inventory-line {
+        display: flex;
+        div {
+          flex: 1;
+        }
+      }
+    }
+    .tip {
+      color: #989898;
+    }
+    .put-storage {
+      .tip {
+        color: #989898;
+      }
+      .put-storage-center{
+        display: flex;
+        align-items: center;
+        div{
+          flex: 1;
+        }
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
   }
   .tab-length {
     width: 950px !important;
   }
   .copy-number {
-    padding-left: 5px;
+    padding-left: 20px;
     cursor: pointer;
   }
   .img-box {
