@@ -5583,3 +5583,6 @@ exports.setComment = (id, display) => $form.put(`order-comments/${id}/display/${
 
 // 面单列表
 exports.labelTemplates = () => $form.get(`label-templates`)
+
+//实时统计数据-V4
+exports.homeData = () => $form.get(`statistics/realtime-data`)

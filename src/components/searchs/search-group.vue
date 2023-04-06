@@ -15,8 +15,9 @@
           slot="append"
           @click="Enter"
           :loading="$store.state.btnLoading"
-          icon="el-icon-search"
-        ></el-button>
+         
+        >{{ $t('搜索') }}</el-button>
+      
       </el-input>
     </el-col>
   </el-row>
@@ -58,9 +59,9 @@ export default {
     width: 100%;
   }
   .search-btn {
-    color: #fff;
-    background-color: #3540a5;
-    border: 1px solid #3540a5;
+    color: #fff !important;
+    background-color: #3540a5 !important;
+    border: 1px solid #3540a5 !important;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
@@ -79,7 +80,7 @@ export default {
     border-color: #e8e9eb;
   }
   .el-button {
-    color: #3540a5 !important;
+    //color: #3540a5 !important;
     background-color: #fff;
     border: none;
   }
