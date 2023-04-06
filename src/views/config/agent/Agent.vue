@@ -20,7 +20,8 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="btn">
+    <div class="agent-list-container_list">
+      <div class="btn">
       <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
       <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
       <el-button type="primary" @click="updateAgentCode">{{ $t('更新代理二维码') }}</el-button>
@@ -141,7 +142,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
+ 
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
@@ -547,6 +550,10 @@ export default {
 }
 </script>
 <style lang="scss" scope>
+.agent-list-container_list{
+  background-color: #fff;
+  padding:15px 20px;
+}
 .img_box {
   text-align: center;
   .imgDialog {

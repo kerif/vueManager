@@ -51,7 +51,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
+    <div style="background-color: #f5f5f5;padding: 5px;"></div>
+    <div class="content">
+      <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
       <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="-1"></el-tab-pane>
       <el-tab-pane :label="`${$t('待付款')}(${statusList['1'] || 0})`" name="1"></el-tab-pane>
       <el-tab-pane :label="`${$t('已付款')}(${statusList['10'] || 0})`" name="10"></el-tab-pane>
@@ -149,7 +151,9 @@
         </el-table-column>
       </el-table>
     </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
+   
     <el-dialog :visible.sync="showConfig" :title="$t('补款方式设置')" @close="clear">
       <el-form label-position="top" :model="form">
         <el-form-item :label="$t('请选择可用收款方式')">
@@ -419,6 +423,10 @@ export default {
 .order-replenishment-search {
   background: #fff;
   padding-left: 10px;
+}
+.content{
+    background-color: #fff;
+    padding:15px 20px;
 }
 .changeVou {
   float: right;

@@ -37,7 +37,9 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
+
+    <div class="content">
+      <div class="searchGroup">
       <div class="bottom-sty">
         <el-button class="btn-deep-purple" size="small" @click="confirmWake">{{
           $t('批量唤醒')
@@ -97,6 +99,8 @@
       </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
+    
     <!-- 轨迹 -->
     <el-dialog :visible.sync="sleepDialog" width="65%" :title="$t('沉睡设置')" @close="clearSn">
       <div style="margin-bottom: 20px">
@@ -380,6 +384,10 @@ export default {
 <style lang="scss">
 .sleep-reminder-container {
   background-color: #f5f5f5;
+  .content{
+    background-color: #fff;
+    padding:15px 20px;
+  }
   .select-box {
     display: inline-block;
     overflow: hidden;

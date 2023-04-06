@@ -36,7 +36,9 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
+    <div style="background-color: #f5f5f5;padding: 5px;"></div>
+    <div style="background-color: #fff;padding:15px 20px">
+      <div class="searchGroup">
       <search-group
         :placeholder="$t('请输入关键字')"
         v-model="page_params.keyword"
@@ -94,6 +96,7 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
+    </div>
     <el-dialog
       :visible.sync="show"
       :title="$t('修改状态')"
@@ -136,6 +139,7 @@
           </el-select>
         </el-form-item>
       </el-form>
+    
       <el-dialog :visible.sync="imgVisible" append-to-body width="30%">
         <div class="img_box">
           <img :src="imgSrc" class="imgDialog" />
@@ -331,7 +335,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     padding: 10px 0px;
-    background-color: #f5f5f5;
+    // background-color: #f5f5f5;
     .search-group {
       width: 21.5%;
       margin-right: 10px;

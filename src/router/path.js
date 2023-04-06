@@ -148,6 +148,20 @@ const selfbatchImport = loadonDemand('config/point/selfbatchImport')
 // const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置
 const configurationMore = loadonDemand('config/Payment/configuration')
+// 配置 偏远地区设置
+const RemoteAreas = loadonDemand('config/RemoteAreas/remoteSetting')
+// 配置 预报单号
+const reservationNo = loadonDemand('config/reservationNo/reservationNoList')
+// 配置 预报单号详情
+const reservationNoDetail = loadonDemand('config/reservationNo/reservationNoDetail')
+// 配置 预报单号导入清单
+const reservationNoImport = loadonDemand('config/reservationNo/import')
+// 配置 箱/袋预留号管理
+const boxReservedNum = loadonDemand('config/reservedBox/boxReservedNum')
+// 配置 箱/袋预留号管理 详情
+const boxReservedDetail = loadonDemand('config/reservedBox/boxReservedDetail')
+// 配置 导入
+const boxReservedImport = loadonDemand('config/reservedBox/boxReservedImport')
 // 配置 更多配置 短信服务配置
 const smsServices = loadonDemand('config/Payment/smsService')
 // 配置 更多配置 物流查询服务
@@ -170,6 +184,8 @@ const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
+// 快速入库下单
+const warehouseOrder = loadonDemand('station/warehouseOrder')
 // 自提点 转运包裹管理
 const PackageManagement = loadonDemand('pick/packageMana')
 // 自提点 仓位管理
@@ -208,6 +224,8 @@ const ImportOrder = loadonDemand('order/order/importOrder')
 const BatchShelves = loadonDemand('order/order/batchShelves')
 // 订单 预报包裹列表 批量预报
 const BatchForecast = loadonDemand('order/order/batchForecast')
+// 偏远地区查询
+const remoteSearch = loadonDemand('order/remote/remoteSearch')
 // // 订单 订单列表 货量统计
 // const VolumeStatistics = loadonDemand('order/order/volumeStatistics')
 // 订单 无人认领包裹
@@ -259,6 +277,8 @@ const channelManagement = loadonDemand('marketing/channel/channelList')
 const reportList = loadonDemand('marketing/report/report')
 // 营销管理 广告图管理
 const advertising = loadonDemand('marketing/advertising')
+// 营销管理 chatgpt 文案
+const AiAssistant = loadonDemand('marketing/ai/index')
 // 营销管理 轮播图管理
 const bannerList = loadonDemand('marketing/banner/bannerList')
 // 营销管理 广告图管理 海报管理
@@ -708,6 +728,17 @@ export default [
             }
           },
           {
+            path: '/marketing/ai_assistant',
+            name: 'aiAssistant',
+            component: AiAssistant,
+            id: 807,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: 'AI内容助手'
+            }
+          },
+          {
             path: '/marketing/banner',
             name: 'bannerList',
             component: bannerList,
@@ -729,6 +760,70 @@ export default [
               group: '营销管理',
               name: '海报管理',
               parent: '/marketing/advertising'
+            }
+          }
+        ]
+      },
+      {
+        path: 'group',
+        component: LayoutContainer,
+        icon: 'order',
+        id: 1300,
+        children: [
+          {
+            path: '/group/groupList',
+            name: 'groupMana',
+            component: groupMana,
+            id: 1301,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '拼团管理'
+            }
+          },
+          {
+            path: '/group/leaderList',
+            name: 'leaderMana',
+            component: leaderMana,
+            id: 1302,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '团长管理'
+            }
+          },
+          {
+            path: '/group/groupSet',
+            name: 'groupSet',
+            component: groupSet,
+            id: 1303,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '拼团配置'
+            }
+          },
+          {
+            path: '/group/contentMana',
+            name: 'contentMana',
+            component: contentMana,
+            id: 1304,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '内容管理'
+            }
+          },
+          {
+            path: '/group/contentMana/edit',
+            name: 'editContent',
+            component: editContent,
+            id: 1304,
+            meta: {
+              level: 3,
+              group: '拼团管理',
+              name: '编辑内容',
+              parent: '/group/contentMana'
             }
           }
         ]
@@ -1385,17 +1480,6 @@ export default [
             }
           },
           {
-            path: '/config/point',
-            name: 'point',
-            component: SinceList,
-            id: 605,
-            meta: {
-              level: 2,
-              group: '基础数据',
-              name: '自提点配置'
-            }
-          },
-          {
             path: '/config/line',
             name: 'linelist',
             component: Line,
@@ -1573,17 +1657,17 @@ export default [
               parent: '/config/warehouse'
             }
           },
-          // {
-          //     path: '/config/notice',
-          //     component: NoticeList,
-          //     name: 'noticelist',
-          //     id: 603,
-          //     meta: {
-          //         group: '基础数据',
-          //         level: 2,
-          //         name: '文章管理'
-          //     }
-          // },
+          {
+              path: '/config/notice',
+              component: NoticeList,
+              name: 'noticelist',
+              id: 603,
+              meta: {
+                  group: '基础数据',
+                  level: 2,
+                  name: '文章管理'
+              }
+          },
           {
             path: '/config/notice/add',
             component: NoticeAddEdit,
@@ -1945,12 +2029,23 @@ export default [
             }
           },
           {
+            path: '/order/remote/remoteSearch',
+            name: 'remoteSearch',
+            component: remoteSearch,
+            id: 409,
+            meta: {
+              level: 2,
+              group: '订单管理',
+              name: '偏远地区查询'
+            }
+          },
+          {
             path: '/order/freight',
             name: 'freight',
             component: Freight,
             id: 404,
             meta: {
-              level: 3,
+              level: 2,
               group: '订单管理',
               name: '运费查询'
             }
@@ -2046,14 +2141,25 @@ export default [
         id: 500,
         children: [
           {
+            path: '/station/warehouseOrder',
+            name: 'warehouseOrder',
+            component: warehouseOrder,
+            id: 501,
+            meta: {
+              level: 2,
+              group: '货站管理',
+              name: '快速入库下单'
+            }
+          },
+          {
             path: '/station/storage',
             name: 'storageContainer',
             component: Storage,
             id: 501,
             meta: {
-              level: 2,
+              level: 3,
               group: '货站管理',
-              name: '快速入库'
+              name: '包裹快速入库'
             }
           },
           {
@@ -2101,6 +2207,17 @@ export default [
               group: '货站管理',
               name: '详情',
               parent: '/station/ship'
+            }
+          },
+          {
+            path: '/station/tracking',
+            name: 'tracking',
+            component: tracking,
+            id: 506,
+            meta: {
+              level: 2,
+              group: '货站管理',
+              name: '物流查询'
             }
           },
           {
@@ -2234,6 +2351,17 @@ export default [
               level: 2,
               group: '自提点管理',
               name: '转运包裹管理'
+            }
+          },
+          {
+            path: '/config/point',
+            name: 'point',
+            component: SinceList,
+            id: 605,
+            meta: {
+              level: 2,
+              group: '自提点管理',
+              name: '自提点配置'
             }
           },
           {
@@ -2519,6 +2647,87 @@ export default [
               level: 2,
               group: '基础配置',
               name: '基础配置'
+            }
+          },
+          {
+            path: '/config/remoteAreas',
+            component: RemoteAreas,
+            name: 'RemoteAreas',
+            id: 609,
+            meta: {
+              group: '基础配置',
+              level: 2,
+              name: '偏远地区设置'
+            }
+          },
+          {
+            path: '/config/reservationNo',
+            name: 'reservationNo',
+            component: reservationNo,
+            id: 607,
+            meta: {
+              group: '基础配置',
+              level: 2,
+              name: '预留订单号'
+            }
+          },
+          {
+            path: '/config/reservationNo/detail',
+            component: reservationNoDetail,
+            name: 'reservationNoDetail',
+            id: 607,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '预留订单号详情',
+              parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservationNo/import',
+            component: reservationNoImport,
+            name: 'reservationNoImport',
+            id: 607,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '导入清单',
+              parent: '/config/reservationNo'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedNum',
+            name: 'boxReservedNum',
+            component: boxReservedNum,
+            id: 608,
+            meta: {
+              group: '基础配置',
+              level: 2,
+              name: '预留袋号'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedDetail',
+            name: 'boxReservedDetail',
+            component: boxReservedDetail,
+            id: 608,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '详情',
+              parent: '/config/reservedBox'
+            }
+          },
+          {
+            path: '/config/reservedBox/boxReservedImport',
+            name: 'boxReservedImport',
+            component: boxReservedImport,
+            id: 608,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '导入',
+              parent: '/config/reservedBox'
             }
           },
           {

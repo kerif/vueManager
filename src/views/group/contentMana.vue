@@ -129,6 +129,8 @@ export default {
 </script>
 <style lang="scss">
 .content-management-container {
+  background-color: #fff;
+  padding:15px 20px;
   .searchGroup {
     width: 21.5%;
     float: right;

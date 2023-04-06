@@ -2,7 +2,7 @@
   <div class="reservation-import">
     <div class="content">
       <el-row class="row">
-        <el-col :span="2">快递公司</el-col>
+        <el-col :span="2">{{ $t('快递公司') }}</el-col>
         <el-col :span="6">
           <el-select v-model="data.logistics" style="width: 300px" :placeholder="$t('请选择')">
             <el-option

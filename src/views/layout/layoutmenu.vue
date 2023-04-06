@@ -30,24 +30,25 @@ export default {
     return {
       showMeunList: [
         {
-          key: 2,
-          lists: ['marketing', 'content', 'website', 'customer', 'vip', 'staff', 'basics']
+          key: 3,
+          // lists: ['marketing', 'content', 'website', 'vip', 'staff', 'basics']
+          lists: ['pick']
         },
         {
-          key: 3,
-          lists: ['order', 'station', 'pick']
+          key: 2,
+          lists: ['order', 'station']
         },
         {
           key: 4,
-          lists: ['finance', 'consumption']
+          lists: ['vip','overview','customer','marketing','group','content']
         },
         {
           key: 5,
-          lists: ['overview']
+          lists: ['finance','consumption']
         },
         {
           key: 6,
-          lists: ['config', 'language']
+          lists: ['config', 'language','staff','basics','website']
         }
       ]
     }
@@ -201,7 +202,7 @@ export default {
 .menu-right {
   line-height: 60px;
   color: #fff;
-  width: 40%;
+  width: 43%;
   .el-dropdown-link {
     height: 60px;
     font-size: 15px;

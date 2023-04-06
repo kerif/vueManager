@@ -76,7 +76,7 @@
     <!-- <div class="select-box">
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div> -->
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 285px)">
       <el-table
         :data="rechargeList"
         stripe
@@ -84,7 +84,7 @@
         class="data-list"
         v-loading="tableLoading"
         ref="table"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 280px)"
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 自提点名称 -->
@@ -337,6 +337,8 @@ export default {
 </script>
 <style lang="scss">
 .self-settlement-container {
+    background-color: #fff;
+    padding:15px 20px;
   .flex-box {
     display: flex;
     justify-content: space-between;

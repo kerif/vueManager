@@ -5,19 +5,20 @@
       :searchFieldData="searchFieldData"
       v-on:submit="goMatch"
     ></order-list-search>
-    <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
-      <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
-      <el-tab-pane
-        :label="`${$t('未入库')} (${countData.wait_in_storage || 0})`"
-        name="1"
-      ></el-tab-pane>
-      <el-tab-pane :label="`${$t('已入库')} (${countData.in_storage || 0})`" name="2"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已集包')} (${countData.packed || 0})`" name="3"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
-      <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
-    </el-tabs>
+   <div style="background-color: #fff;padding:15px 20px">
+      <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
+        <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
+        <el-tab-pane
+          :label="`${$t('未入库')} (${countData.wait_in_storage || 0})`"
+          name="1"
+        ></el-tab-pane>
+        <el-tab-pane :label="`${$t('已入库')} (${countData.in_storage || 0})`" name="2"></el-tab-pane>
+        <el-tab-pane :label="`${$t('已集包')} (${countData.packed || 0})`" name="3"></el-tab-pane>
+        <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
+        <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
+        <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
+        <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
+     </el-tabs>
     <div class="header-range">
       <div class="header-btns">
         <el-button
@@ -441,7 +442,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination
+    </div>
+    <nle-pagination
         style="margin-top: 5px"
         :pageParams="page_params"
         :notNeedInitQuery="false"
@@ -450,8 +452,7 @@
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
-      </nle-pagination>
-    </div>
+    </nle-pagination>
     <div style="height: calc(100vh - 270px)" v-if="activeName === '7'">
       <el-table
         class="data-list"
@@ -557,6 +558,8 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
+    </div>
+    
   </div>
 </template>
 

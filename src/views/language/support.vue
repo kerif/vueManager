@@ -176,6 +176,8 @@ export default {
 
 <style lang="scss">
 .language-container {
+  background-color: #fff;
+  padding:15px 20px;
   .select-box {
     overflow: hidden;
   }
