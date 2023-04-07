@@ -1290,7 +1290,7 @@ export default {
   margin-right: 20px;
 }
 .poster-right {
-  width: calc(100%-340px);
+  width: calc(100% - 340px);
   width: -moz-calc(100% - 340px);
   width: -webkit-calc(100% - 340px);
   vertical-align: top;

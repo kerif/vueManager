@@ -5586,3 +5586,8 @@ exports.labelTemplates = () => $form.get(`label-templates`)
 
 //实时统计数据-V4
 exports.homeData = () => $form.get(`statistics/realtime-data`)
+//设置包裹备注
+exports.setPackageRemark = (id, params) => $form.put(`/packages/${id}/remark`, params)
+
+//设置包裹备注
+exports.setOrderRemark = (id, params) => $form.put(`orders/${id}/remark`, params)

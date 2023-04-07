@@ -1,44 +1,51 @@
 <template>
   <div class="goodsAllocation">
     <div class="overview">
-      <div class="headline">{{$t('仓位概览')}}</div>
+      <div class="headline">{{ $t('仓位概览') }}</div>
       <div>
         <el-select v-model="value" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
-            :value="item.value">
+            :value="item.value"
+          >
           </el-option>
         </el-select>
       </div>
     </div>
     <div class="shelfs">
-      <div class="shelf" v-for="(item,index) in goodsAllocationList" :key="index" @click="detail">
-        <div class="shelf-tag">A货区{{ index+1 }}</div>
+      <div class="shelf" v-for="(item, index) in goodsAllocationList" :key="index" @click="detail">
+        <div class="shelf-tag">A货区{{ index + 1 }}</div>
         <div class="left-side"></div>
-        <div v-for="(i,index) in item" :key="index">
-          <div class="layer" v-for="(te,ind) in i.row" :key="ind">
+        <div v-for="(i, index) in item" :key="index">
+          <div class="layer" v-for="(te, ind) in i.row" :key="ind">
             <div class="layer-contianer">
-              <div :class="indexs==2?'boxs has':'boxs'" v-for="(te,indexs) in i.list" :key="indexs">
-                <span v-if="indexs==2">20</span>
+              <div
+                :class="indexs == 2 ? 'boxs has' : 'boxs'"
+                v-for="(te, indexs) in i.list"
+                :key="indexs"
+              >
+                <span v-if="indexs === 2">20</span>
               </div>
             </div>
             <div class="layer-label">
-              <div class="label-code" v-for="(te,indexs) in i.list" :key="indexs"><label>A-01-0{{ indexs+1 }}</label></div>
+              <div class="label-code" v-for="(te, indexs) in i.list" :key="indexs">
+                <label>A-01-0{{ indexs + 1 }}</label>
+              </div>
             </div>
           </div>
         </div>
         <div class="right-side"></div>
       </div>
-      <div class="shelf" style="background-color: #DCDCDC;">
-          <div class="goodsArea">A货区5</div>
-          <div class="area">
-            <div class="inner" v-for="(item,index) in 5" :key="index">
-              <div class="left">A-04-0{{ index+1 }}</div>
-              <div class="right">40</div>
-            </div>
+      <div class="shelf" style="background-color: #dcdcdc">
+        <div class="goodsArea">A货区5</div>
+        <div class="area">
+          <div class="inner" v-for="(item, index) in 5" :key="index">
+            <div class="left">A-04-0{{ index + 1 }}</div>
+            <div class="right">40</div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,18 +54,25 @@
 export default {
   data() {
     return {
-      goodsAllocationList: [[{ row: 3, list: 4 }], [{ row: 4, list: 5 }], [{ row: 2, list: 3 }], [{ row: 3, list: 5 }]],
+      goodsAllocationList: [
+        [{ row: 6, list: 4 }],
+        [{ row: 4, list: 5 }],
+        [{ row: 2, list: 3 }],
+        [{ row: 3, list: 5 }]
+      ],
       value: '',
-      options:[{
+      options: [
+        {
           value: '选项1',
           label: '黄金糕'
-      }]
+        }
+      ]
     }
   },
-  methods:{
-    detail(){
+  methods: {
+    detail() {
       this.$router.push({
-        name:'placeDetail'
+        name: 'placeDetail'
       })
     }
   }
@@ -67,44 +81,44 @@ export default {
 <style lang="scss" scoped>
 .goodsAllocation {
   background-color: white;
-  .overview{
+  .overview {
     padding: 25px;
     display: flex;
     justify-content: space-between;
-    .headline{
+    .headline {
       font-weight: 800;
     }
   }
   .shelfs {
-    height: calc(100vh - 270px);
+    height: calc(100vh - 200px);
     overflow-x: hidden;
     display: flex;
     flex-grow: 3;
     flex-wrap: wrap;
   }
-  .goodsArea{
+  .goodsArea {
     text-align: center;
     padding: 20px 0px;
   }
-  .area{
+  .area {
     display: flex;
     flex-wrap: wrap;
   }
-  .inner{
+  .inner {
     width: 15%;
     margin: 10px;
     border: 8px solid #1480fe;
     height: 30px;
     display: flex;
     line-height: 30px;
-    .left{
+    .left {
       width: 70%;
       background-color: aliceblue;
       height: 100%;
       font-size: 14px;
       text-align: right;
     }
-    .right{
+    .right {
       width: 30%;
       background-color: #b59565;
       height: 100%;
@@ -119,12 +133,12 @@ export default {
     margin-bottom: 40px;
     margin-left: 20px;
     /*            background-color: #7F7F7F;*/
-    height: 500px;
+    //height: 500px;
     position: relative;
   }
   .left-side {
     width: 20px;
-    height: 100%;
+    height: calc(100% + 20px);
     position: absolute;
     left: 0px;
     background-color: #1480fe;
@@ -132,7 +146,7 @@ export default {
   }
   .right-side {
     width: 20px;
-    height: 100%;
+    height: calc(100% + 20px);
     position: absolute;
     right: 0px;
     top: 0px;

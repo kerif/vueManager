@@ -199,6 +199,8 @@ import bindPhonePointRule from './bindPhonePointRule.vue'
 import bindEmailPointRule from './bindEmailPointRule.vue'
 import invoiceList from './invoiceList.vue'
 import remoteInfo from './remoteInfo.vue'
+import packpageRemark from './packpageRemark'
+import orderRemark from './orderRemark'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -398,6 +400,8 @@ const bindPhonePointRuleController = Vue.extend(bindPhonePointRule)
 const bindEmailPointRuleController = Vue.extend(bindEmailPointRule)
 const invoiceListController = Vue.extend(invoiceList)
 const remoteInfoController = Vue.extend(remoteInfo)
+const packpageRemarkController = Vue.extend(packpageRemark)
+const orderRemarkController = Vue.extend(orderRemark)
 
 const mixin = {
   data() {
@@ -1801,6 +1805,20 @@ function initInstance(type) {
       break
     case 'remoteInfo':
       instance = new remoteInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //包裹备注
+    case 'packpageRemark':
+      instance = new packpageRemarkController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //订单备注
+    case 'orderRemark':
+      instance = new orderRemarkController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
