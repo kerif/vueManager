@@ -160,7 +160,7 @@
         :data="orderData"
         @selection-change="selectionChange"
         v-loading="tableLoading"
-        height="calc(100vh - 275px)"
+        height="calc(100vh - 300px)"
         class="order-data-list"
         :header-cell-style="{ 'text-align': 'center' }"
       >
@@ -278,8 +278,7 @@
                 </div>
                 <div>
                   <span class="tip">{{ $t('物品属性') }}：</span
-                  ><span v-for="item in scope.row.props" :key="item.id"
-                    >
+                  ><span v-for="item in scope.row.props" :key="item.id">
                     {{ item.cn_name }}
                   </span>
                 </div>
@@ -287,7 +286,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('状态')" width="100" align="center" key="status" v-if="activeName !== '7'">
+        <el-table-column
+          :label="$t('状态')"
+          width="100"
+          align="center"
+          key="status"
+          v-if="activeName !== '7'"
+        >
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
@@ -324,7 +329,7 @@
                 <span class="tip">{{ $t('重量') }}({{ localization.weight_unit }})：</span
                 >{{ scope.row.package_weight }}
               </div>
-              <div class='put-storage-center'>
+              <div class="put-storage-center">
                 <div>
                   <span class="tip">{{ $t('体积') }}(m³)：</span>
                   {{
@@ -340,7 +345,11 @@
                 <div>
                   <span class="tip">{{ $t('货位') }}：</span>{{ scope.row.location }}
                 </div>
-                <img style="width: 20px; height: 20px;" src="@/assets/pic.png" />
+                <img
+                  style="width: 20px; height: 20px"
+                  v-if="scope.row.package_pictures.length === 0"
+                  src="@/assets/pic.png"
+                />
               </div>
             </div>
           </template>
@@ -349,16 +358,16 @@
           <template slot-scope="scope">
             <div class="time">
               <div>
-                <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.received_at }}
+                <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.shelf_off_at }}
               </div>
               <div>
-                <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.received_at }}
+                <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_up_at }}
               </div>
               <div>
                 <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.received_at }}
               </div>
               <div>
-                <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.received_at }}
+                <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.created_at }}
               </div>
             </div>
           </template>
@@ -1693,10 +1702,10 @@ export default {
       .tip {
         color: #989898;
       }
-      .put-storage-center{
+      .put-storage-center {
         display: flex;
         align-items: center;
-        div{
+        div {
           flex: 1;
         }
       }

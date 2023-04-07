@@ -210,7 +210,7 @@
         @expand-change="exChange"
         :data="oderData"
         @selection-change="onSelectChange"
-        height="calc(100vh - 270px)"
+        height="calc(100vh - 300px)"
         :header-cell-style="{ 'text-align': 'center' }"
       >
         <el-table-column
@@ -239,21 +239,197 @@
                     }}<span v-if="$store.state.uid === 1">)</span>
                   </div>
                   <div class="customer-code">
-                    ID:<span v-if="$store.state.uid === 1">{{
-                      scope.row.user_uid
-                    }}</span>
+                    ID:<span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
                     <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
                     }}<span v-if="$store.state.uid === 1">)</span>
                   </div>
                   <div class="username">
-                    {{ $t('昵称') }}:<span v-if="$store.state.uid === 1">{{
-                      scope.row.user_uid
-                    }}</span>
-                    <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
-                    }}<span v-if="$store.state.uid === 1">)</span>
+                    <span class="tip">{{ $t('昵称') }}:</span>
+                    <span>{{ scope.row.user_name }}</span>
+                  </div>
+                  <div class="vip">
+                    <span class="tip">{{ $t('会员等级') }}:</span>
+                    <span>{{ scope.row.user_member_level }}</span>
                   </div>
                 </div>
-
+              </template>
+              <template v-if="item.id === 'order_info'">
+                <div class="order_info">
+                  <div class="first-line">
+                    <div>
+                      <el-button @click="details(scope.row.id, activeName)" type="text">{{
+                        scope.row.order_sn
+                      }}</el-button>
+                      <el-button
+                        type="text"
+                        v-if="scope.row.is_parent === 1"
+                        @click.native="groupBuy(scope.row)"
+                        style="margin-left: 0"
+                      >
+                        <img class="group-sty" src="../../../assets/group.jpg"
+                      /></el-button>
+                      <el-button type="text" v-if="scope.row.is_stg === 1" style="margin-left: 0">
+                        <img src="../../../assets/stgv.jpg" class="group-sty" />
+                      </el-button>
+                      <span>
+                        <el-button
+                          style="color: red; font-weight: bolder; margin-left: 0"
+                          type="text"
+                          v-if="scope.row.status === 11"
+                          @click.native="reviewPackage(scope.row.id)"
+                          >{{ $t('待审核') }}</el-button
+                        >
+                        <router-link
+                          v-if="scope.row.status === 12"
+                          class="choose-order"
+                          :to="`/order/review/?id=${scope.row.id}`"
+                        >
+                          {{ $t('审核拒绝') }}
+                        </router-link>
+                      </span>
+                      <div
+                        :title="$t('复制单号')"
+                        class="copy-sty"
+                        @click="copyNumber(scope.row.order_sn)"
+                      >
+                        <i class="el-icon-copy-document"></i>
+                      </div>
+                    </div>
+                    <div style="height: 20px">
+                      <img class="img" src="@/assets/beizhu.png" @click="goRemark(scope.row)" />
+                      <img class="img" v-if="activeName === '6'" src="@/assets/erro.png" />
+                      <!--                      <img class="img" src="@/assets/printer.png" />-->
+                      <img
+                        class="img"
+                        v-if="scope.row.pack_pictures.length === 0"
+                        src="@/assets/pic.png"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="info-line">
+                      <div>
+                        <span class="tip">{{ $t('包裹数与件数') }}：</span
+                        ><span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+                      </div>
+                      <div>
+                        <span class="tip">{{ $t('出库数量') }}：</span>{{ scope.row.boxes_count }}
+                      </div>
+                    </div>
+                    <div class="info-line">
+                      <div>
+                        <span class="tip">{{ $t('预计重量') }}{{ localization.weight_unit }}：</span
+                        ><span>{{ scope.row.except_weight }}</span>
+                      </div>
+                      <div>
+                        <span class="tip">{{ $t('计费重量') }}{{ localization.weight_unit }}：</span
+                        >1
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.id === 'pay_info'">
+                <div class="pay-info">
+                  <div>
+                    <span class="tip">{{ $t('支付方式') }}：</span
+                    ><span>{{ scope.row.payment_type_name }}</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('应付') }}：</span
+                    ><span>{{ scope.row.actual_payment_fee }}</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('减免') }}：</span
+                    ><span>{{
+                      scope.row.actual_payment_fee * 1 - scope.row.actual_payment_fee * 1
+                    }}</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('实付') }}：</span
+                    ><span>{{ scope.row.actual_payment_fee }}</span>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.id === 'address_info'">
+                <div class="address-info">
+                  <div>
+                    <span class="bold-font">{{
+                      scope.row.address && scope.row.address.phone
+                    }}</span>
+                  </div>
+                  <div>
+                    <span>{{ scope.row.address.country_name }}</span>
+                    <span class="span-left">{{ scope.row.address.province }}</span>
+                    <span class="span-left">{{ scope.row.address.city }}</span>
+                    <span class="span-left">{{ scope.row.address.distinct }}</span>
+                    <span class="span-left"
+                      >{{ scope.row.address.street }}{{ scope.row.address.door_no
+                      }}{{ scope.row.address.door_no }}{{ scope.row.address.address }}</span
+                    >
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('邮编') }}：</span
+                    ><span>{{
+                      scope.row.address.area ? scope.row.address.area.postcode : ''
+                    }}</span>
+                  </div>
+                  <div>
+                    <span class="bold-font">{{ scope.row.address_type }}</span>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.id === 'outbound_info'">
+                <div class="outbound-info">
+                  <div class="bold-font">
+                    <span>{{ $t('仓库') }}：</span><span>{{ scope.row.payment_type_name }}</span>
+                  </div>
+                  <div class="bold-font">
+                    <span>{{ $t('渠道') }}：</span><span>{{ scope.row.express_line.cn_name }}</span>
+                  </div>
+                  <div class="bold-font">
+                    <span>{{ $t('发货单号') }}：</span
+                    ><span>{{ scope.row.shipment ? scope.row.shipment.sn : '' }}</span>
+                  </div>
+                  <div class="bold-font">
+                    <span>{{ $t('转运单号') }}：</span><span>{{ scope.row.logistics_sn }}</span>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.id === 'docking_staff'">
+                <div class="docking-staff">
+                  <div>
+                    <span class="tip">{{ $t('代理') }}：</span> <span>{{ scope.row.agent }}</span>
+                    <span>({{ scope.row.agent_commission }}%)</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('销售') }}：</span
+                    ><span>{{ scope.row.sale_name }}</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('客服') }}：</span
+                    ><span>{{ scope.row.customer_name }}</span>
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('打包') }}：</span><span>未知</span>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.id === 'order_time'">
+                <div class="time">
+                  <div>
+                    <span class="tip">{{ $t('提交时间') }}：</span>{{ scope.row.created_at }}
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('打包时间') }}：</span>{{ scope.row.packed_at }}
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('支付时间') }}：</span>{{ scope.row.paid_at }}
+                  </div>
+                  <div>
+                    <span class="tip">{{ $t('发货时间') }}：</span>{{ scope.row.shipped_at }}
+                  </div>
+                </div>
               </template>
               <template v-if="item.id === 'user_id'">
                 <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
@@ -1358,6 +1534,11 @@ export default {
     this.initQuery()
   },
   methods: {
+    goRemark(item) {
+      dialog({ type: 'orderRemark', id: item.id }, () => {
+        console.log('cnm')
+      })
+    },
     // 获取排序模板
     getTemplateColumn() {
       this.tableLoading = true
@@ -2806,13 +2987,49 @@ export default {
   .waybill-data-list {
     background-color: inherit;
     overflow-y: auto !important;
+    color: black;
+    .tip {
+      color: #989898;
+    }
+    .bold-font {
+      font-weight: bold;
+    }
     .place_order_customer {
       .customer-code {
         font-weight: bold;
       }
-      .username{
-
+      .username {
       }
+    }
+    .order_info {
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+      .first-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 20px;
+      }
+      .info-line {
+        display: flex;
+        div {
+          flex: 1;
+        }
+      }
+    }
+    .address-info {
+      .span-left {
+        padding-left: 8px;
+      }
+    }
+    .docking-staff {
     }
   }
   .tab-length {
@@ -2861,7 +3078,7 @@ export default {
   }
   .copy-sty {
     display: inline-block;
-    margin-left: 5px;
+    margin-left: 16px;
     cursor: pointer;
   }
 }

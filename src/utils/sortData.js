@@ -187,19 +187,19 @@ export default [
   {
     id: 'place_order_customer',
     name: '下单客户',
-    width: '160',
+    width: '120',
     checked: true
   },
   {
     id: 'order_info',
     name: '订单信息',
-    width: '300',
+    width: '350',
     checked: true
   },
   {
     id: 'pay_info',
     name: '支付信息',
-    width: '250',
+    width: '200',
     checked: true
   },
   {
