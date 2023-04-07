@@ -223,7 +223,7 @@ export default [
   {
     id: 'order_time',
     name: '时间',
-    width: '200',
+    width: '300',
     checked: true
   }
   // {

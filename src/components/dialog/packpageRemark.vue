@@ -61,60 +61,25 @@ export default {
       this.supplierId = item.id
       this.supplierName = item.name
     },
-    confirm(formName) {
-      // this.$refs[formName].validate(valid => {
-      // if (valid) {
-      //     if (this.status === 'alone') {
-      //       this.$request
-      //         .claimPackage(this.id, {
-      //           user_id: this.supplierId
-      //         })
-      //         .then(res => {
-      //           if (res.ret) {
-      //             this.$notify({
-      //               type: 'success',
-      //               title: this.$t('操作成功'),
-      //               message: res.msg
-      //             })
-      //             this.show = false
-      //             this.success()
-      //           } else {
-      //             this.$message({
-      //               message: res.msg,
-      //               type: 'error'
-      //             })
-      //           }
-      //         })
-      //     } else {
-      //       this.$request.batchClaim({ ids: this.id, user_id: this.supplierId }).then(res => {
-      //         if (res.ret) {
-      //           this.$notify({
-      //             type: 'success',
-      //             title: this.$t('操作成功'),
-      //             message: res.msg
-      //           })
-      //           this.show = false
-      //           this.success()
-      //         } else {
-      //           this.$message({
-      //             message: res.msg,
-      //             type: 'error'
-      //           })
-      //         }
-      //       })
-      //     }
-      //   } else {
-      //     return false
-      //   }
-      // })
-      this.show = false
-      this.success()
+    confirm() {
+      this.$request
+        .setPackageRemark(this.id, {
+          remark: this.remark
+        })
+        .then(res => {
+          this.$message.success(res.msg)
+          this.remark = null
+          this.show = false
+          this.success()
+        })
     },
     clear() {
       this.user.user_id = ''
       this.status = ''
+      this.remark = null
     },
     cancelDialog() {
+      this.remark = null
       this.show = false
     },
     init() {}
