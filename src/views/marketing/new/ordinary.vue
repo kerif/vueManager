@@ -584,6 +584,7 @@ export default {
 <style lang="scss">
 .ordinary-container {
   background-color: #fff !important;
+  padding: 15px 20px;
   .input-sty {
     width: 30%;
   }

@@ -7,8 +7,12 @@
         <span>{{ customData.sidebar_title }}</span>
       </div>
       <div v-else>
+        <img
+          src="@/assets/logo-top.png"
+          class="img-sty"
+        />
         <span>{{ $t('海鸥集运') }}</span>
-        <span>{{ $t('管理系统') }}</span>
+        <span>{{ $t('系统') }}</span>
       </div>
     </div>
     <div class="menu-left">
@@ -50,7 +54,7 @@
           <el-button icon="el-icon-download download-icon" slot="reference" class="button" round @click="uploadManagenent">{{ $t('下载管理') }}
           </el-button>
         </el-popover>
-        <el-button slot="reference" class="button" round @click="$router.push({name:'trackingService'})">
+        <el-button slot="reference" class="button" round @click="$router.push({name:'tracking'})">
           <span class="icon">
             <svg t="1675651504636" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2696" width="16" height="16">
               <path
@@ -125,10 +129,10 @@ export default {
       customData: {},
       topList: [
         { title: this.$t('首页'), id: 1 },
-        { title: this.$t('运营'), id: 2 },
-        { title: this.$t('仓库'), id: 3 },
-        { title: this.$t('财务'), id: 4 },
-        { title: this.$t('数据'), id: 5 },
+        { title: this.$t('集运'), id: 2},
+        { title: this.$t('自提点'), id: 3 },
+        { title: this.$t('运营'), id: 4 },
+        { title: this.$t('财务'), id: 5 },
         { title: this.$t('配置'), id: 6 }
       ],
       form: {
@@ -390,6 +394,10 @@ export default {
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
     }
+  }
+  .img-sty {
+    vertical-align: middle;
+    padding-right: 10px;
   }
   .aside-top {
     width: 280px;

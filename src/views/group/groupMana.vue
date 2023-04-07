@@ -591,6 +591,8 @@ export default {
 
 <style lang="scss">
 .group-list-container {
+  background-color: #fff;
+  padding:15px 20px;
   .btnList:after {
     content: '';
     height: 0;

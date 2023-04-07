@@ -6,6 +6,7 @@
       @info="getVal"
       v-on:submit="goMatch"
     ></waybill-list-search>
+    <div class="way-list-container_list">
     <el-tabs v-model="activeName" class="tab-length" stretch @tab-click="onTabChange">
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane :label="`${$t('待处理')} (${countData.pending || 0})`" name="1"></el-tab-pane>
@@ -1367,6 +1368,7 @@
       class="tmp"
     ></waybill-list-tmp-drawer>
     <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passVal="passVal"></abnormal>
+    </div>
   </div>
 </template>
 
@@ -2958,6 +2960,10 @@ export default {
   .el-checkbox__label {
     flex: 1;
   }
+}
+.way-list-container_list{
+  background-color: #fff;
+  padding: 10px 15px;
 }
 .way-list-container {
   .header-range {

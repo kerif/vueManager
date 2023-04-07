@@ -37,125 +37,128 @@
         </div>
       </div>
     </div>
-    <div class="headerList">
-      <div class="import-list">
-        <el-button class="btn-light-red" size="small" @click="deleteData">{{
-          $t('删除')
-        }}</el-button>
-        <el-button class="btn-blue-green" size="small" @click="claimList">{{
-          $t('认领记录')
-        }}</el-button>
-        <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
-          $t('批量认领')
-        }}</el-button>
-        <el-button type="success" plain size="small" @click="uploadList">{{
-          $t('导出清单')
-        }}</el-button>
-      </div>
-      <div class="headr-r">
-        <div class="searchGroup">
-          <search-group
-            :placeholder="$t('请输入关键字')"
-            v-model="page_params.keyword"
-            @search="goSearch"
-          >
-          </search-group>
+     <div style="background-color: #fff;padding:15px 20px">
+        <div class="headerList">
+        <div class="import-list">
+          <el-button class="btn-light-red" size="small" @click="deleteData">{{
+            $t('删除')
+          }}</el-button>
+          <el-button class="btn-blue-green" size="small" @click="claimList">{{
+            $t('认领记录')
+          }}</el-button>
+          <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
+            $t('批量认领')
+          }}</el-button>
+          <el-button type="success" plain size="small" @click="uploadList">{{
+            $t('导出清单')
+          }}</el-button>
         </div>
-        <div class="filter">
-          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-          ></el-button>
+        <div class="headr-r">
+          <div class="searchGroup">
+            <search-group
+              :placeholder="$t('请输入关键字')"
+              v-model="page_params.keyword"
+              @search="goSearch"
+            >
+            </search-group>
+          </div>
+          <div class="filter">
+            <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+              >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+            ></el-button>
+          </div>
         </div>
       </div>
+      <el-table
+        class="data-list"
+        border
+        stripe
+        :data="ownerData"
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        height="calc(100vh - 275px)"
+        ref="table"
+      >
+        <!-- height="550" -->
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 快递单号 -->
+        <el-table-column :label="$t('快递单号')" width="155">
+          <template slot-scope="scope">
+            <el-button @click="oderDetails(scope.row.id)" type="text">{{
+              scope.row.express_num
+            }}</el-button>
+            <span
+              :title="$t('复制单号')"
+              class="copy-number"
+              @click="copyNumber(scope.row.express_num)"
+            >
+              <i class="el-icon-copy-document"></i>
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 包裹编码 -->
+        <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
+        <!-- 物品价值 -->
+        <el-table-column
+          :label="$t('包裹重量') + this.localization.weight_unit"
+          prop="package_weight"
+          width="155"
+        ></el-table-column>
+        <!-- 物品属性 -->
+        <el-table-column :label="$t('物品属性')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{ item.cn_name }}
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 货位 -->
+        <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
+        <!-- 规格 -->
+        <el-table-column
+          :label="$t('规格') + this.localization.length_unit"
+          prop="dimension"
+          width="120px"
+        ></el-table-column>
+        <!-- 提交时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
+        <!-- 仓库 -->
+        <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
+        </el-table-column>
+        <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
+        <!-- 包裹图片 -->
+        <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
+          <template slot-scope="scope">
+            <span
+              v-for="(item, index) in scope.row.package_pictures"
+              :key="index"
+              style="cursor: pointer"
+              @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px" />
+            </span>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
+          <div class="append-box">
+          </div>
+        </template> -->
+        <el-table-column :label="$t('操作')" width="220" fixed="right">
+          <template slot-scope="scope">
+            <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
+              $t('打印标签')
+            }}</el-button>
+            <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
+              $t('认领')
+            }}</el-button>
+            <!-- <el-button class="btn-deep-purple">详细</el-button> -->
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
-    <el-table
-      class="data-list"
-      border
-      stripe
-      :data="ownerData"
-      @selection-change="selectionChange"
-      v-loading="tableLoading"
-      height="calc(100vh - 275px)"
-      ref="table"
-    >
-      <!-- height="550" -->
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <!-- 快递单号 -->
-      <el-table-column :label="$t('快递单号')" width="155">
-        <template slot-scope="scope">
-          <el-button @click="oderDetails(scope.row.id)" type="text">{{
-            scope.row.express_num
-          }}</el-button>
-          <span
-            :title="$t('复制单号')"
-            class="copy-number"
-            @click="copyNumber(scope.row.express_num)"
-          >
-            <i class="el-icon-copy-document"></i>
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 包裹编码 -->
-      <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
-      <!-- 物品价值 -->
-      <el-table-column
-        :label="$t('包裹重量') + this.localization.weight_unit"
-        prop="package_weight"
-        width="155"
-      ></el-table-column>
-      <!-- 物品属性 -->
-      <el-table-column :label="$t('物品属性')">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.props" :key="item.id">
-            {{ item.cn_name }}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 货位 -->
-      <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
-      <!-- 规格 -->
-      <el-table-column
-        :label="$t('规格') + this.localization.length_unit"
-        prop="dimension"
-        width="120px"
-      ></el-table-column>
-      <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
-      <!-- 仓库 -->
-      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
-      </el-table-column>
-      <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
-      <!-- 包裹图片 -->
-      <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
-        <template slot-scope="scope">
-          <span
-            v-for="(item, index) in scope.row.package_pictures"
-            :key="index"
-            style="cursor: pointer"
-            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
-          >
-            <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px" />
-          </span>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-        </div>
-      </template> -->
-      <el-table-column :label="$t('操作')" width="220" fixed="right">
-        <template slot-scope="scope">
-          <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
-            $t('打印标签')
-          }}</el-button>
-          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
-            $t('认领')
-          }}</el-button>
-          <!-- <el-button class="btn-deep-purple">详细</el-button> -->
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+  
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
       <div class="dialogSty">
         <iframe class="iframe" :src="urlHtml"></iframe>

@@ -36,7 +36,8 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
+    <div class="content">
+      <div class="searchGroup">
       <el-button class="upload-sty" size="small" type="success" plain @click="uploadList">{{
         $t('导出清单')
       }}</el-button>
@@ -133,6 +134,8 @@
         ></nle-pagination>
       </div>
     </div>
+    </div>
+  
   </div>
 </template>
 <script>
@@ -359,6 +362,10 @@ export default {
 </script>
 <style lang="scss">
 .recharge-list-container {
+  .content{
+    background-color: #fff;
+    padding:15px 20px;
+  }
   .changeVou {
     margin-left: 20px;
   }
