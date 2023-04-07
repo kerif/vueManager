@@ -125,7 +125,7 @@ export default {
     width: 98%;
     padding: 20px;
     background-color: #fff !important;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     .search-item {
       width: 600px;
       .search-ipt {

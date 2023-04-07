@@ -128,6 +128,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .group-config-container {
+  background-color: #fff;
+  padding:15px 20px;
   .rate-top {
     overflow: hidden;
   }

@@ -5580,3 +5580,6 @@ exports.aiChat = params => $json.post('chat/question', params)
 
 // 评论显示与隐藏
 exports.setComment = (id, display) => $form.put(`order-comments/${id}/display/${display}`)
+
+// 面单列表
+exports.labelTemplates = () => $form.get(`label-templates`)

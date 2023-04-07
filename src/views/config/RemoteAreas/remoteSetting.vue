@@ -104,6 +104,7 @@ export default {
 .remote-areas {
   height: 90%;
   background-color: #fff !important;
+  padding:15px 20px;
   .blue-text {
     font-size: 14px;
     color: #3540a5;

@@ -50,7 +50,8 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
+    <div style=" background-color: #fff;padding:15px 20px;">
+      <div class="searchGroup">
       <div class="bottom-sty">
         <el-button class="btn-blue-green" size="small" @click="updateTracking">{{
           $t('更新物流状态')
@@ -272,13 +273,15 @@
         </div>
       </template> -->
       </el-table>
+      </div>
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+        saveSize="ship"
+      ></nle-pagination>
     </div>
-    <nle-pagination
-      style="margin-top: 5px"
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-      saveSize="ship"
-    ></nle-pagination>
+   
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
         <el-form-item :label="$t('物流状态')">

@@ -45,7 +45,8 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
+    <div class="content">
+      <div class="searchGroup">
       <el-button type="success" plain size="small" class="searchGroup-btn-r" @click="uploadList">{{
         $t('导出清单')
       }}</el-button>
@@ -146,11 +147,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <nle-pagination
-      style="margin-top: 5px"
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+      ></nle-pagination>
+    </div>
+  
   </div>
 </template>
 <script>
@@ -356,6 +359,10 @@ export default {
 </script>
 <style lang="scss">
 .transaction-list-container {
+  .content{
+    background-color: #fff;
+    padding:15px 20px;
+  }
   .changeVou {
     margin-left: 10px;
   }

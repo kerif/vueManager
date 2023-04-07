@@ -17,9 +17,12 @@
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 270px)" border>
       <el-table-column prop="name" :label="$t('模板名称')">
       </el-table-column>
-      <el-table-column prop="size" :label="$t('模板尺寸')" >
+      <el-table-column :label="$t('模板尺寸')" >
+        <template slot-scope="scope">
+            {{ scope.row.width }} * {{ scope.row.height }}
+        </template>
       </el-table-column>
-      <el-table-column prop="type" :label="$t('类型')" >
+      <el-table-column prop="type_name" :label="$t('类型')" >
       </el-table-column>
       <el-table-column prop="default" :label="$t('是否默认')" >
       </el-table-column>
@@ -46,19 +49,23 @@ export default {
       }],
       value: '',
       input: '',
-      tableData: [{
-        size: '297mm*420mm',
-        name: '自定义模板1',
-        type:'发货单',
-        default:'是',
-        custom: '是'
-      }]
+      tableData: []
     }
+  },
+  mounted(){
+    this.templatesList()
   },
   methods:{
     createTemplate(){
         // window.location.href = 'https://www.google.com';
-        window.open('https://order.sslguoji.com/tracking')
+        console.log(121222);
+    },
+    templatesList(){
+      this.$request.labelTemplates().then(res=>{
+        if (res.ret) {
+          this.tableData = res.data
+        }
+      })
     }
   }
 }
