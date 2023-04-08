@@ -264,6 +264,7 @@
                     </div>
                   </div>
                 </template>
+
                 <template v-if="item.id === 'order_info'">
                   <div class="order_info">
                     <div class="first-line">
@@ -307,7 +308,12 @@
                         </div>
                       </div>
                       <div style="height: 20px">
-                        <img class="img" src="@/assets/beizhu.png" @click="goRemark(scope.row)" />
+                        <img
+                          class="img"
+                          style="cursor: pointer"
+                          src="@/assets/beizhu.png"
+                          @click="goRemark(scope.row)"
+                        />
                         <img class="img" v-if="activeName === '6'" src="@/assets/erro.png" />
                         <!--                      <img class="img" src="@/assets/printer.png" />-->
                         <img
@@ -341,6 +347,9 @@
                       </div>
                     </div>
                   </div>
+                </template>
+                <template v-if="item.id === 'order_status_name'">
+                  <div style='text-align: center'>{{ scope.row.status_name }}</div>
                 </template>
                 <template v-if="item.id === 'pay_info'">
                   <div class="pay-info">
@@ -378,8 +387,15 @@
                       <span class="span-left">{{ scope.row.address.distinct }}</span>
                       <span class="span-left"
                         >{{ scope.row.address.street }}{{ scope.row.address.door_no
-                        }}{{ scope.row.address.door_no }}{{ scope.row.address.address }}</span
+                        }}{{ scope.row.address.address }}</span
                       >
+                      <div
+                        :title="$t('复制地址')"
+                        class="copy-sty"
+                        @click="copyAddress(scope.row.address)"
+                      >
+                        <i class="el-icon-copy-document"></i>
+                      </div>
                     </div>
                     <div>
                       <span class="tip">{{ $t('邮编') }}：</span
@@ -493,9 +509,9 @@
                   <span v-else-if="scope.row.pick_status === 0">{{ $t('待拣货') }}</span>
                   <span v-else-if="scope.row.pick_status === 1">{{ $t('待打包') }}</span>
                 </template>
-                <template v-else-if="item.id === 'status_name'">
-                  {{ scope.row.status_name }}
-                </template>
+                <!--                <template v-else-if="item.id === 'status_name'">-->
+                <!--                  {{ scope.row.status_name }}-->
+                <!--                </template>-->
                 <!-- <template v-else-if="item.id === 'code'">
                 {{ scope.row.express_line.code }}
               </template> -->
@@ -1569,9 +1585,7 @@ export default {
   },
   methods: {
     goRemark(item) {
-      dialog({ type: 'orderRemark', id: item.id }, () => {
-
-      })
+      dialog({ type: 'orderRemark', id: item.id }, () => {})
     },
     // 获取排序模板
     getTemplateColumn() {
@@ -1618,6 +1632,7 @@ export default {
       const column = [
         'place_order_customer',
         'order_info',
+        'order_status_name',
         'pay_info',
         'address_info',
         'outbound_info',
@@ -2778,6 +2793,17 @@ export default {
       const input = document.createElement('input')
       document.body.appendChild(input)
       input.setAttribute('value', orderSn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
+    copyAddress(address) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', address.street + address.door_no + address.address)
       input.select()
       if (document.execCommand('copy')) {
         document.execCommand('copy')

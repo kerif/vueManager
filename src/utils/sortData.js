@@ -197,6 +197,12 @@ export default [
     checked: true
   },
   {
+    id: 'order_status_name',
+    name: '状态',
+    width: '100',
+    checked: true
+  },
+  {
     id: 'pay_info',
     name: '支付信息',
     width: '200',
@@ -226,6 +232,7 @@ export default [
     width: '300',
     checked: true
   }
+
   // {
   //   id: 'pack_status_name',
   //   name: '打包状态',
