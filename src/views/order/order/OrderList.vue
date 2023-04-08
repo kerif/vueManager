@@ -246,9 +246,14 @@
                   </span>
                 </div>
                 <div class="express-bottom">
-                  <!--                <span class="seer" v-show="scope.row.source === 3">先知</span>-->
-                  <span class="seer">先知</span>
-                  <img class="beizhu-img" src="@/assets/beizhu.png" @click="goRemark(scope.row)" />
+                  <span class="seer" v-show="scope.row.source === 3">先知</span>
+                  <!--                  <span class="seer">先知</span>-->
+                  <img
+                    class="beizhu-img"
+                    src="@/assets/beizhu.png"
+                    style="cursor: pointer"
+                    @click="goRemark(scope.row)"
+                  />
                 </div>
               </div>
             </template>
@@ -786,9 +791,7 @@ export default {
   mounted() {},
   methods: {
     goRemark(item) {
-      dialog({ type: 'packpageRemark', id: item.id }, () => {
-
-      })
+      dialog({ type: 'packpageRemark', id: item.id }, () => {})
     },
     initSize() {
       if (localStorage.getItem('package_size')) {
