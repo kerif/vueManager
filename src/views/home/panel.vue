@@ -138,16 +138,16 @@
                 </span>
               </div>
             </div>
-            <div class="Factual-generalization-content" v-if="hiddenDataShow=='true'">
+            <div class="Factual-generalization-content" >
               <div class="Factual-generalization-item">
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日新增用户') }}</div>
-                    <div class="content-size2">{{ user.today }}</div>
+                    <div class="content-size2">{{hiddenDataShow=='true'?user.today:'*'}}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ user.yesterday}}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ (user.yesterday-user.today) }}</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{hiddenDataShow=='true'?user.yesterday:'*'}}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{hiddenDataShow=='true'?(user.yesterday-user.today):'*'}}</div>
                   </div>
                 </div>
               </div>
@@ -2092,6 +2092,7 @@ export default {
     flex-grow: 4;
     justify-content: space-between;
     .Factual-generalization-item {
+      cursor: pointer;
       padding: 20px;
       flex-basis: calc(20%);
     }
