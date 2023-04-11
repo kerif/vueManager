@@ -518,6 +518,7 @@
               <p v-if="baseMode === 0">
                 {{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}
               </p>
+              <p>{{ $t('总体积') }}/{{ $t('立方米') }}: {{ sumWeight }}</p>
             </el-col>
           </el-form-item>
         </el-row>
@@ -728,6 +729,7 @@ export default {
       },
       TotalWeight: '',
       UnitTotalWeight: '',
+      sumWeight: '',
       user: {
         weight: '',
         width: '',
@@ -993,6 +995,7 @@ export default {
           return item
         })
         this.unitVolume()
+        this.onSumWeight()
       }
     },
     displayInfo() {
@@ -1031,6 +1034,16 @@ export default {
                   (Number(accumulator) + Number(currentValue)).toFixed(3),
                 0
               )
+    },
+    onSumWeight() {
+      let volumes = this.user.box.map(({ length, width, height }) => {
+        const volumeInM = (length / 100) * (width / 100) * (height / 100)
+        return volumeInM
+      })
+      this.sumWeight =
+        this.user.box.length === 1
+          ? Number(volumes).toFixed(3)
+          : volumes.reduce((acc, cur) => (Number(acc) + Number(cur)).toFixed(3), 0)
     },
     //订单价格计算
     getCalOrderPrice() {
@@ -1252,6 +1265,7 @@ export default {
       this.user.box = []
       this.TotalWeight = ''
       this.UnitTotalWeight = ''
+      this.sumWeight = ''
     },
     batchAddRow() {
       dialog(
@@ -1306,6 +1320,7 @@ export default {
       rows.splice(index, 1)
       this._onTotalWeight()
       this.unitVolume()
+      this.onSumWeight()
     },
     addNew() {
       this.items.push({
@@ -1435,6 +1450,7 @@ export default {
         })
         this._onTotalWeight()
         this.unitVolume()
+        this.onSumWeight()
       } else {
         this.user.box[0].weight = this.PackageData[0].package_weight
         this.user.box[0].length = this.PackageData[0].length
