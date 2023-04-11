@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('包裹标签备注')"
+    :title="$t('订单标签备注')"
     class="dialog-claim"
     @close="clear"
   >
@@ -9,7 +9,7 @@
       <el-input
         type="textarea"
         :autosize="{ minRows: 5, maxRows: 10 }"
-        :placeholder="$t('请输入包裹备注')"
+        :placeholder="$t('请输入订单备注')"
         v-model="remark"
       >
       </el-input>
@@ -63,7 +63,7 @@ export default {
     },
     confirm() {
       this.$request
-        .setPackageRemark(this.id, {
+        .setOrderRemark(this.id, {
           remark: this.remark
         })
         .then(res => {

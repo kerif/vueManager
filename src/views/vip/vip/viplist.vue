@@ -54,8 +54,9 @@
       <div class="search-item">
         <div>
           <div class="search-content">{{ $t('搜索') }}</div>
-          <div class="searchGroup">
+          <div class="searchGroup" style=" display: flex;">
             <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+            <el-button style="padding: 0px 20px !important;margin-left: 5px;" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
           </div>
         </div>
       </div>
@@ -186,8 +187,7 @@
       <div class="search-item" v-if="!hasFilterCondition"></div>
       <div class="search-item" v-if="!hasFilterCondition"> </div>
       <div class="search-item" v-if="hasFilterCondition">
-        <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
-        <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
+        <!-- <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button> -->
       </div>
     </div>
     <div class="bottom-sty">
@@ -608,6 +608,7 @@ export default {
     },
     reset() {
       this.searchParams.level_id = ''
+      this.page_params.keyword = ''
       this.searchParams.user_group_id = ''
       this.searchParams.invite_id = ''
       this.searchParams.customer_id = ''

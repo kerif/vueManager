@@ -187,19 +187,25 @@ export default [
   {
     id: 'place_order_customer',
     name: '下单客户',
-    width: '160',
+    width: '120',
     checked: true
   },
   {
     id: 'order_info',
     name: '订单信息',
-    width: '300',
+    width: '350',
+    checked: true
+  },
+  {
+    id: 'order_status_name',
+    name: '状态',
+    width: '100',
     checked: true
   },
   {
     id: 'pay_info',
     name: '支付信息',
-    width: '250',
+    width: '200',
     checked: true
   },
   {
@@ -223,9 +229,10 @@ export default [
   {
     id: 'order_time',
     name: '时间',
-    width: '200',
+    width: '300',
     checked: true
   }
+
   // {
   //   id: 'pack_status_name',
   //   name: '打包状态',

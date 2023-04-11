@@ -33,7 +33,7 @@
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待签收包裹') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{data_pick.package_wait_in_storage}}</div>
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('无人认领') }}:0</div>
@@ -45,11 +45,11 @@
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待打包包裹') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ data_pick.order_wait_pick }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('无人认领') }}:0</div>
-                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                    <div></div>
+                    <div style="margin-top: 5px;"></div>
                   </div>
                 </div>
               </el-col>
@@ -57,11 +57,11 @@
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待发货包裹') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ data_pick.order_wait_ship }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('无人认领') }}:0</div>
-                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                    <div></div>
+                    <div style="margin-top: 5px;"></div>
                   </div>
                 </div>
               </el-col>
@@ -69,11 +69,11 @@
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待财务审核') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ data_pick.order_wait_audit }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('无人认领') }}:0</div>
-                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                    <div></div>
+                    <div style="margin-top: 5px;"></div>
                   </div>
                 </div>
               </el-col>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="box-size" style="margin-top: 10px;">
                   <div>
-                    {{ $t('上次登录时间') }}:2023-03-14 17:12:56
+                    {{ $t('上次登录时间') }}:{{last_login_at}}
                   </div>
                   <div style="margin-top: 5px;">
                     {{ $t('上次登录IP') }}:168.102.1.1
@@ -104,12 +104,12 @@
                 </div>
               </div>
               <div>
-                
+
               </div>
               <div style="margin-top: 10px;">
-                <div class="login-information-count">{{ $t('修改个人资料') }}</div>
+                <div class="login-information-count" @click="$router.push({ name:'reset-password' })">{{ $t('修改个人资料') }}</div>
                 <div class="login-information-count" @click="$router.push({ name:'reset-password' })">{{ $t('修改密码') }}</div>
-                <div class="login-information-count">{{ $t('注销账号') }}</div>
+                <div class="login-information-count" @click="onLogout">{{ $t('退出登录') }}</div>
               </div>
             </div>
           </div>
@@ -124,30 +124,30 @@
             <div class="flex" style="margin-bottom: 15px;">
               <div>
                 <span class="content-size">{{ $t('实况概括') }}</span>
-                <span class="box-size update-time">{{$t('更新于')}}2023-03-14 17:12:56</span>
+                <span class="box-size update-time">{{$t('更新于')}}{{ realtime.update_at?realtime.update_at:0 }}</span>
               </div>
               <div>
-                <span class="box-size nav-Factual-generalization">
+                <span class="box-size nav-Factual-generalization" @click="hiddenData">
                   <img src="@/assets/conceal.png" class="Factual-generalization-img" alt="">
-                  {{ $t('隐藏数据') }}
+                  {{ hiddenDataShow=='true'? $t('隐藏数据'):$t('显示数据') }}
                 </span>
 
-                <span class="box-size nav-Factual-generalization">
+                <span class="box-size nav-Factual-generalization" @click="copy">
                   <img src="@/assets/copy.png" class="Factual-generalization-imgs" alt="">
                   {{ $t('复制数据') }}
                 </span>
               </div>
             </div>
-            <div class="Factual-generalization-content">
+            <div class="Factual-generalization-content" >
               <div class="Factual-generalization-item">
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日新增用户') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{hiddenDataShow=='true'?user.today:'*'}}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{hiddenDataShow=='true'?user.yesterday:'*'}}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{hiddenDataShow=='true'?(user.yesterday-user.today):'*'}}</div>
                   </div>
                 </div>
               </div>
@@ -156,11 +156,11 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('本月新增用户') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ user.current_month }}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{ user.yesterday }}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ user.last_month-user.current_month }}</div>
                   </div>
                 </div>
               </div>
@@ -169,11 +169,11 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日收入') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ income.today }}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{ income.yesterday }}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ income.today-income.yesterday }}</div>
                   </div>
                 </div>
               </div>
@@ -182,11 +182,11 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日优惠') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ discount.today }}</div>
                   </div>
                   <div style="padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{ discount.yesterday }}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ discount.today-discount.yesterday }}</div>
                   </div>
                 </div>
               </div>
@@ -195,11 +195,11 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日支付金额') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{payment.today}}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{ payment.yesterday }}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ payment.today-payment.yesterday }}</div>
                   </div>
                 </div>
               </div>
@@ -208,16 +208,16 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日充值金额') }}</div>
-                    <div class="content-size2">1000</div>
+                    <div class="content-size2">{{ recharge.today }}</div>
                   </div>
                   <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:0</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+18</div>
+                    <div class="box-size">{{ $t('昨日') }}:{{ recharge.yesterday }}</div>
+                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ recharge.today-recharge.yesterday }}</div>
                   </div>
                 </div>
               </div>
 
-              <div class="Factual-generalization-item">
+              <div class="Factual-generalization-item" >
                 <div class="flex">
                   <div>
                     <div class="content-size"></div>
@@ -252,28 +252,28 @@
             <div class="flex" style="margin-bottom: 15px;">
               <div>
                 <span class="content-size">{{ $t('今日产能') }}</span>
-                <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+                <span class="box-size update-time">{{ $t('更新于') }}{{ product.update_at }}</span>
               </div>
             </div>
             <div class="capacity">
               <div class="capacity-item" style="background-color: #EFF0FF;">
                 <div class="content-size">{{ $t('签收') }}</div>
-                <div class="content-size2">10000</div>
+                <div class="content-size2">{{ product.sign }}</div>
               </div>
 
               <div class="capacity-item">
                 <div class="content-size">{{ $t('上架') }}</div>
-                <div class="content-size2">10000</div>
+                <div class="content-size2">{{ product.shelf_up }}</div>
               </div>
 
               <div class="capacity-item">
                 <div class="content-size">{{ $t('打包') }}</div>
-                <div class="content-size2">10000</div>
+                <div class="content-size2">{{ product.pack }}</div>
               </div>
 
               <div class="capacity-item">
                 <div class="content-size">{{ $t('出库') }}</div>
-                <div class="content-size2">10000</div>
+                <div class="content-size2">{{ product.ship }}</div>
               </div>
 
             </div>
@@ -292,7 +292,7 @@
                   <span class="content-size">{{
                     status === 2 ? $t('已入库包裹') : status === 3 ? $t('已拣货包裹') : $t('已发货包裹')
                   }}</span>
-                  <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+                  <span class="box-size update-time">{{ $t('更新于') }}{{ packageTime }}</span>
                 </div>
                 <div style="font-size: 14px;">
                   <span v-for="item in getDatasList" :key="item.value" :class="scope==item.value?'parcelData parcelDatas':'parcelData'" @click="getDatasr(item.value)">{{ item.name }}</span>
@@ -341,7 +341,7 @@
                       <div>
                         <span class="content-size">{{ $t('实况概括') }}</span>
                       </div>
-                      <div> 
+                      <div>
                         <span class="box-size subheading" @click="$router.push({name:'suggestlist'})">
                           {{ $t('去处理') }}
                           <img src="@/assets/look-over.png" class="subheading-icon" alt="">
@@ -351,7 +351,7 @@
                     <div>
                       <div class="capacity-item">
                         <div class="content-size">{{ $t('投诉数') }}</div>
-                        <div class="content-size2" style="margin-top: 10px;">10 <span style="font-size: 15px;color: #FF4C42;">（{{$t('未处理')}}10）</span></div>
+                        <div class="content-size2" style="margin-top: 10px;">{{ suggestion.count }}<span style="font-size: 15px;color: #FF4C42;">（{{$t('未处理')}}{{ suggestion.wait_deal }}）</span></div>
                       </div>
                     </div>
                   </div>
@@ -420,7 +420,7 @@
               <div class="flex" style="margin-bottom: 15px;">
                 <div>
                   <span class="content-size">{{ $t('注册统计') }}</span>
-                  <span class="box-size update-time">{{ $t('更新于') }}2023-03-14 17:12:56</span>
+                  <span class="box-size update-time">{{ $t('更新于') }}{{ registerTime }}</span>
                 </div>
                 <div>
                   <span class="box-size subheading" @click="$router.push({name:'reportList'})">
@@ -434,17 +434,17 @@
                 <div>
                   <el-table :data="tableData" style="width: 100%;" border height="calc(480px - 70px)">
                     <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column prop="date" :label="$t('统计日期')" width="180">
+                    <el-table-column prop="days" :label="$t('统计日期')" width="180">
                     </el-table-column>
-                    <el-table-column prop="quantity" :label="$t('注册用户数')" width="180">
+                    <el-table-column prop="count" :label="$t('注册用户数')" width="180">
                     </el-table-column>
-                    <el-table-column prop="quantity" :label="$t('邮箱激活数')">
+                    <el-table-column prop="email_count" :label="$t('邮箱激活数')">
                     </el-table-column>
-                    <el-table-column prop="quantity" :label="$t('手机号激活数')">
+                    <el-table-column prop="phone_count" :label="$t('手机号激活数')">
                     </el-table-column>
-                    <el-table-column prop="quantity" :label="$t('预报量')">
+                    <el-table-column prop="package_count" :label="$t('预报量')">
                     </el-table-column>
-                    <el-table-column prop="quantity" :label="$t('转化率')+'%'">
+                    <el-table-column prop="conversion_ratio" :label="$t('转化率')+'%'">
                     </el-table-column>
                   </el-table>
                 </div>
@@ -473,10 +473,10 @@
                       <div class="capacity-item">
                         <div class="charts-discount-coupon" id="discountCoupon">
                           <div class="definable-echarts">
-                            <div style="width: 20%;background-color: #C5C5CE;"></div>
-                            <div style="width: 50%;background-color: #00BC4B;"></div>
-                            <div style="width: 10%;background-color: #6ED183;"></div>
-                            <div style="width: 20%;background-color: #C3EBCA;"></div>
+                            <div :style="'width:'+coupon.generate+'%'+';'+'background-color: #C3EBCA;'"></div>
+                            <div :style="'width:'+coupon.grant+'%'+';'+'background-color: #6ED183;'"></div>
+                            <div :style="'width:'+coupon.employ+'%'+';'+'background-color: #00BC4B;'"></div>
+                            <div :style="'width:'+coupon.pastDue+'%'+';'+'background-color: #C5C5CE;'"></div>
                           </div>
                           <div class="definable-echarts-data">
                             <div class="definable-echarts-item" v-for="item in discountCouponData" :key="item.name">
@@ -509,8 +509,8 @@
                     <!-- 仓位使用 -->
                     <div class="freight-space">
                       <div class="definable-echarts">
-                        <div style="width: 50%;background-color: #00BC4B;"></div>
-                        <div style="width: 50%;background-color: #C3EBCA;"></div>
+                        <div :style="'width:'+location.generate+'%'+';'+'background-color: #6ED183;'"></div>
+                        <div :style="'width:'+location.grant+'%'+';'+'background-color: #00BC4B;'"></div>
                       </div>
                       <div class="definable-echarts-data">
                         <div class="definable-echarts-item" style="margin-top: 15px;" v-for="item in freightSpaceData" :key="item.name">
@@ -522,8 +522,8 @@
                         </div>
                       </div>
                       <div class="definable-echarts">
-                        <div style="width: 40%;background-color: #FF3C31;"></div>
-                        <div style="width: 60%;background-color: #E8EAEC;"></div>
+                        <div :style="'width:'+location.employ+'%'+';'+'background-color: #E8EAEC;'"></div>
+                        <div :style="'width:'+location.pastDue+'%'+';'+'background-color: #FF3C31;'"></div>
                       </div>
 
                       <div class="definable-echarts-data">
@@ -1055,11 +1055,9 @@ export default {
     return {
       cnDate: '',
       usDate: '',
+      packageTime:'',
+      registerTime:'',
       euDate: '',
-      user: {
-        current_month: 0,
-        total: 0
-      },
       shipment: {
         current_month: 0,
         total: 0
@@ -1108,6 +1106,18 @@ export default {
       expressNumber: '',
       expressCount: '',
       count: {},
+      realtime: {},//实况概括数据
+      user: {},//用户数据
+      income: {},//收入
+      discount: {},//今日优惠
+      payment: {},//今日支付金额
+      recharge: {},//今日充值金额
+      product: {},//今日产能
+      suggestion: {},//投诉数
+      comment: {},//订单评价
+      coupon: {},//优惠券
+      location:{},//仓位使用
+      data_pick:{},//待打包包裹
       helpVisible: false,
       optionStatus: '',
       helpData: [],
@@ -1180,69 +1190,12 @@ export default {
           value: 4
         }
       ],
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        quantity: 32
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        quantity: 23
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        quantity: 32
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        quantity: 32
-      }],
-      discountCouponData: [
-        {
-          name: this.$t('已生成'),
-          quantity: 1000,
-          color: '#C3EBCA'
-        },
-        {
-          name: this.$t('已发放'),
-          quantity: 10000,
-          color: '#6ED183'
-        },
-        {
-          name: this.$t('已使用'),
-          quantity: 10000,
-          color: '#00BC4B'
-        },
-        {
-          name: this.$t('已过期'),
-          quantity: 10000,
-          color: '#C5C5CE'
-        }
-      ],
-      freightSpaceData: [
-        {
-          name: this.$t('已生成仓位'),
-          quantity: 10000,
-          color: '#6ED183'
-        },
-        {
-          name: this.$t('已使用仓位'),
-          quantity: 10000,
-          color: '#00BC4B'
-        }
-      ],
-      freightSpaceDatas: [
-        {
-          name: this.$t('已上架包裹'),
-          quantity: 10000,
-          color: '#E8EAEC'
-        },
-        {
-          name: this.$t('已超期包裹'),
-          quantity: 5000,
-          color: '#FF3C31'
-        }
-      ]
+      tableData: [],
+      discountCouponData: [],
+      freightSpaceData: [],
+      freightSpaceDatas: [],
+      hiddenDataShow: '',
+      last_login_at:''
       // systemData: []
     }
   },
@@ -1253,7 +1206,6 @@ export default {
     this.getSystem()
     // this.getPie()
     this.checkExpired()
-    this.getOrderEvaluationPie()
   },
   mounted() {
     window.setInterval(() => {
@@ -1261,7 +1213,10 @@ export default {
       this.getZoneTime(-5)
       this.getZoneTime(1)
     }, 1000)
-
+    this.getHomeData()
+    this.getRegister()
+    this.checkUser()
+    this.getTimes()
     this.myChart = echarts.init(document.getElementById('myChart'))
     // window.onresize = this.myChart.resize
     this.option = {
@@ -1341,6 +1296,22 @@ export default {
     }
   },
   methods: {
+    hiddenData(){
+      let dataShow = localStorage.getItem('DataShow')
+      if (dataShow == 'true') {
+        localStorage.setItem('DataShow',false)
+      }else{
+        localStorage.setItem('DataShow',true)
+      }
+     this.hiddenDataShow =  localStorage.getItem('DataShow')
+    },
+    checkUser(){
+      this.$request.aboutMe().then(res=>{
+        if (res.ret) {
+          this.last_login_at=res.data.last_login_at
+        }
+      })
+    },
     formDate(val) {
       if (val < 10) {
         return '0' + val
@@ -1379,23 +1350,166 @@ export default {
         )}:${formDate(minutes)}:${formDate(seconds)}`
       }
     },
+    getTimes(){
+      var localtime = new Date()
+      const formDate = this.formDate
+      const year = localtime.getFullYear()
+      const month = localtime.getMonth() + 1
+      const day = localtime.getDate()
+      const hours = localtime.getHours()
+      const minutes = localtime.getMinutes()-1
+      const seconds = localtime.getSeconds()
+      this.packageTime = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
+          hours
+        )}:${formDate(minutes)}:${formDate(seconds)}`
+      this.registerTime = `${year}-${formDate(month)}-${formDate(day-1)} 0:5:00`
+    },
     //检查系统是否快过期
     checkExpired() {
       dialog({ type: 'systemExpired' })
+    },
+    getHomeData() {
+      this.$request.homeData().then(res => {
+        if (res.ret) {
+          this.count = res.data
+          this.realtime = res.data.realtime
+          this.user = res.data.realtime.user
+          this.income = res.data.realtime.income
+          this.discount = res.data.realtime.discount
+          this.payment = res.data.realtime.payment
+          this.recharge = res.data.realtime.recharge
+          this.product = res.data.product
+          this.suggestion = res.data.suggestion
+          this.getShippingSpace(res.data.location)
+          this.discountCoupon(res.data.coupon)
+          this.getOrderEvaluationPie()
+          if (localStorage.getItem('DataShow')) {
+            localStorage.getItem('DataShow')
+          }else{
+            localStorage.setItem('DataShow',true)
+          }
+          this.hiddenDataShow=localStorage.getItem('DataShow')
+        }
+      })
+    },
+    copy(){
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      let code = `今日新增用户:${this.user.today},本月新增用户:${this.user.current_month},今日收入:${this.income.today},今日优惠:${this.discount.today},今日支付金额:${this.payment.today},今日充值金额:${this.recharge.today},`
+      input.setAttribute('value', code)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
+    getRegister(){
+      let params = {
+        page: 1,
+        size:10
+      }
+      this.$request.getUserRegister(params).then(res=>{
+        if (res.ret) {
+          this.tableData = res.data
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    discountCoupon(data) {
+      let { all, issued, used, expired } = data
+      this.discountCouponData.push(
+        {
+          name: this.$t('已生成'),
+          quantity: all,
+          color: '#C3EBCA'
+        },
+        {
+          name: this.$t('已发放'),
+          quantity: issued,
+          color: '#6ED183'
+        },
+        {
+          name: this.$t('已使用'),
+          quantity: used,
+          color: '#00BC4B'
+        },
+        {
+          name: this.$t('已过期'),
+          quantity: expired,
+          color: '#C5C5CE'
+        })
+        let total = (all+issued+used+expired)/100
+        let generate = all/total
+        let grant = issued/total
+        let employ = used/total
+        let pastDue = expired/total
+        this.coupon = {
+          generate,
+          grant,
+          employ,
+          pastDue
+        }
+    },
+    //仓位使用
+    getShippingSpace(data) {
+      let { all, used, shelf_up_packages, expired_packages } = data
+      this.freightSpaceData.push(
+        {
+          name: this.$t('已生成仓位'),
+          quantity: all,
+          color: '#6ED183'
+        },
+        {
+          name: this.$t('已使用仓位'),
+          quantity: used,
+          color: '#00BC4B'
+        }
+      )
+      this.freightSpaceDatas.push(
+        {
+          name: this.$t('已上架包裹'),
+          quantity: shelf_up_packages,
+          color: '#E8EAEC'
+        },
+        {
+          name: this.$t('已超期包裹'),
+          quantity: expired_packages,
+          color: '#FF3C31'
+        }
+      )
+      let total = (all+used)/100
+      let totals = (shelf_up_packages+expired_packages)/100
+      let generate = all/total
+      let grant = used/total
+      let employ = shelf_up_packages/totals
+      let pastDue = expired_packages/totals
+      this.location = {
+          generate,
+          grant,
+          employ,
+          pastDue
+      }
     },
     // 获取上面的统计数据
     getNumbers() {
       this.$request.getIndexNumber().then(res => {
         if (res.ret) {
-          this.count = res.data
-          this.user = res.data.user
-          this.shipment = res.data.shipment
-          this.packages = res.data.package
-          this.expressCount = res.data.express_line_count
-          this.order = res.data.order
-          this.waitInStorage = res.data.package_wait_in_storage
-          this.waitPack = res.data.order_wait_pick
-          this.upaid = res.data.order_unpaid
+          this.data_pick = res.data
+          //this.count = res.data
+          // this.user = res.data.user
+          // this.shipment = res.data.shipment
+          // this.packages = res.data.package
+          // this.expressCount = res.data.express_line_count
+          // this.order = res.data.order
+          // this.waitInStorage = res.data.package_wait_in_storage
+          // this.waitPack = res.data.order_wait_pick
+          // this.upaid = res.data.order_unpaid
         }
       })
     },
@@ -1491,6 +1605,7 @@ export default {
     //订单评价饼图
     getOrderEvaluationPie() {
       this.$nextTick(() => {
+        let { five, four, others, three } = this.count.comment
         this.orderRateOption.legend = {
           top: 'bottom',
           textStyle: {
@@ -1530,10 +1645,10 @@ export default {
               show: true
             },
             data: [
-              { value: 1048, name: '五星' },
-              { value: 735, name: '四星' },
-              { value: 580, name: '三星' },
-              { value: 484, name: '三星以下' }
+              { value: five, name: '五星' },
+              { value: four, name: '四星' },
+              { value: three, name: '三星' },
+              { value: others, name: '三星以下' }
             ]
           }
         ]
@@ -1626,7 +1741,6 @@ export default {
       this.$request.tipStatus().then(res => {
         if (res.ret) {
           this.moreTips = res.data.no_more_tips
-          console.log(this.moreTips, 'moreTips')
           if (this.moreTips === 0) {
             this.showTips = true
             this.getGuides() // 获取弹窗数据
@@ -1635,7 +1749,6 @@ export default {
       })
     },
     goExpress() {
-      console.log(this.expressNumber, 'expressNumber')
       if (this.expressType === 1) {
         this.$request
           .goTracking({
@@ -1672,6 +1785,41 @@ export default {
             }
           })
       }
+    },
+
+    onLogout() {
+      this.$confirm(this.$t('是否确认退出登录'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.logout().then(res => {
+          if (res.ret) {
+            this.$store.commit('saveFileterAfterRouterMap', {
+              fileterAfterRouterMap: [],
+              isPermissionFilter: []
+            })
+            this.$store.commit('savePermissionStatus', false)
+            this.$store.commit('removeToken')
+            this.$router.replace({ name: 'login' })
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('退出失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+      // .catch(() => {})
+      // .finally(() => {
+      //   resetRouter()
+      // })
     },
     // 获取弹窗数据
     getGuides() {
@@ -1938,11 +2086,13 @@ export default {
     }
   }
   .Factual-generalization-content {
+    background-color: #fff;
     display: flex;
     flex-wrap: wrap;
     flex-grow: 4;
     justify-content: space-between;
     .Factual-generalization-item {
+      cursor: pointer;
       padding: 20px;
       flex-basis: calc(20%);
     }

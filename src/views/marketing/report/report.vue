@@ -520,6 +520,8 @@ export default {
 
 <style lang="scss">
 .way-list-container {
+  background-color: #fff;
+  padding:10px 15px;
   .tabLength {
     width: 520px !important;
   }
