@@ -1,7 +1,7 @@
 <template>
   <div class="new-user-container">
-    <el-row :gutter="20">
-      <el-col :span="7" class="user-left" v-for="(item, index) in ruleForm" :key="index">
+    <el-row :gutter='10'>
+      <el-col :span="8" class="user-left" v-for="(item, index) in ruleForm" :key="index">
         <div class="new-top">
           <!-- 新用户送券 -->
           <div v-if="item.type === 1">
@@ -243,7 +243,7 @@ export default {
 <style lang="scss">
 .new-user-container {
   background-color: #f5f5f5 !important;
-  padding: 20px;
+  //padding: 20px;
   .new-top {
     margin-bottom: 10px;
     padding: 20px;
@@ -271,7 +271,7 @@ export default {
     }
   }
   .user-left {
-    margin-left: 30px;
+    //margin-left: 30px;
   }
   .font-sty {
     font-size: 12px;

@@ -1,7 +1,7 @@
 export default [
   {
     id: 'user_id',
-    name: '客户ID222',
+    name: '客户ID',
     width: '150',
     checked: true
   },

@@ -28,13 +28,14 @@
               </el-option>
             </el-select>
           </div>
+          <div class="submit">
+            <el-button type="primary" plain size="small" @click="submitForm">{{
+                $t('搜索')
+              }}</el-button>
+            <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+          </div>
         </div>
-        <div class="submit">
-          <el-button type="primary" plain size="small" @click="submitForm">{{
-            $t('搜索')
-          }}</el-button>
-          <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
-        </div>
+
       </div>
     </div>
      <div style="background-color: #fff;padding:15px 20px">
@@ -76,7 +77,7 @@
         :data="ownerData"
         @selection-change="selectionChange"
         v-loading="tableLoading"
-        height="calc(100vh - 275px)"
+        height="calc(100vh - 365px)"
         ref="table"
       >
         <!-- height="550" -->
@@ -158,7 +159,7 @@
       <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
-  
+
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
       <div class="dialogSty">
         <iframe class="iframe" :src="urlHtml"></iframe>
@@ -544,7 +545,6 @@ export default {
   }
   .submit {
     float: right;
-    margin-top: 10px;
   }
 }
 </style>

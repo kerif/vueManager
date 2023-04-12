@@ -60,8 +60,9 @@ export default {
 <style lang="scss">
 .layout-contaniner {
   .middle {
-    height: calc(100vh - 160px) !important;
+    height: calc(100vh - 140px) !important;
     overflow-x: hidden;
+    padding: 0 16px 0 16px;
   }
   .aside {
     width: 180px !important;
@@ -90,7 +91,7 @@ export default {
   }
   .el-main > div {
     background-color: #f5f5f5;
-    padding:0px 20px 0px 20px;
+    //padding:0px 20px 0px 20px;
   }
   .isCollapses {
     left: 0px !important;

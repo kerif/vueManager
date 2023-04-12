@@ -280,11 +280,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .import-orderList-container {
   background-color: #fff !important;
+  padding: 16px;
   .import-sty {
     color: #cdcdcd;
   }
+}
+.el-form-item__label {
+  line-height: 1px!important;
 }
 </style>

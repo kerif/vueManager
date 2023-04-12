@@ -91,6 +91,7 @@ export default {
 </script>
 <style lang="scss">
 .pagination-container {
+  margin-top: 8px;
   text-align: right;
   .left-sider {
     float: left;

@@ -167,7 +167,7 @@
           </div>
         </div>
       </div>
-      <div style="height: calc(100vh - 275px)" v-if="activeName !== '7'">
+      <div style="height: calc(100vh - 325px)" v-if="activeName !== '7'">
         <el-table
           border
           stripe
@@ -175,7 +175,7 @@
           :data="orderData"
           @selection-change="selectionChange"
           v-loading="tableLoading"
-          height="calc(100vh - 275px)"
+          height="calc(100vh - 330px)"
           class="order-data-list"
           :header-cell-style="{ 'text-align': 'center' }"
         >
@@ -246,8 +246,7 @@
                   </span>
                 </div>
                 <div class="express-bottom">
-                  <!--                <span class="seer" v-show="scope.row.source === 3">先知</span>-->
-                  <span class="seer">先知</span>
+                  <span class="seer" v-show="scope.row.source === 3">{{ $t('先知') }}</span>
                   <img class="beizhu-img" src="@/assets/beizhu.png" @click="goRemark(scope.row)" />
                 </div>
               </div>

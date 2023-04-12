@@ -1,7 +1,7 @@
 <template>
   <div class="ship-container">
     <div class="order-list-search" v-show="hasFilterCondition">
-      <div>
+      <div style='display: flex;justify-content: space-between;align-items: center'>
         <div class="changeTime">
           <!-- 提交 -->
           <el-date-picker
@@ -30,7 +30,6 @@
           >
           </el-date-picker>
         </div>
-        <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
         <div class="chooseStatus">
           <el-select size="mini" v-model="page_params.status" clearable :placeholder="$t('请选择')">
             <el-option
@@ -42,6 +41,7 @@
             </el-option>
           </el-select>
         </div>
+        <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
       </div>
       <div class="submit">
         <el-button type="primary" plain size="small" @click="submitForm">{{
@@ -281,7 +281,7 @@
         saveSize="ship"
       ></nle-pagination>
     </div>
-   
+
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
         <el-form-item :label="$t('物流状态')">
@@ -1154,7 +1154,7 @@ export default {
   }
   .submit {
     float: right;
-    margin-top: 10px;
+    margin-top: 8px;
   }
 }
 </style>

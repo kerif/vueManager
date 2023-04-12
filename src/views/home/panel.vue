@@ -1,47 +1,65 @@
 <template>
   <div class="panel-container">
     <div class="panel-hint">
-      <div><strong>{{ $t('欢迎使用海鸥集运系统') }}</strong></div>
+      <div>
+        <strong>{{ $t('欢迎使用海鸥集运系统') }}</strong>
+      </div>
       <div class="flex box-size">
         <div>
           <i class="el-icon-time time" />
-          <span><span>{{ $t('北京时间') }}</span>: {{ cnDate }}</span>
+          <span
+            ><span>{{ $t('北京时间') }}</span
+            >: {{ cnDate }}</span
+          >
         </div>
         <div>
           <i class="el-icon-time time" />
-          <span><span>{{ $t('美东时间') }}</span>: {{ usDate }}</span>
+          <span
+            ><span>{{ $t('美东时间') }}</span
+            >: {{ usDate }}</span
+          >
         </div>
         <div>
           <i class="el-icon-time time" />
-          <span><span>{{ $t('欧州中部时间') }}</span>:{{ euDate }}</span>
+          <span
+            ><span>{{ $t('欧州中部时间') }}</span
+            >:{{ euDate }}</span
+          >
         </div>
       </div>
     </div>
     <!-- 顶部快捷方式 -->
     <div class="top-quick">
-      <div style="cursor: pointer;" v-for="(item,index) in quickList" :key="index" @click="$router.push({ path:item.path })">
+      <div
+        style="cursor: pointer"
+        v-for="(item, index) in quickList"
+        :key="index"
+        @click="$router.push({ path: item.path })"
+      >
         <img :src="require(`@/assets/${item.icon}.png`)" alt="" />
-        <div><strong>{{ item.name }}</strong></div>
+        <div>
+          <strong>{{ item.name }}</strong>
+        </div>
       </div>
     </div>
-    <div style="margin-bottom: 16px;">
+    <div style="margin-bottom: 16px">
       <el-row>
         <el-col :span="16" style="padding-right: 16px">
           <div>
             <el-row :gutter="20">
-              <el-col :span="6" style="padding-right: 8px;">
-                <div class="grid-content">
+              <el-col :span="6" style="padding-right: 8px">
+                <div class="grid-content" @click="goNoSign">
                   <div class="flex">
                     <div class="content-size">{{ $t('待签收包裹') }}</div>
-                    <div class="content-size2">{{data_pick.package_wait_in_storage}}</div>
+                    <div class="content-size2">{{ data_pick.package_wait_in_storage }}</div>
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('无人认领') }}:0</div>
-                    <div style="margin-top: 5px;">{{ $t('正常预报') }}:10000</div>
+                    <div style="margin-top: 5px">{{ $t('正常预报') }}:10000</div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px;">
+              <el-col :span="6" style="padding-left: 6px">
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待打包包裹') }}</div>
@@ -49,11 +67,11 @@
                   </div>
                   <div class="box-size information">
                     <div></div>
-                    <div style="margin-top: 5px;"></div>
+                    <div style="margin-top: 5px"></div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px;">
+              <el-col :span="6" style="padding-left: 6px">
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待发货包裹') }}</div>
@@ -61,11 +79,11 @@
                   </div>
                   <div class="box-size information">
                     <div></div>
-                    <div style="margin-top: 5px;"></div>
+                    <div style="margin-top: 5px"></div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px;">
+              <el-col :span="6" style="padding-left: 6px">
                 <div class="grid-content">
                   <div class="flex">
                     <div class="content-size">{{ $t('待财务审核') }}</div>
@@ -73,7 +91,7 @@
                   </div>
                   <div class="box-size information">
                     <div></div>
-                    <div style="margin-top: 5px;"></div>
+                    <div style="margin-top: 5px"></div>
                   </div>
                 </div>
               </el-col>
@@ -85,8 +103,8 @@
           <div class="login-information">
             <div class="flex">
               <div>
-                <div style="display: flex;">
-                  <div style="margin-right: 20px;">
+                <div style="display: flex">
+                  <div style="margin-right: 20px">
                     <span class="mos">M</span>
                   </div>
                   <div>
@@ -94,21 +112,25 @@
                     <div class="content-size">{{ $store.state.userName }}</div>
                   </div>
                 </div>
-                <div class="box-size" style="margin-top: 10px;">
-                  <div>
-                    {{ $t('上次登录时间') }}:{{last_login_at}}
-                  </div>
-                  <div style="margin-top: 5px;">
-                    {{ $t('上次登录IP') }}:168.102.1.1
-                  </div>
+                <div class="box-size" style="margin-top: 10px">
+                  <div>{{ $t('上次登录时间') }}:{{ last_login_at }}</div>
+                  <div style="margin-top: 5px">{{ $t('上次登录IP') }}:168.102.1.1</div>
                 </div>
               </div>
-              <div>
-
-              </div>
-              <div style="margin-top: 10px;">
-                <div class="login-information-count" @click="$router.push({ name:'reset-password' })">{{ $t('修改个人资料') }}</div>
-                <div class="login-information-count" @click="$router.push({ name:'reset-password' })">{{ $t('修改密码') }}</div>
+              <div></div>
+              <div style="margin-top: 10px">
+                <div
+                  class="login-information-count"
+                  @click="$router.push({ name: 'reset-password' })"
+                >
+                  {{ $t('修改个人资料') }}
+                </div>
+                <div
+                  class="login-information-count"
+                  @click="$router.push({ name: 'reset-password' })"
+                >
+                  {{ $t('修改密码') }}
+                </div>
                 <div class="login-information-count" @click="onLogout">{{ $t('退出登录') }}</div>
               </div>
             </div>
@@ -117,37 +139,45 @@
       </el-row>
     </div>
     <!-- 实况概括 -->
-    <div style="margin-bottom: 16px;">
+    <div style="margin-bottom: 16px">
       <el-row>
         <el-col :span="16" style="padding-right: 16px">
           <div class="title">
-            <div class="flex" style="margin-bottom: 15px;">
+            <div class="flex" style="margin-bottom: 15px">
               <div>
                 <span class="content-size">{{ $t('实况概括') }}</span>
-                <span class="box-size update-time">{{$t('更新于')}}{{ realtime.update_at?realtime.update_at:0 }}</span>
+                <span class="box-size update-time"
+                  >{{ $t('更新于') }}{{ realtime.update_at ? realtime.update_at : 0 }}</span
+                >
               </div>
               <div>
                 <span class="box-size nav-Factual-generalization" @click="hiddenData">
-                  <img src="@/assets/conceal.png" class="Factual-generalization-img" alt="">
-                  {{ hiddenDataShow=='true'? $t('隐藏数据'):$t('显示数据') }}
+                  <img src="@/assets/conceal.png" class="Factual-generalization-img" alt="" />
+                  {{ hiddenDataShow == 'true' ? $t('隐藏数据') : $t('显示数据') }}
                 </span>
 
                 <span class="box-size nav-Factual-generalization" @click="copy">
-                  <img src="@/assets/copy.png" class="Factual-generalization-imgs" alt="">
+                  <img src="@/assets/copy.png" class="Factual-generalization-imgs" alt="" />
                   {{ $t('复制数据') }}
                 </span>
               </div>
             </div>
-            <div class="Factual-generalization-content" >
+            <div class="Factual-generalization-content">
               <div class="Factual-generalization-item">
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日新增用户') }}</div>
-                    <div class="content-size2">{{hiddenDataShow=='true'?user.today:'*'}}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? user.today : '*' }}
+                    </div>
                   </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{hiddenDataShow=='true'?user.yesterday:'*'}}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{hiddenDataShow=='true'?(user.yesterday-user.today):'*'}}</div>
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? user.yesterday - user.today : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -156,11 +186,17 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('本月新增用户') }}</div>
-                    <div class="content-size2">{{ user.current_month }}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? user.current_month : '*' }}
+                    </div>
                   </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ user.yesterday }}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ user.last_month-user.current_month }}</div>
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? user.last_month - user.current_month : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -169,11 +205,17 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日收入') }}</div>
-                    <div class="content-size2">{{ income.today }}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? income.today : '*' }}
+                    </div>
                   </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ income.yesterday }}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ income.today-income.yesterday }}</div>
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? income.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? income.today - income.yesterday : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -182,11 +224,17 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日优惠') }}</div>
-                    <div class="content-size2">{{ discount.today }}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? discount.today : '*' }}
+                    </div>
                   </div>
-                  <div style="padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ discount.yesterday }}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ discount.today-discount.yesterday }}</div>
+                  <div style="padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? discount.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? discount.today - discount.yesterday : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -195,11 +243,17 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日支付金额') }}</div>
-                    <div class="content-size2">{{payment.today}}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? payment.today : '*' }}
+                    </div>
                   </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ payment.yesterday }}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ payment.today-payment.yesterday }}</div>
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? payment.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? payment.today - payment.yesterday : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -208,24 +262,17 @@
                 <div class="flex">
                   <div>
                     <div class="content-size">{{ $t('今日充值金额') }}</div>
-                    <div class="content-size2">{{ recharge.today }}</div>
+                    <div class="content-size2">
+                      {{ hiddenDataShow == 'true' ? recharge.today : '*' }}
+                    </div>
                   </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size">{{ $t('昨日') }}:{{ recharge.yesterday }}</div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;">+{{ recharge.today-recharge.yesterday }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="Factual-generalization-item" >
-                <div class="flex">
-                  <div>
-                    <div class="content-size"></div>
-                    <div class="content-size2"></div>
-                  </div>
-                  <div style="border-right: #E8EAEC 1px solid;padding-right: 10px;">
-                    <div class="box-size"></div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;"></div>
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
+                    <div class="box-size">
+                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? recharge.yesterday : '*' }}
+                    </div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px">
+                      +{{ hiddenDataShow == 'true' ? recharge.today - recharge.yesterday : '*' }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -236,27 +283,39 @@
                     <div class="content-size"></div>
                     <div class="content-size2"></div>
                   </div>
-                  <div style="padding-right: 10px;">
+                  <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
                     <div class="box-size"></div>
-                    <div class="box-size" style="color: #00BC4B;margin-top: 10px;"></div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px"></div>
                   </div>
                 </div>
               </div>
 
+              <div class="Factual-generalization-item">
+                <div class="flex">
+                  <div>
+                    <div class="content-size"></div>
+                    <div class="content-size2"></div>
+                  </div>
+                  <div style="padding-right: 10px">
+                    <div class="box-size"></div>
+                    <div class="box-size" style="color: #00bc4b; margin-top: 10px"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </el-col>
         <!-- 今日产能 -->
         <el-col :span="8">
           <div class="title">
-            <div class="flex" style="margin-bottom: 15px;">
+            <div class="flex" style="margin-bottom: 15px">
               <div>
                 <span class="content-size">{{ $t('今日产能') }}</span>
                 <span class="box-size update-time">{{ $t('更新于') }}{{ product.update_at }}</span>
               </div>
             </div>
             <div class="capacity">
-              <div class="capacity-item" style="background-color: #EFF0FF;">
+              <div class="capacity-item" style="background-color: #eff0ff">
                 <div class="content-size">{{ $t('签收') }}</div>
                 <div class="content-size2">{{ product.sign }}</div>
               </div>
@@ -275,27 +334,36 @@
                 <div class="content-size">{{ $t('出库') }}</div>
                 <div class="content-size2">{{ product.ship }}</div>
               </div>
-
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
     <!-- 已入库包裹 -->
-    <div style="margin-bottom: 16px;">
+    <div style="margin-bottom: 16px">
       <el-row>
         <el-col :span="16" style="padding-right: 16px">
-          <div style="height: 480px;">
+          <div style="height: 480px">
             <div class="title">
-              <div class="flex" style="margin-bottom: 15px;">
+              <div class="flex" style="margin-bottom: 15px">
                 <div>
                   <span class="content-size">{{
-                    status === 2 ? $t('已入库包裹') : status === 3 ? $t('已拣货包裹') : $t('已发货包裹')
+                    status === 2
+                      ? $t('已入库包裹')
+                      : status === 3
+                      ? $t('已拣货包裹')
+                      : $t('已发货包裹')
                   }}</span>
                   <span class="box-size update-time">{{ $t('更新于') }}{{ packageTime }}</span>
                 </div>
-                <div style="font-size: 14px;">
-                  <span v-for="item in getDatasList" :key="item.value" :class="scope==item.value?'parcelData parcelDatas':'parcelData'" @click="getDatasr(item.value)">{{ item.name }}</span>
+                <div style="font-size: 14px">
+                  <span
+                    v-for="item in getDatasList"
+                    :key="item.value"
+                    :class="scope == item.value ? 'parcelData parcelDatas' : 'parcelData'"
+                    @click="getDatasr(item.value)"
+                    >{{ item.name }}</span
+                  >
 
                   <!-- <el-select v-model="scope" @change="getDatas" :placeholder="$t('请选择')">
                 <el-option :value="1" :label="$t('近一周')"></el-option>
@@ -305,9 +373,9 @@
               </el-select> -->
                 </div>
                 <div>
-                  <span class="box-size subheading" @click="$router.push({name:'orderlist'})">
+                  <span class="box-size subheading" @click="$router.push({ name: 'orderlist' })">
                     {{ $t('查看') }}
-                    <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                    <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                   </span>
                 </div>
               </div>
@@ -337,21 +405,29 @@
               <div class="dataOverview">
                 <div class="Factual-generalization">
                   <div class="title">
-                    <div class="flex" style="margin-bottom: 15px;">
+                    <div class="flex" style="margin-bottom: 15px">
                       <div>
                         <span class="content-size">{{ $t('实况概括') }}</span>
                       </div>
                       <div>
-                        <span class="box-size subheading" @click="$router.push({name:'suggestlist'})">
+                        <span
+                          class="box-size subheading"
+                          @click="$router.push({ name: 'suggestlist' })"
+                        >
                           {{ $t('去处理') }}
-                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                         </span>
                       </div>
                     </div>
                     <div>
                       <div class="capacity-item">
                         <div class="content-size">{{ $t('投诉数') }}</div>
-                        <div class="content-size2" style="margin-top: 10px;">{{ suggestion.count }}<span style="font-size: 15px;color: #FF4C42;">（{{$t('未处理')}}{{ suggestion.wait_deal }}）</span></div>
+                        <div class="content-size2" style="margin-top: 10px">
+                          {{ suggestion.count
+                          }}<span style="font-size: 15px; color: #ff4c42"
+                            >（{{ $t('未处理') }}{{ suggestion.wait_deal }}）</span
+                          >
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -359,14 +435,17 @@
 
                 <div class="Order-evaluation">
                   <div class="title">
-                    <div class="flex" style="margin-bottom: 15px;">
+                    <div class="flex" style="margin-bottom: 15px">
                       <div>
                         <span class="content-size">{{ $t('订单评价') }}</span>
                       </div>
                       <div>
-                        <span class="box-size subheading" @click="$router.push({name:'evaluation'})">
+                        <span
+                          class="box-size subheading"
+                          @click="$router.push({ name: 'evaluation' })"
+                        >
                           {{ $t('去处理') }}
-                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                         </span>
                       </div>
                     </div>
@@ -377,30 +456,32 @@
                   </div>
                 </div>
               </div>
-
             </el-col>
             <!-- 问题件列表 -->
             <el-col :span="12">
               <div class="issue-List">
                 <div class="title">
-                  <div class="flex" style="margin-bottom: 20px;">
+                  <div class="flex" style="margin-bottom: 5px">
                     <div>
-                      <span class="content-size">{{ $t('问题件列表') }}</span>
+                      <span class="content-size">{{ $t('异常件列表') }}</span>
                     </div>
                     <div>
-                      <span class="box-size subheading" @click="$router.push({name:'wayBillList'})">
+                      <span
+                        class="box-size subheading"
+                        @click="$router.push({ name: 'wayBillList' })"
+                      >
                         {{ $t('去处理') }}
-                        <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                        <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                       </span>
                     </div>
                   </div>
-                  <div style="overflow-x: hidden;height: 380px;">
-                    <div class="issue-List-item">
-                      <div>{{ $t('会员编号') }}：102908</div>
-                      <div>{{ $t('包裹号') }}：SF1287782187271</div>
-                      <div>{{ $t('货物状态') }}：破碎</div>
-                      <div>{{ $t('问题描述') }}：有个杯子碎了</div>
-                      <div>{{ $t('提交时间') }}：2023-03-15 10:58:32</div>
+                  <div style="overflow-x: auto; height: 415px">
+                    <div class="issue-List-item" v-for="item in issueData">
+                      <div>{{ $t('会员编号') }}：{{ item.user_id }}</div>
+                      <div>{{ $t('包裹号') }}：{{ item.express_num }}</div>
+<!--                      <div>{{ $t('货物状态') }}：破碎</div>-->
+                      <div>{{ $t('异常描述') }}：{{ item.exceptional_remark }}</div>
+                      <div>{{ $t('提交时间') }}：{{ item.created_at }}</div>
                     </div>
                   </div>
                 </div>
@@ -412,27 +493,32 @@
     </div>
 
     <!-- 注册统计 -->
-    <div style="margin-bottom: 16px;">
+    <div style="margin-bottom: 16px">
       <el-row>
         <el-col :span="16" style="padding-right: 16px">
-          <div style="height: 480px;">
+          <div style="height: 480px">
             <div class="title">
-              <div class="flex" style="margin-bottom: 15px;">
+              <div class="flex" style="margin-bottom: 15px">
                 <div>
                   <span class="content-size">{{ $t('注册统计') }}</span>
                   <span class="box-size update-time">{{ $t('更新于') }}{{ registerTime }}</span>
                 </div>
                 <div>
-                  <span class="box-size subheading" @click="$router.push({name:'reportList'})">
+                  <span class="box-size subheading" @click="$router.push({ name: 'reportList' })">
                     {{ $t('查看') }}
-                    <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                    <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                   </span>
                 </div>
               </div>
               <!-- 面板数据 -->
               <div class="panel-box main-item">
                 <div>
-                  <el-table :data="tableData" style="width: 100%;" border height="calc(480px - 70px)">
+                  <el-table
+                    :data="tableData"
+                    style="width: 100%"
+                    border
+                    height="calc(480px - 70px)"
+                  >
                     <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column prop="days" :label="$t('统计日期')" width="180">
                     </el-table-column>
@@ -442,9 +528,8 @@
                     </el-table-column>
                     <el-table-column prop="phone_count" :label="$t('手机号激活数')">
                     </el-table-column>
-                    <el-table-column prop="package_count" :label="$t('预报量')">
-                    </el-table-column>
-                    <el-table-column prop="conversion_ratio" :label="$t('转化率')+'%'">
+                    <el-table-column prop="package_count" :label="$t('预报量')"> </el-table-column>
+                    <el-table-column prop="conversion_ratio" :label="$t('转化率') + '%'">
                     </el-table-column>
                   </el-table>
                 </div>
@@ -458,14 +543,17 @@
               <div class="statistical-data">
                 <div class="discount-coupon">
                   <div class="title">
-                    <div class="flex" style="margin-bottom: 15px;">
+                    <div class="flex" style="margin-bottom: 15px">
                       <div>
                         <span class="content-size">{{ $t('优惠券') }}</span>
                       </div>
                       <div>
-                        <span class="box-size subheading" @click="$router.push({name:'newUser'})">
+                        <span
+                          class="box-size subheading"
+                          @click="$router.push({ name: 'newUser' })"
+                        >
                           {{ $t('查看') }}
-                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                         </span>
                       </div>
                     </div>
@@ -473,14 +561,41 @@
                       <div class="capacity-item">
                         <div class="charts-discount-coupon" id="discountCoupon">
                           <div class="definable-echarts">
-                            <div :style="'width:'+coupon.generate+'%'+';'+'background-color: #C3EBCA;'"></div>
-                            <div :style="'width:'+coupon.grant+'%'+';'+'background-color: #6ED183;'"></div>
-                            <div :style="'width:'+coupon.employ+'%'+';'+'background-color: #00BC4B;'"></div>
-                            <div :style="'width:'+coupon.pastDue+'%'+';'+'background-color: #C5C5CE;'"></div>
+                            <div
+                              :style="
+                                'width:' +
+                                coupon.generate +
+                                '%' +
+                                ';' +
+                                'background-color: #C3EBCA;'
+                              "
+                            ></div>
+                            <div
+                              :style="
+                                'width:' + coupon.grant + '%' + ';' + 'background-color: #6ED183;'
+                              "
+                            ></div>
+                            <div
+                              :style="
+                                'width:' + coupon.employ + '%' + ';' + 'background-color: #00BC4B;'
+                              "
+                            ></div>
+                            <div
+                              :style="
+                                'width:' + coupon.pastDue + '%' + ';' + 'background-color: #C5C5CE;'
+                              "
+                            ></div>
                           </div>
                           <div class="definable-echarts-data">
-                            <div class="definable-echarts-item" v-for="item in discountCouponData" :key="item.name">
-                              <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                            <div
+                              class="definable-echarts-item"
+                              v-for="item in discountCouponData"
+                              :key="item.name"
+                            >
+                              <div
+                                class="definable-echarts-type"
+                                :style="'background:' + item.color"
+                              ></div>
                               <div>
                                 <div class="definable-echarts-name">{{ item.name }}</div>
                                 <div class="definable-echarts-quantity">{{ item.quantity }}</div>
@@ -495,26 +610,45 @@
 
                 <div class="shipping-space">
                   <div class="title">
-                    <div class="flex" style="margin-bottom: 15px;">
+                    <div class="flex" style="margin-bottom: 15px">
                       <div>
                         <span class="content-size">{{ $t('仓位使用') }}</span>
                       </div>
                       <div>
-                        <span class="box-size subheading" @click="$router.push({name:'goodsAllocation'})">
+                        <span
+                          class="box-size subheading"
+                          @click="$router.push({ name: 'goodsAllocation' })"
+                        >
                           {{ $t('查看') }}
-                          <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                          <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                         </span>
                       </div>
                     </div>
                     <!-- 仓位使用 -->
                     <div class="freight-space">
                       <div class="definable-echarts">
-                        <div :style="'width:'+location.generate+'%'+';'+'background-color: #6ED183;'"></div>
-                        <div :style="'width:'+location.grant+'%'+';'+'background-color: #00BC4B;'"></div>
+                        <div
+                          :style="
+                            'width:' + location.generate + '%' + ';' + 'background-color: #6ED183;'
+                          "
+                        ></div>
+                        <div
+                          :style="
+                            'width:' + location.grant + '%' + ';' + 'background-color: #00BC4B;'
+                          "
+                        ></div>
                       </div>
                       <div class="definable-echarts-data">
-                        <div class="definable-echarts-item" style="margin-top: 15px;" v-for="item in freightSpaceData" :key="item.name">
-                          <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                        <div
+                          class="definable-echarts-item"
+                          style="margin-top: 15px"
+                          v-for="item in freightSpaceData"
+                          :key="item.name"
+                        >
+                          <div
+                            class="definable-echarts-type"
+                            :style="'background:' + item.color"
+                          ></div>
                           <div>
                             <div class="definable-echarts-name">{{ item.name }}</div>
                             <div class="definable-echarts-quantity">{{ item.quantity }}</div>
@@ -522,13 +656,29 @@
                         </div>
                       </div>
                       <div class="definable-echarts">
-                        <div :style="'width:'+location.employ+'%'+';'+'background-color: #E8EAEC;'"></div>
-                        <div :style="'width:'+location.pastDue+'%'+';'+'background-color: #FF3C31;'"></div>
+                        <div
+                          :style="
+                            'width:' + location.employ + '%' + ';' + 'background-color: #E8EAEC;'
+                          "
+                        ></div>
+                        <div
+                          :style="
+                            'width:' + location.pastDue + '%' + ';' + 'background-color: #FF3C31;'
+                          "
+                        ></div>
                       </div>
 
                       <div class="definable-echarts-data">
-                        <div class="definable-echarts-item" style="margin-top: 15px;" v-for="item in freightSpaceDatas" :key="item.name">
-                          <div class="definable-echarts-type" :style="'background:'+ item.color"></div>
+                        <div
+                          class="definable-echarts-item"
+                          style="margin-top: 15px"
+                          v-for="item in freightSpaceDatas"
+                          :key="item.name"
+                        >
+                          <div
+                            class="definable-echarts-type"
+                            :style="'background:' + item.color"
+                          ></div>
                           <div>
                             <div class="definable-echarts-name">{{ item.name }}</div>
                             <div class="definable-echarts-quantity">{{ item.quantity }}</div>
@@ -544,7 +694,7 @@
               <div class="statistical-data">
                 <div class="discount-coupon">
                   <div class="title">
-                    <div class="flex" style="margin-bottom: 15px;">
+                    <div class="flex" style="margin-bottom: 15px">
                       <div>
                         <span class="content-size">{{ $t('更新日志') }}</span>
                       </div>
@@ -552,11 +702,16 @@
                     <div>
                       <div class="system-notice">
                         <ul class="notice">
-                          <li style="cursor: pointer;display: flex;justify-content: space-between;" @click="$router.push({ name: 'systemNotice', params: { id: item.id } })" v-for="item in items" :key="item.id">
-                            <div> {{ item.title }}</div>
+                          <li
+                            style="cursor: pointer; display: flex; justify-content: space-between"
+                            @click="$router.push({ name: 'systemNotice', params: { id: item.id } })"
+                            v-for="item in items"
+                            :key="item.id"
+                          >
+                            <div>{{ item.title }}</div>
                             <div class="box-size subheading">
                               {{ $t('查看') }}
-                              <img src="@/assets/look-over.png" class="subheading-icon" alt="">
+                              <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
                             </div>
                           </li>
                         </ul>
@@ -568,32 +723,44 @@
                 <div class="shipping-space">
                   <div class="download-management">
                     <!-- 下载管理 -->
-                    <div style="display: flex;padding: 10px 0px;cursor: pointer" @click="goManual('software')">
-                      <div style="margin-right: 10px;">
-                        <img src="@/assets/download-management.png" alt="">
+                    <div
+                      style="display: flex; padding: 10px 0px; cursor: pointer"
+                      @click="goManual('software')"
+                    >
+                      <div style="margin-right: 10px">
+                        <img src="@/assets/download-management.png" alt="" />
                       </div>
                       <div>
-                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('终端软件下载') }}</strong></div>
+                        <div style="font-size: 16px; margin-bottom: 5px">
+                          <strong>{{ $t('终端软件下载') }}</strong>
+                        </div>
                         <div class="box-size">{{ $t('使用手机、桌面端集运业务') }}</div>
                       </div>
                     </div>
 
-                    <div style="display: flex;padding: 10px 0px;cursor: pointer" @click="goManual('help')">
-                      <div style="margin-right: 10px;">
-                        <img src="@/assets/operation-manual.png" alt="">
+                    <div
+                      style="display: flex; padding: 10px 0px; cursor: pointer"
+                      @click="goManual('help')"
+                    >
+                      <div style="margin-right: 10px">
+                        <img src="@/assets/operation-manual.png" alt="" />
                       </div>
                       <div>
-                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('操作手册') }}</strong></div>
+                        <div style="font-size: 16px; margin-bottom: 5px">
+                          <strong>{{ $t('操作手册') }}</strong>
+                        </div>
                         <div class="box-size">{{ $t('海鸥集运系统操作使用手册') }}</div>
                       </div>
                     </div>
 
-                    <div style="display: flex;padding: 10px 0px;">
-                      <div style="margin-right: 10px;">
-                        <img src="@/assets/attention.png" alt="">
+                    <div style="display: flex; padding: 10px 0px">
+                      <div style="margin-right: 10px">
+                        <img src="@/assets/attention.png" alt="" />
                       </div>
                       <div>
-                        <div style="font-size: 16px;margin-bottom: 5px;"><strong>{{ $t('关注【通晓科技】') }}</strong></div>
+                        <div style="font-size: 16px; margin-bottom: 5px">
+                          <strong>{{ $t('关注【通晓科技】') }}</strong>
+                        </div>
                         <div class="box-size">{{ $t('分享操作技巧、集运运营干货') }}</div>
                       </div>
                     </div>
@@ -923,9 +1090,15 @@
         </div>
       </el-col>
     </el-row> -->
-    <el-dialog :visible.sync="showTips" :title="$t('系统配置助手')" class="dialog-start-loading" width="45%">
+    <el-dialog
+      :visible.sync="showTips"
+      :title="$t('系统配置助手')"
+      class="dialog-start-loading"
+      width="45%"
+    >
       <div class="loading-top">
-        <span>{{ $t('亲爱的用户') }}</span><br />
+        <span>{{ $t('亲爱的用户') }}</span
+        ><br />
         <span>{{ $t('首次系统使用需要完成以下配置才能正常上线运营') }}</span>
       </div>
       <div class="loading-bottom">
@@ -953,7 +1126,11 @@
             <div style="padding-left: 2em">{{ $t('跟踪进度') }}</div>
           </div>
           <ul class="result-list">
-            <li :class="{ 'last-finish': index === 0 }" v-for="(item, index) in TrackingData" :key="index">
+            <li
+              :class="{ 'last-finish': index === 0 }"
+              v-for="(item, index) in TrackingData"
+              :key="index"
+            >
               <div class="time">{{ item.ftime }}</div>
               <div class="dot">
                 <span class="out-dot dot-box"> </span>
@@ -971,7 +1148,14 @@
     </el-dialog>
     <!-- 操作手册下载 -->
     <el-dialog :visible.sync="helpVisible" :title="$t('操作手册下载')" width="60%">
-      <div v-for="(item, index) in helpData" :key="index" class="book-sty" @click="chooseManual(item)" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
+      <div
+        v-for="(item, index) in helpData"
+        :key="index"
+        class="book-sty"
+        @click="chooseManual(item)"
+        @mouseover="changeSty($event)"
+        @mouseleave="removeSty($event)"
+      >
         <div style="padding-top: 10px">
           <div>
             <img src="../../assets/book.jpg" />
@@ -986,7 +1170,12 @@
     </el-dialog>
     <!-- 软件下载 -->
     <el-dialog :visible.sync="appVisible" :title="$t('软件下载')" width="60%">
-      <div class="book-sty" @click="uploadDesktop" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
+      <div
+        class="book-sty"
+        @click="uploadDesktop"
+        @mouseover="changeSty($event)"
+        @mouseleave="removeSty($event)"
+      >
         <p>{{ $t('集运系统仓库桌面软件') }}</p>
         <div>
           <div>
@@ -998,7 +1187,12 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <div class="book-sty" @click="uploadAndroid" @mouseover="changeApp($event)" @mouseleave="removeSty($event)">
+      <div
+        class="book-sty"
+        @click="uploadAndroid"
+        @mouseover="changeApp($event)"
+        @mouseleave="removeSty($event)"
+      >
         <p>{{ $t('集运系统运营APP（安卓版）') }}</p>
         <div>
           <div @mouseover="getImg('android')">
@@ -1011,7 +1205,12 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <div class="book-sty" @click="uploadIos" @mouseover="changeSty($event)" @mouseleave="removeSty($event)">
+      <div
+        class="book-sty"
+        @click="uploadIos"
+        @mouseover="changeSty($event)"
+        @mouseleave="removeSty($event)"
+      >
         <p>{{ $t('集运系统运营APP（iOS版）') }}</p>
         <div>
           <div @mouseover="getImg('ios')">
@@ -1024,9 +1223,14 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
-      <el-dialog width="30%" :title="
+      <el-dialog
+        width="30%"
+        :title="
           uplodaStatus === 'ios' ? $t('集运系统运营APP（iOS版）') : $t('集运系统运营APP（安卓版）')
-        " :visible.sync="innerVisible" append-to-body>
+        "
+        :visible.sync="innerVisible"
+        append-to-body
+      >
         <div style="text-align: center">
           <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
           <div v-else>
@@ -1055,8 +1259,8 @@ export default {
     return {
       cnDate: '',
       usDate: '',
-      packageTime:'',
-      registerTime:'',
+      packageTime: '',
+      registerTime: '',
       euDate: '',
       shipment: {
         current_month: 0,
@@ -1106,18 +1310,18 @@ export default {
       expressNumber: '',
       expressCount: '',
       count: {},
-      realtime: {},//实况概括数据
-      user: {},//用户数据
-      income: {},//收入
-      discount: {},//今日优惠
-      payment: {},//今日支付金额
-      recharge: {},//今日充值金额
-      product: {},//今日产能
-      suggestion: {},//投诉数
-      comment: {},//订单评价
-      coupon: {},//优惠券
-      location:{},//仓位使用
-      data_pick:{},//待打包包裹
+      realtime: {}, //实况概括数据
+      user: {}, //用户数据
+      income: {}, //收入
+      discount: {}, //今日优惠
+      payment: {}, //今日支付金额
+      recharge: {}, //今日充值金额
+      product: {}, //今日产能
+      suggestion: {}, //投诉数
+      comment: {}, //订单评价
+      coupon: {}, //优惠券
+      location: {}, //仓位使用
+      data_pick: {}, //待打包包裹
       helpVisible: false,
       optionStatus: '',
       helpData: [],
@@ -1195,7 +1399,8 @@ export default {
       freightSpaceData: [],
       freightSpaceDatas: [],
       hiddenDataShow: '',
-      last_login_at:''
+      last_login_at: '',
+      issueData: []
       // systemData: []
     }
   },
@@ -1213,6 +1418,7 @@ export default {
       this.getZoneTime(-5)
       this.getZoneTime(1)
     }, 1000)
+    this.getErrorInfo()
     this.getHomeData()
     this.getRegister()
     this.checkUser()
@@ -1296,19 +1502,30 @@ export default {
     }
   },
   methods: {
-    hiddenData(){
+    //货区异常件信息
+    getErrorInfo() {
+      this.$request.getErroInfo().then(res => {
+        if (res.ret) {
+          this.issueData = res.data
+        }
+      })
+    },
+    goNoSign() {
+      this.$router.push({ path: '/order/waybill_list' })
+    },
+    hiddenData() {
       let dataShow = localStorage.getItem('DataShow')
       if (dataShow == 'true') {
-        localStorage.setItem('DataShow',false)
-      }else{
-        localStorage.setItem('DataShow',true)
+        localStorage.setItem('DataShow', false)
+      } else {
+        localStorage.setItem('DataShow', true)
       }
-     this.hiddenDataShow =  localStorage.getItem('DataShow')
+      this.hiddenDataShow = localStorage.getItem('DataShow')
     },
-    checkUser(){
-      this.$request.aboutMe().then(res=>{
+    checkUser() {
+      this.$request.aboutMe().then(res => {
         if (res.ret) {
-          this.last_login_at=res.data.last_login_at
+          this.last_login_at = res.data.last_login_at
         }
       })
     },
@@ -1337,32 +1554,32 @@ export default {
       const minutes = nd.getMinutes()
       const seconds = nd.getSeconds()
       if (offset === 8) {
-        this.cnDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
-          hours
-        )}:${formDate(minutes)}:${formDate(seconds)}`
+        this.cnDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(hours)}:${formDate(
+          minutes
+        )}:${formDate(seconds)}`
       } else if (offset === 1) {
-        this.euDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
-          hours
-        )}:${formDate(minutes)}:${formDate(seconds)}`
+        this.euDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(hours)}:${formDate(
+          minutes
+        )}:${formDate(seconds)}`
       } else {
-        this.usDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
-          hours
-        )}:${formDate(minutes)}:${formDate(seconds)}`
+        this.usDate = `${year}-${formDate(month)}-${formDate(day)} ${formDate(hours)}:${formDate(
+          minutes
+        )}:${formDate(seconds)}`
       }
     },
-    getTimes(){
+    getTimes() {
       var localtime = new Date()
       const formDate = this.formDate
       const year = localtime.getFullYear()
       const month = localtime.getMonth() + 1
       const day = localtime.getDate()
       const hours = localtime.getHours()
-      const minutes = localtime.getMinutes()-1
+      const minutes = localtime.getMinutes() - 1
       const seconds = localtime.getSeconds()
-      this.packageTime = `${year}-${formDate(month)}-${formDate(day)} ${formDate(
-          hours
-        )}:${formDate(minutes)}:${formDate(seconds)}`
-      this.registerTime = `${year}-${formDate(month)}-${formDate(day-1)} 0:5:00`
+      this.packageTime = `${year}-${formDate(month)}-${formDate(day)} ${formDate(hours)}:${formDate(
+        minutes
+      )}:${formDate(seconds)}`
+      this.registerTime = `${year}-${formDate(month)}-${formDate(day - 1)} 0:5:00`
     },
     //检查系统是否快过期
     checkExpired() {
@@ -1385,14 +1602,14 @@ export default {
           this.getOrderEvaluationPie()
           if (localStorage.getItem('DataShow')) {
             localStorage.getItem('DataShow')
-          }else{
-            localStorage.setItem('DataShow',true)
+          } else {
+            localStorage.setItem('DataShow', true)
           }
-          this.hiddenDataShow=localStorage.getItem('DataShow')
+          this.hiddenDataShow = localStorage.getItem('DataShow')
         }
       })
     },
-    copy(){
+    copy() {
       const input = document.createElement('input')
       document.body.appendChild(input)
       let code = `今日新增用户:${this.user.today},本月新增用户:${this.user.current_month},今日收入:${this.income.today},今日优惠:${this.discount.today},今日支付金额:${this.payment.today},今日充值金额:${this.recharge.today},`
@@ -1404,12 +1621,12 @@ export default {
       }
       document.body.removeChild(input)
     },
-    getRegister(){
+    getRegister() {
       let params = {
         page: 1,
-        size:10
+        size: 10
       }
-      this.$request.getUserRegister(params).then(res=>{
+      this.$request.getUserRegister(params).then(res => {
         if (res.ret) {
           this.tableData = res.data
         } else {
@@ -1443,18 +1660,19 @@ export default {
           name: this.$t('已过期'),
           quantity: expired,
           color: '#C5C5CE'
-        })
-        let total = (all+issued+used+expired)/100
-        let generate = all/total
-        let grant = issued/total
-        let employ = used/total
-        let pastDue = expired/total
-        this.coupon = {
-          generate,
-          grant,
-          employ,
-          pastDue
         }
+      )
+      let total = (all + issued + used + expired) / 100
+      let generate = all / total
+      let grant = issued / total
+      let employ = used / total
+      let pastDue = expired / total
+      this.coupon = {
+        generate,
+        grant,
+        employ,
+        pastDue
+      }
     },
     //仓位使用
     getShippingSpace(data) {
@@ -1483,17 +1701,17 @@ export default {
           color: '#FF3C31'
         }
       )
-      let total = (all+used)/100
-      let totals = (shelf_up_packages+expired_packages)/100
-      let generate = all/total
-      let grant = used/total
-      let employ = shelf_up_packages/totals
-      let pastDue = expired_packages/totals
+      let total = (all + used) / 100
+      let totals = (shelf_up_packages + expired_packages) / 100
+      let generate = all / total
+      let grant = used / total
+      let employ = shelf_up_packages / totals
+      let pastDue = expired_packages / totals
       this.location = {
-          generate,
-          grant,
-          employ,
-          pastDue
+        generate,
+        grant,
+        employ,
+        pastDue
       }
     },
     // 获取上面的统计数据
@@ -1612,12 +1830,7 @@ export default {
             fontSize: 12
           },
           itemWidth: 10,
-          data: [
-            this.$t('五星'),
-            this.$t('四星'),
-            this.$t('三星'),
-            this.$t('三星以下')
-          ]
+          data: [this.$t('五星'), this.$t('四星'), this.$t('三星'), this.$t('三星以下')]
         }
         this.orderRateOption.series = [
           {
@@ -1654,7 +1867,6 @@ export default {
         ]
         this.orderRateChart.setOption(this.orderRateOption)
       })
-
     },
     // 包裹饼图数据
     getPie() {
@@ -1718,7 +1930,6 @@ export default {
             }
           ]
           this.cakeChart.setOption(this.cakeOption)
-
         }
       })
     },
@@ -2172,6 +2383,7 @@ export default {
     background-color: #ffffff;
     padding: 20px;
     height: 105px;
+    cursor: pointer;
   }
   .flex {
     display: flex;

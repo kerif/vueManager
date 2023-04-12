@@ -46,7 +46,7 @@
       :data="tableData"
       @selection-change="selectionChange"
       v-loading="tableLoading"
-      height="calc(100vh - 320px)"
+      height="calc(100vh - 310px)"
       border
       style="width: 100%; margin-top: 10px"
     >

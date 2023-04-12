@@ -5591,3 +5591,6 @@ exports.setPackageRemark = (id, params) => $form.put(`/packages/${id}/remark`, p
 
 //设置包裹备注
 exports.setOrderRemark = (id, params) => $form.put(`orders/${id}/remark`, params)
+
+//异常件信息
+exports.getErroInfo = () => $form.get('/statistics/exceptional-packages')

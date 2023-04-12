@@ -221,7 +221,7 @@
           @expand-change="exChange"
           :data="oderData"
           @selection-change="onSelectChange"
-          height="calc(100vh - 300px)"
+          height="calc(100vh - 310px)"
           :header-cell-style="{ 'text-align': 'center' }"
         >
           <el-table-column
@@ -349,7 +349,7 @@
                   </div>
                 </template>
                 <template v-if="item.id === 'order_status_name'">
-                  <div style='text-align: center'>{{ scope.row.status_name }}</div>
+                  <div style="text-align: center">{{ scope.row.status_name }}</div>
                 </template>
                 <template v-if="item.id === 'pay_info'">
                   <div class="pay-info">

@@ -16,7 +16,7 @@
               <span>{{ item }}</span>
             </el-tag>
           </div>
-          <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
+          <div style="margin-top: 30px;margin-bottom: 8px">{{ $t('线路统计') }}</div>
           <el-table :data="linesData" border style="width: 100%">
             <el-table-column label="#" type="index"> </el-table-column>
             <el-table-column prop="express_line_id_name" :label="$t('线路名称')" width="160">

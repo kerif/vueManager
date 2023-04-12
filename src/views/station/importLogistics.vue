@@ -283,6 +283,7 @@ export default {
 <style lang="scss">
 .import-logistics-container {
   background-color: #fff !important;
+  padding: 16px;
   .import-sty {
     color: #cdcdcd;
   }
