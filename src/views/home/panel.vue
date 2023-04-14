@@ -101,7 +101,7 @@
         <!-- 登录信息 -->
         <el-col :span="8">
           <div class="login-information">
-            <div class="flex">
+            <div class="flex login-box">
               <div>
                 <div style="display: flex">
                   <div style="margin-right: 20px">
@@ -2397,6 +2397,9 @@ export default {
     //display: flex;
     //gap: 15px;
     //align-items: center;
+
+  }
+  .login-box{
     width: 100%;
   }
   .box-size {
