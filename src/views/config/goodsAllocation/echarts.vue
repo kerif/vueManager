@@ -1,37 +1,41 @@
 <template>
   <div class="goodsAllocation">
     <el-tabs v-model="activeName" class="warhouse-tabs" @tab-click="handleClick">
-      <template v-for="tab in warehouseTabs">
-        <el-tab-pane :label="tab.warehouse_name" :name="tab.id + ''" :key="tab.id"> </el-tab-pane>
-      </template>
+      <el-tab-pane
+        v-for="tab in warehouseTabs"
+        :label="tab.warehouse_name"
+        :name="tab.id + ''"
+        :key="tab.id"
+      >
+      </el-tab-pane>
     </el-tabs>
     <div class="cargo-list">
-      <div v-for="item in cargoAreaList" @click="showDetail(item)" class="cargo-box">
+      <div v-for="item in cargoAreaList" :key="item.id" @click="showDetail(item)" class="cargo-box">
         <div class="top">
           <div class="cargo-code">
             <span>{{ $t('货区') }}：</span>
             <span class="code">{{ item.number }}</span>
           </div>
-          <div class="cargo-type">{{$t('普通货区')}}</div>
+          <div class="cargo-type">{{ $t('普通货区') }}</div>
         </div>
         <div class="cargo-info">
           <div class="cargo-quantity">
             <div class="data">{{ item.counts }}</div>
-            <div class="tip">{{$t('仓位数量')}}</div>
+            <div class="tip">{{ $t('仓位数量') }}</div>
           </div>
           <div class="cargo-quantity">
             <div class="data">{{ item.max_count }}</div>
-            <div class="tip">{{$t('货位容量')}}</div>
+            <div class="tip">{{ $t('货位容量') }}</div>
           </div>
           <div class="package-quantity">
             <div class="data">{{ item.packages_count }}</div>
-            <div class="tip">{{$t('包裹量')}}</div>
+            <div class="tip">{{ $t('包裹量') }}</div>
           </div>
         </div>
         <div class="bottom">
-          <span v-if="item.reusable === 0">{{$t('优先推荐同一/相邻货位(受货位容量限制)')}}</span>
-          <span v-if="item.reusable === 1">{{$t('专用货位(不受货位容量限制)')}}</span>
-          <span v-if="item.reusable === 2">{{$t('专用货位(受货位容量限制)')}}</span>
+          <span v-if="item.reusable === 0">{{ $t('优先推荐同一/相邻货位(受货位容量限制)') }}</span>
+          <span v-if="item.reusable === 1">{{ $t('专用货位(不受货位容量限制)') }}</span>
+          <span v-if="item.reusable === 2">{{ $t('专用货位(受货位容量限制)') }}</span>
         </div>
       </div>
       <div v-if="cargoAreaList.length === 0" class="no-data">
