@@ -5594,3 +5594,26 @@ exports.setOrderRemark = (id, params) => $form.put(`orders/${id}/remark`, params
 
 //异常件信息
 exports.getErroInfo = () => $form.get('/statistics/exceptional-packages')
+
+//仓库列表
+exports.getWarehouseTabs = () => $form.get('warehouse-address')
+
+//获取货区信息
+exports.getCargoAreaList = (warehouseId, params) =>
+  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas`, params)
+
+//获取货位信息
+exports.getAllocationList = (warehouseId, areaId, params) =>
+  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas/${areaId}/details`, {
+    params
+  })
+
+//获取货位里的包裹信息
+exports.getPackageListInfo = (locationId, params) =>
+  $form.get(`/warehouse-address/whole-package-number/${locationId}`, { params })
+
+//物流查询信息
+exports.getTrackInfo = params => $form.post('/orders/query', params)
+
+//获取首页数据信息
+exports.getPanelData = () => $form.get(`/statistics/index-count-data`)

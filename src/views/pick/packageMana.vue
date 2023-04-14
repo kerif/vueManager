@@ -1,81 +1,112 @@
 <template>
   <div class="package-management-container">
-    <div class="package-top">
-      <div class="top-left">
-        <h3 class="auto-sty">{{ $t('自提点信息') }}</h3>
-        <el-select
-          @change="changePick"
-          v-model="XStationId"
-          filterable
-          clearable
-          placeholder="请选择"
-        >
-          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
-        <el-button class="location-sty" @click="goWarehouse">{{ $t('仓位管理') }}</el-button>
-        <el-button class="location-sty" @click="goAnnouncement">{{ $t('公告设置') }}</el-button>
-      </div>
-      <el-form ref="form" :model="form" label-width="100px" label-position="right">
-        <el-row class="container-center" :gutter="20">
-          <el-col :span="7">
-            <span class="leftWidth">{{ $t('所属国家地区') }}</span>
-            <span>{{ form.country && form.country.name }}</span>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('联系人') }}</span>
-            <span>{{ form.contactor }}</span>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('计佣方式') }}</span>
-            <span>{{ form.rule && form.rule.name }}</span>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="7">
-            <span class="leftWidth">{{ $t('详细地址') }}</span>
-            <span>{{ form.address }}</span>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('联系电话') }}</span>
-            <span>{{ form.contact_info }}</span>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('计佣金额') }}</span>
-            <span v-if="form.rule && form.rule.type !== 2"
-              >{{ localization.currency_unit }}{{ form.rule && form.rule.amount }}</span
+    <div class="top-line">
+      <div class="package-top">
+        <div class="top-left">
+          <div>
+            <h3 class="auto-sty">{{ $t('自提点信息') }}</h3>
+            <el-select
+              @change="changePick"
+              v-model="XStationId"
+              filterable
+              clearable
+              placeholder="请选择"
             >
-            <span v-if="form.rule && form.rule.type === 2"
-              >{{ $t('首重') }}: {{ form.rule && form.rule.first_weight
-              }}{{ localization.weight_unit }}/{{ localization.currency_unit
-              }}{{ form.rule && form.rule.first_money }} {{ $t('续重') }}:{{
-                form.rule && form.rule.next_weight
-              }}{{ localization.weight_unit }}/{{ localization.currency_unit
-              }}{{ form.rule && form.rule.next_money }}
-            </span>
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+          <div>
+            <el-button class="location-sty" @click="goWarehouse">{{ $t('仓位管理') }}</el-button>
+            <el-button class="location-sty" @click="goAnnouncement">{{ $t('公告设置') }}</el-button>
+          </div>
+        </div>
+        <el-form ref="form" :model="form" label-width="100px" label-position="right">
+          <el-row class="container-center" :gutter="20">
+            <el-col :span="7">
+              <span class="leftWidth">{{ $t('所属国家地区') }}：</span>
+              <span>{{ form.country && form.country.name }}</span>
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('联系人') }}：</span>
+              <span>{{ form.contactor }}</span>
+            </el-col>
+            <el-col :span="9">
+              <span class="leftWidth" style='width: 100px'>{{ $t('计佣方式') }}：</span>
+              <span>{{ form.rule && form.rule.name }}</span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <!--          <el-col :span="7">-->
+            <!--            <span class="leftWidth">{{ $t('详细地址') }}</span>-->
+            <!--            <span>{{ form.address }}</span>-->
+            <!--          </el-col>-->
+            <el-col :span="8">
+              <span class="leftWidth" style='width: 100px'>{{ $t('联系电话') }}：</span>
+              <span>{{ form.contact_info }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="leftWidth">{{ $t('计佣金额') }}：</span>
+              <span v-if="form.rule && form.rule.type !== 2"
+                >{{ localization.currency_unit }}{{ form.rule && form.rule.amount }}</span
+              >
+              <span v-if="form.rule && form.rule.type === 2"
+                >{{ $t('首重') }}: {{ form.rule && form.rule.first_weight
+                }}{{ localization.weight_unit }}/{{ localization.currency_unit
+                }}{{ form.rule && form.rule.first_money }} {{ $t('续重') }}:{{
+                  form.rule && form.rule.next_weight
+                }}{{ localization.weight_unit }}/{{ localization.currency_unit
+                }}{{ form.rule && form.rule.next_money }}
+              </span>
+            </el-col>
+            <el-col :span="8"> </el-col>
+          </el-row>
+        </el-form>
+      </div>
+      <div class="package-btn">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <div class="operate-box" @click="fastReceipt">{{ $t('快速收货') }}</div>
+          </el-col>
+          <el-col :span="8">
+            <div class="operate-box" @click="fastSign">{{ $t('快速签收') }}</div>
+          </el-col>
+          <el-col :span="8">
+            <div class="operate-box" @click="fastDelivery">{{ $t('快速出库') }}</div>
           </el-col>
         </el-row>
-      </el-form>
+        <el-row :gutter="[20]" style='margin-top: 8px'>
+          <el-col :span="8">
+            <div class="operate-box" @click="fastTransport">{{ $t('快速转运') }}</div>
+          </el-col>
+          <el-col :span="8">
+            <div class="operate-box">{{ $t('操作手册') }}</div>
+          </el-col>
+          <el-col :span="8">
+            <div class="operate-box">{{ $t('PDA下载') }}</div>
+          </el-col>
+        </el-row>
+      </div>
     </div>
-    <div class="package-middle">
-      <el-row>
-        <!-- <el-col :span="5">
-          <div class="middle-left" @click="goAnnouncement">{{ $t('公告设置') }}</div>
-        </el-col> -->
-        <el-col :span="5">
-          <div class="middle-left" @click="fastReceipt">{{ $t('快速收货') }}</div>
-        </el-col>
-        <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
-        </el-col>
-        <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
-        </el-col>
-        <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
-        </el-col>
-      </el-row>
-    </div>
+<!--    <div class="package-middle">-->
+<!--      <el-row>-->
+<!--        &lt;!&ndash; <el-col :span="5">-->
+<!--          <div class="middle-left" @click="goAnnouncement">{{ $t('公告设置') }}</div>-->
+<!--        </el-col> &ndash;&gt;-->
+<!--        <el-col :span="5">-->
+<!--          <div class="middle-left" @click="fastReceipt">{{ $t('快速收货') }}</div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="5" :offset="1">-->
+<!--          <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="5" :offset="1">-->
+<!--          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="5" :offset="1">-->
+<!--          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--    </div>-->
     <el-tabs v-model="activeName" class="tabLength">
       <!-- 未到自提点 -->
       <el-tab-pane
@@ -198,6 +229,7 @@
       :data="oderData"
       @selection-change="selectionChange"
       v-loading="tableLoading"
+      height='calc(100vh - 550px)'
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
@@ -933,6 +965,27 @@ export default {
 
 <style lang="scss">
 .package-management-container {
+  .top-line {
+    display: flex;
+    margin-bottom: 30px;
+    .package-btn {
+      flex: 1;
+      height: 100%;
+      margin-left: 16px;
+      .operate-box {
+        cursor: pointer;
+        width: 100%;
+        height: 100px;
+        background-color: #ffffff;
+        line-height: 100px;
+        text-align: center;
+        border-radius: 10px;
+        border: 1px solid #c8c8c8;
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
   .tabLength {
     width: 450px !important;
     display: inline-block;
@@ -1001,10 +1054,12 @@ export default {
     color: red;
   }
   .package-top {
-    padding: 20px;
-    // border: 1px solid black;
+    padding: 16px;
+    border: 2px solid #3641a3;
     background-color: #fff;
-    margin-bottom: 30px;
+    //margin-bottom: 30px;
+    width: 50%;
+    border-radius: 10px;
   }
   .container-center {
     margin-bottom: 20px;
@@ -1012,9 +1067,14 @@ export default {
   .leftWidth {
     display: inline-block;
     width: 120px;
+    color: #777777;
+    text-align: left;
   }
   .top-left {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .location-sty {
     margin-left: 20px;

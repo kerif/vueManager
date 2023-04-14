@@ -4,7 +4,7 @@ export default {
       page_params: {
         page: 1,
         size: 10,
-        total: 0,
+        total: 100,
         keyword: '',
         handleCurrentChange: this.handleCurrentChange,
         handleSizeChange: this.handleSizeChange,

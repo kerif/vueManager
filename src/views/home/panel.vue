@@ -51,47 +51,47 @@
                 <div class="grid-content" @click="goNoSign">
                   <div class="flex">
                     <div class="content-size">{{ $t('待签收包裹') }}</div>
-                    <div class="content-size2">{{ data_pick.package_wait_in_storage }}</div>
+                    <div class="content-size2">{{ index_count_data.package_wait_sign }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('无人认领') }}:0</div>
-                    <div style="margin-top: 5px">{{ $t('正常预报') }}:10000</div>
+                    <div>{{ $t('无人认领') }}:{{ index_count_data.package_no_owner }}</div>
+                    <div style="margin-top: 5px">{{ $t('正常预报') }}:{{ index_count_data.package_wait_in_storage }}</div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content">
+              <el-col :span="6" style="padding-left: 6px" >
+                <div class="grid-content" @click="goOrder">
                   <div class="flex">
-                    <div class="content-size">{{ $t('待打包包裹') }}</div>
-                    <div class="content-size2">{{ data_pick.order_wait_pick }}</div>
+                    <div class="content-size">{{ $t('待打包订单') }}</div>
+                    <div class="content-size2">{{ index_count_data.order_wait_pick }}</div>
                   </div>
                   <div class="box-size information">
-                    <div></div>
-                    <div style="margin-top: 5px"></div>
+                    <div>{{ $t('待支付') }}: <span style='color: red'>{{ index_count_data.order_unpaid }}</span></div>
+                    <div style="margin-top: 5px">{{ $t('待审核') }}: <span style='color: red'>{{ index_count_data.order_wait_audit }}</span></div>
                   </div>
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content">
+                <div class="grid-content" @click="goOrder">
                   <div class="flex">
-                    <div class="content-size">{{ $t('待发货包裹') }}</div>
-                    <div class="content-size2">{{ data_pick.order_wait_ship }}</div>
+                    <div class="content-size">{{ $t('待发货订单') }}</div>
+                    <div class="content-size2">{{ index_count_data.order_wait_ship }}</div>
                   </div>
                   <div class="box-size information">
-                    <div></div>
-                    <div style="margin-top: 5px"></div>
+                    <div>{{ $t('未加入发货单') }}:{{ index_count_data.order_no_shipment }}</div>
+                    <div style="margin-top: 5px">{{ $t('已加入发货单') }}:{{ index_count_data.order_with_shipment }}</div>
                   </div>
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content">
+                <div class="grid-content" @click="goOrder">
                   <div class="flex">
                     <div class="content-size">{{ $t('待财务审核') }}</div>
-                    <div class="content-size2">{{ data_pick.order_wait_audit }}</div>
+                    <div class="content-size2">{{ index_count_data.wait_review }}</div>
                   </div>
                   <div class="box-size information">
-                    <div></div>
-                    <div style="margin-top: 5px"></div>
+                    <div>{{ $t('订单支付审核') }}:{{ index_count_data.order_review }}</div>
+                    <div style="margin-top: 5px">{{ $t('充值金额审核') }}:{{ index_count_data.balance_review }}</div>
                   </div>
                 </div>
               </el-col>
@@ -121,7 +121,7 @@
               <div style="margin-top: 10px">
                 <div
                   class="login-information-count"
-                  @click="$router.push({ name: 'reset-password' })"
+                  @click="$router.push({ name: 'reset-personInfo' })"
                 >
                   {{ $t('修改个人资料') }}
                 </div>
@@ -479,7 +479,7 @@
                     <div class="issue-List-item" v-for="item in issueData">
                       <div>{{ $t('会员编号') }}：{{ item.user_id }}</div>
                       <div>{{ $t('包裹号') }}：{{ item.express_num }}</div>
-<!--                      <div>{{ $t('货物状态') }}：破碎</div>-->
+                      <!--                      <div>{{ $t('货物状态') }}：破碎</div>-->
                       <div>{{ $t('异常描述') }}：{{ item.exceptional_remark }}</div>
                       <div>{{ $t('提交时间') }}：{{ item.created_at }}</div>
                     </div>
@@ -1322,6 +1322,7 @@ export default {
       coupon: {}, //优惠券
       location: {}, //仓位使用
       data_pick: {}, //待打包包裹
+      index_count_data: {}, //订单和包裹模块数据
       helpVisible: false,
       optionStatus: '',
       helpData: [],
@@ -1418,6 +1419,7 @@ export default {
       this.getZoneTime(-5)
       this.getZoneTime(1)
     }, 1000)
+    this.getPanelData()
     this.getErrorInfo()
     this.getHomeData()
     this.getRegister()
@@ -1502,6 +1504,12 @@ export default {
     }
   },
   methods: {
+    //获取订单模块信息
+    getPanelData() {
+      this.$request.getPanelData().then(res => {
+        this.index_count_data = res.data
+      })
+    },
     //货区异常件信息
     getErrorInfo() {
       this.$request.getErroInfo().then(res => {
@@ -1511,6 +1519,9 @@ export default {
       })
     },
     goNoSign() {
+      this.$router.push({ path: '/order/orderlist' })
+    },
+    goOrder() {
       this.$router.push({ path: '/order/waybill_list' })
     },
     hiddenData() {
@@ -2386,9 +2397,9 @@ export default {
     cursor: pointer;
   }
   .flex {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+    //display: flex;
+    //gap: 15px;
+    //align-items: center;
   }
   .box-size {
     font-size: 13px;

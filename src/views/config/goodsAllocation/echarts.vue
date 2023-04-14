@@ -1,411 +1,96 @@
 <template>
   <div class="goodsAllocation">
-    <el-tabs v-model="activeName" class='warhouse-tabs' @tab-click="handleClick">
-      <el-tab-pane label="深圳仓" name="1"></el-tab-pane>
-      <el-tab-pane label="本地仓" name="2"></el-tab-pane>
+    <el-tabs v-model="activeName" class="warhouse-tabs" @tab-click="handleClick">
+      <template v-for="tab in warehouseTabs">
+        <el-tab-pane :label="tab.warehouse_name" :name="tab.id + ''" :key="tab.id"> </el-tab-pane>
+      </template>
     </el-tabs>
     <div class="cargo-list">
-      <div @click='showDetail' class="cargo-box">
+      <div v-for="item in cargoAreaList" @click="showDetail(item)" class="cargo-box">
         <div class="top">
           <div class="cargo-code">
             <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
+            <span class="code">{{ item.number }}</span>
           </div>
-          <div class="cargo-type">普通货区</div>
+          <div class="cargo-type">{{$t('普通货区')}}</div>
         </div>
-        <div class="carge-info">
+        <div class="cargo-info">
           <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
+            <div class="data">{{ item.counts }}</div>
+            <div class="tip">{{$t('仓位数量')}}</div>
           </div>
           <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
+            <div class="data">{{ item.max_count }}</div>
+            <div class="tip">{{$t('货位容量')}}</div>
           </div>
           <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
+            <div class="data">{{ item.packages_count }}</div>
+            <div class="tip">{{$t('包裹量')}}</div>
           </div>
         </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
+        <div class="bottom">
+          <span v-if="item.reusable === 0">{{$t('优先推荐同一/相邻货位(受货位容量限制)')}}</span>
+          <span v-if="item.reusable === 1">{{$t('专用货位(不受货位容量限制)')}}</span>
+          <span v-if="item.reusable === 2">{{$t('专用货位(受货位容量限制)')}}</span>
+        </div>
       </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
-      </div>
-      <div class="cargo-box">
-        <div class="top">
-          <div class="cargo-code">
-            <span>{{ $t('货区') }}：</span>
-            <span class="code">C</span>
-          </div>
-          <div class="cargo-type">普通货区</div>
-        </div>
-        <div class="carge-info">
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="cargo-quantity">
-            <div class="data">36</div>
-            <div class="tip">仓位数量</div>
-          </div>
-          <div class="package-quantity">
-            <div class="data">36</div>
-            <div class="tip">包裹量</div>
-          </div>
-        </div>
-        <div class="bottom">优先推荐同一/相邻货位(受货位容量限制)</div>
+      <div v-if="cargoAreaList.length === 0" class="no-data">
+        <el-empty :description="$t('暂无数据')"></el-empty>
       </div>
     </div>
-    <!--    <div class="overview">-->
-    <!--      <div class="headline">{{ $t('仓位概览') }}</div>-->
-    <!--      <div>-->
-    <!--        <el-select v-model="value" :placeholder="$t('请选择')">-->
-    <!--          <el-option-->
-    <!--            v-for="item in options"-->
-    <!--            :key="item.value"-->
-    <!--            :label="item.label"-->
-    <!--            :value="item.value"-->
-    <!--          >-->
-    <!--          </el-option>-->
-    <!--        </el-select>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    <div class="shelfs">-->
-    <!--      <div class="shelf" v-for="(item, index) in goodsAllocationList" :key="index" @click="detail">-->
-    <!--        <div class="shelf-tag">A货区{{ index + 1 }}</div>-->
-    <!--        <div class="left-side"></div>-->
-    <!--        <div v-for="(i, index) in item" :key="index">-->
-    <!--          <div class="layer" v-for="(te, ind) in i.row" :key="ind">-->
-    <!--            <div class="layer-contianer">-->
-    <!--              <div-->
-    <!--                :class="indexs == 2 ? 'boxs has' : 'boxs'"-->
-    <!--                v-for="(te, indexs) in i.list"-->
-    <!--                :key="indexs"-->
-    <!--              >-->
-    <!--                <span v-if="indexs === 2">20</span>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--            <div class="layer-label">-->
-    <!--              <div class="label-code" v-for="(te, indexs) in i.list" :key="indexs">-->
-    <!--                <label>A-01-0{{ indexs + 1 }}</label>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--        <div class="right-side"></div>-->
-    <!--      </div>-->
-    <!--      <div class="shelf" style="background-color: #dcdcdc">-->
-    <!--        <div class="goodsArea">A货区5</div>-->
-    <!--        <div class="area">-->
-    <!--          <div class="inner" v-for="(item, index) in 5" :key="index">-->
-    <!--            <div class="left">A-04-0{{ index + 1 }}</div>-->
-    <!--            <div class="right">40</div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <el-drawer
-      title=""
-      :visible.sync="showCargoDetail"
-      direction="rtl"
-      :withHeader='false'
-      size="50%">
-      我阿三大苏打飒飒的
-    </el-drawer>
+    <Detail
+      :showCargoDetail="showCargoDetail"
+      :selectCargoArea="selectCargoArea"
+      @receive="receive"
+    />
   </div>
-
 </template>
 <script>
+import Detail from './components/cargoAreaDetail'
 export default {
+  components: {
+    Detail
+  },
   data() {
     return {
-      goodsAllocationList: [
-        [{ row: 6, list: 4 }],
-        [{ row: 4, list: 5 }],
-        [{ row: 2, list: 3 }],
-        [{ row: 3, list: 5 }]
-      ],
-      value: '',
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        }
-      ],
-      activeName: '2',
-      showCargoDetail: false
+      activeName: '1',
+      showCargoDetail: false,
+      warehouseTabs: [],
+      cargoAreaList: [],
+      selectCargoArea: {}
     }
   },
+  mounted() {
+    this.getWarehouseTabs()
+  },
   methods: {
+    receive() {
+      this.showCargoDetail = false
+    },
+    //仓库列表
+    getWarehouseTabs() {
+      this.$request.getWarehouseTabs().then(res => {
+        console.log(res.data)
+        this.warehouseTabs = res.data
+        this.activeName = this.warehouseTabs[0].id + ''
+        this.getCargoAreaList()
+      })
+    },
+    //通过仓库ID货区仓库货区列表
+    getCargoAreaList() {
+      this.$request.getCargoAreaList(this.activeName).then(res => {
+        console.log(res.data)
+        this.cargoAreaList = res.data
+      })
+    },
     handleClick() {
       console.log(this.activeName)
+      this.getCargoAreaList()
     },
     //点击查看货区详情
-    showDetail() {
+    showDetail(item) {
+      this.selectCargoArea = item
       this.showCargoDetail = true
-      console.log('cnm')
     },
     detail() {
       this.$router.push({
@@ -426,8 +111,13 @@ export default {
     flex-wrap: wrap;
     //height: calc(100% - 54px);
     overflow-y: auto;
+    .no-data {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
     .cargo-box {
-      width: calc(25% - 18px);
+      width: calc(25% - 20px);
       border: 1px solid #c8c8c8;
       height: 200px;
       margin-bottom: 16px;
@@ -449,10 +139,12 @@ export default {
           }
         }
       }
-      .carge-info {
+      .cargo-info {
         padding: 8px;
         display: flex;
         justify-content: space-around;
+        text-align: center;
+
         .cargo-quantity {
           margin-right: 32px;
           .data {
@@ -487,135 +179,5 @@ export default {
       }
     }
   }
-  //.overview {
-  //  padding: 25px;
-  //  display: flex;
-  //  justify-content: space-between;
-  //  .headline {
-  //    font-weight: 800;
-  //  }
-  //}
-  //.shelfs {
-  //  height: calc(100vh - 200px);
-  //  overflow-x: hidden;
-  //  display: flex;
-  //  flex-grow: 3;
-  //  flex-wrap: wrap;
-  //}
-  //.goodsArea {
-  //  text-align: center;
-  //  padding: 20px 0px;
-  //}
-  //.area {
-  //  display: flex;
-  //  flex-wrap: wrap;
-  //}
-  //.inner {
-  //  width: 15%;
-  //  margin: 10px;
-  //  border: 8px solid #1480fe;
-  //  height: 30px;
-  //  display: flex;
-  //  line-height: 30px;
-  //  .left {
-  //    width: 70%;
-  //    background-color: aliceblue;
-  //    height: 100%;
-  //    font-size: 14px;
-  //    text-align: right;
-  //  }
-  //  .right {
-  //    width: 30%;
-  //    background-color: #b59565;
-  //    height: 100%;
-  //    font-size: 14px;
-  //    text-align: center;
-  //  }
-  //}
-  //.shelf {
-  //  width: 99%;
-  //  flex-basis: calc(33.33% - 20px);
-  //  cursor: pointer;
-  //  margin-bottom: 40px;
-  //  margin-left: 20px;
-  //  /*            background-color: #7F7F7F;*/
-  //  //height: 500px;
-  //  position: relative;
-  //}
-  //.left-side {
-  //  width: 20px;
-  //  height: calc(100% + 20px);
-  //  position: absolute;
-  //  left: 0px;
-  //  background-color: #1480fe;
-  //  z-index: 99;
-  //}
-  //.right-side {
-  //  width: 20px;
-  //  height: calc(100% + 20px);
-  //  position: absolute;
-  //  right: 0px;
-  //  top: 0px;
-  //  background-color: #1480fe;
-  //}
-  //.layer {
-  //  width: 100%;
-  //  height: 100px;
-  //  border-bottom: 20px #1480fe solid;
-  //}
-  //.layer-contianer {
-  //  display: flex;
-  //  position: relative;
-  //  bottom: -2px;
-  //  padding: 0px 20px;
-  //  z-index: 88;
-  //}
-  //.boxs {
-  //  border-top: 5px solid #ffffff;
-  //  border-left: 5px solid #ffffff;
-  //  border-right: 5px solid #ffffff;
-  //  height: 90px;
-  //  flex: 1;
-  //  margin: 0 !important;
-  //}
-  //.has {
-  //  /*            border-top:5px solid #B59565;*/
-  //  /*            border-left:5px solid #B59565;*/
-  //  border-right: 5px solid #d7d7d7 !important;
-  //  background-color: #b59565 !important;
-  //  text-align: center !important;
-  //  font-size: 20px;
-  //  line-height: 90px;
-  //  font-weight: bolder;
-  //}
-  //.layer-label {
-  //  clear: both;
-  //  display: flex;
-  //  z-index: 77;
-  //}
-  //.shelf-tag {
-  //  background-color: #d7d7d7;
-  //  width: 100px;
-  //  height: 30px;
-  //  position: absolute;
-  //  z-index: 99;
-  //  left: 20px;
-  //  text-align: center;
-  //  padding-top: 10px;
-  //}
-  //.label-code {
-  //  width: 100%;
-  //  font-size: 10px;
-  //  text-align: center;
-  //  color: white;
-  //  font-weight: bold;
-  //  border-top: 3px solid #d7d7d7;
-  //  padding: 3px;
-  //}
-  //.label-code label {
-  //  background-color: white;
-  //  padding: 0px 5px;
-  //  color: black;
-  //}
 }
 </style>

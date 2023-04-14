@@ -9,6 +9,8 @@ const updateList = loadonDemand('home/updateList')
 
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
+
+const ResetPersonInfo = loadonDemand('home/resetPersonInfo')
 // 常见问题
 const CommonProblem = loadonDemand('home/commonProblem')
 // 常见问题详情
@@ -435,6 +437,17 @@ export default [
               level: 2,
               group: '首页',
               name: '修改密码'
+            }
+          },
+          {
+            path: '/home/reset-personInfo',
+            name: 'reset-personInfo',
+            component: ResetPersonInfo,
+            id: 102,
+            meta: {
+              level: 2,
+              group: '首页',
+              name: '修改个人资料'
             }
           },
           {

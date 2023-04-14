@@ -943,7 +943,7 @@ export default {
   .login-logo {
     width: 500px;
     height: 450px;
-    background: url('../assets/v3-logo.png') no-repeat;
+    background: url('../assets/v4-log.png') no-repeat;
   }
   .forget-sty {
     text-align: center;
