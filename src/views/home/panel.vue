@@ -119,12 +119,7 @@
               </div>
               <div></div>
               <div style="margin-top: 10px">
-                <div
-                  class="login-information-count"
-                  @click="$router.push({ name: 'reset-personInfo' })"
-                >
-                  {{ $t('修改个人资料') }}
-                </div>
+
                 <div
                   class="login-information-count"
                   @click="$router.push({ name: 'reset-password' })"
@@ -2246,6 +2241,8 @@ export default {
     color: #ffffff;
     padding: 5px 15px;
     height: 135px;
+    display: flex;
+    justify-content: space-between;
     .mos {
       padding: 5px 12px;
       font-size: 40px;
@@ -2400,6 +2397,7 @@ export default {
     //display: flex;
     //gap: 15px;
     //align-items: center;
+    width: 100%;
   }
   .box-size {
     font-size: 13px;

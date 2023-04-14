@@ -778,6 +778,7 @@ export default {
 <style lang="scss" scope>
 .since-add-container {
   background-color: #fff !important;
+  padding: 0 16px;
   .country-select {
     width: 100%;
   }

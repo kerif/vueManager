@@ -94,5 +94,6 @@ export default {
 <style lang="scss">
 .block-edit-container {
   background-color: #fff !important;
+  padding:0 16px 16px 16px;
 }
 </style>

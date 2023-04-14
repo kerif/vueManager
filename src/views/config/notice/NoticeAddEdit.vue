@@ -210,6 +210,7 @@ export default {
 <style lang="scss">
 .notice-add-container {
   background-color: #fff !important;
+  padding: 0 16px ;
   .type-sty {
     .el-radio {
       margin-bottom: 10px;

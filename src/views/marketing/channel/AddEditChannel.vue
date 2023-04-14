@@ -289,6 +289,7 @@ export default {
 <style lang="scss">
 .channel-addEdit-container {
   background-color: #fff !important;
+  padding: 0 16px;
   .tips-box {
     padding: 20px;
     line-height: 30px;

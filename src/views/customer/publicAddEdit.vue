@@ -154,5 +154,6 @@ export default {
 <style lang="scss">
 .public-add-container {
   background-color: #fff !important;
+  padding: 0 16px;
 }
 </style>

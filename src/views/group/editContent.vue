@@ -128,6 +128,8 @@ export default {
 <style lang="scss">
 .edit-content-container {
   background-color: #fff !important;
+  padding: 0 16px 16px 16px;
+  min-height: 100%;
   .lang-sty {
     line-height: 40px;
     color: #e6a344;

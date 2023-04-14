@@ -1,7 +1,7 @@
 <template>
   <div class="advertising-container">
-    <el-row :gutter="20">
-      <el-col :span="7" class="user-left">
+    <el-row :gutter="16">
+      <el-col :span="8" class="user-left">
         <div class="new-top">
           <div class="top-img">
             <img src="../../assets/carousel.png" />
@@ -32,7 +32,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7" class="user-left">
+      <el-col :span="8" class="user-left">
         <div class="new-top">
           <div class="top-img">
             <img src="../../assets/poster.png" />
@@ -49,7 +49,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7" class="user-left">
+      <el-col :span="8" class="user-left">
         <div class="new-top">
           <div class="top-img">
             <img src="../../assets/advertising.png" />
@@ -67,8 +67,8 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="20" v-if="this.enabled === 1">
-      <el-col :span="7" class="user-left">
+    <el-row :gutter="16" v-if="this.enabled === 1">
+      <el-col :span="8" class="user-left">
         <div class="new-top">
           <div class="top-img">
             <img src="../../assets/carousel.png" />
@@ -155,7 +155,6 @@ export default {
 <style lang="scss">
 .advertising-container {
   background-color: #f5f5f5 !important;
-  padding: 20px;
   .new-top {
     margin-bottom: 10px;
     padding: 20px;
@@ -180,7 +179,7 @@ export default {
     }
   }
   .user-left {
-    margin-left: 30px;
+    //margin-left: 30px;
   }
 }
 </style>

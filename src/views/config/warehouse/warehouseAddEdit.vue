@@ -341,6 +341,7 @@ export default {
 </script>
 <style lang="scss">
 .warehouse-addEdit-container {
+  padding: 0 16px;
   background-color: #fff !important;
   .tips-box {
     padding: 20px;

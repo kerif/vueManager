@@ -166,5 +166,6 @@ export default {
 <style>
 .vip-batch-import {
   background: #fff !important;
+  padding: 0 16px;
 }
 </style>
