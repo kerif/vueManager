@@ -118,7 +118,9 @@ export default {
           return [category.id]
         } else if (category.children && category.children.length) {
           const subId = this.getParentId(childId, category.children)
-          if (subId) {
+          if (subId && subId.length >= 2) {
+            return [category.id, ...subId]
+          } else if (subId) {
             return [category.id, subId[0]]
           }
         }
@@ -135,12 +137,17 @@ export default {
               }
             }
             this.form.prop_id = res.data.default.prop_id == null ? '' : res.data.default.prop_id
-            const categoryIds = this.getParentId(res.data.default.category.id, this.options)
+            const categoryIds = this.getParentId(
+              res.data.default && res.data.default.category && res.data.default.category.id,
+              this.options
+            )
             console.log(categoryIds, 'categoryIds')
             if (categoryIds && categoryIds.length > 0) {
               this.category = categoryIds
             } else {
-              this.category = [res.data.default.category.id]
+              this.category = [
+                res.data.default && res.data.default.category && res.data.default.category.id
+              ]
             }
           }
           this.items = res.data.items
