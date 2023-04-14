@@ -110,6 +110,9 @@ export default {
     this.getGoods()
     this.getList()
   },
+  activated() {
+    this.getList()
+  },
   methods: {
     getParentId(childId, categories) {
       for (let i = 0; i < categories.length; i++) {

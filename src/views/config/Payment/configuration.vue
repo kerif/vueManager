@@ -42,9 +42,12 @@
                     {{ $t('打包改价配置') }}
                   </el-menu-item>
                   <el-menu-item index="11">
-                    {{ $t('上门取件配置') }}
+                    {{ $t('集运模式') }}
                   </el-menu-item>
                   <el-menu-item index="12">
+                    {{ $t('上门取件配置') }}
+                  </el-menu-item>
+                  <el-menu-item index="13">
                     {{ $t('自动签收配置') }}
                   </el-menu-item>
                 </el-menu-item-group>
@@ -89,11 +92,14 @@
             <el-col :span="19" v-if="secondTab1 === '10'" class="main-right">
               <pack-price-change></pack-price-change>
             </el-col>
-            <!-- 上门取件配置 -->
             <el-col :span="19" v-if="secondTab1 === '11'" class="main-right">
+              <transport-mode></transport-mode>
+            </el-col>
+            <!-- 上门取件配置 -->
+            <el-col :span="19" v-if="secondTab1 === '12'" class="main-right">
               <pickup-time-config></pickup-time-config>
             </el-col>
-            <el-col :span="19" v-if="secondTab1 === '12'" class="main-right">
+            <el-col :span="19" v-if="secondTab1 === '13'" class="main-right">
               <auto-sign></auto-sign>
             </el-col>
           </el-row>
@@ -301,6 +307,7 @@ import autoSign from './autoSign.vue'
 // import GroupConfigure from './groupConfigure.vue'
 import customUserNum from './customUserNum.vue'
 import unpackingAndInventory from './unpackingAndInventory.vue'
+import transportMode from './transportMode.vue'
 export default {
   components: {
     AppConfigure,
@@ -332,6 +339,7 @@ export default {
     autoSign,
     // GroupConfigure,
     customUserNum,
+    transportMode,
     unpackingAndInventory
   },
   mixins: [pagination],

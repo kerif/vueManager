@@ -5590,3 +5590,13 @@ exports.getUnpackConfig = () => {
 exports.updateUnpackConfig = params => {
   return $json.put(`unpack-config`, params)
 }
+
+// 获取集包模式
+exports.getTransportMode = () => {
+  return $form.get(`basic-settings/spu-mode`)
+}
+
+// 更新集包模式
+exports.updateTransportMode = params => {
+  return $form.put(`basic-settings/spu-mode`, params)
+}
