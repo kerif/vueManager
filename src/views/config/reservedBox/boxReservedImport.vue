@@ -76,7 +76,7 @@
           height="calc(100vh - 550px)"
         >
           <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
-          <el-table-column prop="box_sn" :label="$t('预留袋号')"></el-table-column>
+          <el-table-column prop="box_sn" :label="$t('预留单号')"></el-table-column>
           <el-table-column prop="clearance_area" :label="$t('通关专区')"></el-table-column>
           <el-table-column prop="customs_broker" :label="$t('报关业者')"></el-table-column>
         </el-table>

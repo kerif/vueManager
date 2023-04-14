@@ -120,7 +120,7 @@
               <div class="weight">
                 <el-input :placeholder="$t('请输入实际重量')" v-model="queryInfo.weight">
                   <template slot="suffix">
-                    <div class="tip">KG</div>
+                    <div class="tip">{{ localization.weight_unit }}</div>
                   </template>
                 </el-input>
               </div>
@@ -141,7 +141,7 @@
                   v-model="queryInfo.height"
                 >
                   <template slot="suffix">
-                    <div class="tip">CM</div>
+                    <div class="tip">{{ localization.length_unit }}</div>
                   </template>
                 </el-input>
               </div>
@@ -160,52 +160,54 @@
           </div>
         </div>
         <!--        <div class="right-text">{{ $t('查询结果') }}</div>-->
-        <div class="none-box" v-show="isEmpty">
-          <img src="../../../assets/wu.png" />
-          <div class="right-text">{{ $t('您可以在这里估算运费请在上边输入相关参数') }}!</div>
-        </div>
-        <div class="result-list">
-          <div
-            class="result-item is-click"
-            v-for="(item, index) in lineList"
-            :key="item.id"
-            @click="onDetail(item)"
-          >
-            <div class="result-top">
-              <img :src="$baseUrl.IMAGE_URL + item.icon.icon" class="result-item_icon" />
-              <!--            <div class="result-item_content">-->
-              <!--              <div class="small-size">{{ item.name }}</div>-->
-              <!--              <div>-->
-              <!--                {{ $t('运费') }}：{{ localization.currency_unit-->
-              <!--                }}{{ item.expire_fee | formatPrice }}-->
-              <!--              </div>-->
-              <!--              <div>{{ $t('运送时效') }}：{{ item.region.reference_time }}</div>-->
-              <!--              <div>-->
-              <!--                {{ $t('计费重量') }}：{{ item.count_weight | formatWeight }}-->
-              <!--                {{ localization.weight_unit }}-->
-              <!--              </div>-->
-              <!--            </div>-->
-              <div class="result-info">
-                <div class="name">{{ item.name }}</div>
-                <div>
-                  <span class="tip-span">时效：</span>{{ item.region.reference_time }}个工作日
-                </div>
-                <div>
+        <div class='right-button'>
+          <div class="none-box" v-show="isEmpty">
+            <img src="../../../assets/wu.png" />
+            <div class="right-text">{{ $t('您可以在这里估算运费请在上边输入相关参数') }}!</div>
+          </div>
+          <div class="result-list">
+            <div
+              class="result-item is-click"
+              v-for="(item, index) in lineList"
+              :key="item.id"
+              @click="onDetail(item)"
+            >
+              <div class="result-top">
+                <img :src="$baseUrl.IMAGE_URL + item.icon.icon" class="result-item_icon" />
+                <!--            <div class="result-item_content">-->
+                <!--              <div class="small-size">{{ item.name }}</div>-->
+                <!--              <div>-->
+                <!--                {{ $t('运费') }}：{{ localization.currency_unit-->
+                <!--                }}{{ item.expire_fee | formatPrice }}-->
+                <!--              </div>-->
+                <!--              <div>{{ $t('运送时效') }}：{{ item.region.reference_time }}</div>-->
+                <!--              <div>-->
+                <!--                {{ $t('计费重量') }}：{{ item.count_weight | formatWeight }}-->
+                <!--                {{ localization.weight_unit }}-->
+                <!--              </div>-->
+                <!--            </div>-->
+                <div class="result-info">
+                  <div class="name">{{ item.name }}</div>
+                  <div>
+                    <span class="tip-span">时效：</span>{{ item.region.reference_time }}个工作日
+                  </div>
+                  <div>
                   <span class="tip-span">{{ $t('预估费用') }}：</span
                   ><span class="price-span"
-                    >{{ localization.currency_unit }}{{ item.expire_fee | formatPrice }}</span
+                  >{{ localization.currency_unit }}{{ item.expire_fee | formatPrice }}</span
                   >
+                  </div>
                 </div>
+                <!--            <div class="result-item_index">{{ index + 1 }}</div>-->
+                <span class="el-icon-caret-right icon-detail"></span>
               </div>
-              <!--            <div class="result-item_index">{{ index + 1 }}</div>-->
-              <span class="el-icon-caret-right icon-detail"></span>
-            </div>
-            <div class="result-bottom">
-              <div>
-                <span class="tip-span">{{ $t('渠道编码') }}：</span> {{ item.channel_code }}
-              </div>
-              <div>
-                <span class="prop-span" v-for="prop in item.props">{{ prop.name }}</span>
+              <div class="result-bottom">
+                <div>
+                  <span class="tip-span">{{ $t('渠道编码') }}：</span> {{ item.channel_code }}
+                </div>
+                <div>
+                  <span class="prop-span" v-for="prop in item.props">{{ prop.name }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -350,7 +352,7 @@ export default {
   font-size: 0;
   height: 100%;
   .freight-total {
-    background-color: #fff !important;
+
     height: 100%;
   }
   .freight-left,
@@ -359,13 +361,13 @@ export default {
     font-size: 14px;
     box-sizing: border-box;
     vertical-align: top;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
   }
   .freight-left {
     width: 350px;
   }
   .freight-right {
-    padding: 16px 16px;
     width: calc(100%);
     height: 100%;
     display: flex;
@@ -374,6 +376,9 @@ export default {
       display: flex;
       justify-content: space-between;
       padding-right: 30px;
+      background-color: #fff !important;
+      padding: 16px;
+      border-radius: 10px;
       .tip {
         font-size: 14px;
         display: flex;
@@ -528,16 +533,24 @@ export default {
   .icon-detail {
     right: 15px;
     font-size: 18px;
+
   }
   .none-box {
     text-align: center;
     color: #c8c8c8;
     margin-top: 100px;
   }
-  .result-list {
-    margin-top: 20px;
+  .right-button{
+    background-color: #FFFFFF;
+    margin-top: 16px;
+    padding:0 16px;
+    border-radius: 10px;
     flex: 1;
     overflow-y: auto;
+  }
+  .result-list {
+    margin-top: 20px;
+
     .result-item {
       cursor: pointer;
       border: 1px solid #dadada;

@@ -90,8 +90,8 @@
                     <div class="content-size2">{{ index_count_data.wait_review }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('订单支付审核') }}:{{ index_count_data.order_review }}</div>
-                    <div style="margin-top: 5px">{{ $t('充值金额审核') }}:{{ index_count_data.balance_review }}</div>
+                    <div>{{ $t('订单支付待审核') }}:{{ index_count_data.order_review }}</div>
+                    <div style="margin-top: 5px">{{ $t('充值金额待审核') }}:{{ index_count_data.balance_review }}</div>
                   </div>
                 </div>
               </el-col>
@@ -2397,9 +2397,8 @@ export default {
     //display: flex;
     //gap: 15px;
     //align-items: center;
-
   }
-  .login-box{
+  .login-box {
     width: 100%;
   }
   .box-size {

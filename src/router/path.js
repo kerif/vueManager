@@ -2716,7 +2716,7 @@ export default [
             meta: {
               group: '基础配置',
               level: 2,
-              name: '预留袋号'
+              name: '预留单号'
             }
           },
           {

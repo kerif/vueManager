@@ -98,11 +98,11 @@
               </div>
               <div class="first-line">
                 <span class="name">{{ item.user_name }}</span>
-                <span class="weight">{{ item.package_weight }}KG</span>
+                <span class="weight">{{ item.package_weight }}{{localization.weight_unit}}</span>
               </div>
               <div class="second-line">
                 <span class="goods">{{ item.package_name }}*{{ item.qty }}</span>
-                <span class="volume">{{ item.length }}*{{ item.width }}*{{ item.height }}CM</span>
+                <span class="volume">{{ item.length }}*{{ item.width }}*{{ item.height }}{{localization.length_unit}}</span>
               </div>
               <div class="third-line">
                 <span class="time">{{$t('上架时间')}}：{{ item.shelf_up_at }}</span>
@@ -128,7 +128,8 @@ export default {
       showPackageDetails: false,
       package_keyword: null,
       packageList: [],
-      allocation_id: null
+      allocation_id: null,
+      localization: null
     }
   },
   mounted() {},
@@ -163,6 +164,7 @@ export default {
         .getPackageListInfo(this.allocation_id, { keyword: this.package_keyword })
         .then(res => {
           this.packageList = res.data
+          this.localization = res.localization
           this.packageList.map(item => {
             item.storage_time = this.calcTime(item.shelf_up_at)
           })

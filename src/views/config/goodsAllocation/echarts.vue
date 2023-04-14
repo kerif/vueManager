@@ -129,6 +129,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      cursor: pointer;
       .top {
         margin: 8px;
         padding-bottom: 8px;

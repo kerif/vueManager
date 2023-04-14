@@ -2,7 +2,12 @@
   <div class="tracking-container">
     <div class="left-search">
       <div class="search-sty">
-        <el-select style="width: 100%" v-model="expressType" :placeholder="$t('请选择')" @change='changeType'>
+        <el-select
+          style="width: 100%"
+          v-model="expressType"
+          :placeholder="$t('请选择')"
+          @change="changeType"
+        >
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -32,9 +37,10 @@
             border
             style="width: 100%"
             height="calc(100vh - 250px)"
+            @row-click="goDetail"
           >
             <template v-if="this.expressType == 2">
-              <el-table-column prop="express_num" :label="$t('快递单号')" width="180">
+              <el-table-column fixed="left" prop="express_num" :label="$t('快递单号')" width="180">
               </el-table-column>
               <el-table-column prop="code" :label="$t('包裹编码')" width="130"> </el-table-column>
               <el-table-column prop="status_name" :label="$t('包裹状态')"> </el-table-column>
@@ -66,7 +72,8 @@
               </el-table-column>
             </template>
             <template v-if="this.expressType == 1">
-              <el-table-column prop="order_sn" :label="$t('订单号')" width="180"> </el-table-column>
+              <el-table-column fixed="left" prop="order_sn" :label="$t('订单号')" width="180">
+              </el-table-column>
               <el-table-column prop="logistics_sn" :label="$t('转运单号')" width="130">
               </el-table-column>
               <el-table-column prop="status_name" :label="$t('订单状态')"> </el-table-column>
@@ -113,52 +120,52 @@
         </div>
       </div>
     </div>
-    <!--    <div class="search-main">-->
-    <!--      <div class="main-top">-->
-    <!--        <div class="number-sty">{{ $t('单号查询') }}:</div>-->
-    <!--        <div class="search-sty">-->
-    <!--          <el-select v-model="expressType" :placeholder="$t('请选择')">-->
-    <!--            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">-->
-    <!--            </el-option>-->
-    <!--          </el-select>-->
-    <!--        </div>-->
-    <!--        <el-input v-model="expressNumber" @keyup.enter.native="goExpress" class="input-sty">-->
-    <!--        </el-input>-->
-    <!--        <el-button @click.native="goExpress">{{ $t('查询') }}</el-button>-->
-    <!--        <el-button @click.native="trackingMana">{{ $t('管理自定义物流轨迹') }}</el-button>-->
-    <!--      </div>-->
-    <!--      <div class="express-content" v-loading="$store.state.btnLoading">-->
-    <!--        <div class="search-flex">-->
-    <!--          <div v-if="TrackingData.length" class="line-sty">-->
-    <!--            <div class="content-top">-->
-    <!--              <div class="time">{{ $t('时间') }}</div>-->
-    <!--              <div style="padding-left: 2em">{{ $t('跟踪进度') }}</div>-->
-    <!--            </div>-->
-    <!--            <ul class="result-list">-->
-    <!--              <li-->
-    <!--                :class="{ 'last-finish': index === 0 }"-->
-    <!--                v-for="(item, index) in TrackingData"-->
-    <!--                :key="index"-->
-    <!--              >-->
-    <!--                <div class="time">{{ item.ftime }}</div>-->
-    <!--                <div class="dot">-->
-    <!--                  <span class="out-dot dot-box"> </span>-->
-    <!--                  <span class="in-dot dot-box"></span>-->
-    <!--                </div>-->
-    <!--                <div class="text">{{ item.context }}</div>-->
-    <!--              </li>-->
-    <!--            </ul>-->
-    <!--          </div>-->
-    <!--          <div class="empty-box" v-else>-->
-    <!--            <img src="../../assets/empty.png" />-->
-    <!--            <div>{{ $t('暂无物流消息') }}</div>-->
-    <!--          </div>-->
-    <!--          <div class="search-btn">-->
-    <!--            &lt;!&ndash; <el-button @click="onUpdate">{{ $t('更新物流') }}</el-button> &ndash;&gt;-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
+<!--    <div class="search-main">-->
+<!--      <div class="main-top">-->
+<!--        <div class="number-sty">{{ $t('单号查询') }}:</div>-->
+<!--        <div class="search-sty">-->
+<!--          <el-select v-model="expressType" :placeholder="$t('请选择')">-->
+<!--            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </div>-->
+<!--        <el-input v-model="expressNumber" @keyup.enter.native="goExpress" class="input-sty">-->
+<!--        </el-input>-->
+<!--        <el-button @click.native="goExpress">{{ $t('查询') }}</el-button>-->
+<!--        <el-button @click.native="trackingMana">{{ $t('管理自定义物流轨迹') }}</el-button>-->
+<!--      </div>-->
+<!--      <div class="express-content" v-loading="$store.state.btnLoading">-->
+<!--        <div class="search-flex">-->
+<!--          <div v-if="TrackingData.length" class="line-sty">-->
+<!--            <div class="content-top">-->
+<!--              <div class="time">{{ $t('时间') }}</div>-->
+<!--              <div style="padding-left: 2em">{{ $t('跟踪进度') }}</div>-->
+<!--            </div>-->
+<!--            <ul class="result-list">-->
+<!--              <li-->
+<!--                :class="{ 'last-finish': index === 0 }"-->
+<!--                v-for="(item, index) in TrackingData"-->
+<!--                :key="index"-->
+<!--              >-->
+<!--                <div class="time">{{ item.ftime }}</div>-->
+<!--                <div class="dot">-->
+<!--                  <span class="out-dot dot-box"> </span>-->
+<!--                  <span class="in-dot dot-box"></span>-->
+<!--                </div>-->
+<!--                <div class="text">{{ item.context }}</div>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <div class="empty-box" v-else>-->
+<!--            <img src="../../assets/empty.png" />-->
+<!--            <div>{{ $t('暂无物流消息') }}</div>-->
+<!--          </div>-->
+<!--          <div class="search-btn">-->
+<!--            &lt;!&ndash; <el-button @click="onUpdate">{{ $t('更新物流') }}</el-button> &ndash;&gt;-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
     <!-- <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('更新物流状态')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
         <el-form-item :label="$t('物流状态')">
@@ -222,6 +229,7 @@
 <script>
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   components: {
     NlePagination
@@ -237,7 +245,7 @@ export default {
         },
         {
           id: 2,
-          name: this.$t('物流单号')
+          name: this.$t('包裹单号')
         }
       ],
       expressType: 1,
@@ -250,7 +258,7 @@ export default {
       is_member: '',
       logisticsRemark: '',
       trackDialog: false,
-      sns: null,
+      sns: '',
       tableData: []
     }
   },
@@ -263,8 +271,24 @@ export default {
     }
   },
   methods: {
-    changeType(){
+    goDetail(scope) {
+      console.log('scope', scope)
+      if (this.expressType == 1) {
+        dialog({ type: 'logisticsInfo', id: scope.order_sn, expressType: this.expressType }, () => {
+          console.log('cnm')
+        })
+      } else {
+        dialog(
+          { type: 'logisticsInfo', id: scope.express_num, expressType: this.expressType },
+          () => {
+            console.log('cnm')
+          }
+        )
+      }
+    },
+    changeType() {
       this.sns = null
+      this.tableData = []
     },
     //查询物流
     getList() {

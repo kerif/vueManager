@@ -201,6 +201,8 @@ import invoiceList from './invoiceList.vue'
 import remoteInfo from './remoteInfo.vue'
 import packpageRemark from './packpageRemark'
 import orderRemark from './orderRemark'
+import logisticsInfo from './logisticsInfo'
+
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -402,6 +404,7 @@ const invoiceListController = Vue.extend(invoiceList)
 const remoteInfoController = Vue.extend(remoteInfo)
 const packpageRemarkController = Vue.extend(packpageRemark)
 const orderRemarkController = Vue.extend(orderRemark)
+const logisticsInfoController = Vue.extend(logisticsInfo)
 
 const mixin = {
   data() {
@@ -1819,6 +1822,13 @@ function initInstance(type) {
     //订单备注
     case 'orderRemark':
       instance = new orderRemarkController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //订单备注
+    case 'logisticsInfo':
+      instance = new logisticsInfoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
