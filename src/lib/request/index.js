@@ -5580,3 +5580,13 @@ exports.aiChat = params => $json.post('chat/question', params)
 
 // 评论显示与隐藏
 exports.setComment = (id, display) => $form.put(`order-comments/${id}/display/${display}`)
+
+// 获取配置
+exports.getUnpackConfig = () => {
+  return $form.get(`unpack-config`)
+}
+
+// 更新配置
+exports.updateUnpackConfig = params => {
+  return $json.put(`unpack-config`, params)
+}

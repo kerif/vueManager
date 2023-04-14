@@ -320,13 +320,28 @@
                 {{ scope.row.shipment && scope.row.shipment.logistics_sn }}
               </template>
               <template v-else-if="item.id === 'logistics_sn'">
-                <span v-if="scope.row.boxes_count === 1">
+                <!-- <span v-if="scope.row.boxes_count === 1">
                   {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
                 </span>
                 <span v-else>
                   <span v-for="item in scope.row.boxes" :key="item.id">
                     {{ item.logistics_company }} &nbsp; {{ item.logistics_sn }}
                   </span>
+                </span> -->
+                <span
+                  v-if="
+                    scope.row.boxes.includes(item.logistics_company) &&
+                    Boolean(item.logistics_company) &&
+                    scope.row.boxes.includes(item.logistics_sn) &&
+                    Boolean(item.logistics_sn)
+                  "
+                >
+                  <span v-for="item in scope.row.boxes" :key="item.id">
+                    {{ item.logistics_company }} &nbsp; {{ item.logistics_sn }}
+                  </span>
+                </span>
+                <span v-else>
+                  {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
                 </span>
               </template>
               <template v-else-if="item.id === 'updated_at'">

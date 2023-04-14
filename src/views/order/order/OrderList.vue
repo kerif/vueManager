@@ -192,6 +192,12 @@
           v-if="activeName !== '7'"
         ></el-table-column>
         <el-table-column
+          :label="$t('商品备注')"
+          v-if="activeName !== '7'"
+          prop="remark"
+          key="remark"
+        ></el-table-column>
+        <el-table-column
           v-if="activeName !== '7'"
           :label="$t('快递单号')"
           key="express_num"
