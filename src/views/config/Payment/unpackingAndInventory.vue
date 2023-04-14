@@ -134,12 +134,6 @@ export default {
       this.$request.getUnpackConfig().then(res => {
         if (res.ret) {
           if (res.data.default) {
-            for (let key in this.form) {
-              if (Object.hasOwnProperty.call(this.form, key)) {
-                this.form[key] = res.data.default[key]
-              }
-            }
-            this.form.prop_id = res.data.default.prop_id == null ? '' : res.data.default.prop_id
             const categoryIds = this.getParentId(
               res.data.default && res.data.default.category && res.data.default.category.id,
               this.options
@@ -152,6 +146,12 @@ export default {
                 res.data.default && res.data.default.category && res.data.default.category.id
               ]
             }
+            for (let key in this.form) {
+              if (Object.hasOwnProperty.call(this.form, key)) {
+                this.form[key] = res.data.default[key]
+              }
+            }
+            this.form.prop_id = res.data.default.prop_id == null ? '' : res.data.default.prop_id
           }
           this.items = res.data.items
           this.form.items = res.data.items.filter(item => item.status == 1).map(item => item.code)
