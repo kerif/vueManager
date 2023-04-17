@@ -110,6 +110,9 @@ export default {
     this.getGoods()
     this.getList()
   },
+  mounted() {
+    this.getList()
+  },
   activated() {
     this.getList()
   },
