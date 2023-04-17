@@ -149,6 +149,26 @@
         <el-button type="primary" @click="dialogVisible = true">{{ $t('配置') }}</el-button>
       </div>
     </div>
+
+    <!--    台湾件实名认证-->
+    <div class="item">
+      <div class="item-top">
+        <div style="text-align: center">
+          <i class="el-icon-chat-line-round icon-sty"></i>
+        </div>
+        <div>
+          <div class="sms-top">{{ $t('台湾件实名认证') }}</div>
+          <div class="text-sty" style="margin-top: 10px">
+            {{ $t('通过易立委实名认证，仅支持台湾地址收件人验证') }}
+          </div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="configureBtn">
+        <el-button type="primary" @click="taiWanRealVisible = true">{{ $t('配置') }}</el-button>
+      </div>
+    </div>
     <div>
       <el-dialog
         :visible.sync="dialogVisible"
@@ -176,6 +196,48 @@
         </div>
       </el-dialog>
     </div>
+    <div>
+      <el-dialog
+        :visible.sync="taiWanRealVisible"
+        :title="$t('台湾件实名认证')"
+        class="taiwan-real"
+      >
+        <div class="taiwan-real-box">
+          <el-form label-width="100px" class="real-form" label-position="left" :model="taiWanReal">
+            <div class="tip-title">
+              使用前请确保能在<span class="go-other" @click="goOther"
+                >https://eccs.tradevan.com.tw/</span
+              >登录
+            </div>
+            <el-form-item :label="$t('公司统一编号')">
+              <el-input v-model="taiWanReal.code" :placeholder="$t('请输入')"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('使用者账号')">
+              <el-input v-model="taiWanReal.ip" :placeholder="$t('请输入')"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('使用者密码')" style="margin-bottom: 8px">
+              <el-input v-model="taiWanReal.password" :placeholder="$t('请输入')"></el-input>
+            </el-form-item>
+            <el-form-item label="" style="margin-bottom: 8px">
+              <div class="switch-box">
+                <el-switch v-model="taiWanReal.check"> </el-switch>
+                <span>启用申请打包实名认证</span>
+              </div>
+            </el-form-item>
+            <el-form-item label="" style="margin-bottom: 8px">
+              <div class="submit-box">
+                <el-button type="primary" class="sub-btn" @click="submit">{{
+                  $t('保存')
+                }}</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item label="" style="margin-bottom: 8px">
+              <span class="red-font">没有帐号？按需收费，请联系销售人员</span>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -186,57 +248,30 @@ export default {
       smsData: {},
       trackingData: {},
       dialogVisible: false,
+      taiWanRealVisible: false,
+      value1: false,
+      taiWanReal: {
+        code: null,
+        ip: null,
+        password: null,
+        check: null
+      },
       resource: {
         key: '',
         address: ''
       }
     }
   },
-  created() {
-    this.getList()
-    this.getMapApi()
-  },
+  created() {},
   methods: {
-    getList() {
-      this.$request.getApiService().then(res => {
-        if (res.ret) {
-          this.smsData = res.data.sms
-          this.trackingData = res.data.tracking
-        }
-      })
+    goOther() {
+      window.open('https://eccs.tradevan.com.tw/')
     },
-    getMapApi() {
-      this.$request.getMapApi().then(res => {
-        if (res.ret) {
-          this.resource.key = res.data.key
-        }
-      })
-    },
-    goConfiguration(status) {
-      if (status === 'sms') {
-        this.$router.push({ name: 'smsServices' })
-      } else if (status === 'tracking') {
-        this.$router.push({ name: 'trackingService' })
-      } else {
-        this.$router.push({ name: 'mailConfigur' })
+    submit() {
+      let params = {
+        ...this.taiWanReal
       }
-    },
-    async save(val) {
-      let res = {}
-      if (val == 1) {
-        res = await this.$request.setMapApi({ key: this.resource.key })
-      } else {
-        res = await this.$request.testAddress({ url: this.resource.address })
-      }
-      if (res.ret) {
-        this.$notify.success({ title: this.$t('成功'), message: res.msg })
-        this.getMapApi()
-      } else {
-        this.$notify.error({ title: this.$t('操作失败'), message: res.msg })
-      }
-    },
-    confirm() {
-      this.dialogVisible = false
+      console.log(params)
     }
   }
 }
@@ -300,6 +335,60 @@ export default {
   .sms-top {
     font-size: 19px;
     font-weight: 900;
+  }
+}
+::v-deep.taiwan-real {
+  .el-dialog {
+    width: 700px;
+    .el-dialog__body {
+      padding: 20px;
+    }
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  .el-dialog__close {
+    color: #fff;
+  }
+  .uploadTmp {
+    height: 150px;
+    margin-top: -10px;
+  }
+  .uploadData {
+    display: inline-block;
+    margin: 0 5px 0 0;
+  }
+  .taiwan-real-box {
+    display: flex;
+    justify-content: center;
+    .real-form {
+      width: 70%;
+      .red-font {
+        color: red;
+      }
+    }
+    .tip-title {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .go-other {
+      cursor: pointer;
+      color: #3777ff;
+    }
+    .switch-box {
+      span {
+        padding-left: 16px;
+      }
+    }
+    .submit-box {
+      .sub-btn {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

@@ -301,7 +301,7 @@
                         :style="'background-color:' + item.color + ';color:' + item.font_color"
                         >{{ item.cn_name }}</span
                       >
-                    </span>
+                    </span>&nbsp;
                   </div>
                 </div>
               </div>
@@ -398,135 +398,135 @@
               </div>
             </template>
           </el-table-column>
-<!--          <el-table-column-->
-<!--            :label="$t('物流状态')"-->
-<!--            prop="third_tracking_status_name"-->
-<!--            key="third_tracking_status_name"-->
-<!--            v-if="activeName === '1'"-->
-<!--            width="150"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-button type="text" class="copy-number" @click="packageTrack(scope.row.id)">{{-->
-<!--                scope.row.third_tracking_status_name-->
-<!--              }}</el-button>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('物品名称')"-->
-<!--            prop="package_name"-->
-<!--            key="package_name"-->
-<!--            width="150"-->
-<!--            v-if="activeName !== '7'"-->
-<!--            show-overflow-tooltip-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('物品价值') + localization.currency_unit"-->
-<!--            v-if="activeName !== '7'"-->
-<!--            prop="package_value"-->
-<!--            key="package_value"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"-->
-<!--            v-if="activeName !== '7'"-->
-<!--            prop="unit_value"-->
-<!--            key="unit_value"-->
-<!--            min-width="100"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">-->
-<!--            <template slot-scope="scope">-->
-<!--              <span v-for="item in scope.row.props" :key="item.id">-->
-<!--                {{ item.cn_name }}-->
-<!--              </span>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('物品重量')"-->
-<!--            key="package_weight"-->
-<!--            v-if="['2', '3', '4', '5'].includes(activeName)"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('商品数量')"-->
-<!--            prop="qty"-->
-<!--            key="qty"-->
-<!--            v-if="['1', '2'].includes(activeName)"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">-->
-<!--            <template slot-scope="scope">-->
-<!--              <span>{{-->
-<!--                (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)-->
-<!--              }}</span>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('商品分类')"-->
-<!--            prop="categories"-->
-<!--            key="categories"-->
-<!--            v-if="['1', '2'].includes(activeName)"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              <span v-for="item in scope.row.categories" :key="item.id">-->
-<!--                {{ item.name_cn }}-->
-<!--              </span>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('寄往国家')"-->
-<!--            prop="destination_country.cn_name"-->
-<!--            key="destination_country.cn_name"-->
-<!--            v-if="activeName !== '7'"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('仓库')"-->
-<!--            prop="warehouse.warehouse_name"-->
-<!--            key="warehouse.warehouse_name"-->
-<!--            v-if="activeName !== '7'"-->
-<!--            width="155"-->
-<!--          >-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('规格(长宽高cm)')"-->
-<!--            prop="dimension"-->
-<!--            key="dimension"-->
-<!--            width="120px"-->
-<!--            v-if="activeName === '2'"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('存放货位')"-->
-<!--            key="location"-->
-<!--            width="120px"-->
-<!--            v-if="activeName === '2' || activeName === '3'"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              <span>{{ scope.row.location }}</span>-->
-<!--              <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('入库时间')"-->
-<!--            width="155"-->
-<!--            prop="in_storage_at"-->
-<!--            key="in_storage_at"-->
-<!--            v-if="activeName === '2' || activeName === '3'"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('签收时间')"-->
-<!--            width="155"-->
-<!--            prop="received_at"-->
-<!--            key="received_at"-->
-<!--            v-if="['0', '1', '2'].includes(activeName)"-->
-<!--          ></el-table-column>-->
-<!--          <el-table-column-->
-<!--            :label="$t('提交时间')"-->
-<!--            prop="created_at"-->
-<!--            v-if="activeName !== '7'"-->
-<!--            key="created_at"-->
-<!--            width="155"-->
-<!--          >-->
-<!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('物流状态')"-->
+          <!--            prop="third_tracking_status_name"-->
+          <!--            key="third_tracking_status_name"-->
+          <!--            v-if="activeName === '1'"-->
+          <!--            width="150"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <el-button type="text" class="copy-number" @click="packageTrack(scope.row.id)">{{-->
+          <!--                scope.row.third_tracking_status_name-->
+          <!--              }}</el-button>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('物品名称')"-->
+          <!--            prop="package_name"-->
+          <!--            key="package_name"-->
+          <!--            width="150"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--            show-overflow-tooltip-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('物品价值') + localization.currency_unit"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--            prop="package_value"-->
+          <!--            key="package_value"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--            prop="unit_value"-->
+          <!--            key="unit_value"-->
+          <!--            min-width="100"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <span v-for="item in scope.row.props" :key="item.id">-->
+          <!--                {{ item.cn_name }}-->
+          <!--              </span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('物品重量')"-->
+          <!--            key="package_weight"-->
+          <!--            v-if="['2', '3', '4', '5'].includes(activeName)"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('商品数量')"-->
+          <!--            prop="qty"-->
+          <!--            key="qty"-->
+          <!--            v-if="['1', '2'].includes(activeName)"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <span>{{-->
+          <!--                (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)-->
+          <!--              }}</span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('商品分类')"-->
+          <!--            prop="categories"-->
+          <!--            key="categories"-->
+          <!--            v-if="['1', '2'].includes(activeName)"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <span v-for="item in scope.row.categories" :key="item.id">-->
+          <!--                {{ item.name_cn }}-->
+          <!--              </span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('寄往国家')"-->
+          <!--            prop="destination_country.cn_name"-->
+          <!--            key="destination_country.cn_name"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('仓库')"-->
+          <!--            prop="warehouse.warehouse_name"-->
+          <!--            key="warehouse.warehouse_name"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--            width="155"-->
+          <!--          >-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('规格(长宽高cm)')"-->
+          <!--            prop="dimension"-->
+          <!--            key="dimension"-->
+          <!--            width="120px"-->
+          <!--            v-if="activeName === '2'"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('存放货位')"-->
+          <!--            key="location"-->
+          <!--            width="120px"-->
+          <!--            v-if="activeName === '2' || activeName === '3'"-->
+          <!--          >-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <span>{{ scope.row.location }}</span>-->
+          <!--              <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('入库时间')"-->
+          <!--            width="155"-->
+          <!--            prop="in_storage_at"-->
+          <!--            key="in_storage_at"-->
+          <!--            v-if="activeName === '2' || activeName === '3'"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('签收时间')"-->
+          <!--            width="155"-->
+          <!--            prop="received_at"-->
+          <!--            key="received_at"-->
+          <!--            v-if="['0', '1', '2'].includes(activeName)"-->
+          <!--          ></el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            :label="$t('提交时间')"-->
+          <!--            prop="created_at"-->
+          <!--            v-if="activeName !== '7'"-->
+          <!--            key="created_at"-->
+          <!--            width="155"-->
+          <!--          >-->
+          <!--          </el-table-column>-->
           <el-table-column
             :label="$t('操作')"
             fixed="right"
@@ -1441,6 +1441,7 @@ export default {
           border-radius: 3px;
           color: rgba(99, 111, 122, 1);
           background-color: rgba(0, 0, 0, 0);
+          margin-right: 5px;
         }
         .img {
           width: 20px;
