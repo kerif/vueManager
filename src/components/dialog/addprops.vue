@@ -10,6 +10,16 @@
       <el-form-item :label="$t('属性名称: ')">
         <el-input v-model="ruleForm.cn_name" @keyup.native.enter="confirm"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('字体颜色: ')">
+        <div class="color-box">
+          <el-color-picker v-model="ruleForm.font_color" show-alpha></el-color-picker>
+        </div>
+      </el-form-item>
+      <el-form-item :label="$t('背景颜色: ')">
+        <div class="color-box">
+          <el-color-picker v-model="ruleForm.color" show-alpha></el-color-picker>
+        </div>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -22,7 +32,9 @@ export default {
   data() {
     return {
       ruleForm: {
-        cn_name: ''
+        cn_name: '',
+        font_color: 'rgba(99, 111, 122,1)',
+        color: 'rgba(0, 0, 0, 0)'
       },
       id: '',
       name: '',
@@ -38,7 +50,24 @@ export default {
     },
     init() {
       if (this.id) {
+        console.log(this.font_color, this.color)
+        // if (this.font_color) {
+        //   this.ruleForm.font_color = this.font_color
+        //   console.log('有font_color')
+        // }else{
+        //   console.log(this.ruleForm.font_color)
+        //   this.ruleForm.font_color = 'rgba(99, 111, 122,1)'
+        //
+        // }
+        // if (this.color) {
+        //   this.ruleForm.color = this.color
+        //   console.log('有color')
+        // }else{
+        //   this.ruleForm.color = 'rgba(0, 0, 0, 0)'
+        // }
         this.ruleForm.cn_name = this.name
+        this.ruleForm.color = this.color ?this.color: 'rgba(0, 0, 0, 0)'
+        this.ruleForm.font_color = this.font_color ?this.font_color: 'rgba(99, 111, 122,1)'
       }
     },
     confirm() {
@@ -46,7 +75,9 @@ export default {
       if (this.state === 'edit') {
         this.$request
           .updatePackageProps(this.id, {
-            cn_name: this.ruleForm.cn_name
+            cn_name: this.ruleForm.cn_name,
+            color: this.ruleForm.color,
+            font_color: this.ruleForm.font_color
           })
           .then(res => {
             if (res.ret) {
@@ -67,7 +98,9 @@ export default {
       } else {
         this.$request
           .addPackageProps({
-            cn_name: this.ruleForm.cn_name
+            cn_name: this.ruleForm.cn_name,
+            color: this.ruleForm.color,
+            font_color: this.ruleForm.font_color
           })
           .then(res => {
             if (res.ret) {
@@ -90,7 +123,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .props-dialog {
   .el-input {
     width: 40%;
@@ -105,6 +138,10 @@ export default {
 
   .el-dialog__close {
     color: #fff;
+  }
+  .color-box {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

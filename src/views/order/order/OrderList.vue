@@ -296,7 +296,7 @@
                   <div>
                     <span class="tip">{{ $t('物品属性') }}：</span
                     ><span v-for="item in scope.row.props" :key="item.id">
-                      {{ item.cn_name }}
+                      <span class='prop-box' :style="'background-color:' + item.color + ';color:'+ item.font_color">{{ item.cn_name }}</span>
                     </span>
                   </div>
                 </div>
@@ -1378,6 +1378,12 @@ export default {
         display: flex;
         div {
           flex: 1;
+        }
+        .prop-box{
+          padding: 3px;
+          border-radius: 3px;
+          color: rgba(99, 111, 122,1);
+          background-color: rgba(0, 0, 0, 0);
         }
       }
     }

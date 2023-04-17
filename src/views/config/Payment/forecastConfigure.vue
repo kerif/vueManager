@@ -12,13 +12,19 @@
           class="data-list positions-type"
           border
           stripe
+          :header-cell-style="{ 'text-align': 'center' }"
         >
           <el-table-column width="100px" align="center">
             <template>
               <i class="el-icon-sort icon-fonts"></i>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column align="center" :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column align="center" :label="$t('色块标记')" prop="name">
+            <template slot-scope="scope">
+              <span class='prop-box' :style="'background-color:' + scope.row.color + ';color:'+ scope.row.font_color">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             :label="item.name"
             v-for="item in formatLangData"
@@ -34,9 +40,9 @@
               <span v-else class="el-icon-plus icon-sty" @click="onProps(scope.row, item)"></span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('操作')" width="200">
+          <el-table-column align="center" :label="$t('操作')" width="200">
             <template slot-scope="scope">
-              <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name)">{{
+              <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name, scope.row.color, scope.row.font_color)">{{
                 $t('编辑')
               }}</el-button>
               <el-button class="btn-light-red" @click="handleClose(scope.row.id)">{{
@@ -148,7 +154,7 @@ export default {
         package_warning: 0,
         prop_type: 0,
         package_auto_code: ''
-      }
+      },
     }
   },
   created() {
@@ -184,8 +190,8 @@ export default {
       })
     },
     // 编辑属性
-    editProps(id, name) {
-      dialog({ type: 'addPackage', id: id, name: name, state: 'edit' }, () => {
+    editProps(id, name, color, font_color) {
+      dialog({ type: 'addPackage', id: id, name: name, state: 'edit', color, font_color }, () => {
         this.getProps()
       })
     },
@@ -313,4 +319,9 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style lang='scss' scoped>
+.prop-box{
+  padding: 3px;
+  border-radius: 3px;
+}
+</style>

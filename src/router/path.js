@@ -1475,474 +1475,474 @@ export default [
           }
         ]
       },
-      {
-        path: 'basics',
-        component: LayoutContainer,
-        icon: 'basics',
-        id: 1102,
-        children: [
-          {
-            path: '/basics/warehouse',
-            component: WareHouse,
-            name: 'warehouse',
-            id: 602,
-            meta: {
-              group: '基础数据',
-              level: 2,
-              name: '仓库地址管理'
-            }
-          },
-          {
-            path: '/config/line',
-            name: 'linelist',
-            component: Line,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 2,
-              name: '渠道路线配置'
-            }
-          },
-          {
-            path: '/config/line/sales',
-            name: 'salesMana',
-            component: salesMana,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '销售价管理',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/tmpSet',
-            name: 'tmpSet',
-            component: tmpSet,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '模版',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/partition',
-            name: 'partition',
-            component: partitionList,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '分区',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/channel_list/:id',
-            name: 'channelLine',
-            component: channelLine,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '渠道',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/channel/add',
-            name: 'channelLineAdd',
-            component: channelLineAdd,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '新增',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/channel/edit/:id',
-            name: 'channelLineEdit',
-            component: channelLineAdd,
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '编辑',
-              parent: '/config/line'
-            }
-          },
-          {
-            path: '/config/line/lineadd',
-            component: LineAddEdit,
-            name: 'lineadd',
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '添加路线',
-              parent: '/config/line/linelist'
-            }
-          },
-          {
-            path: '/config/icon/add',
-            component: IconAdd,
-            name: 'IconAdd',
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '路线icon',
-              parent: '/config/line/linelist'
-            }
-          },
-          {
-            path: '/config/line/lineedit/:state/:id',
-            component: LineAddEdit,
-            name: 'lineedit',
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '修改路线',
-              parent: '/config/line/linelist'
-            }
-          },
-          {
-            path: '/config/line/otherCost/:id',
-            component: othersCost,
-            name: 'othersCost',
-            id: 601,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '其余费用',
-              parent: '/config/line/linelist'
-            }
-          },
-          // {
-          //     path: '/config/warehouse',
-          //     component: WareHouse,
-          //     name: 'warehouse',
-          //     id: 602,
-          //     meta: {
-          //         group: '基础数据',
-          //         level: 2,
-          //         name: '仓库地址配置'
-          //     }
-          // },
-          {
-            path: '/config/warehouse/add',
-            component: WareHouseEdit,
-            name: 'warehouseAdd',
-            id: 602,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '添加仓库',
-              parent: '/config/warehouse'
-            }
-          },
-          {
-            path: '/config/warehouse/position/:id/:warehouseName',
-            component: positionWarehouse,
-            name: 'position',
-            id: 602,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '货位管理',
-              parent: '/config/warehouse'
-            }
-          },
-          {
-            path: '/config/warehouse/edit/:id',
-            component: WareHouseEdit,
-            name: 'warehouseEdit',
-            id: 602,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '修改仓库',
-              parent: '/config/warehouse'
-            }
-          },
-          {
-              path: '/config/notice',
-              component: NoticeList,
-              name: 'noticelist',
-              id: 603,
-              meta: {
-                  group: '基础数据',
-                  level: 2,
-                  name: '文章管理'
-              }
-          },
-          {
-            path: '/config/notice/add',
-            component: NoticeAddEdit,
-            name: 'noticeadd',
-            id: 603,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '新增文章管理',
-              parent: '/config/notice'
-            }
-          },
-          {
-            path: '/config/notice/edit/:id',
-            component: NoticeAddEdit,
-            name: 'noticeEdit',
-            id: 603,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '修改文章管理',
-              parent: '/config/notice'
-            }
-          },
-          {
-            path: '/config/notice/lang/add/:line/:lang/:transCode',
-            component: noticeLang,
-            name: 'noticeLangAdd',
-            id: 603,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '文章管理的翻译内容',
-              parent: '/config/notice'
-            }
-          },
-          // {
-          //   path: '/config/applet',
-          //   name: 'appletManagement',
-          //   component: AppletConfiguration,
-          //   id: 604,
-          //   meta: {
-          //     level: 2,
-          //     group: '配置',
-          //     name: '小程序配置'
-          //   }
-          // },
-          // {
-          //     path: '/config/point',
-          //     name: 'point',
-          //     component: SinceList,
-          //     id: 605,
-          //     meta: {
-          //         level: 2,
-          //         group: '基础数据',
-          //         name: '自提点配置'
-          //     }
-          // },
-          {
-            path: '/config/point/add',
-            name: 'pointAdd',
-            component: sinceAddEdit,
-            id: 605,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '添加自提点配置',
-              parent: '/config/point'
-            }
-          },
-          {
-            path: '/config/point/edit/:id',
-            name: 'pointEdit',
-            component: sinceAddEdit,
-            id: 605,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '编辑自提点配置',
-              parent: '/config/point'
-            }
-          },
-          {
-            path: '/config/point/commissionSet',
-            name: 'commissionSet',
-            component: commissionSet,
-            id: 605,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '计佣方式配置',
-              parent: '/config/point'
-            }
-          },
-          {
-            path: '/config/point/selfbatchImport',
-            name: 'selfbatchImport',
-            component: selfbatchImport,
-            id: 605,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '批量导入',
-              parent: '/config/point'
-            }
-          },
-          // {
-          //   path: '/config/payment',
-          //   name: 'payment',
-          //   component: PaymentManagement,
-          //   id: 606,
-          //   meta: {
-          //     level: 2,
-          //     group: '配置',
-          //     name: '更多配置'
-          //   }
-          // },
-          {
-            path: '/config/mail-configure',
-            name: 'mailConfigur',
-            component: mailConfigure,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '邮件通知配置',
-              parent: '/config/configuration-more'
-            }
-          },
-          // {
-          //     path: '/config/configuration-more',
-          //     name: 'configurationMore',
-          //     component: configurationMore,
-          //     id: 606,
-          //     meta: {
-          //         level: 2,
-          //         group: '基础数据',
-          //         name: '更多配置'
-          //     }
-          // },
-          {
-            path: '/config/auto-reply',
-            name: 'autoReply',
-            component: autoReply,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '自动回复',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/custom-menu',
-            name: 'customMenu',
-            component: customMenu,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '自定义菜单',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/sms-services',
-            name: 'smsServices',
-            component: smsServices,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '短信服务',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/tracking-services',
-            name: 'trackingService',
-            component: trackingService,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '物流查询服务',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/emailLang/add/:line/:lang/:transCode',
-            component: emailLang,
-            name: 'emailLangAdd',
-            id: 606,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '邮件模版的翻译内容',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/categoriesLang/add/:line/:lang/:transCode',
-            component: categoriesLang,
-            name: 'categoriesLangAdd',
-            id: 606,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '商品分类管理的翻译内容',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/sickTips/:id',
-            name: 'sickTips',
-            component: EditSick,
-            id: 606,
-            meta: {
-              level: 3,
-              group: '基础数据',
-              name: '风险提示',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/add',
-            component: AddEditEmail,
-            name: 'emailAdd',
-            id: 606,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '新增邮件模版',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/edit/:id',
-            component: AddEditEmail,
-            name: 'emailEdit',
-            id: 606,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '修改邮件模版',
-              parent: '/config/configuration-more'
-            }
-          },
-          {
-            path: '/config/payment/delivery-company/:id/:name',
-            component: deliveryCompany,
-            name: 'deliveryCompany',
-            id: 606,
-            meta: {
-              group: '基础数据',
-              level: 3,
-              name: '详情',
-              parent: '/config/configuration-more'
-            }
-          }
-        ]
-      },
+      // {
+      //   path: 'basics',
+      //   component: LayoutContainer,
+      //   icon: 'basics',
+      //   id: 1102,
+      //   children: [
+      //     {
+      //       path: '/basics/warehouse',
+      //       component: WareHouse,
+      //       name: 'warehouse',
+      //       id: 602,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 2,
+      //         name: '仓库地址管理'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line',
+      //       name: 'linelist',
+      //       component: Line,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 2,
+      //         name: '渠道路线配置'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/sales',
+      //       name: 'salesMana',
+      //       component: salesMana,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '销售价管理',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/tmpSet',
+      //       name: 'tmpSet',
+      //       component: tmpSet,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '模版',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/partition',
+      //       name: 'partition',
+      //       component: partitionList,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '分区',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/channel_list/:id',
+      //       name: 'channelLine',
+      //       component: channelLine,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '渠道',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/channel/add',
+      //       name: 'channelLineAdd',
+      //       component: channelLineAdd,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '新增',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/channel/edit/:id',
+      //       name: 'channelLineEdit',
+      //       component: channelLineAdd,
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '编辑',
+      //         parent: '/config/line'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/lineadd',
+      //       component: LineAddEdit,
+      //       name: 'lineadd',
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '添加路线',
+      //         parent: '/config/line/linelist'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/icon/add',
+      //       component: IconAdd,
+      //       name: 'IconAdd',
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '路线icon',
+      //         parent: '/config/line/linelist'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/lineedit/:state/:id',
+      //       component: LineAddEdit,
+      //       name: 'lineedit',
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '修改路线',
+      //         parent: '/config/line/linelist'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/line/otherCost/:id',
+      //       component: othersCost,
+      //       name: 'othersCost',
+      //       id: 601,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '其余费用',
+      //         parent: '/config/line/linelist'
+      //       }
+      //     },
+      //     // {
+      //     //     path: '/config/warehouse',
+      //     //     component: WareHouse,
+      //     //     name: 'warehouse',
+      //     //     id: 602,
+      //     //     meta: {
+      //     //         group: '基础数据',
+      //     //         level: 2,
+      //     //         name: '仓库地址配置'
+      //     //     }
+      //     // },
+      //     {
+      //       path: '/config/warehouse/add',
+      //       component: WareHouseEdit,
+      //       name: 'warehouseAdd',
+      //       id: 602,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '添加仓库',
+      //         parent: '/config/warehouse'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/warehouse/position/:id/:warehouseName',
+      //       component: positionWarehouse,
+      //       name: 'position',
+      //       id: 602,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '货位管理',
+      //         parent: '/config/warehouse'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/warehouse/edit/:id',
+      //       component: WareHouseEdit,
+      //       name: 'warehouseEdit',
+      //       id: 602,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '修改仓库',
+      //         parent: '/config/warehouse'
+      //       }
+      //     },
+      //     {
+      //         path: '/config/notice',
+      //         component: NoticeList,
+      //         name: 'noticelist',
+      //         id: 603,
+      //         meta: {
+      //             group: '基础数据',
+      //             level: 2,
+      //             name: '文章管理'
+      //         }
+      //     },
+      //     {
+      //       path: '/config/notice/add',
+      //       component: NoticeAddEdit,
+      //       name: 'noticeadd',
+      //       id: 603,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '新增文章管理',
+      //         parent: '/config/notice'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/notice/edit/:id',
+      //       component: NoticeAddEdit,
+      //       name: 'noticeEdit',
+      //       id: 603,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '修改文章管理',
+      //         parent: '/config/notice'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/notice/lang/add/:line/:lang/:transCode',
+      //       component: noticeLang,
+      //       name: 'noticeLangAdd',
+      //       id: 603,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '文章管理的翻译内容',
+      //         parent: '/config/notice'
+      //       }
+      //     },
+      //     // {
+      //     //   path: '/config/applet',
+      //     //   name: 'appletManagement',
+      //     //   component: AppletConfiguration,
+      //     //   id: 604,
+      //     //   meta: {
+      //     //     level: 2,
+      //     //     group: '配置',
+      //     //     name: '小程序配置'
+      //     //   }
+      //     // },
+      //     // {
+      //     //     path: '/config/point',
+      //     //     name: 'point',
+      //     //     component: SinceList,
+      //     //     id: 605,
+      //     //     meta: {
+      //     //         level: 2,
+      //     //         group: '基础数据',
+      //     //         name: '自提点配置'
+      //     //     }
+      //     // },
+      //     {
+      //       path: '/config/point/add',
+      //       name: 'pointAdd',
+      //       component: sinceAddEdit,
+      //       id: 605,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '添加自提点配置',
+      //         parent: '/config/point'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/point/edit/:id',
+      //       name: 'pointEdit',
+      //       component: sinceAddEdit,
+      //       id: 605,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '编辑自提点配置',
+      //         parent: '/config/point'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/point/commissionSet',
+      //       name: 'commissionSet',
+      //       component: commissionSet,
+      //       id: 605,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '计佣方式配置',
+      //         parent: '/config/point'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/point/selfbatchImport',
+      //       name: 'selfbatchImport',
+      //       component: selfbatchImport,
+      //       id: 605,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '批量导入',
+      //         parent: '/config/point'
+      //       }
+      //     },
+      //     // {
+      //     //   path: '/config/payment',
+      //     //   name: 'payment',
+      //     //   component: PaymentManagement,
+      //     //   id: 606,
+      //     //   meta: {
+      //     //     level: 2,
+      //     //     group: '配置',
+      //     //     name: '更多配置'
+      //     //   }
+      //     // },
+      //     {
+      //       path: '/config/mail-configure',
+      //       name: 'mailConfigur',
+      //       component: mailConfigure,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '邮件通知配置',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     // {
+      //     //     path: '/config/configuration-more',
+      //     //     name: 'configurationMore',
+      //     //     component: configurationMore,
+      //     //     id: 606,
+      //     //     meta: {
+      //     //         level: 2,
+      //     //         group: '基础数据',
+      //     //         name: '更多配置'
+      //     //     }
+      //     // },
+      //     {
+      //       path: '/config/auto-reply',
+      //       name: 'autoReply',
+      //       component: autoReply,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '自动回复',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/custom-menu',
+      //       name: 'customMenu',
+      //       component: customMenu,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '自定义菜单',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/sms-services',
+      //       name: 'smsServices',
+      //       component: smsServices,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '短信服务',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/tracking-services',
+      //       name: 'trackingService',
+      //       component: trackingService,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '物流查询服务',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/emailLang/add/:line/:lang/:transCode',
+      //       component: emailLang,
+      //       name: 'emailLangAdd',
+      //       id: 606,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '邮件模版的翻译内容',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/categoriesLang/add/:line/:lang/:transCode',
+      //       component: categoriesLang,
+      //       name: 'categoriesLangAdd',
+      //       id: 606,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '商品分类管理的翻译内容',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/sickTips/:id',
+      //       name: 'sickTips',
+      //       component: EditSick,
+      //       id: 606,
+      //       meta: {
+      //         level: 3,
+      //         group: '基础数据',
+      //         name: '风险提示',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/add',
+      //       component: AddEditEmail,
+      //       name: 'emailAdd',
+      //       id: 606,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '新增邮件模版',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/edit/:id',
+      //       component: AddEditEmail,
+      //       name: 'emailEdit',
+      //       id: 606,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '修改邮件模版',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     },
+      //     {
+      //       path: '/config/payment/delivery-company/:id/:name',
+      //       component: deliveryCompany,
+      //       name: 'deliveryCompany',
+      //       id: 606,
+      //       meta: {
+      //         group: '基础数据',
+      //         level: 3,
+      //         name: '详情',
+      //         parent: '/config/configuration-more'
+      //       }
+      //     }
+      //   ]
+      // },
       {
         path: 'order',
         component: LayoutContainer,
@@ -2753,7 +2753,29 @@ export default [
               group: '基础配置',
               name: '面单配置'
             }
-          }
+          },
+          {
+            path: '/basics/warehouse',
+            component: WareHouse,
+            name: 'warehouse',
+            id: 602,
+            meta: {
+              group: '基础配置',
+              level: 2,
+              name: '仓库地址管理'
+            }
+          },
+          {
+            path: '/config/line',
+            name: 'linelist',
+            component: Line,
+            id: 601,
+            meta: {
+              group: '基础配置',
+              level: 2,
+              name: '渠道路线配置'
+            }
+          },
         ]
       },
       {

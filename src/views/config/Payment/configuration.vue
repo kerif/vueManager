@@ -422,7 +422,7 @@ export default {
     background-color: #fff;
   }
   .main-right {
-    padding: 20px;
+    //padding: 20px;
   }
   .add-insurance {
     float: right;
@@ -459,7 +459,7 @@ export default {
     padding: 20px;
   }
   .settings-container {
-    padding: 20px;
+    //padding: 20px;
     .el-tag {
       margin-right: 8px;
     }
