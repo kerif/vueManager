@@ -1,21 +1,42 @@
 <template>
-  <div :class="$store.state.languageCode=='en'?'layoutmenu':''">
+  <div :class="$store.state.languageCode == 'en' ? 'layoutmenu' : ''">
     <div class="navigation-text">
       <div :class="[isCollapse ? 'titles' : 'menu-title']">{{ $t($store.state.menuTitle) }}</div>
       <div @click="switchLeft" class="transfer-left">
-        <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']" style="font-size: 24px"></i>
+        <i
+          :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
+          style="font-size: 24px"
+        ></i>
       </div>
     </div>
     <div class="menus">
-      <el-menu :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path" text-color="#17233D" :router="true" :collapse="isCollapse" active-text-color="#7E8BFF" :unique-opened="true" class="route-menu" @select="onMenuSelect">
+      <el-menu
+        :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
+        text-color="#17233D"
+        :router="true"
+        :collapse="isCollapse"
+        active-text-color="#7E8BFF"
+        :unique-opened="true"
+        class="route-menu"
+        @select="onMenuSelect"
+      >
         <el-submenu v-for="(route, index) in formatRouterMap" :key="route.name" :index="index + ''">
           <template slot="title">
             <!-- <i :class="['iconfont', 'icon-title', route.icon]"></i> -->
-            <img :src="require(`@/assets/${route.icon}.png`)" style="width: 18px;height: 18px;margin-right: 22px;" />
+            <img
+              :src="require(`@/assets/${route.icon}.png`)"
+              style="width: 18px; height: 18px; margin-right: 22px"
+            />
             <span class="menu-title">{{ $t(route.name) }}</span>
           </template>
           <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
-            <el-menu-item :index="childRoute.path" :key="childRoute.name" v-if="childRoute.level === 2" class="route-item" @click="onRoute(route)">
+            <el-menu-item
+              :index="childRoute.path"
+              :key="childRoute.name"
+              v-if="childRoute.level === 2"
+              class="route-item"
+              @click="onRoute(route)"
+            >
               {{ $t(childRoute.name) }}
             </el-menu-item>
           </el-menu-item-group>
@@ -40,15 +61,15 @@ export default {
         },
         {
           key: 4,
-          lists: ['vip','overview','customer','marketing','group','content']
+          lists: ['vip', 'overview', 'customer', 'marketing', 'group', 'content']
         },
         {
           key: 5,
-          lists: ['finance','consumption']
+          lists: ['finance', 'consumption']
         },
         {
           key: 6,
-          lists: ['config', 'language','staff','basics','website']
+          lists: ['config', 'language', 'staff', 'basics', 'website']
         }
       ]
     }
@@ -64,7 +85,7 @@ export default {
     onRoute() {
       // console.log('route', route)
       // console.log('$route', this.$route)
-    },
+    }
   },
   computed: {
     isCollapse() {
@@ -80,28 +101,30 @@ export default {
     },
     formatRouterMap() {
       let formatRouterMap = {}
-      let showMeun = this.showMeunList.filter(item=>item.key===this.menuId)[0].lists
+      let showMeun = this.showMeunList.filter(item => item.key === this.menuId)[0].lists
       this.fileterAfterRouterMap &&
-        this.fileterAfterRouterMap.filter(item => showMeun.includes(item.path)).forEach(item => {
-          item.children.forEach(ele => {
-            if (formatRouterMap[ele.meta.group]) {
-              formatRouterMap[ele.meta.group].children.push({
-                name: ele.meta.name,
-                path: ele.path,
-                level: ele.meta.level
-              })
-            } else {
-              formatRouterMap[ele.meta.group] = {
-                children: [{ name: ele.meta.name, path: ele.path, level: ele.meta.level }],
-                name: ele.meta.group,
-                level: 1,
-                icon: item.icon
+        this.fileterAfterRouterMap
+          .filter(item => showMeun.includes(item.path))
+          .forEach(item => {
+            item.children.forEach(ele => {
+              if (formatRouterMap[ele.meta.group]) {
+                formatRouterMap[ele.meta.group].children.push({
+                  name: ele.meta.name,
+                  path: ele.path,
+                  level: ele.meta.level
+                })
+              } else {
+                formatRouterMap[ele.meta.group] = {
+                  children: [{ name: ele.meta.name, path: ele.path, level: ele.meta.level }],
+                  name: ele.meta.group,
+                  level: 1,
+                  icon: item.icon
+                }
               }
-            }
+            })
           })
-        })
       return formatRouterMap
-    },
+    }
   }
 }
 </script>
