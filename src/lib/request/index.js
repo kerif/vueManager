@@ -2336,6 +2336,11 @@ exports.closeCountryLocation = (id, status) => {
   return $form.put(`countries/${id}/status/${status}`)
 }
 
+// 更多配置 开启或关闭 国家/地区
+exports.setCountryHot = (id, status) => {
+  return $form.put(`countries/${id}/hot/${status}`)
+}
+
 // 更多配置 国家地区 排序
 exports.countryLocationIndex = params => {
   return $form.put('countries/sort-indexes', params)

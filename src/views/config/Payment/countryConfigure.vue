@@ -22,6 +22,22 @@
           </el-table-column>
           <!-- 前缀字符 -->
           <el-table-column prop="name" :label="$t('国家地区')"> </el-table-column>
+          <!-- 是否热门 -->
+          <el-table-column :label="$t('是否热门')">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.hot"
+                @change="setCountryHot($event, scope.row.hot, scope.row.id)"
+                :active-text="$t('是')"
+                :inactive-text="$t('否')"
+                :active-value="1"
+                :inactive-value="0"
+                active-color="#13ce66"
+                inactive-color="gray"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
           <!-- 状态 -->
           <el-table-column :label="$t('状态')">
             <template slot-scope="scope">
@@ -477,6 +493,25 @@ export default {
           }
         })
       }
+    },
+    // 国家地区 热门
+    setCountryHot(event, hot, id) {
+      console.log(event, 'event')
+      this.$request.setCountryHot(id, event).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getCountryList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 确定拖拽 国家地区
     rowUpdate() {
