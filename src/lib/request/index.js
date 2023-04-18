@@ -5617,3 +5617,9 @@ exports.getTrackInfo = params => $form.post('/orders/query', params)
 
 //获取首页数据信息
 exports.getPanelData = () => $form.get(`/statistics/index-count-data`)
+
+//获取台湾件实名认证信息
+exports.getTaiWanInfo = () => $form.get('/api-services/id-verify-tw')
+
+//保存台湾件实名认证
+exports.saveTaiWanInfo = params => $form.put('/api-services/id-verify-tw', params)

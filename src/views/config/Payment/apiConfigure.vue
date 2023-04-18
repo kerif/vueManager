@@ -102,7 +102,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="14" class="text-sty"> {{ $t('51Tracking剩余次数') }}： </el-col>
+              <el-col :span="14" class="text-sty"> {{ $t('51Tracking剩余次数') }}：</el-col>
               <el-col :span="6">
                 <span class="no-sty">
                   {{ trackingData.count && trackingData.count['51tracking'] }}
@@ -166,7 +166,7 @@
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="taiWanRealVisible = true">{{ $t('配置') }}</el-button>
+        <el-button type="primary" @click="showTaiWanDialog">{{ $t('配置') }}</el-button>
       </div>
     </div>
     <div>
@@ -205,34 +205,34 @@
         <div class="taiwan-real-box">
           <el-form label-width="100px" class="real-form" label-position="left" :model="taiWanReal">
             <div class="tip-title">
-              使用前请确保能在<span class="go-other" @click="goOther"
-                >https://eccs.tradevan.com.tw/</span
-              >登录
+              {{ $t('使用前请确保能在')
+              }}<span class="go-other" @click="goOther">https://eccs.tradevan.com.tw/</span
+              >{{ $t('登录') }}
             </div>
             <el-form-item :label="$t('公司统一编号')">
               <el-input v-model="taiWanReal.code" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('使用者账号')">
-              <el-input v-model="taiWanReal.ip" :placeholder="$t('请输入')"></el-input>
+              <el-input v-model="taiWanReal.username" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('使用者密码')" style="margin-bottom: 8px">
               <el-input v-model="taiWanReal.password" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
             <el-form-item label="" style="margin-bottom: 8px">
               <div class="switch-box">
-                <el-switch v-model="taiWanReal.check"> </el-switch>
-                <span>启用申请打包实名认证</span>
+                <el-switch v-model="taiWanReal.check"></el-switch>
+                <span>{{ $t('启用申请打包实名认证') }}</span>
               </div>
             </el-form-item>
             <el-form-item label="" style="margin-bottom: 8px">
               <div class="submit-box">
-                <el-button type="primary" class="sub-btn" @click="submit">{{
-                  $t('保存')
-                }}</el-button>
+                <el-button type="primary" class="sub-btn" @click="submit"
+                  >{{ $t('保存') }}
+                </el-button>
               </div>
             </el-form-item>
             <el-form-item label="" style="margin-bottom: 8px">
-              <span class="red-font">没有帐号？按需收费，请联系销售人员</span>
+              <span class="red-font">{{ $t('没有帐号？按需收费，请联系销售人员') }}</span>
             </el-form-item>
           </el-form>
         </div>
@@ -252,7 +252,7 @@ export default {
       value1: false,
       taiWanReal: {
         code: null,
-        ip: null,
+        username: null,
         password: null,
         check: null
       },
@@ -264,14 +264,31 @@ export default {
   },
   created() {},
   methods: {
+    showTaiWanDialog() {
+      this.taiWanRealVisible = true
+      this.$request.getTaiWanInfo().then(res => {
+        console.log(res.data)
+        this.taiWanReal.code = res.data.no
+        this.taiWanReal.username = res.data.username
+        this.taiWanReal.password = res.data.password
+        this.taiWanReal.check = res.data.enabled ? true : false
+      })
+    },
     goOther() {
       window.open('https://eccs.tradevan.com.tw/')
     },
     submit() {
       let params = {
-        ...this.taiWanReal
+        no: this.taiWanReal.code,
+        username: this.taiWanReal.username,
+        password: this.taiWanReal.password,
+        enabled: this.taiWanReal.check ? 1 : 0
       }
       console.log(params)
+      this.$request.saveTaiWanInfo(params).then(res => {
+        this.$message.success(res.msg)
+        this.taiWanRealVisible = false
+      })
     }
   }
 }
@@ -281,109 +298,136 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+
   .item {
     display: flex;
     flex-direction: column;
     padding: 20px;
     border: 1px solid #f5f5f5;
     border-radius: 10px;
+
     .item-top {
       display: grid;
       grid-template-columns: 1fr 3fr;
       align-items: center;
       gap: 20px;
     }
+
     .configureBtn {
       text-align: right;
       margin-top: 10px;
     }
   }
+
   .icon-sty {
     font-size: 60px;
   }
+
   .sms-sty {
     margin-top: 10px;
   }
+
   .service-sty {
     font-size: 16px;
     font-weight: 900;
   }
+
   .system-sty {
     color: #15b23e;
   }
+
   .third-sty {
     color: #3540a5;
   }
+
   .no-sty {
     color: #df6062;
   }
+
   .text-sty {
     font-size: 15px;
   }
+
   .icon-china {
     font-size: 22px;
     color: #15b23e;
     padding-left: 10px;
     vertical-align: middle;
   }
+
   .icon-int {
     font-size: 22px;
     color: #df6062;
     padding-left: 10px;
     vertical-align: middle;
   }
+
   .sms-top {
     font-size: 19px;
     font-weight: 900;
   }
 }
+
 ::v-deep.taiwan-real {
   .el-dialog {
     width: 700px;
+
     .el-dialog__body {
       padding: 20px;
     }
   }
+
   .el-dialog__header {
     background-color: #0e102a;
   }
+
   .el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
+
   .el-dialog__close {
     color: #fff;
   }
+
   .uploadTmp {
     height: 150px;
     margin-top: -10px;
   }
+
   .uploadData {
     display: inline-block;
     margin: 0 5px 0 0;
   }
+
   .taiwan-real-box {
     display: flex;
     justify-content: center;
+
     .real-form {
       width: 70%;
+
       .red-font {
         color: red;
       }
     }
+
     .tip-title {
       font-size: 16px;
       margin-bottom: 16px;
     }
+
     .go-other {
       cursor: pointer;
       color: #3777ff;
     }
+
     .switch-box {
       span {
         padding-left: 16px;
       }
     }
+
     .submit-box {
       .sub-btn {
         width: 100%;

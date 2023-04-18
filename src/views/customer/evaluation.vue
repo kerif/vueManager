@@ -789,6 +789,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative!important;
       }
       .content {
         padding: 10px 0;

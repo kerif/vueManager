@@ -154,7 +154,7 @@ export default {
         package_warning: 0,
         prop_type: 0,
         package_auto_code: ''
-      },
+      }
     }
   },
   created() {
@@ -203,8 +203,10 @@ export default {
         onEnd: ({ newIndex, oldIndex }) => {
           if (oldIndex === newIndex) return false
           console.log(oldIndex, newIndex)
+          console.log('前', this.typeSendData)
           const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
           this.typeSendData.splice(newIndex, 0, oldItem)
+          console.log('后', this.typeSendData)
         }
       })
     },
