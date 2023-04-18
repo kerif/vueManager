@@ -68,6 +68,9 @@ export default {
         this.ruleForm.cn_name = this.name
         this.ruleForm.color = this.color ?this.color: 'rgba(0, 0, 0, 0)'
         this.ruleForm.font_color = this.font_color ?this.font_color: 'rgba(99, 111, 122,1)'
+      }else{
+        this.ruleForm.color = 'rgba(0, 0, 0, 0)'
+        this.ruleForm.font_color = 'rgba(99, 111, 122,1)'
       }
     },
     confirm() {
