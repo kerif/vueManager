@@ -2771,6 +2771,7 @@ export default {
   请输入货位号: 'Please enter the location number',
   货位号: 'Location number',
   容量: 'volume',
+  是否热门: 'Hot',
   请输入包裹单号或客户ID: 'Please enter the package tracking number or customer ID',
   已存放天: 'Stored for days'
 }
