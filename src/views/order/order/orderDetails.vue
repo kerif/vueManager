@@ -136,7 +136,11 @@
             <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('物品属性') }}</span>
               <span v-for="item in form.props" :key="item.id">
-                {{ item.cn_name }}
+                <span
+                  class="prop-box"
+                  :style="'background-color:' + item.color + ';color:' + item.font_color"
+                  >{{ item.cn_name }}</span
+                >
               </span>
             </el-col>
           </el-row>

@@ -28,6 +28,8 @@ const dynamicAddRouter = (router, next, to) => {
     })
     store.commit('savePermissionStatus', true) // 标记筛选完成
     console.log(filteredRouterMap[0])
+    console.log('filteredRouterMap[0]', filteredRouterMap[0])
+    console.log('isPermissionFilterArr', isPermissionFilterArr)
     if (to.path !== '/no_permission' && matchRoute(list[1], to.path)) {
       // 路由无权限
       next('/no_permission')
@@ -39,10 +41,16 @@ const dynamicAddRouter = (router, next, to) => {
 
 export default router => {
   return (to, from, next) => {
+    console.log('to', to)
+    console.log('from', from)
+    console.log('next', next)
+    console.log('store.state.isPermissionFilter', store.state.isPermissionFilter)
     if (store.state.token) {
       if (!store.state.isPermissionFilter) {
+        console.log('我进来了噢')
         dynamicAddRouter(router, next, to)
       } else {
+        console.log('我走下面了')
         if (to.path === '/home/panel') {
           if (!store.state.isPermissionFilterArr.includes(101)) {
             next({ path: '/home/reset-password' })

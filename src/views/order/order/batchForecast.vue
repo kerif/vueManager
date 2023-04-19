@@ -57,7 +57,13 @@
           <el-table-column :label="$t('物品价值')" prop="package_value"></el-table-column>
           <el-table-column :label="$t('物品属性')">
             <template slot-scope="scope">
-              <span v-for="item in scope.row.prop" :key="item.id">{{ item.name }}</span>
+              <span v-for="item in scope.row.prop" :key="item.id"
+                ><span
+                  class="prop-box"
+                  :style="'background-color:' + item.color + ';color:' + item.font_color"
+                  >{{ item.cn_name }}</span
+                ></span
+              >
             </template>
           </el-table-column>
           <el-table-column :label="$t('商品备注')" prop="remark"></el-table-column>
