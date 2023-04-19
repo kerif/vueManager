@@ -30,7 +30,7 @@ export default {
       permissionMenu: [],
       defaultShowNodes: [],
       defaultProps: {
-        children: 'child',
+        children: 'children',
         label: 'name'
       }
     }

@@ -75,7 +75,7 @@
             <div class="operate-box" @click="fastDelivery">{{ $t('快速出库') }}</div>
           </el-col>
         </el-row>
-        <el-row :gutter="[20]" style='margin-top: 8px'>
+        <el-row :gutter="20" style='margin-top: 8px'>
           <el-col :span="8">
             <div class="operate-box" @click="fastTransport">{{ $t('快速转运') }}</div>
           </el-col>

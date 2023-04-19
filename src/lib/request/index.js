@@ -1335,12 +1335,18 @@ exports.deleteApproved = id => {
   return $form.delete(`agent-applications/${id}`)
 }
 // 获取管理员组权限设置
+// exports.getPermissions = id => {
+//   return $form.get(`admin-groups/${id}/permissions`)
+// }
 exports.getPermissions = id => {
-  return $form.get(`admin-groups/${id}/permissions`)
+  return $form.get(`/admin-groups/${id}/permissions/v4`)
 }
 // 修改员工组权限
-exports.updatePermissions = (id, params) => {
-  return $form.put(`admin-groups/${id}/permissions`, params)
+// exports.updatePermissions = (id, params) => {
+//   return $form.put(`admin-groups/${id}/permissions`, params)
+// }
+exports.updatePermissions = (id, params, config) => {
+  return $json.put(`admin-groups/${id}/permissions/v4`, params, config)
 }
 // 员工组 获取单条所属仓库
 exports.getAffiliation = id => {
@@ -3953,7 +3959,7 @@ exports.getResetCode = phone => $form.post('reset-password/apply', { phone })
 exports.resetPassword = params => $json.put('reset-password', params)
 
 // 获取权限
-exports.getCurrentUserPermissions = () => $form.get('menu-tree')
+exports.getCurrentUserPermissions = () => $form.get('menu-tree/v4')
 
 // 获取是否显示拼团配置
 exports.getMe = () => $form.get('me')

@@ -400,7 +400,7 @@
                     <div>
                       <span class="tip">{{ $t('邮编') }}：</span
                       ><span>{{
-                        scope.row.address.area ? scope.row.address.area.postcode : ''
+                        scope.row.address ? scope.row.address.postcode : ''
                       }}</span>
                     </div>
                     <div>

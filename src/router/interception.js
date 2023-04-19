@@ -11,10 +11,17 @@ const dynamicAddRouter = (router, next, to) => {
   let filteredRouterMap = clone['array'](dynamicRouters)
   request.getCurrentUserPermissions().then(res => {
     res.data.map(item => {
-      item.child.map(childrenItem => {
-        if (childrenItem.child.length >= 1 && childrenItem.child[0].enabled === true) {
+      console.log('item.tag', item.tag)
+      item.children.map(childrenItem => {
+        if (childrenItem.children.length >= 1 && childrenItem.children[0].enabled === 1) {
           isPermissionFilterArr.push(childrenItem.tag, item.tag)
+          console.log('item.tag', childrenItem.tag, item.tag)
         }
+        childrenItem.children.map(grandsonItem => {
+          if (grandsonItem.children.length >= 1 && grandsonItem.children[0].enabled === 1) {
+            isPermissionFilterArr.push(grandsonItem.tag)
+          }
+        })
       })
     })
     // 获取有权限和无权限路由
@@ -28,11 +35,11 @@ const dynamicAddRouter = (router, next, to) => {
     })
     store.commit('savePermissionStatus', true) // 标记筛选完成
     console.log(filteredRouterMap[0])
-    console.log('filteredRouterMap[0]', filteredRouterMap[0])
+    console.log('filteredRouterMap[0]', filteredRouterMap)
     console.log('isPermissionFilterArr', isPermissionFilterArr)
     if (to.path !== '/no_permission' && matchRoute(list[1], to.path)) {
       // 路由无权限
-      next('/no_permission')
+      next('/home/reset-password')
     } else {
       next({ path: to.path, query: to.query })
     }
@@ -45,6 +52,7 @@ export default router => {
     console.log('from', from)
     console.log('next', next)
     console.log('store.state.isPermissionFilter', store.state.isPermissionFilter)
+    console.log('判断是不是没权限', matchRoute(store.state.noPermmissionArr, to.path))
     if (store.state.token) {
       if (!store.state.isPermissionFilter) {
         console.log('我进来了噢')
@@ -52,13 +60,16 @@ export default router => {
       } else {
         console.log('我走下面了')
         if (to.path === '/home/panel') {
-          if (!store.state.isPermissionFilterArr.includes(101)) {
+          console.log('??????home/panel')
+          if (!store.state.isPermissionFilterArr.includes(1000)) {
             next({ path: '/home/reset-password' })
+            console.log('??????home/panel22222', to.path)
           }
         } else if (
           to.path !== '/no_permission' &&
           matchRoute(store.state.noPermmissionArr, to.path)
         ) {
+          console.log('????????')
           next('/no_permission')
         }
         next()

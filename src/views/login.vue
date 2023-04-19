@@ -53,40 +53,55 @@
                 ><strong>{{ $t('欢迎使用') }}</strong></span
               >
               <div class="go-sty">
-                <span @click="changeWelcome(3)" v-if="$route.query.register">{{
-                  $t('去注册')
-                }}</span>
+<!--                <span @click="changeWelcome(3)" v-if="$route.query.register">{{-->
+<!--                  $t('去注册')-->
+<!--                }}</span>-->
+                <span @click="changeWelcome(3)" >{{
+                    $t('去注册')
+                  }}</span>
               </div>
             </div>
             <el-form>
               <el-form-item>
                 <el-input
-                  prefix-icon="el-icon-user"
                   :placeholder="$t('请输入邮箱')"
                   v-model.trim="userInfo.username"
-                ></el-input>
+                  class='login-input'
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <el-input
                   type="password"
                   :placeholder="$t('请输入密码')"
-                  prefix-icon="el-icon-unlock"
+                  class='login-input'
                   v-model.trim="userInfo.password"
                   @keyup.native.enter="onLogin"
-                ></el-input>
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%;'>
+                    <i class="el-icon-unlock" style='font-size: 22px;padding-right: 8px'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <el-col :span="12">
                   <el-input
                     type="text"
                     :placeholder="$t('请输入验证码')"
-                    prefix-icon="el-icon-unlock"
                     v-model="userInfo.captcha"
                     @keyup.native.enter="onLogin"
-                  ></el-input>
+                    class='login-input'
+                  >
+                    <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                      <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                    </div>
+                  </el-input>
                 </el-col>
                 <el-col :span="11" :offset="1">
-                  <img :src="captha" @click="getCaptcha" class="captha-sty" />
+                  <img style='height: 50px' :src="captha" @click="getCaptcha" class="captha-sty" />
                 </el-col>
               </el-form-item>
               <el-form-item>
@@ -97,7 +112,7 @@
               </div> -->
               </el-form-item>
               <el-form-item>
-                <el-button :loading="$store.state.btnLoading" class="login-btn" @click="onLogin">{{
+                <el-button size='medium' :loading="$store.state.btnLoading" class="login-btn" @click="onLogin">{{
                   $t('登录')
                 }}</el-button>
                 <div class="forget-sty">
@@ -141,10 +156,13 @@
             <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
               <el-form-item prop="phone">
                 <el-input
-                  prefix-icon="el-icon-user"
                   :placeholder="$t('请输入您的手机号')"
                   v-model="forget.phone"
+                  class='login-input'
                 >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  </div>
                   <span v-show="showPsd" slot="append" @click="onResetCode">{{
                     $t('获取验证码')
                   }}</span>
@@ -157,9 +175,13 @@
                 <el-input
                   type="text"
                   :placeholder="$t('请输入验证码')"
-                  prefix-icon="el-icon-unlock"
                   v-model="forget.code"
-                ></el-input>
+                  class='login-input'
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <el-button
@@ -180,12 +202,14 @@
                   :placeholder="$t('请输入新密码')"
                   v-model="forget.new_password"
                   type="password"
+                  class="login-input"
                 ></el-input>
               </el-form-item>
               <el-form-item prop="confirm_new_password">
                 <el-input
                   :placeholder="$t('请确认您的密码')"
                   type="password"
+                  class="login-input"
                   v-model="forget.confirm_new_password"
                 ></el-input>
               </el-form-item>
@@ -242,34 +266,46 @@
             <el-form :model="reAccount" :rules="rules" ref="registerForm">
               <el-form-item prop="email">
                 <el-input
-                  prefix-icon="el-icon-user"
                   :placeholder="$t('请输入邮箱')"
                   v-model="reAccount.email"
-                ></el-input>
+                  class='login-input'
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item prop="password">
                 <el-input
                   type="password"
                   :placeholder="$t('请输入820位密码区分大小写')"
-                  prefix-icon="el-icon-unlock"
+                  class='login-input'
                   v-model="reAccount.password"
-                ></el-input>
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item prop="confirm_password">
                 <el-input
                   type="password"
                   :placeholder="$t('确认密码')"
-                  prefix-icon="el-icon-unlock"
+                  class='login-input'
                   v-model="reAccount.confirm_password"
-                ></el-input>
+                >
+                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
+                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  </div>
+                </el-input>
               </el-form-item>
               <el-form-item prop="phone">
-                <el-input :placeholder="$t('请输入11位手机号码')" v-model="reAccount.phone">
+                <el-input :placeholder="$t('请输入11位手机号码')" class='login-input' v-model="reAccount.phone">
                   <template slot="prepend">+86</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="code">
-                <el-input :placeholder="$t('请输入验证码')" v-model="reAccount.code">
+                <el-input :placeholder="$t('请输入验证码')" class='login-input' v-model="reAccount.code">
                   <span v-show="show" slot="append" @click="onRegisterCode">{{
                     $t('获取验证码')
                   }}</span>
@@ -351,6 +387,7 @@
 </template>
 <script>
 import JSEncrypt from 'jsencrypt'
+import store from '@/store'
 export default {
   name: 'login',
   data() {
@@ -522,6 +559,7 @@ export default {
               })
               this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
               this.$store.commit('saveName', res.data.email)
+              this.$store.commit('savePermissionStatus', false)
               this.centerDialogVisible = false
               this.$router.push('/')
             } else {
@@ -789,11 +827,13 @@ export default {
     background-color: #fff;
     border-radius: 4px;
     width: 1000px;
-    height: 450px;
+    height: 555px;
     position: absolute;
+    border-radius: 10px;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2);
   }
   .info-box {
     display: inline-block;
@@ -801,9 +841,33 @@ export default {
     transform: translateY(-50%);
     resize: both;
     top: 50%;
-    right: 11%;
-    width: 30%;
+    right: 4%;
+    width: 42%;
     // margin: 30px auto;
+    .info-title{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .login-input {
+      input{
+        height: 50px;
+        font-size: 18px;
+        padding-left: 35px;
+      }
+    }
+    .el-checkbox__inner{
+      width: 15px;
+      height: 15px;
+    }
+    .step-box{
+      font-size: 22px;
+      display: flex;
+      justify-content: center;
+    }
+    .register-email{
+      font-size: 20px;
+    }
   }
   .info-title {
     // font-size: 18px;
@@ -820,7 +884,7 @@ export default {
   }
   .welcome-sty {
     display: inline-block;
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 900;
   }
   .login-footer {
@@ -840,15 +904,15 @@ export default {
     margin-right: 5px;
   }
   .info-text {
-    font-size: 12px;
+    font-size: 16px;
   }
   .login-btn {
     width: 100%;
-    height: 40px;
+    height: 50px;
     color: #fff;
     border-color: #35b85a;
     background-color: #35b85a;
-    border-radius: 20px;
+    border-radius: 5px;
   }
   .forget {
     float: right;
@@ -939,11 +1003,16 @@ export default {
   }
   .main-container {
     position: relative;
+    width: 100%;
+    height: 100%;
   }
   .login-logo {
-    width: 500px;
-    height: 450px;
+    width: 50%;
+    height: 100%;
     background: url('../assets/v4-log.png') no-repeat;
+    border-radius: 10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
   .forget-sty {
     text-align: center;

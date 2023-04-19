@@ -202,6 +202,7 @@ import remoteInfo from './remoteInfo.vue'
 import packpageRemark from './packpageRemark'
 import orderRemark from './orderRemark'
 import logisticsInfo from './logisticsInfo'
+import followWx from './followWx'
 
 
 const InviteController = Vue.extend(inviteList)
@@ -405,6 +406,7 @@ const remoteInfoController = Vue.extend(remoteInfo)
 const packpageRemarkController = Vue.extend(packpageRemark)
 const orderRemarkController = Vue.extend(orderRemark)
 const logisticsInfoController = Vue.extend(logisticsInfo)
+const followWxController = Vue.extend(followWx)
 
 const mixin = {
   data() {
@@ -1829,6 +1831,13 @@ function initInstance(type) {
     //订单备注
     case 'logisticsInfo':
       instance = new logisticsInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //关注公众号
+    case 'followWx':
+      instance = new followWxController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
