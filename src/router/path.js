@@ -390,14 +390,14 @@ export default [
         redirect: 'home/panel',
         component: LayoutContainer,
         icon: 'icon-ico_home',
-        id: 2000,
+        id: 1000,
         children: [
           {
             path: '/home/panel',
             name: 'panel',
             icon: '',
             component: Panel,
-            id: 2100,
+            id: 1100,
             meta: {
               level: 2,
               group: '首页',

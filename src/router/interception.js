@@ -7,7 +7,7 @@ import dynamicRouters from './path'
 const whiteList = ['login', 'NotFound'] // 不重定向白名单
 
 const dynamicAddRouter = (router, next, to) => {
-  let isPermissionFilterArr = [2000, 102] // 102 为修改密码的页面
+  let isPermissionFilterArr = [1000, 102] // 102 为修改密码的页面
   let filteredRouterMap = clone['array'](dynamicRouters)
   request.getCurrentUserPermissions().then(res => {
     res.data.map(item => {
@@ -62,7 +62,7 @@ export default router => {
         console.log('我走下面了')
         if (to.path === '/home/panel') {
           console.log('??????home/panel')
-          if (!store.state.isPermissionFilterArr.includes(1000)) {
+          if (!store.state.isPermissionFilterArr.includes(1100)) {
             next({ path: '/home/reset-password' })
             console.log('??????home/panel22222', to.path)
           }
@@ -74,7 +74,7 @@ export default router => {
           console.log('????????')
           next('/no_permission')
         } else if (to.path === '/') {
-          next('/home/panel')
+          next({ path: '/home/panel' })
         }
         next()
       }
