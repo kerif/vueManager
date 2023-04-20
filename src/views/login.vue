@@ -1,32 +1,36 @@
 <template>
   <div class="login-container">
     <div class="login-header">
-      <img
-        v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')"
-        class="img-sty img-logo"
-        :src="$baseUrl.IMAGE_URL + customData.login_logo"
-        alt=""
-      />
-      <img
-        v-else-if="
-          this.hostname.includes('haiouoms') ||
-          this.hostname.includes('localhost') ||
-          !customData.login_logo
-        "
-        src="../assets/logo-top.png"
-        class="img-sty"
-      />
-      <span v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">{{
-        customData.login_title
-      }}</span>
-      <span
-        v-else-if="
-          this.hostname.includes('haiouoms') ||
-          this.hostname.includes('localhost') ||
-          !customData.login_title
-        "
-        >{{ $t('海鸥集运管理系统') }}</span
-      >
+      <div>
+        <img
+          v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')"
+          class="img-sty img-logo"
+          :src="$baseUrl.IMAGE_URL + customData.login_logo"
+          alt=""
+        />
+        <img
+          v-else-if="
+            this.hostname.includes('haiouoms') ||
+            this.hostname.includes('localhost') ||
+            !customData.login_logo
+          "
+          src="../assets/logo-top.png"
+          class="img-sty"
+        />
+      </div>
+      <div>
+        <span v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">{{
+          customData.login_title
+        }}</span>
+        <span
+          v-else-if="
+            this.hostname.includes('haiouoms') ||
+            this.hostname.includes('localhost') ||
+            !customData.login_title
+          "
+          >{{ $t('海鸥集运管理系统') }}</span
+        >
+      </div>
     </div>
     <div class="main">
       <!-- 登陆页面 -->
@@ -49,27 +53,29 @@
           ></div>
           <div class="info-box">
             <div class="info-title">
-              <span class="welcome-sty"
-                ><strong>{{ $t('欢迎使用') }}</strong></span
-              >
-              <div class="go-sty">
-<!--                <span @click="changeWelcome(3)" v-if="$route.query.register">{{-->
-<!--                  $t('去注册')-->
-<!--                }}</span>-->
-                <span @click="changeWelcome(3)" >{{
-                    $t('去注册')
-                  }}</span>
-              </div>
+              <!--              <span class="welcome-sty"-->
+              <!--                ><strong>{{ $t('欢迎使用') }}</strong></span-->
+              <!--              >-->
+              <!--              <div class="go-sty">-->
+              <!--                &lt;!&ndash;                <span @click="changeWelcome(3)" v-if="$route.query.register">{{&ndash;&gt;-->
+              <!--                &lt;!&ndash;                  $t('去注册')&ndash;&gt;-->
+              <!--                &lt;!&ndash;                }}</span>&ndash;&gt;-->
+              <!--                <span @click="changeWelcome(3)">{{ $t('去注册') }}</span>-->
+              <!--              </div>-->
+              <el-tabs v-model="activeType" @tab-click="changeType">
+                <el-tab-pane label="登录" name="1"></el-tab-pane>
+                <el-tab-pane label="注册" name="2"></el-tab-pane>
+              </el-tabs>
             </div>
             <el-form>
               <el-form-item>
                 <el-input
                   :placeholder="$t('请输入邮箱')"
                   v-model.trim="userInfo.username"
-                  class='login-input'
+                  class="login-input"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-user" style="font-size: 20px"></i>
                   </div>
                 </el-input>
               </el-form-item>
@@ -77,47 +83,58 @@
                 <el-input
                   type="password"
                   :placeholder="$t('请输入密码')"
-                  class='login-input'
+                  class="login-input"
                   v-model.trim="userInfo.password"
                   @keyup.native.enter="onLogin"
+                  :show-password="true"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%;'>
-                    <i class="el-icon-unlock" style='font-size: 22px;padding-right: 8px'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-unlock" style="font-size: 20px; padding-right: 8px"></i>
                   </div>
                 </el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item style="margin-bottom: 0">
                 <el-col :span="12">
                   <el-input
                     type="text"
                     :placeholder="$t('请输入验证码')"
                     v-model="userInfo.captcha"
                     @keyup.native.enter="onLogin"
-                    class='login-input'
+                    class="login-input"
                   >
-                    <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                      <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                    <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                      <i class="el-icon-unlock" style="font-size: 20px"></i>
                     </div>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="1">
-                  <img style='height: 50px' :src="captha" @click="getCaptcha" class="captha-sty" />
+                  <img
+                    style="height: 50px; width: 100%"
+                    :src="captha"
+                    @click="getCaptcha"
+                    class="captha-sty"
+                  />
                 </el-col>
               </el-form-item>
-              <el-form-item>
+
+              <div class="operate-line">
                 <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
-                <span class="info-text">{{ $t('保持登录') }}</span>
-                <!-- <div class="forget">
-                <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
-              </div> -->
-              </el-form-item>
-              <el-form-item>
-                <el-button size='medium' :loading="$store.state.btnLoading" class="login-btn" @click="onLogin">{{
-                  $t('登录')
-                }}</el-button>
-                <div class="forget-sty">
+                <span>{{ $t('保持登录') }}</span>
+                <div class="forget">
                   <span @click="changeWelcome(2)">{{ $t('忘记密码') }}</span>
                 </div>
+              </div>
+              <el-form-item>
+                <el-button
+                  size="medium"
+                  :loading="$store.state.btnLoading"
+                  class="login-btn"
+                  @click="onLogin"
+                  >{{ $t('登录') }}</el-button
+                >
+                <!--                <div class="forget-sty">-->
+                <!--                  <span @click="changeWelcome(2)">{{ $t('忘记密码') }}</span>-->
+                <!--                </div>-->
               </el-form-item>
               <!-- <div class="register">
               <p @click="changeWelcome(3)">{{$t('注册账户')}}</p>
@@ -127,23 +144,31 @@
         </div>
       </div>
       <!-- 忘记密码 -->
-      <div class="login-main" v-show="welcome === 2">
+      <div class="forget-main" v-show="welcome === 2">
         <div class="main-container">
-          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">
-            <img
-              :src="$baseUrl.IMAGE_URL + customData.login_image"
-              style="width: 500px; height: 450px"
-              alt=""
-            />
+          <!--          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">-->
+          <!--            <img-->
+          <!--              :src="$baseUrl.IMAGE_URL + customData.login_image"-->
+          <!--              style="width: 500px; height: 450px"-->
+          <!--              alt=""-->
+          <!--            />-->
+          <!--          </div>-->
+          <!--          <div-->
+          <!--            v-else-if="-->
+          <!--              this.hostname.includes('haiouoms') ||-->
+          <!--              this.hostname.includes('localhost') ||-->
+          <!--              !customData.login_image-->
+          <!--            "-->
+          <!--            class="login-logo"-->
+          <!--          ></div>-->
+          <div class="forget-title" v-show="forgetStep !== 3">
+            <div>
+              {{ $t('找回密码') }}
+            </div>
+            <div class="go-login">
+              {{ $t('记起密码') }}？<span @click="changeWelcome(1)">{{ $t('登录') }}</span>
+            </div>
           </div>
-          <div
-            v-else-if="
-              this.hostname.includes('haiouoms') ||
-              this.hostname.includes('localhost') ||
-              !customData.login_image
-            "
-            class="login-logo"
-          ></div>
           <div class="info-box">
             <div class="step-box">
               <span :class="['step-item', { select: forgetStep <= 3 }]">{{ $t('验证身份') }}</span>
@@ -158,10 +183,10 @@
                 <el-input
                   :placeholder="$t('请输入您的手机号')"
                   v-model="forget.phone"
-                  class='login-input'
+                  class="login-input"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-user" style="font-size: 20px"></i>
                   </div>
                   <span v-show="showPsd" slot="append" @click="onResetCode">{{
                     $t('获取验证码')
@@ -176,10 +201,10 @@
                   type="text"
                   :placeholder="$t('请输入验证码')"
                   v-model="forget.code"
-                  class='login-input'
+                  class="login-input"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-unlock" style="font-size: 20px"></i>
                   </div>
                 </el-input>
               </el-form-item>
@@ -191,9 +216,9 @@
                   >{{ $t('下一步') }}</el-button
                 >
               </el-form-item>
-              <div class="register">
-                <p @click="changeWelcome(1)">{{ $t('返回登录') }}</p>
-              </div>
+              <!--              <div class="register">-->
+              <!--                <p @click="changeWelcome(1)">{{ $t('返回登录') }}</p>-->
+              <!--              </div>-->
             </el-form>
             <!-- 忘记密码第二步：重置登录密码 -->
             <el-form v-show="forgetStep === 2" :model="forget" :rules="rules" ref="resetForm">
@@ -236,42 +261,48 @@
         </div>
       </div>
       <!-- 注册账号 -->
-      <div class="login-main" v-show="welcome === 3">
+      <div class="register-main" v-show="welcome === 3">
         <div class="main-container">
-          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">
-            <img
-              :src="$baseUrl.IMAGE_URL + customData.login_image"
-              style="width: 500px; height: 450px"
-              alt=""
-            />
-          </div>
-          <div
-            v-else-if="
-              this.hostname.includes('haiouoms') ||
-              this.hostname.includes('localhost') ||
-              !customData.login_image
-            "
-            class="login-logo"
-          ></div>
+          <!--          <div v-if="!this.hostname.includes('haiouoms') && !this.hostname.includes('localhost')">-->
+          <!--            <img-->
+          <!--              :src="$baseUrl.IMAGE_URL + customData.login_image"-->
+          <!--              style="width: 500px; height: 450px"-->
+          <!--              alt=""-->
+          <!--            />-->
+          <!--          </div>-->
+          <!--          <div-->
+          <!--            v-else-if="-->
+          <!--              this.hostname.includes('haiouoms') ||-->
+          <!--              this.hostname.includes('localhost') ||-->
+          <!--              !customData.login_image-->
+          <!--            "-->
+          <!--            class="login-logo"-->
+          <!--          ></div>-->
+
           <div class="info-box">
             <!-- <p class="info-title">{{$t('注册')}}</p> -->
             <div class="info-title">
-              <span class="welcome-sty"
-                ><strong>{{ $t('注册') }}</strong></span
-              >
-              <div class="go-sty">
-                <span @click="changeWelcome(1)">{{ $t('去登录') }}</span>
-              </div>
+              <!--              <span class="welcome-sty"-->
+              <!--                ><strong>{{ $t('注册') }}</strong></span-->
+              <!--              >-->
+              <!--              <div class="go-sty">-->
+              <!--                <span @click="changeWelcome(1)">{{ $t('去登录') }}</span>-->
+              <!--              </div>-->
+              <el-tabs v-model="activeType" @tab-click="changeType">
+                <el-tab-pane label="登录" name="1"></el-tab-pane>
+                <el-tab-pane label="注册" name="2"></el-tab-pane>
+              </el-tabs>
             </div>
+            <div class='tip-red'>当前页面注册的是新的集运公司账号</div>
             <el-form :model="reAccount" :rules="rules" ref="registerForm">
               <el-form-item prop="email">
                 <el-input
                   :placeholder="$t('请输入邮箱')"
                   v-model="reAccount.email"
-                  class='login-input'
+                  class="login-input"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-user" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-user" style="font-size: 20px"></i>
                   </div>
                 </el-input>
               </el-form-item>
@@ -279,11 +310,11 @@
                 <el-input
                   type="password"
                   :placeholder="$t('请输入820位密码区分大小写')"
-                  class='login-input'
+                  class="login-input"
                   v-model="reAccount.password"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-unlock" style="font-size: 20px"></i>
                   </div>
                 </el-input>
               </el-form-item>
@@ -291,21 +322,29 @@
                 <el-input
                   type="password"
                   :placeholder="$t('确认密码')"
-                  class='login-input'
+                  class="login-input"
                   v-model="reAccount.confirm_password"
                 >
-                  <div slot="prefix" style='display: flex;align-items: center;height: 100%'>
-                    <i class="el-icon-unlock" style='font-size: 22px;'></i>
+                  <div slot="prefix" style="display: flex; align-items: center; height: 100%">
+                    <i class="el-icon-unlock" style="font-size: 20px"></i>
                   </div>
                 </el-input>
               </el-form-item>
               <el-form-item prop="phone">
-                <el-input :placeholder="$t('请输入11位手机号码')" class='login-input' v-model="reAccount.phone">
+                <el-input
+                  :placeholder="$t('请输入11位手机号码')"
+                  class="login-input"
+                  v-model="reAccount.phone"
+                >
                   <template slot="prepend">+86</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="code">
-                <el-input :placeholder="$t('请输入验证码')" class='login-input' v-model="reAccount.code">
+                <el-input
+                  :placeholder="$t('请输入验证码')"
+                  class="login-input"
+                  v-model="reAccount.code"
+                >
                   <span v-show="show" slot="append" @click="onRegisterCode">{{
                     $t('获取验证码')
                   }}</span>
@@ -348,6 +387,25 @@
         </div>
       </div>
       <div class="login-footer">
+        <div class="qrcode-list">
+          <div slot="reference" class='code-icon' @click='uploadDesktop'>
+            <i class="iconfont icon-diannaofuben desktop-sty"></i>
+          </div>
+          <el-popover placement="top" trigger="hover">
+            <div slot="reference" class='code-icon'>
+              <i class="iconfont icon-anzhuo anzhuo-sty"></i>
+            </div>
+            <div>
+              <img style="width: 150px; height: 150px" src="../assets/android.png" />
+            </div>
+          </el-popover>
+          <el-popover placement="top" trigger="hover">
+            <div slot="reference" class='code-icon'>
+              <i class="iconfont icon-pingguo ios-sty"></i>
+            </div>
+            <img style="width: 150px; height: 150px" src="../assets/ios.png" />
+          </el-popover>
+        </div>
         <div class="language-sty">
           <p>
             <span :class="{ active: languageCode === 'zhCN' }" @click="languageCut('zhCN')"
@@ -482,7 +540,8 @@ export default {
           { required: true, validator: validatePass2, trigger: 'blur' },
           { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ]
-      }
+      },
+      activeType: '1'
     }
   },
   computed: {
@@ -505,6 +564,18 @@ export default {
     }
   },
   methods: {
+    uploadDesktop() {
+      let url = 'http://update.tongxiao.tech/jiyun_v3/update.html'
+      window.open(url)
+    },
+    //切换登录注册
+    changeType() {
+      if (this.activeType === '1') {
+        this.changeWelcome(1)
+      } else {
+        this.changeWelcome(3)
+      }
+    },
     getInit() {
       this.hostname = location.hostname
       this.$request.initConfig({ domain: location.hostname }).then(res => {
@@ -812,13 +883,20 @@ export default {
   // position: relative;
   overflow: hidden;
   .login-header {
-    text-align: left;
+    text-align: center;
     color: #3540a5;
     // padding-top: 10px;
     font-size: 18px;
     padding: 10px;
     font-weight: bold;
     // border-bottom: 1px solid #4A55B7;
+    background-color: #efefef;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .app-name {
     font-size: 35px;
@@ -834,6 +912,63 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2);
+    .operate-line {
+      margin-bottom: 40px;
+    }
+  }
+  .register-main {
+    background-color: #fff;
+    border-radius: 4px;
+    width: 500px;
+    height: 555px;
+    position: absolute;
+    border-radius: 10px;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2);
+    .info-box {
+      width: 90%;
+      .info-title{
+        margin: 0;
+      }
+      .tip-red{
+        color: red;
+        margin-bottom: 16px;
+        font-size: 14px;
+      }
+    }
+  }
+  .forget-main {
+    background-color: #fff;
+    border-radius: 4px;
+    width: 400px;
+    height: 555px;
+    position: absolute;
+    border-radius: 10px;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2);
+    .forget-title {
+      width: 90%;
+      position: absolute;
+      right: 5%;
+      padding-top: 16px;
+      font-size: 24px;
+      font-weight: 500;
+      .go-login {
+        font-size: 14px;
+        font-weight: normal;
+        span {
+          color: #3641a3;
+          cursor: pointer;
+        }
+      }
+    }
+    .info-box {
+      width: 90%;
+    }
   }
   .info-box {
     display: inline-block;
@@ -841,39 +976,65 @@ export default {
     transform: translateY(-50%);
     resize: both;
     top: 50%;
-    right: 4%;
+    right: 5%;
     width: 42%;
     // margin: 30px auto;
-    .info-title{
+    .info-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .login-input {
-      input{
+      input {
         height: 50px;
-        font-size: 18px;
+        font-size: 16px;
         padding-left: 35px;
+        background-color: #f7f8f9;
+        //border: none;
+        border-color: #f7f8f9;
+      }
+      .el-input-group__prepend {
+        border-right: 1px solid #dcdfe6;
+      }
+      .el-input-group__append {
+        border-left: 1px solid #dcdfe6;
+      }
+      .el-input__suffix {
+        display: flex;
+        align-items: center;
       }
     }
-    .el-checkbox__inner{
+    .el-checkbox__inner {
       width: 15px;
       height: 15px;
     }
-    .step-box{
+    .step-box {
       font-size: 22px;
       display: flex;
       justify-content: center;
     }
-    .register-email{
+    .register-email {
       font-size: 20px;
     }
   }
   .info-title {
     // font-size: 18px;
-    margin: 30px 0;
+    margin: 16px 0;
     overflow: hidden;
     // margin-bottom: 40px;
+    .el-tabs__item {
+      font-size: 28px;
+      padding: 0 10px !important;
+    }
+    .el-tabs__active-bar {
+      height: 3px !important;
+    }
+    .el-tabs__nav {
+      padding-bottom: 8px;
+    }
+    .el-tabs__nav-wrap::after {
+      background-color: #ffffff !important;
+    }
   }
   .go-sty {
     display: inline-block;
@@ -890,28 +1051,55 @@ export default {
   .login-footer {
     color: #3540a5;
     text-align: center;
-    padding: 10px 0;
+    //padding: 10px 0;
     position: absolute;
     bottom: 0;
     width: 100%;
     font-size: 14px;
+    background-color: #efefef;
     // background-color: #fff;
     a {
       text-decoration: none;
+    }
+    .qrcode-list {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      gap: 10px;
+      .code-img {
+        width: 50px;
+        height: 50px;
+      }
+      .code-icon{
+        width: 30px;
+        height: 30px;
+        border: 1px solid #7a818f;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .iconfont{
+          color: #7a818f;
+        }
+      }
+      .code-icon:hover .iconfont{
+        color: #3641a3;
+      }
+      .code-icon:hover {
+        border-color: #3641a3;
+      }
     }
   }
   .login-checkbox {
     margin-right: 5px;
   }
-  .info-text {
-    font-size: 16px;
-  }
+
   .login-btn {
     width: 100%;
     height: 50px;
     color: #fff;
-    border-color: #35b85a;
-    background-color: #35b85a;
+    border-color: #3641a3;
+    background-color: #3641a3;
     border-radius: 5px;
   }
   .forget {
@@ -922,7 +1110,7 @@ export default {
   .register {
     text-align: center;
     // padding-top: 25px;
-    color: #35b85a;
+    color: #3641a3;
     cursor: pointer;
   }
   .el-input-group__append {
@@ -973,9 +1161,9 @@ export default {
     font-size: 18px;
     margin-bottom: 30px;
     .select {
-      color: #35b85a;
+      color: #3641a3;
       &::after {
-        background-color: #35b85a;
+        background-color: #3641a3;
       }
     }
   }
@@ -1006,6 +1194,7 @@ export default {
     width: 100%;
     height: 100%;
   }
+
   .login-logo {
     width: 50%;
     height: 100%;
@@ -1023,10 +1212,10 @@ export default {
     cursor: pointer;
   }
   .language-sty {
-    margin-top: 20px;
+    //margin-top: 20px;
     // color: black;
     p:first-child {
-      padding: 1.5em 0 1em;
+      padding: 0em 0 1em;
       span {
         cursor: pointer;
         // cursor: not-allowed;

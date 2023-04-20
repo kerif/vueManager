@@ -418,7 +418,7 @@
                       <div>
                         <span
                           class="box-size subheading"
-                          @click="$router.push({ name: 'suggestlist' })"
+                          @click="$router.push({ name: 'suggestlist'})"
                         >
                           {{ $t('去处理') }}
                           <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -474,7 +474,7 @@
                     <div>
                       <span
                         class="box-size subheading"
-                        @click="$router.push({ name: 'wayBillList' })"
+                        @click="$router.push({ name: 'wayBillList', params: { type: 'erro' }  })"
                       >
                         {{ $t('去处理') }}
                         <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -1527,7 +1527,7 @@ export default {
   methods: {
     //关注公众号
     followWx() {
-      dialog({ type: 'followWx'}, () => {
+      dialog({ type: 'followWx' }, () => {
         console.log('ccc')
       })
     },

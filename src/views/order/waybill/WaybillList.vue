@@ -238,6 +238,7 @@
               v-if="item.checked"
               :width="item.width"
               show-overflow-tooltip
+              min-width='300'
             >
               <template slot-scope="scope">
                 <template v-if="item.id === 'place_order_customer'">
@@ -342,7 +343,7 @@
                         <div>
                           <span class="tip"
                             >{{ $t('计费重量') }}{{ localization.weight_unit }}：</span
-                          >1
+                          >{{scope.row.payment_weight}}
                         </div>
                       </div>
                     </div>
@@ -364,12 +365,12 @@
                     <div>
                       <span class="tip">{{ $t('减免') }}：</span
                       ><span>{{
-                        scope.row.actual_payment_fee * 1 - scope.row.actual_payment_fee * 1
+                        scope.row.actual_payment_fee * 1 - scope.row.pay_amount * 1
                       }}</span>
                     </div>
                     <div>
                       <span class="tip">{{ $t('实付') }}：</span
-                      ><span>{{ scope.row.actual_payment_fee }}</span>
+                      ><span>{{ scope.row.pay_amount }}</span>
                     </div>
                   </div>
                 </template>
@@ -411,7 +412,7 @@
                 <template v-if="item.id === 'outbound_info'">
                   <div class="outbound-info">
                     <div class="bold-font">
-                      <span>{{ $t('仓库') }}：</span><span>{{ scope.row.payment_type_name }}</span>
+                      <span>{{ $t('仓库') }}：</span><span>{{ scope.row.warehouse.warehouse_name }}</span>
                     </div>
                     <div class="bold-font">
                       <span>{{ $t('渠道') }}：</span
@@ -1577,6 +1578,10 @@ export default {
   },
   activated() {
     this.initQuery()
+    console.log(this.$route.params.type, 'activated@@@@@')
+    if(this.$route.params.type === 'erro'){
+      this.activeName = '6'
+    }
   },
   created() {
     this.getOrderFieldList()

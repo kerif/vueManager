@@ -408,7 +408,7 @@ export default [
             path: '/home/update_list',
             name: 'updateList',
             component: updateList,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -420,7 +420,7 @@ export default [
             path: '/home/notice/:id',
             name: 'systemNotice',
             component: homeNotice,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -454,7 +454,7 @@ export default [
             path: '/home/commonProblem',
             name: 'commonProblem',
             component: CommonProblem,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -466,7 +466,7 @@ export default [
             path: '/home/problemDetails/:id',
             name: 'problemDetails',
             component: ProblemDetails,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -478,7 +478,7 @@ export default [
             path: '/home/systemInfo',
             name: 'systemInfo',
             component: SystemInfo,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -490,7 +490,7 @@ export default [
             path: '/home/infoDetails/:id',
             name: 'infoDetails',
             component: InfoDetails,
-            id: 101,
+            id: 1100,
             meta: {
               level: 3,
               group: '首页',
@@ -532,7 +532,7 @@ export default [
             path: '/marketing/new/addNew/:type',
             name: 'addNew',
             component: addNew,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -544,7 +544,7 @@ export default [
             path: '/marketing/new/ordinary/:type',
             name: 'ordinary',
             component: ordinary,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -556,7 +556,7 @@ export default [
             path: '/marketing/rebate',
             name: 'rebate',
             component: rebate,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -568,7 +568,7 @@ export default [
             path: '/marketing/ordinaryDetail',
             name: 'ordinaryDetail',
             component: ordinaryDetail,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -580,7 +580,7 @@ export default [
             path: '/marketing/new/:type',
             name: 'new',
             component: managementNew,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -592,7 +592,7 @@ export default [
             path: '/marketing/invitees/:type',
             name: 'invitees',
             component: managementNew,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -604,7 +604,7 @@ export default [
             path: '/marketing/invite/:type',
             name: 'invite',
             component: managementNew,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -616,7 +616,7 @@ export default [
             path: '/marketing/rebate/:type',
             name: 'rebates',
             component: managementNew,
-            id: 801,
+            id: 4102,
             meta: {
               level: 3,
               group: '营销管理',
@@ -639,7 +639,7 @@ export default [
             path: '/marketing/voucher/notes',
             name: 'notes',
             component: Notes,
-            id: 802,
+            id: 4103,
             meta: {
               level: 3,
               group: '营销管理',
@@ -651,7 +651,7 @@ export default [
             path: '/marketing/voucher/userWelfare',
             name: 'userWelfare',
             component: UserWelfare,
-            id: 802,
+            id: 4103,
             meta: {
               level: 3,
               group: '营销管理',
@@ -663,7 +663,7 @@ export default [
             path: '/marketing/voucher/add/voucher',
             name: 'addVoucher',
             component: addVoucher,
-            id: 802,
+            id: 4103,
             meta: {
               level: 3,
               group: '营销管理',
@@ -697,7 +697,7 @@ export default [
             path: '/marketing/add/channel',
             name: 'addChannel',
             component: AddEditChannel,
-            id: 803,
+            id: 4104,
             meta: {
               level: 3,
               group: '营销管理',
@@ -709,7 +709,7 @@ export default [
             path: '/marketing/edit/channel/:id',
             name: 'editChannel',
             component: AddEditChannel,
-            id: 803,
+            id: 4104,
             meta: {
               level: 3,
               group: '营销管理',
@@ -721,7 +721,7 @@ export default [
             path: '/marketing/drainage/:id',
             name: 'drainageList',
             component: drainageList,
-            id: 803,
+            id: 4104,
             meta: {
               level: 3,
               group: '营销管理',
@@ -733,7 +733,7 @@ export default [
             path: '/marketing/advertising',
             name: 'advertising',
             component: advertising,
-            id: 805,
+            id: 4105,
             meta: {
               level: 2,
               group: '营销管理',
@@ -755,7 +755,7 @@ export default [
             path: '/marketing/banner',
             name: 'bannerList',
             component: bannerList,
-            id: 805,
+            id: 4105,
             meta: {
               level: 3,
               group: '营销管理',
@@ -767,7 +767,7 @@ export default [
             path: '/marketing/poster',
             name: 'poster',
             component: poster,
-            id: 805,
+            id: 4105,
             meta: {
               level: 3,
               group: '营销管理',
@@ -831,7 +831,7 @@ export default [
             path: '/group/contentMana/edit',
             name: 'editContent',
             component: editContent,
-            id: 1304,
+            id: 4204,
             meta: {
               level: 3,
               group: '拼团管理',
@@ -847,10 +847,21 @@ export default [
         icon: 'content',
         id: 4300,
         children: [
+          // {
+          //   path: '/content/imageSet',
+          //   name: 'imageSet',
+          //   component: imageSet,
+          //   id: 4301,
+          //   meta: {
+          //     level: 2,
+          //     group: '内容管理',
+          //     name: '广告图管理'
+          //   }
+          // },
           {
-            path: '/content/imageSet',
-            name: 'imageSet',
-            component: imageSet,
+            path: '/marketing/advertising',
+            name: 'advertising',
+            component: advertising,
             id: 4301,
             meta: {
               level: 2,
@@ -892,7 +903,7 @@ export default [
             path: '/website/column/add',
             name: 'addColumn',
             component: addEditWebsite,
-            id: 1101,
+            id: 6101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -904,7 +915,7 @@ export default [
             path: '/website/column/edit/:id/:fixed',
             name: 'editColumn',
             component: addEditWebsite,
-            id: 1101,
+            id: 6101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -916,7 +927,7 @@ export default [
             path: '/website/column/:parent/:state',
             name: 'addSecondColumn',
             component: addEditWebsite,
-            id: 1101,
+            id: 6101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -928,7 +939,7 @@ export default [
             path: '/website/column/first/edit/:id',
             name: 'editFirstWeb',
             component: editFirstWeb,
-            id: 1101,
+            id: 6101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -951,7 +962,7 @@ export default [
             path: '/website/singlePage/add',
             name: 'addSingle',
             component: addEditSingle,
-            id: 1102,
+            id: 6102,
             meta: {
               level: 3,
               group: '官网管理',
@@ -963,7 +974,7 @@ export default [
             path: '/website/singlePage/edit/:id',
             name: 'editSingle',
             component: addEditSingle,
-            id: 1102,
+            id: 6102,
             meta: {
               level: 3,
               group: '官网管理',
@@ -975,7 +986,7 @@ export default [
             path: '/website/page/lang/add/:line/:lang/:transCode',
             component: pageLang,
             name: 'pageLang',
-            id: 1102,
+            id: 6102,
             meta: {
               group: '官网管理',
               level: 3,
@@ -998,7 +1009,7 @@ export default [
             path: '/website/block/edit/:id/:status',
             name: 'blockEdit',
             component: blockEdit,
-            id: 1103,
+            id: 6103,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1010,7 +1021,7 @@ export default [
             path: '/website/block/edit/:id',
             name: 'otherWebsiteEdit',
             component: otherWebsite,
-            id: 1103,
+            id: 6103,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1022,7 +1033,7 @@ export default [
             path: '/website/block/lang/add/:line/:lang/:transCode',
             component: blockLang,
             name: 'blockLang',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1034,7 +1045,7 @@ export default [
             path: '/website/url/block/lang/add/:line/:lang/:transCode',
             component: urlLangEdit,
             name: 'urlLangEdit',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1046,7 +1057,7 @@ export default [
             path: '/website/url/block/img/edit/:line/:lang/:transCode',
             component: imgLangEdit,
             name: 'imgLangEdit',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1058,7 +1069,7 @@ export default [
             path: '/website/block/others/lang/add/:line/:lang/:transCode',
             component: blockOthersLang,
             name: 'blockOthersLang',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1070,7 +1081,7 @@ export default [
             path: '/website/block/editOthers/:id/:type',
             component: editOthersBlocks,
             name: 'editOthersBlocks',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1082,7 +1093,7 @@ export default [
             path: '/website/block/editOthers/:id',
             component: editImages,
             name: 'editImages',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1094,7 +1105,7 @@ export default [
             path: '/website/block/editLink/:id',
             component: editLink,
             name: 'editLink',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1106,7 +1117,7 @@ export default [
             path: '/website/block/editString/:id',
             component: editString,
             name: 'editString',
-            id: 1103,
+            id: 6103,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1159,7 +1170,7 @@ export default [
             path: '/customer/Public/Add',
             name: 'addPublic',
             component: AddEditPublic,
-            id: 903,
+            id: 4403,
             meta: {
               level: 3,
               group: '客服事务处理',
@@ -1171,7 +1182,7 @@ export default [
             path: '/customer/Public/Edit/:id',
             name: 'editPublic',
             component: AddEditPublic,
-            id: 903,
+            id: 4403,
             meta: {
               level: 3,
               group: '客服事务处理',
@@ -1183,7 +1194,7 @@ export default [
             path: '/customer/Public/lang/add/:line/:lang/:transCode',
             component: publicLang,
             name: 'publicLangAdd',
-            id: 903,
+            id: 4403,
             meta: {
               //group: '配置',
               group: '客服事务处理',
@@ -1226,7 +1237,7 @@ export default [
             path: '/vip/vipListDetails/:id',
             name: 'vipListDetails',
             component: vipListDetails,
-            id: 301,
+            id: 4501,
             meta: {
               group: '客户管理',
               level: 3,
@@ -1259,7 +1270,7 @@ export default [
             path: '/vip/vipaddress/vipBatchImport',
             name: 'vipBatchImport',
             component: vipBatchImport,
-            id: 303,
+            id: 4503,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1281,7 +1292,7 @@ export default [
             path: '/vip/add/agent',
             name: 'addAgent',
             component: AddEditAgent,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1293,7 +1304,7 @@ export default [
             path: '/vip/edit/agent',
             name: 'editAgent',
             component: AddEditAgent,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1305,7 +1316,7 @@ export default [
             path: '/vip/agent/template',
             name: 'agentTemplate',
             component: agentTemplate,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1317,7 +1328,7 @@ export default [
             path: '/vip/agent/template/add',
             name: 'agentTemplateAdd',
             component: agentTemplateConfig,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1329,7 +1340,7 @@ export default [
             path: '/vip/agent/template/edit/:id',
             name: 'agentTemplateEdit',
             component: agentTemplateConfig,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1341,7 +1352,7 @@ export default [
             path: '/vip/withdrawal/:id',
             name: 'Withdrawal',
             component: Withdrawal,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1353,7 +1364,7 @@ export default [
             path: '/vip/WithdrawalDetail/:userId/:id/:status',
             name: 'wdDetail',
             component: wdDetail,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1365,7 +1376,7 @@ export default [
             path: '/vip/reviewWithdrawal/:userId/:id/:state',
             name: 'wdReviewDetail',
             component: wdDetail,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1377,7 +1388,7 @@ export default [
             path: '/vip/agent/record',
             name: 'record',
             component: transactionRecord,
-            id: 304,
+            id: 4504,
             meta: {
               level: 3,
               group: '客户管理',
@@ -1430,7 +1441,7 @@ export default [
             path: '/staff/staffadd',
             name: 'staffadd',
             component: StaffEdit,
-            id: 201,
+            id: 6201,
             meta: {
               level: 3,
               group: '员工管理',
@@ -1442,7 +1453,7 @@ export default [
             path: '/staff/staffEdit/:state/:id',
             name: 'staffEdit',
             component: StaffEdit,
-            id: 201,
+            id: 6201,
             meta: {
               level: 3,
               group: '员工管理',
@@ -1964,7 +1975,7 @@ export default [
             path: '/order/orderlist/importOrder',
             component: ImportOrder,
             name: 'ImportOrder',
-            id: 401,
+            id: 2101,
             meta: {
               level: 3,
               group: '订单管理',
@@ -1976,7 +1987,7 @@ export default [
             path: '/order/orderlist/batchForecast',
             component: BatchForecast,
             name: 'BatchForecast',
-            id: 401,
+            id: 2101,
             meta: {
               level: 3,
               group: '订单管理',
@@ -1988,7 +1999,7 @@ export default [
             path: '/order/orderlist/batchShelves',
             component: BatchShelves,
             name: 'BatchShelves',
-            id: 401,
+            id: 2101,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2000,7 +2011,7 @@ export default [
             path: '/order/orderlist/details/:id',
             component: oderDetails,
             name: 'oderDetails',
-            id: 401,
+            id: 2101,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2067,7 +2078,7 @@ export default [
             path: '/order/freight/detail/:id',
             name: 'freightDetail',
             component: freightDetail,
-            id: 404,
+            id: 2104,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2079,7 +2090,7 @@ export default [
             path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
-            id: 402,
+            id: 2102,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2091,7 +2102,7 @@ export default [
             path: '/order/review',
             name: 'review',
             component: reviewDetails,
-            id: 402,
+            id: 2102,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2103,7 +2114,7 @@ export default [
             path: '/order/editBillPacked/:id/:activeName/:parent/:lineId',
             name: 'editPacked',
             component: editPacked,
-            id: 402,
+            id: 2102,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2115,7 +2126,7 @@ export default [
             path: '/order/billPacked/:id/:order_sn/:activeName/:parent/:lineId',
             name: 'billPacked',
             component: Billpacked,
-            id: 402,
+            id: 2102,
             meta: {
               level: 3,
               group: '订单管理',
@@ -2168,7 +2179,7 @@ export default [
             path: '/station/storage',
             name: 'storageContainer',
             component: Storage,
-            id: 501,
+            id: 2201,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2179,7 +2190,7 @@ export default [
             path: '/station/storage/:id',
             name: 'editStorage',
             component: Storage,
-            id: 501,
+            id: 2201,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2191,7 +2202,7 @@ export default [
             path: '/station/edit/storage/:id/:state',
             name: 'editWarehouse',
             component: Storage,
-            id: 501,
+            id: 2201,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2214,7 +2225,7 @@ export default [
             path: '/station/ship/details',
             name: 'shipDetails',
             component: ShipDetails,
-            id: 502,
+            id: 2202,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2270,7 +2281,7 @@ export default [
             path: '/station/self/details/:id/:status',
             name: 'selfDetails',
             component: selfDetails,
-            id: 504,
+            id: 2204,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2293,7 +2304,7 @@ export default [
             path: '/station/tracking',
             name: 'tracking',
             component: tracking,
-            id: 506,
+            id: 2203,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2304,7 +2315,7 @@ export default [
             path: '/station/tracking/logistics',
             name: 'logistics',
             component: logisticsList,
-            id: 506,
+            id: 2203,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2316,7 +2327,7 @@ export default [
             path: '/station/import/logistics',
             name: 'importLogistics',
             component: importLogistics,
-            id: 505,
+            id: 2205,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2339,7 +2350,7 @@ export default [
             path: '/station/boxing',
             name: 'boxing',
             component: boxing,
-            id: 507,
+            id: 2205,
             meta: {
               level: 3,
               group: '货站管理',
@@ -2381,7 +2392,7 @@ export default [
             path: '/pick/packageManagement/pickLocation/:XStationId',
             name: 'pickLocation',
             component: pickLocation,
-            id: 1201,
+            id: 3101,
             meta: {
               level: 3,
               group: '自提点管理',
@@ -2401,7 +2412,7 @@ export default [
             path: '/finance/details',
             name: 'TransactionDetails',
             component: TransactionDetails,
-            id: 701,
+            id: 5201,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2413,7 +2424,7 @@ export default [
             path: '/finance/wechatPay',
             name: 'wechatPay',
             component: TransactionWechat,
-            id: 701,
+            id: 5201,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2436,7 +2447,7 @@ export default [
             path: '/finance/rechargeDetails/:id',
             name: 'rechargeDetails',
             component: RechargeDetails,
-            id: 702,
+            id: 5101,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2448,7 +2459,7 @@ export default [
             path: '/finance/rechargeReview/:id/:state',
             name: 'rechargeReview',
             component: RechargeDetails,
-            id: 702,
+            id: 5101,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2482,7 +2493,7 @@ export default [
             path: '/finance/orderReplenishDetail/:id',
             name: 'orderReplenishDetail',
             component: orderReplenishDetail,
-            id: 710,
+            id: 5103,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2505,7 +2516,7 @@ export default [
             path: '/finance/selfSettlement/recordDetails/:id/:name',
             name: 'recordDetails',
             component: recordDetails,
-            id: 705,
+            id: 5104,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2528,7 +2539,7 @@ export default [
             path: '/finance/orderReview/reviewFinance/:id/:state',
             name: 'reviewFinance',
             component: reviewFinance,
-            id: 706,
+            id: 5105,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2551,7 +2562,7 @@ export default [
             path: '/finance/growthFinanceDetails/:id',
             name: 'growthFinanceDetails',
             component: GrowthFinanceDetails,
-            id: 707,
+            id: 5106,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2573,7 +2584,7 @@ export default [
             path: '/finance/agency/viewDetails/:id',
             name: 'viewDetails',
             component: viewDetails,
-            id: 708,
+            id: 5107,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2585,7 +2596,7 @@ export default [
             path: '/finance/agency/agencyCommission',
             name: 'agencyCommission',
             component: agencyCommission,
-            id: 708,
+            id: 5107,
             meta: {
               group: '财务审核',
               level: 3,
@@ -2635,7 +2646,7 @@ export default [
             path: '/finance/invoice/invoiceDetails/:id',
             name: 'invoiceDetails',
             component: invoiceDetails,
-            id: 709,
+            id: 5301,
             meta: {
               group: '发票管理',
               level: 3,
@@ -2655,7 +2666,7 @@ export default [
             path: '/config/configuration-more',
             name: 'configurationMore',
             component: configurationMore,
-            id: 6300,
+            id: 6301,
             meta: {
               level: 2,
               group: '基础配置',
@@ -2688,7 +2699,7 @@ export default [
             path: '/config/reservationNo/detail',
             component: reservationNoDetail,
             name: 'reservationNoDetail',
-            id: 607,
+            id: 6303,
             meta: {
               group: '基础配置',
               level: 3,
@@ -2700,7 +2711,7 @@ export default [
             path: '/config/reservationNo/import',
             component: reservationNoImport,
             name: 'reservationNoImport',
-            id: 607,
+            id: 6303,
             meta: {
               group: '基础配置',
               level: 3,
@@ -2723,7 +2734,7 @@ export default [
             path: '/config/reservedBox/boxReservedDetail',
             name: 'boxReservedDetail',
             component: boxReservedDetail,
-            id: 608,
+            id: 6304,
             meta: {
               group: '基础配置',
               level: 3,
@@ -2735,7 +2746,7 @@ export default [
             path: '/config/reservedBox/boxReservedImport',
             name: 'boxReservedImport',
             component: boxReservedImport,
-            id: 608,
+            id: 6304,
             meta: {
               group: '基础配置',
               level: 3,
@@ -2884,7 +2895,7 @@ export default [
             path: '/goodsAllocation/placeDetail',
             name: 'placeDetail',
             component: GoodsAllocationDetail,
-            id: 804,
+            id: 4606,
             meta: {
               level: 3,
               group: '数据概览',

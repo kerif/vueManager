@@ -59,7 +59,12 @@ export default {
           //   }
           // })
           this.formatIds(res.data)
+          // delete res.data[3].enabled
+          // res.data[3].children[0].enabled = true
           this.permissionMenu = res.data
+
+          // this.permissionMenu[3].children[0].enabled =1
+          console.log('this.permissionMenu', this.permissionMenu)
         } else {
           this.$message.error(res.msg)
         }
@@ -78,6 +83,7 @@ export default {
     },
     confirmSubmit() {
       let permissions = this.$refs.tree.getCheckedKeys(true)
+
       this.$request.updatePermissions(this.$route.params.id, { permissions }).then(res => {
         if (res.ret) {
           this.$notify({

@@ -384,16 +384,16 @@
             <template slot-scope="scope">
               <div class="time">
                 <div>
-                  <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.shelf_up_at }}
+                  <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.shelf_off_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_off_at }}
+                  <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_up_at }}
                 </div>
                 <div>
                   <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.in_storage_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.created_at }}
+                  <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.received_at }}
                 </div>
               </div>
             </template>
