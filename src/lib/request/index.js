@@ -5634,3 +5634,23 @@ exports.getTaiWanInfo = () => $form.get('/api-services/id-verify-tw')
 
 //保存台湾件实名认证
 exports.saveTaiWanInfo = params => $form.put('/api-services/id-verify-tw', params)
+
+// 获取配置
+exports.getUnpackConfig = () => {
+  return $form.get(`unpack-config`)
+}
+
+// 更新配置
+exports.updateUnpackConfig = params => {
+  return $json.put(`unpack-config`, params)
+}
+
+// 获取集包模式
+exports.getTransportMode = () => {
+  return $form.get(`basic-settings/spu-mode`)
+}
+
+// 更新集包模式
+exports.updateTransportMode = params => {
+  return $form.put(`basic-settings/spu-mode`, params)
+}

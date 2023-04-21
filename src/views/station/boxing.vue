@@ -151,6 +151,18 @@
               </el-select>
             </div>
             <div class="line-sty"></div>
+            <div class="express-left">
+              <p>{{ $t('客户备注') }}</p>
+            </div>
+            <div class="express-left right-margin add-remark">
+              <el-input
+                v-model="vip_remark"
+                :autosize="{ minRows: 2, maxRows: 4 }"
+                :placeholder="$t('请输入备注')"
+                type="textarea"
+              ></el-input>
+            </div>
+            <div class="line-sty"></div>
             <div v-if="this.radio === 2">
               <div class="express-left">
                 <p>{{ $t('自提点地址') }}</p>
@@ -336,6 +348,13 @@
         <!-- 邮编 -->
         <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
         <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
+        <el-table-column prop="tags" :label="$t('标签')">
+          <template slot-scope="scope">
+            <el-tag v-for="item in scope.row.tags" :key="item.id" class="tag">{{
+              item.name
+            }}</el-tag>
+          </template>
+        </el-table-column>
         <!-- 收件人 -->
         <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
         <!-- 收件电话 -->
@@ -627,7 +646,8 @@ export default {
       address_ids: [],
       countryOptions: [],
       id: '',
-      props: { checkStrictly: true }
+      props: { checkStrictly: true },
+      vip_remark: ''
     }
   },
   created() {
@@ -1069,7 +1089,8 @@ export default {
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
-            type: this.radio === 2 ? 2 : ''
+            type: this.radio === 2 ? 2 : '',
+            vip_remark: this.vip_remark
           })
           .then(res => {
             if (res.ret) {
@@ -1097,7 +1118,8 @@ export default {
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
             // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
-            type: this.radio === 2 ? 2 : ''
+            type: this.radio === 2 ? 2 : '',
+            vip_remark: this.vip_remark
           })
           .then(res => {
             if (res.ret) {
@@ -1304,5 +1326,11 @@ export default {
 .tips-sty {
   font-size: 13px;
   color: red;
+}
+.tag {
+  margin: 10px;
+}
+.add-remark {
+  width: 300px;
 }
 </style>
