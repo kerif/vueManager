@@ -59,11 +59,7 @@ export default {
           //   }
           // })
           this.formatIds(res.data)
-          // delete res.data[3].enabled
-          // res.data[3].children[0].enabled = true
           this.permissionMenu = res.data
-
-          // this.permissionMenu[3].children[0].enabled =1
           console.log('this.permissionMenu', this.permissionMenu)
         } else {
           this.$message.error(res.msg)
@@ -72,11 +68,11 @@ export default {
     },
     formatIds(arr) {
       arr.forEach(ele => {
-        if (ele.child) {
-          this.formatIds(ele.child)
+        if (ele.children) {
+          this.formatIds(ele.children)
         }
         if (ele.tag) {
-          ele.id = `${ele.id}-1`
+          // ele.id = `${ele.id}-1`
         }
         ele.name = this.$t(ele.name)
       })

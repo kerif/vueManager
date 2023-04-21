@@ -44,11 +44,15 @@ export const getCheckedChild = arr => {
 }
 
 function recArr(arr, ret) {
+  console.log('=========arr===========')
+  console.log(arr)
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i]
-    if (element.child) {
+    console.log('==================')
+    console.log(element)
+    if (element.children.length>0) {
       recArr(
-        element.child.map(item => ({ ...item, name: $t(item.name) })),
+        element.children.map(item => ({ ...item, name: $t(item.name) })),
         ret
       )
     } else if (element.enabled) {

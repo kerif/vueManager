@@ -289,8 +289,8 @@
               <!--                <span @click="changeWelcome(1)">{{ $t('去登录') }}</span>-->
               <!--              </div>-->
               <el-tabs v-model="activeType" @tab-click="changeType">
-                <el-tab-pane label="登录" name="1"></el-tab-pane>
-                <el-tab-pane label="注册" name="2"></el-tab-pane>
+                <el-tab-pane :label="$t('登录')" name="1"></el-tab-pane>
+                <el-tab-pane :label="$t('注册')" name="2"></el-tab-pane>
               </el-tabs>
             </div>
             <div class='tip-red'>当前页面注册的是新的集运公司账号</div>
@@ -388,9 +388,9 @@
       </div>
       <div class="login-footer">
         <div class="qrcode-list">
-          <div slot="reference" class='code-icon' @click='uploadDesktop'>
-            <i class="iconfont icon-diannaofuben desktop-sty"></i>
-          </div>
+<!--          <div slot="reference" class='code-icon' @click='uploadDesktop'>-->
+<!--            <i class="iconfont icon-diannaofuben desktop-sty"></i>-->
+<!--          </div>-->
           <el-popover placement="top" trigger="hover">
             <div slot="reference" class='code-icon'>
               <i class="iconfont icon-anzhuo anzhuo-sty"></i>
@@ -942,7 +942,7 @@ export default {
   .forget-main {
     background-color: #fff;
     border-radius: 4px;
-    width: 400px;
+    width: 500px;
     height: 555px;
     position: absolute;
     border-radius: 10px;

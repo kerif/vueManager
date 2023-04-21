@@ -48,6 +48,11 @@ switch (hostName) {
       IMAGE_URL: 'https://api-jiyun-v3.haiouoms.com',
       BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
     }
+    // baseUrl = {
+    //   BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
+    //   IMAGE_URL: 'https://dev-api.haiouoms.com',
+    //   BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+    // }
     break
 }
 
