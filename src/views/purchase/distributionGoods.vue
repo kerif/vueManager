@@ -1149,7 +1149,7 @@ export default {
   margin-right: 20px;
 }
 .poster-right {
-  width: calc(100%-342px);
+  width: calc(100% - 342px);
   width: -moz-calc(100% - 342px);
   width: -webkit-calc(100% - 342px);
   padding: 15px;

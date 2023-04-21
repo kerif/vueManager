@@ -489,7 +489,7 @@ export default {
     }
   }
   .poster-right {
-    width: calc(100%-360px);
+    width: calc(100% - 360px);
     width: -moz-calc(100% - 360px);
     width: -webkit-calc(100% - 360px);
     vertical-align: top;
