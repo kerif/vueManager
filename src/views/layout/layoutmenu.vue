@@ -51,6 +51,11 @@ export default {
     return {
       showMeunList: [
         {
+          key: 1,
+          // lists: ['marketing', 'content', 'website', 'vip', 'staff', 'basics']
+          lists: ['home']
+        },
+        {
           key: 3,
           // lists: ['marketing', 'content', 'website', 'vip', 'staff', 'basics']
           lists: ['pick']
@@ -101,7 +106,14 @@ export default {
     },
     formatRouterMap() {
       let formatRouterMap = {}
+      console.log('menuId', this.menuId)
       let showMeun = this.showMeunList.filter(item => item.key === this.menuId)[0].lists
+      console.log('showMeun', showMeun)
+      console.log(
+        'filter',
+        this.fileterAfterRouterMap.filter(item => showMeun.includes(item.path))
+      )
+      console.log('formatRouterMap', formatRouterMap)
       this.fileterAfterRouterMap &&
         this.fileterAfterRouterMap
           .filter(item => showMeun.includes(item.path))
@@ -123,6 +135,7 @@ export default {
               }
             })
           })
+      console.log('formatRouterMap@@@@@@@@', formatRouterMap)
       return formatRouterMap
     }
   }

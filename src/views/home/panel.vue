@@ -55,19 +55,27 @@
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('无人认领') }}:{{ index_count_data.package_no_owner }}</div>
-                    <div style="margin-top: 5px">{{ $t('正常预报') }}:{{ index_count_data.package_wait_in_storage }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('正常预报') }}:{{ index_count_data.package_wait_in_storage }}
+                    </div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px" >
+              <el-col :span="6" style="padding-left: 6px">
                 <div class="grid-content" @click="goOrder">
                   <div class="flex">
                     <div class="content-size">{{ $t('待打包订单') }}</div>
                     <div class="content-size2">{{ index_count_data.order_wait_pick }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('待支付') }}: <span style='color: red'>{{ index_count_data.order_unpaid }}</span></div>
-                    <div style="margin-top: 5px">{{ $t('待审核') }}: <span style='color: red'>{{ index_count_data.order_wait_audit }}</span></div>
+                    <div>
+                      {{ $t('待支付') }}:
+                      <span style="color: red">{{ index_count_data.order_unpaid }}</span>
+                    </div>
+                    <div style="margin-top: 5px">
+                      {{ $t('待审核') }}:
+                      <span style="color: red">{{ index_count_data.order_wait_audit }}</span>
+                    </div>
                   </div>
                 </div>
               </el-col>
@@ -79,7 +87,9 @@
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('未加入发货单') }}:{{ index_count_data.order_no_shipment }}</div>
-                    <div style="margin-top: 5px">{{ $t('已加入发货单') }}:{{ index_count_data.order_with_shipment }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('已加入发货单') }}:{{ index_count_data.order_with_shipment }}
+                    </div>
                   </div>
                 </div>
               </el-col>
@@ -91,7 +101,9 @@
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('订单支付待审核') }}:{{ index_count_data.order_review }}</div>
-                    <div style="margin-top: 5px">{{ $t('充值金额待审核') }}:{{ index_count_data.balance_review }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('充值金额待审核') }}:{{ index_count_data.balance_review }}
+                    </div>
                   </div>
                 </div>
               </el-col>
@@ -119,7 +131,6 @@
               </div>
               <div></div>
               <div style="margin-top: 10px">
-
                 <div
                   class="login-information-count"
                   @click="$router.push({ name: 'reset-password' })"
@@ -407,7 +418,7 @@
                       <div>
                         <span
                           class="box-size subheading"
-                          @click="$router.push({ name: 'suggestlist' })"
+                          @click="$router.push({ name: 'suggestlist'})"
                         >
                           {{ $t('去处理') }}
                           <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -463,7 +474,7 @@
                     <div>
                       <span
                         class="box-size subheading"
-                        @click="$router.push({ name: 'wayBillList' })"
+                        @click="$router.push({ name: 'wayBillList', params: { type: 'erro' }  })"
                       >
                         {{ $t('去处理') }}
                         <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -740,15 +751,30 @@
                       <div style="margin-right: 10px">
                         <img src="@/assets/operation-manual.png" alt="" />
                       </div>
-                      <div>
-                        <div style="font-size: 16px; margin-bottom: 5px">
+                      <div style="flex: 1">
+                        <div
+                          style="
+                            font-size: 16px;
+                            margin-bottom: 5px;
+                            display: flex;
+                            justify-content: space-between;
+                          "
+                        >
                           <strong>{{ $t('操作手册') }}</strong>
+                          <span
+                            style="cursor: pointer; color: #1f6dff; font-size: 16px"
+                            @click.stop="goTutorial"
+                            >{{ $t('视频教程') }}</span
+                          >
                         </div>
                         <div class="box-size">{{ $t('海鸥集运系统操作使用手册') }}</div>
                       </div>
                     </div>
 
-                    <div style="display: flex; padding: 10px 0px">
+                    <div
+                      style="display: flex; padding: 10px 0px; cursor: pointer"
+                      @click="followWx"
+                    >
                       <div style="margin-right: 10px">
                         <img src="@/assets/attention.png" alt="" />
                       </div>
@@ -1499,6 +1525,18 @@ export default {
     }
   },
   methods: {
+    //关注公众号
+    followWx() {
+      dialog({ type: 'followWx' }, () => {
+        console.log('ccc')
+      })
+    },
+    //跳转到视频教程
+    goTutorial() {
+      window.open(
+        'https://www.douyin.com/user/MS4wLjABAAAAeXrbw1-Iyj0qJbrqf-qpnBcwgQdRFpN0EzKykvs7PxZgtvzgFrP3Ka0HoYjz-i-B?relation=2'
+      )
+    },
     //获取订单模块信息
     getPanelData() {
       this.$request.getPanelData().then(res => {

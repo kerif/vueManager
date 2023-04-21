@@ -167,7 +167,11 @@
               <el-form-item :label="$t('物品属性')" prop="props">
                 <el-checkbox-group v-model="ruleForm.props">
                   <el-checkbox v-for="item in propList" :key="item.id" :label="item.id"
-                    >{{ item.cn_name }}
+                    ><span
+                      class="prop-box"
+                      :style="'background-color:' + item.color + ';color:' + item.font_color"
+                      >{{ item.cn_name }}</span
+                    >
                   </el-checkbox>
                 </el-checkbox-group>
               </el-form-item>

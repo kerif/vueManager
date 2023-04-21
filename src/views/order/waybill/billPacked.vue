@@ -120,7 +120,13 @@
       ></el-table-column>
       <el-table-column :label="$t('物品属性')">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.props" :key="item.id">{{ item.cn_name }}</span>
+          <span v-for="item in scope.row.props" :key="item.id"
+            ><span
+              class="prop-box"
+              :style="'background-color:' + item.color + ';color:' + item.font_color"
+              >{{ item.cn_name }}</span
+            ></span
+          >
         </template>
       </el-table-column>
       <el-table-column :label="$t('代理')" prop="agent"></el-table-column>

@@ -339,7 +339,11 @@
                 <el-form-item :label="$t('物品属性')" class="service-style">
                   <el-checkbox-group v-model="user.props">
                     <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
-                      >{{ item.cn_name }}
+                      ><span
+                        class="prop-box"
+                        :style="'background-color:' + item.color + ';color:' + item.font_color"
+                        >{{ item.cn_name }}</span
+                      >
                     </el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
@@ -1251,5 +1255,6 @@ export default {
       margin-left: 5px;
     }
   }
+
 }
 </style>
