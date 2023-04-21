@@ -541,7 +541,7 @@ export default [
             }
           },
           {
-            path: '/marketing/new/ordinary/:type',
+            path: '/marketing/new/ordinary',
             name: 'ordinary',
             component: ordinary,
             id: 4102,
@@ -552,6 +552,18 @@ export default [
               parent: '/marketing/new'
             }
           },
+          // {
+          //   path: '/marketing/new/ordinary/:type',
+          //   name: 'ordinary',
+          //   component: ordinary,
+          //   id: 4102,
+          //   meta: {
+          //     level: 3,
+          //     group: '营销管理',
+          //     name: '新增用户福利',
+          //     parent: '/marketing/new'
+          //   }
+          // },
           {
             path: '/marketing/rebate',
             name: 'rebate',
@@ -847,17 +859,6 @@ export default [
         icon: 'content',
         id: 4300,
         children: [
-          // {
-          //   path: '/content/imageSet',
-          //   name: 'imageSet',
-          //   component: imageSet,
-          //   id: 4301,
-          //   meta: {
-          //     level: 2,
-          //     group: '内容管理',
-          //     name: '广告图管理'
-          //   }
-          // },
           {
             path: '/marketing/advertising',
             name: 'advertising',
@@ -867,6 +868,30 @@ export default [
               level: 2,
               group: '内容管理',
               name: '广告图管理'
+            }
+          },
+          {
+            path: '/content/imageSet',
+            name: 'imageSet',
+            component: imageSet,
+            id: 4301,
+            meta: {
+              level: 3,
+              group: '广告图管理',
+              name: '广告图管理',
+              parent: '/marketing/advertising'
+            }
+          },
+          {
+            path: '/marketing/advertise',
+            name: 'advertiseList',
+            component: advertiseList,
+            id: 4301,
+            meta: {
+              level: 3,
+              group: '广告图管理',
+              name: '弹窗广告管理',
+              parent: '/marketing/advertising'
             }
           },
           {
@@ -2777,6 +2802,30 @@ export default [
             }
           },
           {
+            path: '/config/warehouse/position/:id/:warehouseName',
+            component: positionWarehouse,
+            name: 'position',
+            id: 6306,
+            meta: {
+              group: '基础数据',
+              level: 3,
+              name: '货位管理',
+              parent: '/config/warehouse'
+            }
+          },
+          {
+            path: '/config/warehouse/add',
+            component: WareHouseEdit,
+            name: 'warehouseAdd',
+            id: 6306,
+            meta: {
+              group: '基础数据',
+              level: 3,
+              name: '添加仓库',
+              parent: '/config/warehouse'
+            }
+          },
+          {
             path: '/config/line',
             name: 'linelist',
             component: Line,
@@ -2787,6 +2836,18 @@ export default [
               name: '渠道路线配置'
             }
           },
+          {
+            path: '/config/line/channel_list/:id',
+            name: 'channelLine',
+            component: channelLine,
+            id: 6307,
+            meta: {
+              group: '基础数据',
+              level: 3,
+              name: '渠道',
+              parent: '/config/line'
+            }
+          }
         ]
       },
       {

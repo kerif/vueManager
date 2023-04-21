@@ -81,6 +81,10 @@ export default {
     }
   },
   methods: {
+    gai() {
+      this.$store.commit('savePermissionStatus', false)
+      console.log('我在这里改了啊', this.$store.state.isPermissionFilter)
+    },
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

@@ -1581,6 +1581,12 @@ export default {
     console.log(this.$route.params.type, 'activated@@@@@')
     if(this.$route.params.type === 'erro'){
       this.activeName = '6'
+    }else if(this.$route.params.type === 'daifahuo'){
+      this.activeName = '3'
+    }else if(this.$route.params.type === 'noSign'){
+      this.activeName = '1'
+    }else if(this.$route.params.type === 'daidabao'){
+      this.activeName = '2'
     }
   },
   created() {

@@ -631,6 +631,7 @@ export default {
               this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
               this.$store.commit('saveName', res.data.email)
               this.$store.commit('savePermissionStatus', false)
+              console.log('我在登录这里改了啊', this.$store.state.isPermissionFilter)
               this.centerDialogVisible = false
               this.$router.push('/')
             } else {
@@ -663,6 +664,8 @@ export default {
               })
               this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
               this.$store.commit('saveName', res.data.email)
+              this.$store.commit('savePermissionStatus', false)
+
               this.centerDialogVisible = false
               this.$router.push('/')
             } else {
@@ -890,13 +893,14 @@ export default {
     padding: 10px;
     font-weight: bold;
     // border-bottom: 1px solid #4A55B7;
-    background-color: #efefef;
+    background-color: none;
     display: flex;
     flex-direction: column;
     position: absolute;
     top: 8%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 9999;
   }
   .app-name {
     font-size: 35px;

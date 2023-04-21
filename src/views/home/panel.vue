@@ -62,7 +62,7 @@
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content" @click="goOrder">
+                <div class="grid-content" @click="goOrder('daidabao')">
                   <div class="flex">
                     <div class="content-size">{{ $t('待打包订单') }}</div>
                     <div class="content-size2">{{ index_count_data.order_wait_pick }}</div>
@@ -80,7 +80,7 @@
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content" @click="goOrder">
+                <div class="grid-content" @click="goOrder('daifahuo')">
                   <div class="flex">
                     <div class="content-size">{{ $t('待发货订单') }}</div>
                     <div class="content-size2">{{ index_count_data.order_wait_ship }}</div>
@@ -94,7 +94,7 @@
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content" @click="goOrder">
+                <div class="grid-content" @click="goNoExamine">
                   <div class="flex">
                     <div class="content-size">{{ $t('待财务审核') }}</div>
                     <div class="content-size2">{{ index_count_data.wait_review }}</div>
@@ -418,7 +418,7 @@
                       <div>
                         <span
                           class="box-size subheading"
-                          @click="$router.push({ name: 'suggestlist'})"
+                          @click="$router.push({ name: 'suggestlist' })"
                         >
                           {{ $t('去处理') }}
                           <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -474,7 +474,7 @@
                     <div>
                       <span
                         class="box-size subheading"
-                        @click="$router.push({ name: 'wayBillList', params: { type: 'erro' }  })"
+                        @click="$router.push({ name: 'wayBillList', params: { type: 'erro' } })"
                       >
                         {{ $t('去处理') }}
                         <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -780,7 +780,7 @@
                       </div>
                       <div>
                         <div style="font-size: 16px; margin-bottom: 5px">
-                          <strong>{{ $t('关注【通晓科技】') }}</strong>
+                          <strong>{{ $t('关注【海鸥集运系统】') }}</strong>
                         </div>
                         <div class="box-size">{{ $t('分享操作技巧、集运运营干货') }}</div>
                       </div>
@@ -1552,10 +1552,13 @@ export default {
       })
     },
     goNoSign() {
-      this.$router.push({ path: '/order/orderlist' })
+      this.$router.push({ name: 'wayBillList', params: { type: 'noSign' } })
     },
-    goOrder() {
-      this.$router.push({ path: '/order/waybill_list' })
+    goOrder(name) {
+      this.$router.push({ name: 'wayBillList', params: { type: name } })
+    },
+    goNoExamine() {
+      this.$router.push({ name: 'orderReview'})
     },
     hiddenData() {
       let dataShow = localStorage.getItem('DataShow')
