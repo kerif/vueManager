@@ -138,7 +138,7 @@
           </el-table>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('预留面单')">
+      <el-form-item :label="$t('预留单号池')">
         <el-select :placeholder="$t('请选择')" v-model="landing.auto_sn_express_id">
           <el-option
             v-for="item in reservedList"

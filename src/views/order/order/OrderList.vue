@@ -197,9 +197,14 @@
               <div class="customer">
                 <div class="user-id">
                   <span>ID：</span>
-                  <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
                   <span>{{ scope.row.user_id }}</span>
                 </div>
+                <div class="customer-code">
+                  {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
+                    scope.row.user_uid
+                  }}</span>
+                </div>
+
                 <div>
                   <span>{{ $t('昵称') }}：</span>
                   <span>{{ scope.row.user_name }}</span>

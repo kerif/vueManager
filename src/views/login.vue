@@ -63,8 +63,8 @@
               <!--                <span @click="changeWelcome(3)">{{ $t('去注册') }}</span>-->
               <!--              </div>-->
               <el-tabs v-model="activeType" @tab-click="changeType">
-                <el-tab-pane label="登录" name="1"></el-tab-pane>
-                <el-tab-pane label="注册" name="2"></el-tab-pane>
+                <el-tab-pane :label="$t('登录')" name="1"></el-tab-pane>
+                <el-tab-pane :label="$t('注册')" name="2"></el-tab-pane>
               </el-tabs>
             </div>
             <el-form>
@@ -909,7 +909,7 @@ export default {
     background-color: #fff;
     border-radius: 4px;
     width: 1000px;
-    height: 555px;
+    height: 60%;
     position: absolute;
     border-radius: 10px;
     top: 45%;

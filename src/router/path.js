@@ -741,17 +741,17 @@ export default [
               parent: '/marketing/channelManagement'
             }
           },
-          {
-            path: '/marketing/advertising',
-            name: 'advertising',
-            component: advertising,
-            id: 4105,
-            meta: {
-              level: 2,
-              group: '营销管理',
-              name: '广告图管理'
-            }
-          },
+          // {
+          //   path: '/marketing/advertising',
+          //   name: 'advertising',
+          //   component: advertising,
+          //   id: 4105,
+          //   meta: {
+          //     level: 2,
+          //     group: '营销管理',
+          //     name: '广告图管理'
+          //   }
+          // },
           {
             path: '/marketing/ai_assistant',
             name: 'aiAssistant',
@@ -877,7 +877,7 @@ export default [
             id: 4301,
             meta: {
               level: 3,
-              group: '广告图管理',
+              group: '内容管理',
               name: '广告图管理',
               parent: '/marketing/advertising'
             }
@@ -889,7 +889,7 @@ export default [
             id: 4301,
             meta: {
               level: 3,
-              group: '广告图管理',
+              group: '内容管理',
               name: '弹窗广告管理',
               parent: '/marketing/advertising'
             }
@@ -2802,12 +2802,24 @@ export default [
             }
           },
           {
+            path: '/config/warehouse/edit/:id',
+            component: WareHouseEdit,
+            name: 'warehouseEdit',
+            id: 6306,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '修改仓库',
+              parent: '/config/warehouse'
+            }
+          },
+          {
             path: '/config/warehouse/position/:id/:warehouseName',
             component: positionWarehouse,
             name: 'position',
             id: 6306,
             meta: {
-              group: '基础数据',
+              group: '基础配置',
               level: 3,
               name: '货位管理',
               parent: '/config/warehouse'
@@ -2819,7 +2831,7 @@ export default [
             name: 'warehouseAdd',
             id: 6306,
             meta: {
-              group: '基础数据',
+              group: '基础配置',
               level: 3,
               name: '添加仓库',
               parent: '/config/warehouse'
@@ -2837,12 +2849,36 @@ export default [
             }
           },
           {
+            path: '/config/line/tmpSet',
+            name: 'tmpSet',
+            component: tmpSet,
+            id: 6307,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '模版',
+              parent: '/config/line'
+            }
+          },
+          {
+            path: '/config/line/sales',
+            name: 'salesMana',
+            component: salesMana,
+            id: 6307,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '销售价管理',
+              parent: '/config/line'
+            }
+          },
+          {
             path: '/config/line/channel_list/:id',
             name: 'channelLine',
             component: channelLine,
             id: 6307,
             meta: {
-              group: '基础数据',
+              group: '基础配置',
               level: 3,
               name: '渠道',
               parent: '/config/line'
