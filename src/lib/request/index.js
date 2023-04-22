@@ -1805,6 +1805,14 @@ exports.getBasic = () => {
 exports.updateBasic = params => {
   return $form.put('basic-settings', params)
 }
+// 更多配置 基础配置 预报与入库 禁用词配置
+exports.getProhibitedWords = () => {
+  return $form.get('prohibited-words')
+}
+// 更多配置 基础配置 预报与入库 修改禁用词库
+exports.updateProhibitedWords = params => {
+  return $form.put('prohibited-words', params)
+}
 // 更多配置  获取汇率配置
 exports.getRates = params => {
   return $form.get('exchange-rates', { params })

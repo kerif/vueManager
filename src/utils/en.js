@@ -2773,5 +2773,13 @@ export default {
   容量: 'volume',
   是否热门: 'Hot',
   请输入包裹单号或客户ID: 'Please enter the package tracking number or customer ID',
-  已存放天: 'Stored for days'
+  已存放天: 'Stored for days',
+  禁用词汇库配置: 'Disable vocabulary configuration',
+  预报禁用词汇库: 'Forecast Disabled Vocabulary Library',
+  '请输入禁用词(用,隔开)': "Please enter prohibited words (separated by ',')",
+  '注意: 多个禁用词汇，使用逗号分开，填写后客人预报包裹中物品名称如果包括其中一项，将会禁止提交!':
+    "Attention: Multiple prohibited words separated by commas. If the item name in the customer's forecast package includes one of them, submission will be prohibited!",
+  禁词匹配规则: 'Prohibited word matching rules',
+  全匹配: 'Full Match',
+  半匹配: 'Semi matching'
 }
