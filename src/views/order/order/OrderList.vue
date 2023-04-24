@@ -195,14 +195,14 @@
           >
             <template slot-scope="scope">
               <div class="customer">
-                <div class="user-id">
-                  <span>ID：</span>
-                  <span>{{ scope.row.user_id }}</span>
-                </div>
                 <div class="customer-code">
                   {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
                     scope.row.user_uid
                   }}</span>
+                </div>
+                <div class="user-id">
+                  <span>ID：</span>
+                  <span>{{ scope.row.user_id }}</span>
                 </div>
 
                 <div>
@@ -395,10 +395,10 @@
                   <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_up_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.in_storage_at }}
+                  <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.received_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.received_at }}
+                  <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.created_at }}
                 </div>
               </div>
             </template>

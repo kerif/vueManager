@@ -2752,7 +2752,7 @@ export default [
             meta: {
               group: '基础配置',
               level: 2,
-              name: '预留单号'
+              name: '预留袋号'
             }
           },
           {
@@ -2846,6 +2846,18 @@ export default [
               group: '基础配置',
               level: 2,
               name: '渠道路线配置'
+            }
+          },
+          {
+            path: '/config/line/channel/edit/:id',
+            name: 'channelLineEdit',
+            component: channelLineAdd,
+            id: 6307,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '编辑',
+              parent: '/config/line'
             }
           },
           {

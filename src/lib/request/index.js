@@ -4501,7 +4501,7 @@ exports.orderRefundExport = params => {
 
 // 代理佣金结算 统计
 exports.withdrawCount = () => {
-  return $form.get('agents/withdraw-counts')
+  return $form.get('agents/withdraws-counts')
 }
 
 // 视频
@@ -5611,7 +5611,7 @@ exports.getWarehouseTabs = () => $form.get('warehouse-address')
 
 //获取货区信息
 exports.getCargoAreaList = (warehouseId, params) =>
-  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas`, params)
+  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas`, { params })
 
 //获取货位信息
 exports.getAllocationList = (warehouseId, areaId, params) =>
