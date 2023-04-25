@@ -247,7 +247,7 @@
       <!-- 发货时间 -->
       <el-table-column :label="$t('发货时间')" prop="shipped_at"> </el-table-column>
       <!-- 箱数 -->
-      <el-table-column :label="$t('箱数')">
+      <el-table-column :label="$t('箱数')" width='50'>
         <template slot-scope="scope">
           <span v-if="scope.row.box_count > 0">{{ scope.row.box_count }}</span>
           <span v-else>1</span>
@@ -257,6 +257,7 @@
       <el-table-column
         :label="$t('重量') + `${localization ? localization.weight_unit : ''}`"
         prop="actual_weight"
+        width='100'
       >
       </el-table-column>
       <!-- 尺寸/体积 -->
@@ -292,7 +293,7 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="160px" fixed="right">
+      <el-table-column :label="$t('操作')" width="160px">
         <template slot-scope="scope">
           <el-button
             v-if="activeName === '0'"

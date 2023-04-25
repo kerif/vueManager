@@ -13,7 +13,7 @@ const dynamicAddRouter = (router, next, to) => {
     res.data.map(item => {
       console.log('item.tag', item.tag)
       item.children.map(childrenItem => {
-        if (childrenItem.children.length >= 1 && childrenItem.children[0].enabled === 1) {
+        if (childrenItem.children.length >= 1 && childrenItem.enabled === 1) {
           isPermissionFilterArr.push(childrenItem.tag, item.tag)
           console.log('item.tag', childrenItem.tag, item.tag)
         }

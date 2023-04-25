@@ -3987,8 +3987,8 @@ exports.getPackagePick = params => {
   return $form.get('stations', { params })
 }
 // 自提点 转运订单
-exports.transformOrder = params => {
-  return $form.put('stations/transport', params)
+exports.transformOrder = (params) => {
+  return $json.put(`stations/transport`, params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
@@ -4501,7 +4501,7 @@ exports.orderRefundExport = params => {
 
 // 代理佣金结算 统计
 exports.withdrawCount = () => {
-  return $form.get('agents/withdraws-counts')
+  return $form.get('/agents/withdraws/counts')
 }
 
 // 视频

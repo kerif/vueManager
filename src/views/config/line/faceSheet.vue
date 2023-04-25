@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <el-form ref="form" :model="landing" label-width="130px" class='sheet-form'>
+    <el-form ref="form" :model="landing" label-width="130px" class="sheet-form">
       <!-- <el-form-item :label="$t('落地配配置')">
         <el-select
           @change="changeChannel"
@@ -57,17 +57,19 @@
         </el-select>
       </el-form-item> -->
       <el-form-item :label="$t('当前模式为')">
-        <span class='type-font'>{{ type === 1 ? '物流服务商API对接模式' : '物流服务商预留单号模式' }}</span>
+        <span class="type-font">{{
+          type === 1 ? '物流服务商API对接模式' : '物流服务商预留单号模式'
+        }}</span>
       </el-form-item>
-      <el-form-item :label="$t('落地配对接方式')" v-if='type===1'>
+      <el-form-item :label="$t('落地配对接方式')" v-if="type === 1">
         <el-radio-group v-model="landing.channel_type">
-          <el-radio style='margin-right: 290px' :label="1">{{ $t('单接口') }}</el-radio>
+          <el-radio style="margin-right: 290px" :label="1">{{ $t('单接口') }}</el-radio>
 
           <el-radio :label="2" @change="getList">{{ $t('多接口') }}</el-radio>
         </el-radio-group>
-        <div class='channel-type-tips'>
-          <span>{{$t('一次性只能对接一家服务商API')}}</span>
-          <span>{{$t('一次性对接多家服务商API')}}</span>
+        <div class="channel-type-tips">
+          <span>{{ $t('一次性只能对接一家服务商API') }}</span>
+          <span>{{ $t('一次性对接多家服务商API') }}</span>
         </div>
         <div v-if="landing.channel_type === 1" style="margin: 10px 0">
           <span style="display: inline-block; margin-right: 5px">{{ $t('配单公司') }}</span>
@@ -130,39 +132,42 @@
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
                 <el-button class="btn-main" @click="onEdit(scope.row.id)">{{
-                    $t('编辑')
-                  }}</el-button>
+                  $t('编辑')
+                }}</el-button>
                 <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
-                    $t('删除')
-                  }}</el-button>
+                  $t('删除')
+                }}</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('多箱订单推送方式')" v-if='type===1'>
+      <el-form-item :label="$t('多箱订单推送方式')" v-if="type === 1">
         <el-radio-group v-model="landing.push_type">
-          <el-radio style='margin-right: 263px' :label="1">{{ $t('按订单推送') }}</el-radio>
+          <el-radio style="margin-right: 263px" :label="1">{{ $t('按订单推送') }}</el-radio>
           <el-radio :label="2">{{ $t('按箱数推送') }}</el-radio>
         </el-radio-group>
-        <div class='push-type-tips'>
-          <span>{{$t('设置此项，一个订单只会向服务器商推送一次')}}</span>
-          <span>{{$t('设置此项，一个订单只会向服务器商推送N次')}}</span>
+        <div class="push-type-tips">
+          <span>{{ $t('设置此项，一个订单只会向服务器商推送一次') }}</span>
+          <span>{{ $t('设置此项，一个订单只会向服务器商推送N次') }}</span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('开启直接提交')" v-if='type===1'>
-<!--        <el-tooltip-->
-<!--          class="item"-->
-<!--          effect="dark"-->
-<!--          :content="-->
-<!--            $t(-->
-<!--              '开启直接提交：开启时，客户支付后直接推送订单；关闭时，订单需要后台在进行报关信息审核'-->
-<!--            )-->
-<!--          "-->
-<!--          placement="top"-->
-<!--        >-->
-<!--          <span class="el-icon-warning-outline icon-info"></span>-->
-<!--        </el-tooltip>-->
+      <el-form-item :label="$t('启用API推送')" v-if="type === 1">
+        <el-switch
+          v-model="landing.docking_enabled"
+          :active-text="$t('开')"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="gray"
+          :inactive-text="$t('关')"
+        >
+        </el-switch>
+        <div class="push-type-tips">
+          <span>{{ $t('开启后才会向第三方推送，关闭后系统不向第三方推送') }}</span>
+        </div>
+      </el-form-item>
+      <el-form-item :label="$t('开启直接推送')" v-if="type === 1">
         <el-switch
           v-model="landing.third_push_now"
           :active-text="$t('开')"
@@ -173,11 +178,15 @@
           :inactive-text="$t('关')"
         >
         </el-switch>
-        <div class='push-type-tips'>
-          <span>{{$t('开启后才会向第三方推送，关闭后系统不向第三方推送')}}</span>
+        <div class="push-type-tips">
+          <span>{{
+            $t(
+              '开启直接提交：开启时，客户支付后直接推送订单；关闭时，订单需要后台在进行报关信息审核'
+            )
+          }}</span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('开启直接推送')" v-if='type===1'>
+      <el-form-item :label="$t('启动预留单号池')" v-if="type === 2">
         <el-switch
           v-model="landing.third_push_now"
           :active-text="$t('开')"
@@ -188,38 +197,28 @@
           :inactive-text="$t('关')"
         >
         </el-switch>
-        <div class='push-type-tips'>
-          <span>{{$t('开启直接提交：开启时，客户支付后直接推送订单；关闭时，订单需要后台在进行报关信息审核')}}</span>
+        <div class="push-type-tips">
+          <span>{{ $t('开启后设置的预留单号池取号才会生效') }}</span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('启动预留单号池')" v-if='type===2'>
-        <el-switch
-          v-model="landing.third_push_now"
-          :active-text="$t('开')"
-          :active-value="1"
-          :inactive-value="0"
-          active-color="#13ce66"
-          inactive-color="gray"
-          :inactive-text="$t('关')"
-        >
-        </el-switch>
-        <div class='push-type-tips'>
-          <span>{{$t('开启后设置的预留单号池取号才会生效')}}</span>
-        </div>
-      </el-form-item>
-      <el-form-item :label="$t('预留单号模式')" v-if='type===2'>
+      <el-form-item :label="$t('预留单号模式')" v-if="type === 2">
         <el-radio-group v-model="landing.auto_sn_mode">
-          <el-radio :label="0" style='margin-top: 10px'>
+          <el-radio :label="0" style="margin-top: 10px">
             {{ $t('多票多件') }}
-            <div style='color: #b9b9b9;margin-top: 8px'>{{$t('设置此项，一个订单有N箱，会取N个预留单号')}}</div>
+            <div style="color: #b9b9b9; margin-top: 8px">
+              {{ $t('设置此项，一个订单有N箱，会取N个预留单号') }}
+            </div>
           </el-radio>
           <div></div>
-          <el-radio style="margin-top: 40px" :label="1">{{ $t('一票多件') }}
-            <div style='color: #b9b9b9;margin-top: 8px'>{{$t('设置此项，一个订单有N箱，会取N个预留单号')}}</div>
+          <el-radio style="margin-top: 40px" :label="1"
+            >{{ $t('一票多件') }}
+            <div style="color: #b9b9b9; margin-top: 8px">
+              {{ $t('设置此项，一个订单有N箱，会取N个预留单号') }}
+            </div>
           </el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('预留单号池')" v-if='type===2'>
+      <el-form-item :label="$t('预留单号池')" v-if="type === 2">
         <el-select :placeholder="$t('请选择')" v-model="landing.auto_sn_express_id">
           <el-option
             v-for="item in reservedList"
@@ -246,6 +245,7 @@ export default {
         docking_type: '',
         channel_code: '',
         push_type: 1,
+        docking_enabled: 0,
         third_push_now: 0,
         channel_type: 1,
         auto_sn_express_id: '',
@@ -295,9 +295,11 @@ export default {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         if (res.ret) {
           this.landing.docking_type = res.data.express_company_id
+          this.type = res.data.docking_mode
           this.getChannel()
           this.landing.channel_code = res.data.channel_code
           this.landing.push_type = res.data.push_type
+          this.landing.docking_enabled = res.data.docking_enabled
           this.landing.third_push_now = res.data.third_push_now
           this.landing.channel_type = res.data.channel_type
           this.landing.auto_sn_express_id = res.data.auto_sn_express_id
@@ -353,22 +355,24 @@ export default {
     },
     // 更新落地配配置
     saveDocking() {
-      this.$request.updateDocking(this.$route.params.id, { ...this.landing }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.dockData()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .updateDocking(this.$route.params.id, { ...this.landing, docking_mode: this.type })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dockData()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     getReservedSheet() {
       this.$request.reservedFaceSheet().then(res => {
@@ -427,21 +431,21 @@ export default {
       }
     }
   }
-  .sheet-form{
-    .type-font{
+  .sheet-form {
+    .type-font {
       color: #993433;
       font-weight: bold;
     }
-    .channel-type-tips{
+    .channel-type-tips {
       line-height: 20px;
-      span{
+      span {
         color: #c2c2c2;
         padding-right: 170px;
       }
     }
-    .push-type-tips{
+    .push-type-tips {
       line-height: 20px;
-      span{
+      span {
         color: #c2c2c2;
         padding-right: 80px;
       }

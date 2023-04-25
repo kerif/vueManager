@@ -134,7 +134,7 @@ export default {
     // 确认出库
     confirmToShip() {
       let param = {
-        order_ids: this.deleteNum,
+        order_ids: this.textarea2.split('\n'),
         station_id: this.station_id
       }
       this.$request.transformOrder(param).then(res => {

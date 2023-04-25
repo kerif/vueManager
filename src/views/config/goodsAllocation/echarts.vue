@@ -43,20 +43,20 @@
       <div v-if="cargoAreaList.length === 0" class="no-data">
         <el-empty :description="$t('暂无数据')"></el-empty>
       </div>
-<!--      <nle-pagination-->
-<!--        style="margin-top: 5px"-->
-<!--        :pageParams="page_params"-->
-<!--        :notNeedInitQuery="false"-->
-<!--        saveSize="package"-->
-<!--      >-->
-
-<!--      </nle-pagination>-->
     </div>
     <Detail
       :showCargoDetail="showCargoDetail"
       :selectCargoArea="selectCargoArea"
       @receive="receive"
     />
+    <nle-pagination
+      v-if="cargoAreaList.length > 0"
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+      saveSize="package"
+    >
+    </nle-pagination>
   </div>
 </template>
 <script>
@@ -102,7 +102,7 @@ export default {
       this.$request.getCargoAreaList(this.activeName, this.page_params).then(res => {
         console.log(res.data)
         this.cargoAreaList = res.data
-        this.page_params.total = res.data.meta.total
+        this.page_params.total = res.meta.total
       })
     },
     handleClick() {
