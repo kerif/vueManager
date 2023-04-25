@@ -26,6 +26,9 @@
     </div>
     <div class="menu-right">
       <div>
+        <el-button style="background-color: #3742a1; color: white" @click="goOld">{{
+          $t('切换旧版')
+        }}</el-button>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{ languageCode == 'zhCN' ? '简体' : languageCode == 'zhTW' ? '繁体' : 'English' }}
@@ -227,6 +230,21 @@ export default {
     }
   },
   methods: {
+    goOld() {
+      const hostName = location.hostname
+      let baseUrl
+      switch (hostName) {
+        case 'localhost':
+        case 'dev-admin.haiouoms.com': //有了正式服后换成正式服地址
+          baseUrl = 'https://dev-admin.haiouoms.com'
+          break
+        default:
+          baseUrl = 'https://dev-admin.haiouoms.com'
+          break
+      }
+      console.log(baseUrl)
+      window.location.replace(baseUrl)
+    },
     switchMenu(item) {
       this.$store.commit('saveMenu', item)
     },
