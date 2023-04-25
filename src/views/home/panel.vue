@@ -182,7 +182,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (user.yesterday - user.today).toFixed(2) : '*' }}
+                      {{user.today - user.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (user.today - user.yesterday).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -201,7 +201,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (user.last_month - user.current_month).toFixed(2) : '*' }}
+                      {{user.current_month - user.last_month<0?'':'+'}}{{ hiddenDataShow == 'true' ? (user.current_month - user.last_month).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -220,7 +220,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? income.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (income.today - income.yesterday).toFixed(2) : '*' }}
+                      {{income.today - income.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (income.today - income.yesterday).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? discount.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (discount.today - discount.yesterday).toFixed(2) : '*' }}
+                      {{discount.today - discount.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (discount.today - discount.yesterday).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -258,7 +258,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? payment.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (payment.today - payment.yesterday).toFixed(2) : '*' }}
+                      {{payment.today - payment.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (payment.today - payment.yesterday).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -277,7 +277,7 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? recharge.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? (recharge.today - recharge.yesterday).toFixed(2) : '*' }}
+                      {{recharge.today - recharge.yesterday?'':'+'}}{{ hiddenDataShow == 'true' ? (recharge.today - recharge.yesterday).toFixed(2) : '*' }}
                     </div>
                   </div>
                 </div>
@@ -484,7 +484,7 @@
                   <div style="overflow-x: auto; height: 415px">
                     <div class="issue-List-item" v-for="item in issueData">
                       <div>{{ $t('会员编号') }}：{{ item.user_id }}</div>
-                      <div>{{ $t('包裹号') }}：{{ item.express_num }}</div>
+                      <div>{{ $t('订单号') }}：{{ item.express_num }}</div>
                       <!--                      <div>{{ $t('货物状态') }}：破碎</div>-->
                       <div>{{ $t('异常描述') }}：{{ item.exceptional_remark }}</div>
                       <div>{{ $t('提交时间') }}：{{ item.created_at }}</div>
