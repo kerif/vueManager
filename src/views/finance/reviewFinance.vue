@@ -61,8 +61,8 @@
           </p>
           <span>{{ form.point_amount }}</span>
           <br />
-          <p class="transfer-right">{{ $t('支付金额') + this.localization.currency_unit }}</p>
-          <span>{{ form.tran_amount }}</span>
+          <p class="transfer-right">{{ $t('实付金额') + this.localization.currency_unit }}</p>
+          <span>{{ form.pay_amount }}</span>
           <span v-if="this.form.show_rate == true">
             （{{ this.form.currency_code }}&nbsp;{{ this.form.currency_symbol }}&nbsp;{{
               this.form.rate_amount
