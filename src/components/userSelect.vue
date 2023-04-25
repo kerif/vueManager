@@ -3,7 +3,7 @@
     <div class="first-line">
       <div class="uid">
         <span>{{ $t('编号') }}</span
-        >{{ item.uid }}
+        >{{$store.state.uid===0?item.id:item.uid }}
       </div>
       <div>{{ item.id }}</div>
     </div>
@@ -24,7 +24,6 @@ export default {
 
 <style lang="scss">
 .user-box {
-  padding: 0 -20px;
   border-bottom: 1px solid #bdbdbd;
   padding: 0 16px;
   .first-line {
@@ -43,5 +42,9 @@ export default {
     justify-content: space-between !important;
     color: #484848;
   }
+
+}
+.el-autocomplete-suggestion li{
+  padding: 0!important;
 }
 </style>

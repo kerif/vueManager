@@ -236,10 +236,10 @@ export default {
       switch (hostName) {
         case 'localhost':
         case 'dev-admin.haiouoms.com': //有了正式服后换成正式服地址
-          baseUrl = 'https://dev-admin.haiouoms.com'
+          baseUrl = 'https://jiyun-v3.haiouoms.com/'
           break
         default:
-          baseUrl = 'https://dev-admin.haiouoms.com'
+          baseUrl = 'https://jiyun-v3.haiouoms.com/'
           break
       }
       console.log(baseUrl)

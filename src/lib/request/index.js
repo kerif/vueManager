@@ -3987,8 +3987,8 @@ exports.getPackagePick = params => {
   return $form.get('stations', { params })
 }
 // 自提点 转运订单
-exports.transformOrder = (params) => {
-  return $json.put(`stations/transport`, params)
+exports.transformOrder = (id, params) => {
+  return $json.put(`stations/transport?XStationId=${id}`, params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
@@ -5653,4 +5653,9 @@ exports.getTransportMode = () => {
 // 更新集包模式
 exports.updateTransportMode = params => {
   return $form.put(`basic-settings/spu-mode`, params)
+}
+
+//显示ID判断
+exports.getIdType = () => {
+  return $form.get(`/setting/user-uid/init-config`)
 }

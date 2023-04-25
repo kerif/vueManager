@@ -1369,7 +1369,7 @@ export default {
         },
         {
           name: this.$t('快速入库'),
-          path: '/station/storage',
+          path: '/station/warehouseOrder',
           icon: 'home_storage'
         },
         {

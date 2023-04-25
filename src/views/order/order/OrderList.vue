@@ -195,7 +195,7 @@
           >
             <template slot-scope="scope">
               <div class="customer">
-                <div class="user-id">
+                <div class="user-id" v-if='$store.state.uid === 1'>
                   {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
                     scope.row.user_uid
                   }}</span>
