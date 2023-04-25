@@ -2849,6 +2849,18 @@ export default [
             }
           },
           {
+            path: '/config/line/channel/add',
+            name: 'channelLineAdd',
+            component: channelLineAdd,
+            id: 6307,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '新增',
+              parent: '/config/line'
+            }
+          },
+          {
             path: '/config/line/channel/edit/:id',
             name: 'channelLineEdit',
             component: channelLineAdd,

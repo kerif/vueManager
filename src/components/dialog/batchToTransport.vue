@@ -133,8 +133,12 @@ export default {
     },
     // 确认出库
     confirmToShip() {
+      let ids = []
+      this.tableData.map(item => {
+        ids.push(item.id)
+      })
       let param = {
-        order_ids: this.textarea2.split('\n'),
+        order_ids: ids,
         station_id: this.station_id
       }
       this.$request.transformOrder(param).then(res => {

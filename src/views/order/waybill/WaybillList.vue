@@ -359,7 +359,7 @@
                       <span class="tip">{{ $t('应付') }}：</span
                       ><span>{{ scope.row.actual_payment_fee }}</span>
                     </div>
-                    <div v-if='scope.row.status!=2 || scope.row.status!=1'>
+                    <div v-if='scope.row.status!=2 && scope.row.status!=1'>
                       <span class="tip">{{ $t('减免') }}：</span
                       ><span>{{
                         scope.row.actual_payment_fee * 1 - scope.row.pay_amount * 1

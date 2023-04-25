@@ -16,8 +16,10 @@
             <span>{{ $t('货区') }}：</span>
             <span class="code">{{ item.number }}</span>
           </div>
-          <div class="cargo-type" v-if='item.for_big===1'>{{ $t('大货专区') }}</div>
-          <div class="cargo-type" v-else-if='item.no_throw_condition===1'>{{ $t('无人认领专区') }}</div>
+          <div class="cargo-type" v-if="item.for_big === 1">{{ $t('大货专区') }}</div>
+          <div class="cargo-type" v-else-if="item.no_package_special === 1">
+            {{ $t('无人认领专区') }}
+          </div>
           <div class="cargo-type" v-else>{{ $t('普通货区') }}</div>
         </div>
         <div class="cargo-info">
@@ -108,6 +110,8 @@ export default {
     handleClick() {
       console.log(this.activeName)
       this.getCargoAreaList()
+      this.page_params.page = 1
+      this.page_params.size = 10
     },
     //点击查看货区详情
     showDetail(item) {
