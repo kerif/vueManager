@@ -2747,6 +2747,66 @@ export default [
             }
           },
           {
+            path: '/config/auto-reply',
+            name: 'autoReply',
+            component: autoReply,
+            id: 6301,
+            meta: {
+              level: 3,
+              group: '基础配置',
+              name: '自动回复',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/custom-menu',
+            name: 'customMenu',
+            component: customMenu,
+            id: 6301,
+            meta: {
+              level: 3,
+              group: '基础配置',
+              name: '自定义菜单',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/sms-services',
+            name: 'smsServices',
+            component: smsServices,
+            id: 6301,
+            meta: {
+              level: 3,
+              group: '基础配置',
+              name: '短信服务',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/tracking-services',
+            name: 'trackingService',
+            component: trackingService,
+            id: 6301,
+            meta: {
+              level: 3,
+              group: '基础配置',
+              name: '物流查询服务',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/mail-configure',
+            name: 'mailConfigur',
+            component: mailConfigure,
+            id: 6301,
+            meta: {
+              level: 3,
+              group: '基础配置',
+              name: '邮件通知配置',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
             path: '/config/remoteAreas',
             component: RemoteAreas,
             name: 'RemoteAreas',
@@ -2827,17 +2887,17 @@ export default [
               parent: '/config/reservedBox'
             }
           },
-          {
-            path: '/config/FaceSingleList',
-            name: 'FaceSingleList',
-            component: FaceSingleList,
-            id: 6305,
-            meta: {
-              level: 2,
-              group: '基础配置',
-              name: '面单配置'
-            }
-          },
+          // {
+          //   path: '/config/FaceSingleList',
+          //   name: 'FaceSingleList',
+          //   component: FaceSingleList,
+          //   id: 6305,
+          //   meta: {
+          //     level: 2,
+          //     group: '基础配置',
+          //     name: '面单配置'
+          //   }
+          // },
           {
             path: '/basics/warehouse',
             component: WareHouse,

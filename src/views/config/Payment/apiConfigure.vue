@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="goConfiguration('sms')">{{ $t('配222置') }}</el-button>
+        <el-button type="primary" @click="goConfiguration('sms')">{{ $t('配置') }}</el-button>
       </div>
     </div>
     <div class="item">
@@ -264,6 +264,15 @@ export default {
   },
   created() {},
   methods: {
+    goConfiguration(status) {
+      if (status === 'sms') {
+        this.$router.push({ name: 'smsServices' })
+      } else if (status === 'tracking') {
+        this.$router.push({ name: 'trackingService' })
+      } else {
+        this.$router.push({ name: 'mailConfigur' })
+      }
+    },
     showTaiWanDialog() {
       this.taiWanRealVisible = true
       this.$request.getTaiWanInfo().then(res => {
