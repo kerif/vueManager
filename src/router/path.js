@@ -2414,6 +2414,54 @@ export default [
             }
           },
           {
+            path: '/config/point/add',
+            name: 'pointAdd',
+            component: sinceAddEdit,
+            id: 3102,
+            meta: {
+              level: 3,
+              group: '自提点管理',
+              name: '添加自提点配置',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/commissionSet',
+            name: 'commissionSet',
+            component: commissionSet,
+            id: 3102,
+            meta: {
+              level: 3,
+              group: '自提点管理',
+              name: '计佣方式配置',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/selfbatchImport',
+            name: 'selfbatchImport',
+            component: selfbatchImport,
+            id: 3102,
+            meta: {
+              level: 3,
+              group: '自提点管理',
+              name: '批量导入',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/edit/:id',
+            name: 'pointEdit',
+            component: sinceAddEdit,
+            id: 3102,
+            meta: {
+              level: 3,
+              group: '自提点管理',
+              name: '编辑自提点配置',
+              parent: '/config/point'
+            }
+          },
+          {
             path: '/pick/packageManagement/pickLocation/:XStationId',
             name: 'pickLocation',
             component: pickLocation,
