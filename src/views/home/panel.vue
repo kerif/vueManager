@@ -115,12 +115,12 @@
           <div class="login-information">
             <div class="flex login-box">
               <div>
-                <div style="display: flex">
+                <div style="display: flex;align-items:center">
                   <div style="margin-right: 20px">
-                    <span class="mos">M</span>
+                    <span class="mos">{{ me.company_name[0] }}</span>
                   </div>
                   <div>
-                    <div class="content-size2">MOS</div>
+                    <div class="content-size2">{{ me.company_name }}</div>
                     <div class="content-size">{{ $store.state.userName }}</div>
                   </div>
                 </div>
@@ -182,7 +182,17 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{user.today - user.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (user.today - user.yesterday).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && user.today - user.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ user.today - user.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true' ? (user.today - user.yesterday).toFixed(2) : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -198,10 +208,22 @@
                   </div>
                   <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
                     <div class="box-size">
-                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
+                      {{ $t('上月') }}:{{ hiddenDataShow == 'true' ? user.last_month : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{user.current_month - user.last_month<0?'':'+'}}{{ hiddenDataShow == 'true' ? (user.current_month - user.last_month).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && user.current_month - user.last_month > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ user.current_month - user.last_month < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (user.current_month - user.last_month).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -220,7 +242,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? income.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{income.today - income.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (income.today - income.yesterday).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && income.today - income.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ income.today - income.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (income.today - income.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -239,7 +273,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? discount.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{discount.today - discount.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (discount.today - discount.yesterday).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && discount.today - discount.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ discount.today - discount.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (discount.today - discount.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -258,7 +304,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? payment.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{payment.today - payment.yesterday<0?'':'+'}}{{ hiddenDataShow == 'true' ? (payment.today - payment.yesterday).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && payment.today - payment.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ payment.today - payment.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (payment.today - payment.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -277,7 +335,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? recharge.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      {{recharge.today - recharge.yesterday?'':'+'}}{{ hiddenDataShow == 'true' ? (recharge.today - recharge.yesterday).toFixed(2) : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && recharge.today - recharge.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ recharge.today - recharge.yesterday ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (recharge.today - recharge.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -1422,7 +1492,8 @@ export default {
       freightSpaceDatas: [],
       hiddenDataShow: '',
       last_login_at: '',
-      issueData: []
+      issueData: [],
+      me: {}
       // systemData: []
     }
   },
@@ -1433,6 +1504,7 @@ export default {
     this.getSystem()
     // this.getPie()
     this.checkExpired()
+    this.getMe()
   },
   mounted() {
     window.setInterval(() => {
@@ -1525,6 +1597,13 @@ export default {
     }
   },
   methods: {
+    getMe() {
+      this.$request.aboutMe().then(res => {
+        if (res.ret) {
+          this.me.company_name = res.data.company_name
+        }
+      })
+    },
     //关注公众号
     followWx() {
       dialog({ type: 'followWx' }, () => {
@@ -1552,13 +1631,13 @@ export default {
       })
     },
     goNoSign() {
-      this.$router.push({ name: 'wayBillList', params: { type: 'noSign' } })
+      this.$router.push({ name: 'orderlist', params: { type: 'noSign' } })
     },
     goOrder(name) {
       this.$router.push({ name: 'wayBillList', params: { type: name } })
     },
     goNoExamine() {
-      this.$router.push({ name: 'orderReview'})
+      this.$router.push({ name: 'orderReview' })
     },
     hiddenData() {
       let dataShow = localStorage.getItem('DataShow')
@@ -2962,6 +3041,9 @@ export default {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
+}
+.red-data {
+  color: red;
 }
 @media screen and (max-width: 1359px) {
   .order-search {

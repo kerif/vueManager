@@ -784,6 +784,9 @@ export default {
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
+    if (this.$route.params.type === 'noSign') {
+      this.activeName = '1'
+    }
   },
   created() {
     this.initSize()

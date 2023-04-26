@@ -1580,7 +1580,7 @@ export default {
     } else if (this.$route.params.type === 'noSign') {
       this.activeName = '1'
     } else if (this.$route.params.type === 'daidabao') {
-      this.activeName = '2'
+      this.activeName = '1'
     }
   },
   created() {
