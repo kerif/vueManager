@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="goConfiguration('sms')">{{ $t('配置') }}</el-button>
+        <el-button type="primary" @click="goConfiguration('sms')">{{ $t('配222置') }}</el-button>
       </div>
     </div>
     <div class="item">
