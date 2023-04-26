@@ -115,9 +115,9 @@
           <div class="login-information">
             <div class="flex login-box">
               <div>
-                <div style="display: flex;align-items:center">
+                <div style="display: flex; align-items: center">
                   <div style="margin-right: 20px">
-                    <span class="mos">{{ me.company_name[0] }}</span>
+                    <span class="mos">{{ me.company_name.charAt(0) }}</span>
                   </div>
                   <div>
                     <div class="content-size2">{{ me.company_name }}</div>
@@ -1493,7 +1493,9 @@ export default {
       hiddenDataShow: '',
       last_login_at: '',
       issueData: [],
-      me: {}
+      me: {
+        company_name:''
+      }
       // systemData: []
     }
   },
