@@ -385,10 +385,10 @@ export default {
     //替换user_id
     replaceUserId() {
       console.log(this.ruleForm.receiver_name.indexOf('USER_ID'))
-      this.preview_receiver_name = this.ruleForm.receiver_name.replace('USER_ID','壹贰叁肆伍')
-      this.preview_receiver_name = this.preview_receiver_name.replace('user_id','12345')
-      this.preview_address = this.ruleForm.address.replace('USER_ID','壹贰叁肆伍')
-      this.preview_address = this.preview_address.replace('user_id','12345')
+      this.preview_receiver_name = this.ruleForm.receiver_name.replace('{USER_ID}','壹贰叁肆伍')
+      this.preview_receiver_name = this.preview_receiver_name.replace('{user_id}','12345')
+      this.preview_address = this.ruleForm.address.replace('{USER_ID}','壹贰叁肆伍')
+      this.preview_address = this.preview_address.replace('{user_id}','12345')
 
     },
     // 添加国家或地区
