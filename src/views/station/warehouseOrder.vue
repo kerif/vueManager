@@ -717,7 +717,13 @@ export default {
         receiver_name: [{ required: true, message: this.$t('请输入收件人'), trigger: 'blur' }],
         city: [{ required: true, message: this.$t('请输入城市'), trigger: 'blur' }]
       },
-      rule: {}
+      rule: {
+        express_num: [{ required: true, message: '请输入快递单号', trigger: 'blur' }],
+        package_weight: [{ required: true, message: '请输入重量', trigger: 'blur' }],
+        warehouse_id: [{ required: true, message: '请选择寄往仓库', trigger: 'blur' }],
+        user_id: [{ required: true, message: '请选择客户', trigger: 'blur' }],
+        props: [{ required: true, message: '请选择物品属性', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -735,8 +741,8 @@ export default {
   },
   mounted() {},
   methods: {
-    getUid(){
-      this.$request.initUserId().then(res=>{
+    getUid() {
+      this.$request.initUserId().then(res => {
         this.$store.commit('saveUid', res.data.user_uid)
         console.log(this.$store.state.uid, '@@@uid')
       })
@@ -930,7 +936,7 @@ export default {
     },
     changeSelect() {
       if (this.ruleForm.user_id) {
-        if(this.locationId){
+        if (this.locationId) {
           this.locationCNSearch()
         }
       }
@@ -1006,13 +1012,12 @@ export default {
 
       if (this.ruleForm.warehouse_id) {
         this.getAreaLocation()
-        if(this.locationId){
+        if (this.locationId) {
           this.locationCNSearch()
         }
       }
       this.address = ''
       this.getAddressDialog()
-
     },
     getAreaLocation() {
       this.locationCode = ''
