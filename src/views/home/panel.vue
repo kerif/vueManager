@@ -145,9 +145,9 @@
       </el-row>
     </div>
     <!-- 实况概括 -->
-    <div style="margin-bottom: 16px">
+    <div style="margin-bottom: 16px;min-height: 270px">
       <el-row>
-        <el-col :span="16" style="padding-right: 16px">
+        <el-col :span="16" style="padding-right: 16px;height: 270px">
           <div class="title">
             <div class="flex" style="margin-bottom: 15px">
               <div>
@@ -382,7 +382,7 @@
           </div>
         </el-col>
         <!-- 今日产能 -->
-        <el-col :span="8">
+        <el-col style='height: 270px' :span="8">
           <div class="title">
             <div class="flex" style="margin-bottom: 15px">
               <div>
@@ -2377,6 +2377,7 @@ export default {
   .title {
     padding: 15px;
     background-color: #ffffff;
+    height: calc( 100% - 32px );
     .update-time {
       margin-left: 20px;
     }
@@ -2444,7 +2445,7 @@ export default {
     flex-grow: 2;
     justify-content: space-between;
     .capacity-item {
-      padding: 20px;
+      padding: 10px;
       flex-basis: calc(40%);
     }
   }
