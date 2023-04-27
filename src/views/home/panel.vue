@@ -2444,6 +2444,7 @@ export default {
     flex-wrap: wrap;
     flex-grow: 2;
     justify-content: space-between;
+    margin-top: 30px;
     .capacity-item {
       padding: 10px;
       flex-basis: calc(40%);
