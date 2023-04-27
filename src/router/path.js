@@ -904,6 +904,30 @@ export default [
               level: 2,
               name: '文章管理'
             }
+          },
+          {
+            path: '/config/notice/add',
+            component: NoticeAddEdit,
+            name: 'noticeadd',
+            id: 4302,
+            meta: {
+              group: '内容管理',
+              level: 3,
+              name: '新增文章管理',
+              parent: '/config/notice'
+            }
+          },
+          {
+            path: '/config/notice/edit/:id',
+            component: NoticeAddEdit,
+            name: 'noticeEdit',
+            id: 4302,
+            meta: {
+              group: '内容管理',
+              level: 3,
+              name: '修改文章管理',
+              parent: '/config/notice'
+            }
           }
         ]
       },
