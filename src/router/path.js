@@ -376,6 +376,10 @@ const groupSet = loadonDemand('group/groupSet')
 const contentMana = loadonDemand('group/contentMana')
 // 内容编辑
 const editContent = loadonDemand('group/editContent')
+// 抽奖活动列表
+const luckyDrawList = loadonDemand('marketing/luckyDraw/luckyDrawList')
+// 添加抽奖活动
+const addLuckDraw = loadonDemand('marketing/luckyDraw/addLuckyDraw')
 
 // 订单 上门取件
 const pickupList = loadonDemand('order/pickup/pickupList')
@@ -682,6 +686,28 @@ export default [
           //     name: '视频管理'
           //   }
           // },
+          {
+            path: '/luckyDraw/list',
+            name: 'luckyDraw',
+            component: luckyDrawList,
+            id: 810,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '抽奖活动'
+            }
+          },
+          {
+            path: '/luckyDraw/add/:id',
+            name: 'addLuckDraw',
+            component: addLuckDraw,
+            id: 810,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '编辑抽奖活动'
+            }
+          },
           {
             path: '/marketing/channelManagement',
             name: 'channel',

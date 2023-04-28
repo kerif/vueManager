@@ -5628,3 +5628,18 @@ exports.getTaiWanInfo = () => $form.get('/api-services/id-verify-tw')
 
 //保存台湾件实名认证
 exports.saveTaiWanInfo = params => $form.put('/api-services/id-verify-tw', params)
+
+// 获取抽奖活动列表
+exports.getLuckyDrawList = params => $form.get('/lucky-draw', { params })
+// 抽奖活动新增或编辑
+exports.saveLuckyDraw = params => $form.post('/lucky-draw', params)
+// 获取抽奖活动详情
+exports.getLuckyDrawInfo = (id, params) => $form.get(`/lucky-draw/show/${id}`, { params })
+// 修改抽奖活动状态
+exports.updateLuckyDraw = (id, params) => $form.put(`/lucky-draw/update/${id}`, params)
+// 删除抽奖活动
+exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete/', params)
+// 获取抽奖活动参与用户数据
+exports.getLuckyDrawRecords = params => $form.get('/lucky-draw/records', { params })
+// 更新抽奖记录状态
+exports.updateLuckyDrawRecords = (uid, params) => $form.put(`/lucky-draw/record/${uid}`, params)
