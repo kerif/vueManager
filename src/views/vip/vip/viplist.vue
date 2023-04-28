@@ -194,7 +194,7 @@
       <div>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-main" size="small" @click="onUserLabel">{{
-            $t('添加标签')
+            $t('更新标签')
           }}</el-button>
           <el-button class="btn-main" size="small" @click="onBatchTag">...</el-button>
         </el-button-group>
