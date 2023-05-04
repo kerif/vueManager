@@ -136,7 +136,7 @@
               <template slot-scope="scope">
                 <el-image
                   v-if="scope.row.gift_image"
-                  :src="scope.row.gift_image"
+                  :src="$baseUrl.IMAGE_URL + scope.row.gift_image"
                   style="height: 50px"
                 ></el-image>
               </template>
@@ -148,7 +148,11 @@
             </el-table-column>
             <el-table-column prop="gift_num" :label="$t('投放数量')"> </el-table-column>
             <el-table-column :label="$t('限定中奖用户')" width="200px">
-              <template slot-scope="scope"></template>
+              <template slot-scope="scope">
+                <span v-for="(item) in scope.row.limit_user">
+                  {{ item }} ,
+                </span>
+              </template>
             </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
@@ -156,6 +160,17 @@
                 <el-button type="text" style="color: red" @click="delGift(scope.$index)"
                   >删除</el-button
                 >
+                <el-button
+                  type="text"
+                  style="color: red"
+                  @click="setDefaultGift(scope.row, 1)"
+                  v-show="scope.row.is_default !== 1"
+                >{{ $t('设为默认奖品') }}</el-button>
+                <el-button
+                  type="text"
+                  @click="setDefaultGift(scope.row, 0)"
+                  v-show="scope.row.is_default === 1"
+                >{{ $t('取消默认奖品') }}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -311,9 +326,8 @@ export default {
       this.visibleData.addGift = true
     },
     addGift(giftInfo) {
-      console.log(giftInfo)
       if (giftInfo.index || giftInfo.index === 0) {
-        this.giftList[giftInfo.index] = giftInfo
+        this.giftList.splice(giftInfo.index, 1, giftInfo)
       } else {
         this.giftList.push(giftInfo)
         this.giftProbability.forEach(item => {
@@ -323,11 +337,13 @@ export default {
       }
     },
     delGift(index) {
-      console.log(index)
       this.giftList.splice(index, 1)
       this.giftProbability.forEach((item, key) => {
         this.giftProbability[key].probability.splice(index, 1)
       })
+    },
+    setDefaultGift(row, value) {
+      this.$set(row, 'is_default', value)
     },
     addProbability() {
       let probability = []

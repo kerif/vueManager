@@ -5638,7 +5638,7 @@ exports.getLuckyDrawInfo = (id, params) => $form.get(`/lucky-draw/show/${id}`, {
 // 修改抽奖活动状态
 exports.updateLuckyDraw = (id, params) => $form.put(`/lucky-draw/update/${id}`, params)
 // 删除抽奖活动
-exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete/', params)
+exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete', { params })
 // 获取抽奖活动参与用户数据
 exports.getLuckyDrawRecords = params => $form.get('/lucky-draw/records', { params })
 // 更新抽奖记录状态

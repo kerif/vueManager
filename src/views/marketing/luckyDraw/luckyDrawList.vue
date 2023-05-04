@@ -168,29 +168,41 @@ export default {
       })
     },
     deleteActivity(id) {
-      this.$request.deleteLuckyDraw({ ids: [id] }).then(res => {
-        if (res.ret === 1) {
-          this.$message.success('删除成功')
-          setTimeout(() => {
-            this.reload()
-          }, 500)
-        } else {
-          this.$message.error(res.msg)
-        }
+      this.$confirm(this.$t('确认要删除该活动？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteLuckyDraw({ ids: [id] }).then(res => {
+          if (res.ret === 1) {
+            this.$message.success('删除成功')
+            setTimeout(() => {
+              this.reload()
+            }, 500)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       })
     },
     updateStatus(id, status) {
       let params = { status }
-      this.$request.updateLuckyDraw(id, params)
-      .then(res => {
-        if (res.ret === 1) {
-          this.$message.success('操作成功')
-          setTimeout(() => {
-            this.reload()
-          }, 500)
-        } else {
-          this.$message.error(res.msg)
-        }
+      this.$confirm(this.$t('确认要结束该活动？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.updateLuckyDraw(id, params)
+        .then(res => {
+          if (res.ret === 1) {
+            this.$message.success('操作成功')
+            setTimeout(() => {
+              this.reload()
+            }, 500)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       })
     },
     showDetail(row) {

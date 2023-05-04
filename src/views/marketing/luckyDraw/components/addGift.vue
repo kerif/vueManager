@@ -13,7 +13,7 @@
             <span class="model-box"></span>
             <span class="operate-box">
               <i class="el-icon-zoom-in" @click="onPreview(giftForm.gift_image)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg()"></i>
             </span>
           </span>
           <el-upload
@@ -155,7 +155,7 @@ export default {
     },
     // 删除图片
     onDeleteImg() {
-      this.ruleForm.image = ''
+      this.giftForm.gift_image = ''
     },
     changeCoupon(value) {
       let obj = this.couponList.find(item => {
