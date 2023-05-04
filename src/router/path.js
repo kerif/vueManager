@@ -690,7 +690,7 @@ export default [
             path: '/luckyDraw/list',
             name: 'luckyDraw',
             component: luckyDrawList,
-            id: 810,
+            id: 808,
             meta: {
               level: 2,
               group: '营销管理',
@@ -701,7 +701,7 @@ export default [
             path: '/luckyDraw/add/:id',
             name: 'addLuckDraw',
             component: addLuckDraw,
-            id: 810,
+            id: 808,
             meta: {
               level: 3,
               group: '营销管理',
