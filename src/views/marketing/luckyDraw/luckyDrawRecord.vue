@@ -12,7 +12,7 @@
           <div class="gift-data" v-for="(item, index) in activity.gift_list" :key="index">
             <p>{{ item.gift_name }}</p>
             <p>
-              总计： <span>{{ item.gift_num }}</span>.
+              总计： <span>{{ item.gift_num }}</span>
             </p>
             <p>
               领取： <span>{{ item.gift_take_num }}</span>
@@ -29,12 +29,22 @@
             size="small"
           >
             <div class="search-form">
-              <el-form-item :label="$t('所属用户')" style="margin-right: 10px">
-                <el-select v-model="searchForm.uids" style="width: 320px" filterable multiple>
+              <el-form-item :label="$t('用户')" style="margin-right: 10px">
+                <el-select v-model="searchForm.uids" style="width: 280px" filterable multiple>
                   <el-option
                     v-for="item in userList"
                     :key="item.value"
                     :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('状态')" style="margin-right: 10px">
+                <el-select v-model="searchForm.status" style="width: 200px" >
+                  <el-option
+                    v-for="item in statusList"
+                    :label="item.label"
                     :value="item.id"
                   >
                   </el-option>
@@ -106,12 +116,18 @@ export default {
     return {
       searchForm: {
         uids: [],
+        status: '',
         page: 1,
         size: 10,
         total: 0,
         handleCurrentChange: this.pageChange,
         handleQueryChange: this.resetPageSize
       },
+      statusList: [
+        { id: 1, label: '未抽奖' },
+        { id: 2, label: '已抽奖' },
+        { id: 3, label: '已兑换' }
+      ],
       luckyDrawRecords: [],
       activity: {
         gift_list: []
@@ -140,6 +156,7 @@ export default {
     getLuckDrawRecords() {
       const params = {
         uids: this.searchForm.uids,
+        status: this.searchForm.status,
         lucky_draw_id: this.luckyDraw && this.luckyDraw.id,
         page: this.searchForm.page,
         page_size: this.searchForm.size

@@ -59,20 +59,23 @@
           <el-input v-model="giftForm.gift_num"></el-input>
         </el-form-item>
         <el-form-item :label="$t('限定中奖用户')">
-          <el-select v-model="giftForm.limit_user" style="width: 320px" filterable multiple>
-            <el-option
-              v-for="item in userList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
+          <div style="display: flex; align-items: center">
+            <el-tooltip effect="dark" content="限定中奖用户100%中奖" style="margin-right: 10px"><i class="el-icon-question"></i></el-tooltip>
+            <el-select v-model="giftForm.limit_user" style="width: 320px" filterable multiple>
+              <el-option
+                v-for="item in userList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="handleClose">{{ $t('取 消') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('确 定') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -111,6 +114,9 @@ export default {
       userList: []
     }
   },
+  created() {
+    this.getUserList()
+  },
   methods: {
     handleClose() {
       this.$emit('input', false)
@@ -127,7 +133,7 @@ export default {
         })
     },
     getUserList() {
-      this.$request.getUsers({}).then(res => {
+      this.$request.getAllUsers({}).then(res => {
         this.userList = res.data
       })
     },
@@ -165,6 +171,7 @@ export default {
     },
     changeType() {
       this.giftForm.gift_name = ''
+      this.giftForm.gift_value = ''
     },
     submit() {
       let obj = this.typeList.find(item => {
@@ -188,7 +195,6 @@ export default {
     value(val) {
       if (val) {
         this.getCouponList()
-        this.getUserList()
         if (this.giftInfo) {
           this.giftForm = JSON.parse(JSON.stringify(this.giftInfo))
           this.giftForm.gift_value = parseInt(this.giftForm.gift_value)

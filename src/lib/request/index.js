@@ -1278,6 +1278,10 @@ exports.getVipLogs = id => {
 exports.getUsers = params => {
   return $form.get('users', { params })
 }
+// 获取所有客户
+exports.getAllUsers = params => {
+  return $form.get('users/all', { params })
+}
 // 客户 代理管理 单条提现申请
 exports.agentsWithdraws = (id, params) => {
   return $form.get(`agents/${id}/withdraws`, { params })

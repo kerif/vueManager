@@ -17,6 +17,15 @@
           <el-form-item :label="$t('活动名称')" style="margin-right: 10px">
             <el-input v-model="searchForm.name" :placeholder="$t('请输入活动名称')"></el-input>
           </el-form-item>
+          <el-form-item :label="$t('活动状态')" style="margin-right: 10px">
+            <el-select v-model="searchForm.status" :placeholder="$t('请输入活动名称')">
+              <el-option
+                v-for="item in statusList"
+                :label="item.label"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <div>
             <el-button type="primary" size="small" @click="search">{{ $t('搜索') }}</el-button>
           </div>
@@ -118,6 +127,7 @@ export default {
     return {
       searchForm: {
         name: '',
+        status: '',
         page: 1,
         size: 10,
         total: 0,
@@ -125,6 +135,11 @@ export default {
         handleQueryChange: this.resetPageSize
       },
       luckyDrawList: [],
+      statusList: [
+        { id: 1, label: '未开始' },
+        { id: 2, label: '进行中' },
+        { id: 3, label: '已结束' }
+      ],
       loadingData: {
         getLuckyDraw: false
       },
@@ -149,6 +164,7 @@ export default {
     getLuckDrawList() {
       const params = {
         name: this.searchForm.name,
+        status: this.searchForm.status,
         page: this.searchForm.page,
         page_size: this.searchForm.size
       }
@@ -186,8 +202,10 @@ export default {
       })
     },
     updateStatus(id, status) {
+      let tips = '确认要结束该活动？'
+      if (status === 2) tips = '确定要开始该活动？'
       let params = { status }
-      this.$confirm(this.$t('确认要结束该活动？'), this.$t('提示'), {
+      this.$confirm(this.$t(tips), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

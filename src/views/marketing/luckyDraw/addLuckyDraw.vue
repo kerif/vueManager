@@ -71,6 +71,7 @@
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
+                  :picker-options="pickerOptions"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -83,13 +84,14 @@
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
+                  :picker-options="pickerOptions"
                 >
                 </el-date-picker>
               </el-form-item>
             </div>
           </div>
           <el-form-item label="可参与抽奖用户">
-            <el-input v-model="baseForm.user" style="width: 300px; margin-right: 20px"></el-input>
+            <span style="width: 300px; margin-right: 20px">{{ getSelectUser }}</span>
             <el-button type="primary" @click="showChooseUser()">选择</el-button>
           </el-form-item>
           <div>
@@ -268,7 +270,7 @@ export default {
         max_num: '',
         day_max_num: '',
         max_prize_num: '',
-        choose_user: null
+        choose_user: {}
       },
       giftList: [{ gift_name: '奖品1', gift_type: 2, gift_type_text: '自定义', sort: 1 }],
       giftProbability: [
@@ -284,7 +286,18 @@ export default {
       loadingData: {
         getLuckyDrawInfo: false
       },
-      activeGift: null
+      activeGift: null,
+      pickerOptions: {
+        disabledDate: time => {
+          if (this.baseForm.time) {
+            let start = this.baseForm.time[0]
+            let end = this.baseForm.time[1]
+            return (
+              time.getTime() < new Date(start).getTime() || time.getTime() > new Date(end).getTime()
+            )
+          }
+        }
+      }
     }
   },
   created() {
@@ -292,7 +305,6 @@ export default {
       this.getLuckyDrawInfo(this.$route.params.id)
     }
   },
-  computed: {},
   methods: {
     getLuckyDrawInfo(id) {
       if (!id || id == 0) return false
@@ -421,7 +433,6 @@ export default {
       this.baseForm.activity_image = ''
     },
 
-
     transfer(giftList, giftProbability) {
       giftList.forEach((item, index) => {
         let probability = []
@@ -480,6 +491,28 @@ export default {
     },
     chooseUser(data) {
       this.baseForm.choose_user = data
+    }
+  },
+  computed: {
+    getSelectUser() {
+      console.log(this.baseForm.choose_user)
+      let str = ''
+      if (this.baseForm.choose_user.userGroupList) {
+        str += ' 用户组：' + this.baseForm.choose_user.userGroupList.join(', ')
+      }
+      if (this.baseForm.choose_user.tagList) {
+        str += ' 标签：' + this.baseForm.choose_user.tagList.join(', ')
+      }
+      if (this.baseForm.choose_user.levelList) {
+        str += ' 等级：' + this.baseForm.choose_user.levelList.join(', ')
+      }
+      if (this.baseForm.choose_user.customerList) {
+        str += ' 用户：'
+        this.baseForm.choose_user.customerList.forEach(item => {
+          str += item.id
+        })
+      }
+      return str
     }
   }
 }
