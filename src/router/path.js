@@ -2981,6 +2981,18 @@ export default [
             }
           },
           {
+            path: '/config/line/partition',
+            name: 'partition',
+            component: partitionList,
+            id: 6307,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '分区',
+              parent: '/config/line'
+            }
+          },
+          {
             path: '/config/line/channel/add',
             name: 'channelLineAdd',
             component: channelLineAdd,
