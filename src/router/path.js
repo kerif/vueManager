@@ -40,6 +40,8 @@ const application = loadonDemand('vip/application')
 const sleepReminder = loadonDemand('vip/sleepReminder')
 // 客户 客户概览
 const customerEcharts = loadonDemand('vip/customer/echarts')
+// 客户 优质客户
+const highQualityUsers = loadonDemand('vip/customer/highQuality')
 // 客户地址
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 客户地址 批量导入地址
@@ -1416,6 +1418,17 @@ export default [
               level: 2,
               group: '客户管理',
               name: '未活跃提醒'
+            }
+          },
+          {
+            path: '/vip/highQuality',
+            name: 'highQualityUsers',
+            component: highQualityUsers,
+            id: 4506,
+            meta: {
+              level: 2,
+              group: '客户管理',
+              name: '优质客户'
             }
           }
         ]

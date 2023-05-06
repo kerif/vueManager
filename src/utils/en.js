@@ -2781,5 +2781,16 @@ export default {
     "Attention: Multiple prohibited words separated by commas. If the item name in the customer's forecast package includes one of them, submission will be prohibited!",
   禁词匹配规则: 'Prohibited word matching rules',
   全匹配: 'Full Match',
-  半匹配: 'Semi matching'
+  半匹配: 'Semi matching',
+  优质客户配置: 'High quality customer configuration',
+  选择客户组: 'Select Customer Group',
+  '会员ID/编号': 'Member ID/ID',
+  区间消费总金额: 'Total amount of interval consumption',
+  请选择同时满足以下规则为优质会员:
+    'Please select a high-quality member who simultaneously meets the following rules',
+  近: 'Near',
+  天消费金额大于: 'days consumption amount greater than',
+  元: 'yuan',
+  天内有登录: 'days internal login',
+  不填写即代表不启用该条件: 'Not filling in means that the condition is not enabled'
 }

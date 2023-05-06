@@ -1258,6 +1258,10 @@ exports.updateSleepRules = params => {
 exports.batchWake = params => {
   return $form.post('asleep-users/notify', params)
 }
+// 优质客户
+exports.highQualityUsers = params => {
+  return $form.get('users/high-quality-users', { params })
+}
 // 客户 删除
 exports.deleteUser = ids => {
   return $form.put('users/batch-delete', ids)
