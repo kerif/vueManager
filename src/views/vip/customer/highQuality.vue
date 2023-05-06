@@ -143,8 +143,8 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('会员ID/编号')" prop="id"></el-table-column>
         <el-table-column :label="$t('会员昵称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('代理')" prop="invitor?.name"></el-table-column>
-        <el-table-column :label="$t('区间消费总金额')" prop="record_sum_amount"></el-table-column>
+        <el-table-column :label="$t('代理')" prop="invitor_name"></el-table-column>
+        <el-table-column :label="$t('区间消费总金额')" prop="records_sum_amount"></el-table-column>
         <el-table-column
           :label="$t('最后下单时间')"
           prop="last_pay_time"
