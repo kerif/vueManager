@@ -65,7 +65,7 @@
               <el-option
                 v-for="item in userList"
                 :key="item.value"
-                :label="item.name"
+                :label="item.id"
                 :value="item.id"
               >
               </el-option>
@@ -197,7 +197,9 @@ export default {
         this.getCouponList()
         if (this.giftInfo) {
           this.giftForm = JSON.parse(JSON.stringify(this.giftInfo))
-          this.giftForm.gift_value = parseInt(this.giftForm.gift_value)
+          if (this.giftForm.gift_value) {
+            this.giftForm.gift_value = parseInt(this.giftForm.gift_value)
+          }
         } else {
           this.giftForm = { gift_image: '', limit_user: [], gift_type: 1, gift_name: '' }
         }

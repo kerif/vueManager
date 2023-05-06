@@ -34,7 +34,7 @@
                   <el-option
                     v-for="item in userList"
                     :key="item.value"
-                    :label="item.name"
+                    :label="item.id"
                     :value="item.id"
                   >
                   </el-option>
@@ -169,7 +169,7 @@ export default {
       })
     },
     getUserList() {
-      this.$request.getUsers({}).then(res => {
+      this.$request.getAllUsers({}).then(res => {
         this.userList = res.data
       })
     },

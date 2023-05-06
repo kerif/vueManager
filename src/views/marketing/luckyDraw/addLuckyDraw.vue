@@ -235,7 +235,7 @@
     </div>
     <div class="base-submit" v-if="~~infoType === 2">
       <el-button>{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="saveInfo">{{ $t('保存') }}</el-button>
+      <el-button type="primary" @click="saveInfo" v-loading="loadingData.saveInfo">{{ $t('保存') }}</el-button>
     </div>
     <add-gift v-model="visibleData.addGift" :gift-info="activeGift" @submit="addGift"></add-gift>
     <choose-user
@@ -284,7 +284,8 @@ export default {
         chooseUser: false
       },
       loadingData: {
-        getLuckyDrawInfo: false
+        getLuckyDrawInfo: false,
+        saveInfo: false
       },
       activeGift: null,
       pickerOptions: {
@@ -394,7 +395,9 @@ export default {
         return false
       }
       params.gift_list = this.transfer(this.giftList, this.giftProbability)
+      this.loadingData.saveInfo = true
       this.$request.saveLuckyDraw(params).then(res => {
+        this.loadingData.saveInfo = false
         if (res.ret === 0) {
           this.$message.error(res.msg)
           return false
@@ -509,7 +512,7 @@ export default {
       if (this.baseForm.choose_user.customerList) {
         str += ' 用户：'
         this.baseForm.choose_user.customerList.forEach(item => {
-          str += item.id
+          str += item.id + ', '
         })
       }
       return str
