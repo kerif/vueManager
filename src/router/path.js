@@ -2771,6 +2771,18 @@ export default [
             }
           },
           {
+            path: '/config/payment/add',
+            component: AddEditEmail,
+            name: 'emailAdd',
+            id: 6301,
+            meta: {
+              group: '基础配置',
+              level: 3,
+              name: '新增邮件模版',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
             path: '/config/auto-reply',
             name: 'autoReply',
             component: autoReply,

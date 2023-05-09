@@ -145,6 +145,13 @@
                   </template>
                 </el-input>
               </div>
+              <div class="post-code">
+                <el-input :placeholder="$t('请输入邮编')" v-model="queryInfo.postcode">
+                  <template slot="suffix">
+                    <div class="tip">{{ localization.weight_unit }}</div>
+                  </template>
+                </el-input>
+              </div>
             </div>
             <div class="attribute">
               <span>{{ $t('物品属性') }}：</span>
@@ -435,6 +442,21 @@ export default {
           position: relative;
           &::before {
             content: '单箱重量';
+            position: absolute;
+            top: -10px;
+            left: 24px;
+            z-index: 999;
+            color: #3641a3;
+            padding: 0 4px 0 3px;
+            background-color: #fff;
+          }
+        }
+        .post-code {
+          width: 200px;
+          border-radius: 6px;
+          position: relative;
+          &::before {
+            content: '邮编';
             position: absolute;
             top: -10px;
             left: 24px;
