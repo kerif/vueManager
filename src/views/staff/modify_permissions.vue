@@ -30,7 +30,7 @@ export default {
       permissionMenu: [],
       defaultShowNodes: [],
       defaultProps: {
-        children: 'child',
+        children: 'children',
         label: 'name'
       }
     }
@@ -60,6 +60,7 @@ export default {
           // })
           this.formatIds(res.data)
           this.permissionMenu = res.data
+          console.log('this.permissionMenu', this.permissionMenu)
         } else {
           this.$message.error(res.msg)
         }
@@ -67,17 +68,18 @@ export default {
     },
     formatIds(arr) {
       arr.forEach(ele => {
-        if (ele.child) {
-          this.formatIds(ele.child)
+        if (ele.children) {
+          this.formatIds(ele.children)
         }
         if (ele.tag) {
-          ele.id = `${ele.id}-1`
+          // ele.id = `${ele.id}-1`
         }
         ele.name = this.$t(ele.name)
       })
     },
     confirmSubmit() {
       let permissions = this.$refs.tree.getCheckedKeys(true)
+
       this.$request.updatePermissions(this.$route.params.id, { permissions }).then(res => {
         if (res.ret) {
           this.$notify({

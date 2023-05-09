@@ -209,7 +209,7 @@ export default {
         this.$router.push({ name: 'rebate', params: { type: type }, query: { type } })
         // this.$router.push({ name: 'ordinary', params: { type: type } })
       } else if (type === 1 || type === 2 || type === 3 || type === 5 || type === 6) {
-        this.$router.push({ name: 'ordinary', query: { type: JSON.stringify(type) } })
+        this.$router.push({ path: `/marketing/new/ordinary?type=${JSON.stringify(type)}` })
       } else if (type === 7 || type === 8) {
         this.$router.push({ name: 'addVoucher', params: { type: type } })
       } else {

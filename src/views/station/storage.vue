@@ -89,6 +89,9 @@
                     @change="changeSelect"
                     :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
                   >
+                    <template slot-scope="{ item }">
+                      <UserSelect :item="item" />
+                    </template>
                   </el-autocomplete>
                 </el-form-item>
               </el-col>
@@ -339,7 +342,11 @@
                 <el-form-item :label="$t('物品属性')" class="service-style">
                   <el-checkbox-group v-model="user.props">
                     <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
-                      >{{ item.cn_name }}
+                      ><span
+                        class="prop-box"
+                        :style="'background-color:' + item.color + ';color:' + item.font_color"
+                        >{{ item.cn_name }}</span
+                      >
                     </el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
@@ -455,10 +462,12 @@
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
+import UserSelect from '@/components/userSelect'
 export default {
   mixins: [pagination],
   components: {
-    AddBtn
+    AddBtn,
+    UserSelect
   },
   data() {
     return {
@@ -613,6 +622,7 @@ export default {
       }
       this.$request.getProductDetails(id).then(res => {
         if (res.ret) {
+          console.log('我叼你，', res.data)
           const services = JSON.parse(JSON.stringify(res.data.chosen_services))
           this.user = res.data
           if (res.data.user_id) {
@@ -854,8 +864,13 @@ export default {
       this.userId = item.id
       this.supplierName = item.name
       this.user.location = ''
-      this.getAreaLocation()
-      this.locationCNSearch()
+      if (this.user.warehouse_id){
+        this.getAreaLocation()
+        this.locationCNSearch()
+      }else{
+
+      }
+
     },
     changeSelect() {
       if (!this.user.user_id) {
@@ -1094,6 +1109,10 @@ export default {
 </script>
 
 <style lang="scss">
+.el-autocomplete-suggestion li {
+  padding: 0;
+}
+
 .storage-container {
   .container-top {
     background-color: #fff !important;

@@ -77,6 +77,39 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('属性模式') }}</span>
+            </div>
+            <el-radio-group v-model="form.prop_mode">
+              <el-radio :label="0"
+              >{{ $t('存在模式') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('包裹属性任意一个匹配渠道属性')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
+              <el-radio :label="1"
+              >{{ $t('全等模式') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('包裹属性必须完全等于渠道属性')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
         <el-row>
           <el-col :span="10">
             <div>{{ $t('送货方式') }}</div>
@@ -407,7 +440,8 @@ export default {
         label_ids: [],
         order_mode: 0,
         require_size: 0,
-        tips: ''
+        tips: '',
+        prop_mode:''
       },
       referenceTime: {
         minTime: '',
@@ -570,6 +604,7 @@ export default {
         this.form.need_personal_code = res.data.need_personal_code
         this.form.need_id_card = res.data.need_id_card
         this.form.is_delivery = res.data.is_delivery
+        this.form.prop_mode = res.data.prop_mode
         this.form.order_mode = res.data.order_mode
         this.form.require_size = res.data.require_size
         this.form.default_pickup_station_id = res.data.default_pickup_station_id

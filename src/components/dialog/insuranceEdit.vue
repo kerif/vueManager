@@ -39,6 +39,12 @@
       >
         <el-input v-model="ruleForm.insurance_proportion"> </el-input>
       </el-form-item>
+      <el-form-item
+        :label="$t('保险金额上限')"
+        class="input-sty"
+      >
+        <el-input v-model="ruleForm.max"> </el-input>
+      </el-form-item>
       <!-- 是否强制购买 -->
       <el-form-item :label="$t('是否强制购买')">
         <el-switch
@@ -77,7 +83,8 @@ export default {
         insurance_type: '',
         start: '',
         remark: '',
-        is_force: 0
+        is_force: 0,
+        max:''
       },
       options: [
         {

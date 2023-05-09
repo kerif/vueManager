@@ -96,7 +96,11 @@
               v-model="ruleForm.user_id"
               @change="changeSelect"
               :placeholder="$t('请输入客户ID,不填则默认无人认领')"
-            ></el-autocomplete>
+            >
+              <template slot-scope="{ item }">
+                <UserSelect :item="item" />
+              </template>
+            </el-autocomplete>
           </el-form-item>
         </el-col>
       </el-row>
@@ -167,7 +171,11 @@
               <el-form-item :label="$t('物品属性')" prop="props">
                 <el-checkbox-group v-model="ruleForm.props">
                   <el-checkbox v-for="item in propList" :key="item.id" :label="item.id"
-                    >{{ item.cn_name }}
+                    ><span
+                      class="prop-box"
+                      :style="'background-color:' + item.color + ';color:' + item.font_color"
+                      >{{ item.cn_name }}</span
+                    >
                   </el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -609,7 +617,11 @@
 
 <script>
 import dialog from '@/components/dialog'
+import UserSelect from '@/components/userSelect'
 export default {
+  components: {
+    UserSelect
+  },
   data() {
     return {
       ruleForm: {
@@ -705,7 +717,13 @@ export default {
         receiver_name: [{ required: true, message: this.$t('请输入收件人'), trigger: 'blur' }],
         city: [{ required: true, message: this.$t('请输入城市'), trigger: 'blur' }]
       },
-      rule: {}
+      rule: {
+        express_num: [{ required: true, message: '请输入快递单号', trigger: 'blur' }],
+        package_weight: [{ required: true, message: '请输入重量', trigger: 'blur' }],
+        warehouse_id: [{ required: true, message: '请选择寄往仓库', trigger: 'blur' }],
+        user_id: [{ required: true, message: '请选择客户', trigger: 'blur' }],
+        props: [{ required: true, message: '请选择物品属性', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -715,13 +733,20 @@ export default {
     this.getProp()
     this.getWarehouseData()
     this.getServices()
-    console.log(this.$route.query.id, 'id')
+    this.getUid()
+
     if (this.$route.query.id) {
       this.getList()
     }
   },
   mounted() {},
   methods: {
+    getUid() {
+      this.$request.initUserId().then(res => {
+        this.$store.commit('saveUid', res.data.user_uid)
+        console.log(this.$store.state.uid, '@@@uid')
+      })
+    },
     getList() {
       let id = this.$route.query.id || this.shipNum
       this.$request.getProductDetails(id).then(res => {
@@ -910,8 +935,10 @@ export default {
       }
     },
     changeSelect() {
-      if (!this.ruleForm.user_id) {
-        this.locationCNSearch()
+      if (this.ruleForm.user_id) {
+        if (this.locationId) {
+          this.locationCNSearch()
+        }
       }
       // this.getAddressDialog()
     },
@@ -919,7 +946,8 @@ export default {
       this.$request
         .bigAutoLocation(this.locationId, {
           isbig: Number(this.ruleForm.isbig),
-          user_id: this.ruleForm.user_id.split('---')[0]
+          // user_id: this.ruleForm.user_id.split('---')[0]
+          user_id: this.supplierId
         })
         .then(res => {
           this.ruleForm.location = res.data[0].code
@@ -930,7 +958,8 @@ export default {
       this.$request
         .AutoLocation(this.locationId, {
           keyword: this.ruleForm.location,
-          user_id: this.ruleForm.user_id.split('---')[0]
+          // user_id: this.ruleForm.user_id.split('---')[0]
+          user_id: this.supplierId
         })
         .then(res => {
           for (let i of res.data) {
@@ -965,7 +994,11 @@ export default {
         })
         .then(res => {
           for (let i of res.data) {
-            i.value = i.id + '---' + i.name
+            if (this.$store.state.uid === 0) {
+              i.value = i.id + '---' + i.name
+            } else {
+              i.value = i.uid + '---' + i.name
+            }
           }
           list = res.data
           callback && callback(list)
@@ -976,8 +1009,13 @@ export default {
       this.userId = item.id
       this.supplierName = item.name
       this.ruleForm.location = ''
-      this.getAreaLocation()
-      this.locationCNSearch()
+
+      if (this.ruleForm.warehouse_id) {
+        this.getAreaLocation()
+        if (this.locationId) {
+          this.locationCNSearch()
+        }
+      }
       this.address = ''
       this.getAddressDialog()
     },
@@ -1009,7 +1047,8 @@ export default {
     getAddressDialog() {
       this.$request
         .previewAddress({
-          user_id: this.ruleForm.user_id.split('---')[0]
+          // user_id: this.ruleForm.user_id.split('---')[0]
+          user_id: this.supplierId
         })
         .then(res => {
           if (res.ret) {
@@ -1029,6 +1068,7 @@ export default {
               res.data[0].door_no +
               res.data[0].city +
               res.data[0].address
+
             this.getExpress()
           }
         })
@@ -1075,7 +1115,8 @@ export default {
               country_id: this.form.country_id[0],
               area_id: this.form.country_id[1] ? this.form.country_id[1] : '',
               sub_area_id: this.form.country_id[2] ? this.form.country_id[2] : '',
-              user_id: this.ruleForm.user_id.split('---')[0]
+              // user_id: this.ruleForm.user_id.split('---')[0]
+              user_id: this.supplierId
             })
             .then(res => {
               this.notifyInfo(res)
@@ -1239,7 +1280,8 @@ export default {
           return this.$message.error(this.$t('请选择自提点地址'))
         }
       }
-      this.ruleForm.user_id = this.ruleForm.user_id.split('---')[0]
+      // this.ruleForm.user_id = this.ruleForm.user_id.split('---')[0]
+      this.ruleForm.user_id = this.supplierId
       this.ruleForm.package_pictures = this.goodsImgList
       this.ruleForm.station_id = this.selfData.id
       this.ruleForm.isbig = Number(this.ruleForm.isbig)

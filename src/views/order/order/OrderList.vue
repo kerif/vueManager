@@ -195,11 +195,16 @@
           >
             <template slot-scope="scope">
               <div class="customer">
+                <div class="user-id" v-if='$store.state.uid === 1'>
+                  {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
+                    scope.row.user_uid
+                  }}</span>
+                </div>
                 <div class="user-id">
                   <span>ID：</span>
-                  <span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
                   <span>{{ scope.row.user_id }}</span>
                 </div>
+
                 <div>
                   <span>{{ $t('昵称') }}：</span>
                   <span>{{ scope.row.user_name }}</span>
@@ -300,8 +305,8 @@
                         class="prop-box"
                         :style="'background-color:' + item.color + ';color:' + item.font_color"
                         >{{ item.cn_name }}</span
-                      >
-                    </span>&nbsp;
+                      > </span
+                    >&nbsp;
                   </div>
                 </div>
               </div>
@@ -384,13 +389,13 @@
             <template slot-scope="scope">
               <div class="time">
                 <div>
-                  <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.shelf_up_at }}
+                  <span class="tip">{{ $t('下架时间') }}：</span>{{ scope.row.shelf_off_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_off_at }}
+                  <span class="tip">{{ $t('上架时间') }}：</span>{{ scope.row.shelf_up_at }}
                 </div>
                 <div>
-                  <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.in_storage_at }}
+                  <span class="tip">{{ $t('签收时间') }}：</span>{{ scope.row.received_at }}
                 </div>
                 <div>
                   <span class="tip">{{ $t('预报时间') }}：</span>{{ scope.row.created_at }}
@@ -646,7 +651,11 @@
           <el-table-column :label="$t('物品属性')">
             <template slot-scope="scope">
               <span v-for="item in scope.row.props" :key="item.id">
-                {{ item.cn_name }}
+                <span
+                  class="prop-box"
+                  :style="'background-color:' + item.color + ';color:' + item.font_color"
+                  >{{ item.cn_name }}</span
+                >
               </span>
             </template>
           </el-table-column>
@@ -775,6 +784,9 @@ export default {
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
+    if (this.$route.params.type === 'noSign') {
+      this.activeName = '1'
+    }
   },
   created() {
     this.initSize()

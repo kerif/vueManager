@@ -1335,12 +1335,18 @@ exports.deleteApproved = id => {
   return $form.delete(`agent-applications/${id}`)
 }
 // 获取管理员组权限设置
+// exports.getPermissions = id => {
+//   return $form.get(`admin-groups/${id}/permissions`)
+// }
 exports.getPermissions = id => {
-  return $form.get(`admin-groups/${id}/permissions`)
+  return $form.get(`/admin-groups/${id}/permissions/v4`)
 }
 // 修改员工组权限
-exports.updatePermissions = (id, params) => {
-  return $form.put(`admin-groups/${id}/permissions`, params)
+// exports.updatePermissions = (id, params) => {
+//   return $form.put(`admin-groups/${id}/permissions`, params)
+// }
+exports.updatePermissions = (id, params, config) => {
+  return $json.put(`admin-groups/${id}/permissions/v4`, params, config)
 }
 // 员工组 获取单条所属仓库
 exports.getAffiliation = id => {
@@ -3953,7 +3959,7 @@ exports.getResetCode = phone => $form.post('reset-password/apply', { phone })
 exports.resetPassword = params => $json.put('reset-password', params)
 
 // 获取权限
-exports.getCurrentUserPermissions = () => $form.get('menu-tree')
+exports.getCurrentUserPermissions = () => $form.get('menu-tree/v4')
 
 // 获取是否显示拼团配置
 exports.getMe = () => $form.get('me')
@@ -3981,8 +3987,8 @@ exports.getPackagePick = params => {
   return $form.get('stations', { params })
 }
 // 自提点 转运订单
-exports.transformOrder = params => {
-  return $form.put('stations/transport', params)
+exports.transformOrder = (id, params) => {
+  return $json.put(`stations/transport?XStationId=${id}`, params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
@@ -4495,7 +4501,7 @@ exports.orderRefundExport = params => {
 
 // 代理佣金结算 统计
 exports.withdrawCount = () => {
-  return $form.get('agents/withdraw-counts')
+  return $form.get('/agents/withdraws/counts')
 }
 
 // 视频
@@ -5605,7 +5611,7 @@ exports.getWarehouseTabs = () => $form.get('warehouse-address')
 
 //获取货区信息
 exports.getCargoAreaList = (warehouseId, params) =>
-  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas`, params)
+  $form.get(`/warehouse-address/${warehouseId}/goods-allocation-areas`, { params })
 
 //获取货位信息
 exports.getAllocationList = (warehouseId, areaId, params) =>
@@ -5628,3 +5634,28 @@ exports.getTaiWanInfo = () => $form.get('/api-services/id-verify-tw')
 
 //保存台湾件实名认证
 exports.saveTaiWanInfo = params => $form.put('/api-services/id-verify-tw', params)
+
+// 获取配置
+exports.getUnpackConfig = () => {
+  return $form.get(`unpack-config`)
+}
+
+// 更新配置
+exports.updateUnpackConfig = params => {
+  return $json.put(`unpack-config`, params)
+}
+
+// 获取集包模式
+exports.getTransportMode = () => {
+  return $form.get(`basic-settings/spu-mode`)
+}
+
+// 更新集包模式
+exports.updateTransportMode = params => {
+  return $form.put(`basic-settings/spu-mode`, params)
+}
+
+//显示ID判断
+exports.getIdType = () => {
+  return $form.get(`/setting/user-uid/init-config`)
+}

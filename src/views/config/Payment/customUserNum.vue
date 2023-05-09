@@ -122,6 +122,10 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.$request.initUserId().then(res=>{
+            this.$store.commit('saveUid', res.data.user_uid)
+            console.log(this.$store.state.uid, '@@@uid')
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

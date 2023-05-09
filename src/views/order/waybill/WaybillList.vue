@@ -18,7 +18,7 @@
         <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
         <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
         <el-tab-pane
-          :label="`${$t('异常件')} (${countData.exceptional || 0})`"
+          :label="`${$t('异常订单')} (${countData.exceptional || 0})`"
           name="6"
         ></el-tab-pane>
         <el-tab-pane
@@ -238,21 +238,17 @@
               v-if="item.checked"
               :width="item.width"
               show-overflow-tooltip
+              min-width="300"
             >
               <template slot-scope="scope">
                 <template v-if="item.id === 'place_order_customer'">
                   <div class="place_order_customer">
-                    <div class="customer-code">
-                      {{ $t('编号') }}:<span v-if="$store.state.uid === 1">{{
-                        scope.row.user_uid
-                      }}</span>
-                      <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
-                      }}<span v-if="$store.state.uid === 1">)</span>
+                    <div class="customer-code" v-if="$store.state.uid === 1">
+                      {{ $t('编号') }}:<span>{{ scope.row.user_uid }}</span>
                     </div>
                     <div class="customer-code">
-                      ID:<span v-if="$store.state.uid === 1">{{ scope.row.user_uid }}</span>
-                      <span v-if="$store.state.uid === 1">(</span>{{ scope.row.user_id
-                      }}<span v-if="$store.state.uid === 1">)</span>
+                      ID:
+                      {{ scope.row.user_id }}
                     </div>
                     <div class="username">
                       <span class="tip">{{ $t('昵称') }}:</span>
@@ -342,7 +338,7 @@
                         <div>
                           <span class="tip"
                             >{{ $t('计费重量') }}{{ localization.weight_unit }}：</span
-                          >1
+                          >{{ scope.row.payment_weight }}
                         </div>
                       </div>
                     </div>
@@ -361,15 +357,15 @@
                       <span class="tip">{{ $t('应付') }}：</span
                       ><span>{{ scope.row.actual_payment_fee }}</span>
                     </div>
-                    <div>
+                    <div v-if="scope.row.status != 2 && scope.row.status != 1">
                       <span class="tip">{{ $t('减免') }}：</span
                       ><span>{{
-                        scope.row.actual_payment_fee * 1 - scope.row.actual_payment_fee * 1
+                        scope.row.actual_payment_fee * 1 - scope.row.pay_amount * 1
                       }}</span>
                     </div>
                     <div>
                       <span class="tip">{{ $t('实付') }}：</span
-                      ><span>{{ scope.row.actual_payment_fee }}</span>
+                      ><span>{{ scope.row.pay_amount }}</span>
                     </div>
                   </div>
                 </template>
@@ -399,9 +395,7 @@
                     </div>
                     <div>
                       <span class="tip">{{ $t('邮编') }}：</span
-                      ><span>{{
-                        scope.row.address.area ? scope.row.address.area.postcode : ''
-                      }}</span>
+                      ><span>{{ scope.row.address ? scope.row.address.postcode : '' }}</span>
                     </div>
                     <div>
                       <span class="bold-font">{{ scope.row.address_type }}</span>
@@ -411,7 +405,8 @@
                 <template v-if="item.id === 'outbound_info'">
                   <div class="outbound-info">
                     <div class="bold-font">
-                      <span>{{ $t('仓库') }}：</span><span>{{ scope.row.payment_type_name }}</span>
+                      <span>{{ $t('仓库') }}：</span
+                      ><span>{{ scope.row.warehouse.warehouse_name }}</span>
                     </div>
                     <div class="bold-font">
                       <span>{{ $t('渠道') }}：</span
@@ -1577,6 +1572,16 @@ export default {
   },
   activated() {
     this.initQuery()
+    console.log(this.$route.params.type, 'activated@@@@@')
+    if (this.$route.params.type === 'erro') {
+      this.activeName = '6'
+    } else if (this.$route.params.type === 'daifahuo') {
+      this.activeName = '3'
+    } else if (this.$route.params.type === 'noSign') {
+      this.activeName = '1'
+    } else if (this.$route.params.type === 'daidabao') {
+      this.activeName = '1'
+    }
   },
   created() {
     this.getOrderFieldList()

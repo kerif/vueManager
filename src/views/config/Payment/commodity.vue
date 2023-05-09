@@ -27,7 +27,13 @@
             <el-table-column :label="$t('分类分组')" prop="group_name"></el-table-column>
             <el-table-column :label="$t('物品属性')" prop="props">
               <template slot-scope="scope">
-                <span v-for="item in scope.row.props" :key="item.id">{{ item.name }}</span>
+                <span v-for="item in scope.row.props" :key="item.id"
+                  ><span
+                    class="prop-box"
+                    :style="'background-color:' + item.color + ';color:' + item.font_color"
+                    >{{ item.cn_name }}</span
+                  ></span
+                >
               </template>
             </el-table-column>
             <!-- 是否显示 -->
@@ -103,7 +109,11 @@
       <el-table-column :label="$t('物品属性')" prop="props">
         <template slot-scope="scope">
           <span v-for="item in scope.row.props" :key="item.id">
-            {{ item.name }}
+            <span
+              class="prop-box"
+              :style="'background-color:' + item.color + ';color:' + item.font_color"
+              >{{ item.cn_name }}</span
+            >
           </span>
         </template>
       </el-table-column>

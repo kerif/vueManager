@@ -55,43 +55,55 @@
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('无人认领') }}:{{ index_count_data.package_no_owner }}</div>
-                    <div style="margin-top: 5px">{{ $t('正常预报') }}:{{ index_count_data.package_wait_in_storage }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('正常预报') }}:{{ index_count_data.package_wait_in_storage }}
+                    </div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="6" style="padding-left: 6px" >
-                <div class="grid-content" @click="goOrder">
+              <el-col :span="6" style="padding-left: 6px">
+                <div class="grid-content" @click="goOrder('daidabao')">
                   <div class="flex">
                     <div class="content-size">{{ $t('待打包订单') }}</div>
                     <div class="content-size2">{{ index_count_data.order_wait_pick }}</div>
                   </div>
                   <div class="box-size information">
-                    <div>{{ $t('待支付') }}: <span style='color: red'>{{ index_count_data.order_unpaid }}</span></div>
-                    <div style="margin-top: 5px">{{ $t('待审核') }}: <span style='color: red'>{{ index_count_data.order_wait_audit }}</span></div>
+                    <div>
+                      {{ $t('待支付') }}:
+                      <span style="color: red">{{ index_count_data.order_unpaid }}</span>
+                    </div>
+                    <div style="margin-top: 5px">
+                      {{ $t('待审核') }}:
+                      <span style="color: red">{{ index_count_data.order_wait_audit }}</span>
+                    </div>
                   </div>
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content" @click="goOrder">
+                <div class="grid-content" @click="goOrder('daifahuo')">
                   <div class="flex">
                     <div class="content-size">{{ $t('待发货订单') }}</div>
                     <div class="content-size2">{{ index_count_data.order_wait_ship }}</div>
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('未加入发货单') }}:{{ index_count_data.order_no_shipment }}</div>
-                    <div style="margin-top: 5px">{{ $t('已加入发货单') }}:{{ index_count_data.order_with_shipment }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('已加入发货单') }}:{{ index_count_data.order_with_shipment }}
+                    </div>
                   </div>
                 </div>
               </el-col>
               <el-col :span="6" style="padding-left: 6px">
-                <div class="grid-content" @click="goOrder">
+                <div class="grid-content" @click="goNoExamine">
                   <div class="flex">
                     <div class="content-size">{{ $t('待财务审核') }}</div>
                     <div class="content-size2">{{ index_count_data.wait_review }}</div>
                   </div>
                   <div class="box-size information">
                     <div>{{ $t('订单支付待审核') }}:{{ index_count_data.order_review }}</div>
-                    <div style="margin-top: 5px">{{ $t('充值金额待审核') }}:{{ index_count_data.balance_review }}</div>
+                    <div style="margin-top: 5px">
+                      {{ $t('充值金额待审核') }}:{{ index_count_data.balance_review }}
+                    </div>
                   </div>
                 </div>
               </el-col>
@@ -103,12 +115,12 @@
           <div class="login-information">
             <div class="flex login-box">
               <div>
-                <div style="display: flex">
+                <div style="display: flex; align-items: center">
                   <div style="margin-right: 20px">
-                    <span class="mos">M</span>
+                    <span class="mos">{{ me.company_name.charAt(0) }}</span>
                   </div>
                   <div>
-                    <div class="content-size2">MOS</div>
+                    <div class="content-size2">{{ me.company_name }}</div>
                     <div class="content-size">{{ $store.state.userName }}</div>
                   </div>
                 </div>
@@ -119,7 +131,6 @@
               </div>
               <div></div>
               <div style="margin-top: 10px">
-
                 <div
                   class="login-information-count"
                   @click="$router.push({ name: 'reset-password' })"
@@ -134,9 +145,9 @@
       </el-row>
     </div>
     <!-- 实况概括 -->
-    <div style="margin-bottom: 16px">
+    <div style="margin-bottom: 16px;min-height: 270px">
       <el-row>
-        <el-col :span="16" style="padding-right: 16px">
+        <el-col :span="16" style="padding-right: 16px;height: 270px">
           <div class="title">
             <div class="flex" style="margin-bottom: 15px">
               <div>
@@ -171,7 +182,17 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? user.yesterday - user.today : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && user.today - user.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ user.today - user.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true' ? (user.today - user.yesterday).toFixed(2) : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -187,10 +208,22 @@
                   </div>
                   <div style="border-right: #e8eaec 1px solid; padding-right: 10px">
                     <div class="box-size">
-                      {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? user.yesterday : '*' }}
+                      {{ $t('上月') }}:{{ hiddenDataShow == 'true' ? user.last_month : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? user.last_month - user.current_month : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && user.current_month - user.last_month > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ user.current_month - user.last_month < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (user.current_month - user.last_month).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -209,7 +242,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? income.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? income.today - income.yesterday : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && income.today - income.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ income.today - income.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (income.today - income.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -228,7 +273,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? discount.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? discount.today - discount.yesterday : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && discount.today - discount.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ discount.today - discount.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (discount.today - discount.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -247,7 +304,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? payment.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? payment.today - payment.yesterday : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && payment.today - payment.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ payment.today - payment.yesterday < 0 ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (payment.today - payment.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -266,7 +335,19 @@
                       {{ $t('昨日') }}:{{ hiddenDataShow == 'true' ? recharge.yesterday : '*' }}
                     </div>
                     <div class="box-size" style="color: #00bc4b; margin-top: 10px">
-                      +{{ hiddenDataShow == 'true' ? recharge.today - recharge.yesterday : '*' }}
+                      <span
+                        :class="
+                          hiddenDataShow == 'true' && recharge.today - recharge.yesterday > 0
+                            ? 'red-data'
+                            : ''
+                        "
+                        >{{ recharge.today - recharge.yesterday ? '' : '+'
+                        }}{{
+                          hiddenDataShow == 'true'
+                            ? (recharge.today - recharge.yesterday).toFixed(2)
+                            : '*'
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -301,7 +382,7 @@
           </div>
         </el-col>
         <!-- 今日产能 -->
-        <el-col :span="8">
+        <el-col style='height: 270px' :span="8">
           <div class="title">
             <div class="flex" style="margin-bottom: 15px">
               <div>
@@ -458,12 +539,12 @@
                 <div class="title">
                   <div class="flex" style="margin-bottom: 5px">
                     <div>
-                      <span class="content-size">{{ $t('异常件列表') }}</span>
+                      <span class="content-size">{{ $t('订单异常件') }}</span>
                     </div>
                     <div>
                       <span
                         class="box-size subheading"
-                        @click="$router.push({ name: 'wayBillList' })"
+                        @click="$router.push({ name: 'wayBillList', params: { type: 'erro' } })"
                       >
                         {{ $t('去处理') }}
                         <img src="@/assets/look-over.png" class="subheading-icon" alt="" />
@@ -473,7 +554,7 @@
                   <div style="overflow-x: auto; height: 415px">
                     <div class="issue-List-item" v-for="item in issueData">
                       <div>{{ $t('会员编号') }}：{{ item.user_id }}</div>
-                      <div>{{ $t('包裹号') }}：{{ item.express_num }}</div>
+                      <div>{{ $t('订单号') }}：{{ item.express_num }}</div>
                       <!--                      <div>{{ $t('货物状态') }}：破碎</div>-->
                       <div>{{ $t('异常描述') }}：{{ item.exceptional_remark }}</div>
                       <div>{{ $t('提交时间') }}：{{ item.created_at }}</div>
@@ -740,21 +821,36 @@
                       <div style="margin-right: 10px">
                         <img src="@/assets/operation-manual.png" alt="" />
                       </div>
-                      <div>
-                        <div style="font-size: 16px; margin-bottom: 5px">
+                      <div style="flex: 1">
+                        <div
+                          style="
+                            font-size: 16px;
+                            margin-bottom: 5px;
+                            display: flex;
+                            justify-content: space-between;
+                          "
+                        >
                           <strong>{{ $t('操作手册') }}</strong>
+                          <span
+                            style="cursor: pointer; color: #1f6dff; font-size: 16px"
+                            @click.stop="goTutorial"
+                            >{{ $t('视频教程') }}</span
+                          >
                         </div>
                         <div class="box-size">{{ $t('海鸥集运系统操作使用手册') }}</div>
                       </div>
                     </div>
 
-                    <div style="display: flex; padding: 10px 0px">
+                    <div
+                      style="display: flex; padding: 10px 0px; cursor: pointer"
+                      @click="followWx"
+                    >
                       <div style="margin-right: 10px">
                         <img src="@/assets/attention.png" alt="" />
                       </div>
                       <div>
                         <div style="font-size: 16px; margin-bottom: 5px">
-                          <strong>{{ $t('关注【通晓科技】') }}</strong>
+                          <strong>{{ $t('关注【海鸥集运系统】') }}</strong>
                         </div>
                         <div class="box-size">{{ $t('分享操作技巧、集运运营干货') }}</div>
                       </div>
@@ -1343,7 +1439,7 @@ export default {
         },
         {
           name: this.$t('快速入库'),
-          path: '/station/storage',
+          path: '/station/warehouseOrder',
           icon: 'home_storage'
         },
         {
@@ -1396,7 +1492,10 @@ export default {
       freightSpaceDatas: [],
       hiddenDataShow: '',
       last_login_at: '',
-      issueData: []
+      issueData: [],
+      me: {
+        company_name:''
+      }
       // systemData: []
     }
   },
@@ -1407,6 +1506,7 @@ export default {
     this.getSystem()
     // this.getPie()
     this.checkExpired()
+    this.getMe()
   },
   mounted() {
     window.setInterval(() => {
@@ -1499,6 +1599,25 @@ export default {
     }
   },
   methods: {
+    getMe() {
+      this.$request.aboutMe().then(res => {
+        if (res.ret) {
+          this.me.company_name = res.data.company_name
+        }
+      })
+    },
+    //关注公众号
+    followWx() {
+      dialog({ type: 'followWx' }, () => {
+        console.log('ccc')
+      })
+    },
+    //跳转到视频教程
+    goTutorial() {
+      window.open(
+        'https://www.douyin.com/user/MS4wLjABAAAAeXrbw1-Iyj0qJbrqf-qpnBcwgQdRFpN0EzKykvs7PxZgtvzgFrP3Ka0HoYjz-i-B?relation=2'
+      )
+    },
     //获取订单模块信息
     getPanelData() {
       this.$request.getPanelData().then(res => {
@@ -1514,10 +1633,13 @@ export default {
       })
     },
     goNoSign() {
-      this.$router.push({ path: '/order/orderlist' })
+      this.$router.push({ name: 'orderlist', params: { type: 'noSign' } })
     },
-    goOrder() {
-      this.$router.push({ path: '/order/waybill_list' })
+    goOrder(name) {
+      this.$router.push({ name: 'wayBillList', params: { type: name } })
+    },
+    goNoExamine() {
+      this.$router.push({ name: 'orderReview' })
     },
     hiddenData() {
       let dataShow = localStorage.getItem('DataShow')
@@ -2255,6 +2377,7 @@ export default {
   .title {
     padding: 15px;
     background-color: #ffffff;
+    height: calc( 100% - 32px );
     .update-time {
       margin-left: 20px;
     }
@@ -2321,8 +2444,9 @@ export default {
     flex-wrap: wrap;
     flex-grow: 2;
     justify-content: space-between;
+    margin-top: 30px;
     .capacity-item {
-      padding: 20px;
+      padding: 10px;
       flex-basis: calc(40%);
     }
   }
@@ -2921,6 +3045,9 @@ export default {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
+}
+.red-data {
+  color: red;
 }
 @media screen and (max-width: 1359px) {
   .order-search {

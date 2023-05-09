@@ -133,11 +133,15 @@ export default {
     },
     // 确认出库
     confirmToShip() {
+      let ids = []
+      this.tableData.map(item => {
+        ids.push(item.id)
+      })
       let param = {
-        order_ids: this.deleteNum,
+        order_ids: ids,
         station_id: this.station_id
       }
-      this.$request.transformOrder(param).then(res => {
+      this.$request.transformOrder(this.id, param).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

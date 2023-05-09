@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('添加标签')" :visible.sync="showLabel" :before-close="close" @close="clear">
+  <el-dialog :title="$t('更新标签')" :visible.sync="showLabel" :before-close="close" @close="clear">
     <el-form :model="form">
       <el-form-item :label="$t('选择标签')">
         <el-select v-model="form.tag_ids" multiple clearable>
@@ -11,6 +11,9 @@
           ></el-option>
         </el-select>
         <el-button class="add-btn" @click="onAddLabel">{{ $t('新增标签') }}</el-button>
+      </el-form-item>
+      <el-form-item :label="$t('添加标签')">
+        <el-switch v-model="form.add_mode"> </el-switch>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -26,7 +29,8 @@ export default {
   data() {
     return {
       form: {
-        tag_ids: []
+        tag_ids: [],
+        add_mode: false
       },
       labelData: []
     }
@@ -72,9 +76,11 @@ export default {
       this.$request
         .makeTag({
           user_ids: this.deleteNum,
-          tag_ids: this.form.tag_ids
+          tag_ids: this.form.tag_ids,
+          add_mode: this.form.add_mode ? 1 : 0
         })
         .then(res => {
+          this.form.add_mode = false
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -94,6 +100,7 @@ export default {
     },
     close() {
       this.$emit('passVal', false)
+      this.form.add_mode = false
     },
     clear() {
       this.form.tag_ids = []

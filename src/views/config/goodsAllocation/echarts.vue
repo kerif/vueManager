@@ -16,7 +16,11 @@
             <span>{{ $t('货区') }}：</span>
             <span class="code">{{ item.number }}</span>
           </div>
-          <div class="cargo-type">{{ $t('普通货区') }}</div>
+          <div class="cargo-type" v-if="item.for_big === 1">{{ $t('大货专区') }}</div>
+          <div class="cargo-type" v-else-if="item.no_package_special === 1">
+            {{ $t('无人认领专区') }}
+          </div>
+          <div class="cargo-type" v-else>{{ $t('普通货区') }}</div>
         </div>
         <div class="cargo-info">
           <div class="cargo-quantity">
@@ -47,14 +51,26 @@
       :selectCargoArea="selectCargoArea"
       @receive="receive"
     />
+    <nle-pagination
+      v-if="cargoAreaList.length > 0"
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+      saveSize="package"
+    >
+    </nle-pagination>
   </div>
 </template>
 <script>
 import Detail from './components/cargoAreaDetail'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   components: {
-    Detail
+    Detail,
+    NlePagination
   },
+  mixins: [pagination],
   data() {
     return {
       activeName: '1',
@@ -80,16 +96,22 @@ export default {
         this.getCargoAreaList()
       })
     },
+    getList() {
+      this.getCargoAreaList()
+    },
     //通过仓库ID货区仓库货区列表
     getCargoAreaList() {
-      this.$request.getCargoAreaList(this.activeName).then(res => {
+      this.$request.getCargoAreaList(this.activeName, this.page_params).then(res => {
         console.log(res.data)
         this.cargoAreaList = res.data
+        this.page_params.total = res.meta.total
       })
     },
     handleClick() {
       console.log(this.activeName)
       this.getCargoAreaList()
+      this.page_params.page = 1
+      this.page_params.size = 10
     },
     //点击查看货区详情
     showDetail(item) {

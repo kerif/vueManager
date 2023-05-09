@@ -24,6 +24,18 @@
         <el-form-item :label="$t('物流信息')">
           <el-input v-model="typeForm.context"></el-input>
         </el-form-item>
+        <el-form-item :label="$t('物流通知')">
+          <el-switch
+            v-model="typeForm.notify"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="expressDialog = false">{{ $t('取消') }}</el-button>
@@ -167,7 +179,8 @@ export default {
       trackingDialog: false,
       expressDialog: false,
       typeForm: {
-        context: ''
+        context: '',
+        notify: 0
       },
       typeId: '',
       languageData: [],
@@ -339,12 +352,14 @@ export default {
     clearType() {
       this.typeId = ''
       this.typeForm.context = ''
+      this.typeForm.notify = ''
     },
     // 获取 单条自定义物流信息
     getTypeDialog() {
       this.$request.getAloneType(this.typeId).then(res => {
         if (res.ret) {
           this.typeForm.context = res.data.context
+          this.typeForm.notify = res.data.notify
         }
       })
     },

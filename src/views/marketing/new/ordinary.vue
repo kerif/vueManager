@@ -179,6 +179,9 @@
           <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item v-if='ruleForm.trigger_condition==1' :label="$t('订单支付金额门槛')" prop="trigger_condition">
+        <el-input v-model="ruleForm.order_amount" placeholder="请输入金额" class="input-sty"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('抢券时间')" v-if="type === 8">
         <el-date-picker
           :picker-options="pickerOptions"

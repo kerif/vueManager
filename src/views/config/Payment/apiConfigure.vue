@@ -264,6 +264,15 @@ export default {
   },
   created() {},
   methods: {
+    goConfiguration(status) {
+      if (status === 'sms') {
+        this.$router.push({ name: 'smsServices' })
+      } else if (status === 'tracking') {
+        this.$router.push({ name: 'trackingService' })
+      } else {
+        this.$router.push({ name: 'mailConfigur' })
+      }
+    },
     showTaiWanDialog() {
       this.taiWanRealVisible = true
       this.$request.getTaiWanInfo().then(res => {
