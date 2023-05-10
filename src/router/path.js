@@ -699,28 +699,6 @@ export default [
           //   }
           // },
           {
-            path: '/luckyDraw/list',
-            name: 'luckyDraw',
-            component: luckyDrawList,
-            id: 808,
-            meta: {
-              level: 2,
-              group: '营销管理',
-              name: '抽奖活动'
-            }
-          },
-          {
-            path: '/luckyDraw/add/:id',
-            name: 'addLuckDraw',
-            component: addLuckDraw,
-            id: 808,
-            meta: {
-              level: 3,
-              group: '营销管理',
-              name: '编辑抽奖活动'
-            }
-          },
-          {
             path: '/marketing/channelManagement',
             name: 'channel',
             component: channelManagement,
@@ -812,7 +790,29 @@ export default [
               name: '海报管理',
               parent: '/marketing/advertising'
             }
-          }
+          },
+          {
+            path: '/luckyDraw/list',
+            name: 'luckyDraw',
+            component: luckyDrawList,
+            id: 4106,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '抽奖活动'
+            }
+          },
+          {
+            path: '/luckyDraw/add/:id',
+            name: 'addLuckDraw',
+            component: addLuckDraw,
+            id: 4106,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '编辑抽奖活动'
+            }
+          },
         ]
       },
       {
