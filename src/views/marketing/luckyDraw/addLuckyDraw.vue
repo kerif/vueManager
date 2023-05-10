@@ -498,8 +498,8 @@ export default {
   },
   computed: {
     getSelectUser() {
-      console.log(this.baseForm.choose_user)
       let str = ''
+      if (!this.baseForm.choose_user) return str
       if (this.baseForm.choose_user.userGroupList) {
         str += ' 用户组：' + this.baseForm.choose_user.userGroupList.join(', ')
       }
