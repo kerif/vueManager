@@ -122,6 +122,17 @@ export default {
       this.$emit('input', false)
     },
     getCouponList() {
+      // 同时请求两个状态优惠券，后面要把后台接口改了！！！！
+      this.couponList = []
+      this.$request
+        .getCouponList({
+          status: 1,
+          page: 1,
+          size: 1000
+        })
+        .then(res => {
+          this.couponList = [...res.data, ...this.couponList]
+        })
       this.$request
         .getCouponList({
           status: 2,
@@ -129,7 +140,7 @@ export default {
           size: 1000
         })
         .then(res => {
-          this.couponList = res.data
+          this.couponList = [...res.data, ...this.couponList]
         })
     },
     getUserList() {
