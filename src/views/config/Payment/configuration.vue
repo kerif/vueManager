@@ -50,7 +50,7 @@
                   <el-menu-item index="13">
                     {{ $t('自动签收配置') }}
                   </el-menu-item>
-                  <el-menu-item index="13">
+                  <el-menu-item index="14">
                     {{ $t('禁用词汇库配置') }}
                   </el-menu-item>
                 </el-menu-item-group>
@@ -106,7 +106,7 @@
               <auto-sign></auto-sign>
             </el-col>
             <!--  禁用词汇库配置-->
-            <el-col :span="19" v-if="secondTab1 === '13'" class="main-right">
+            <el-col :span="19" v-if="secondTab1 === '14'" class="main-right">
               <prohibited-words></prohibited-words>
             </el-col>
           </el-row>
