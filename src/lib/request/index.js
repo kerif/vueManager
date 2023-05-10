@@ -1258,6 +1258,10 @@ exports.updateSleepRules = params => {
 exports.batchWake = params => {
   return $form.post('asleep-users/notify', params)
 }
+// 优质客户
+exports.highQualityUsers = params => {
+  return $form.get('users/high-quality-users', { params })
+}
 // 客户 删除
 exports.deleteUser = ids => {
   return $form.put('users/batch-delete', ids)
@@ -1808,6 +1812,14 @@ exports.getBasic = () => {
 // 更多配置 修改基础配置
 exports.updateBasic = params => {
   return $form.put('basic-settings', params)
+}
+// 更多配置 基础配置 预报与入库 禁用词配置
+exports.getProhibitedWords = () => {
+  return $form.get('prohibited-words')
+}
+// 更多配置 基础配置 预报与入库 修改禁用词库
+exports.updateProhibitedWords = params => {
+  return $form.put('prohibited-words', params)
 }
 // 更多配置  获取汇率配置
 exports.getRates = params => {
