@@ -2175,6 +2175,18 @@ export default [
             }
           },
           {
+            path: '/order/billDetails/:id',
+            name: 'billDetailsr',
+            component: Billdetails,
+            id: 2102,
+            meta: {
+              level: 3,
+              group: '订单管理',
+              name: '详情',
+              parent: '/order/waybill_list'
+            }
+          },
+          {
             path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
