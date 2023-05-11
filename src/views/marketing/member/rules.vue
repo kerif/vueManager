@@ -77,6 +77,7 @@ export default {
             message: res.msg,
             type: 'error'
           })
+          this.getInOutRule()
         }
       })
     },

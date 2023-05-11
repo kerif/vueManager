@@ -50,6 +50,9 @@
                   <el-menu-item index="13">
                     {{ $t('自动签收配置') }}
                   </el-menu-item>
+                  <el-menu-item index="14">
+                    {{ $t('禁用词汇库配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -101,6 +104,10 @@
             </el-col>
             <el-col :span="19" v-if="secondTab1 === '13'" class="main-right">
               <auto-sign></auto-sign>
+            </el-col>
+            <!--  禁用词汇库配置-->
+            <el-col :span="19" v-if="secondTab1 === '14'" class="main-right">
+              <prohibited-words></prohibited-words>
             </el-col>
           </el-row>
         </div>
@@ -304,6 +311,7 @@ import addressConfig from './addressConfig.vue'
 import packPriceChange from './packPriceChange.vue'
 import pickupTimeConfig from './pickupTimeConfig.vue'
 import autoSign from './autoSign.vue'
+import ProhibitedWords from './prohibitedWords.vue'
 // import GroupConfigure from './groupConfigure.vue'
 import customUserNum from './customUserNum.vue'
 import unpackingAndInventory from './unpackingAndInventory.vue'
@@ -337,6 +345,7 @@ export default {
     // StoreGoods,
     Arrival,
     autoSign,
+    ProhibitedWords,
     // GroupConfigure,
     customUserNum,
     transportMode,

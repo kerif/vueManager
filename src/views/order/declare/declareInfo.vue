@@ -645,7 +645,7 @@ export default {
     },
     goOrderDetail(id) {
       this.$router.push({
-        name: 'billDetails',
+        name: 'billDetailsr',
         params: {
           id
         }

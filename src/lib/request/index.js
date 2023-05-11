@@ -1258,6 +1258,10 @@ exports.updateSleepRules = params => {
 exports.batchWake = params => {
   return $form.post('asleep-users/notify', params)
 }
+// 优质客户
+exports.highQualityUsers = params => {
+  return $form.get('users/high-quality-users', { params })
+}
 // 客户 删除
 exports.deleteUser = ids => {
   return $form.put('users/batch-delete', ids)
@@ -1277,6 +1281,10 @@ exports.getVipLogs = id => {
 // 获取客户列表
 exports.getUsers = params => {
   return $form.get('users', { params })
+}
+// 获取所有客户
+exports.getAllUsers = params => {
+  return $form.get('users/all', { params })
 }
 // 客户 代理管理 单条提现申请
 exports.agentsWithdraws = (id, params) => {
@@ -1804,6 +1812,14 @@ exports.getBasic = () => {
 // 更多配置 修改基础配置
 exports.updateBasic = params => {
   return $form.put('basic-settings', params)
+}
+// 更多配置 基础配置 预报与入库 禁用词配置
+exports.getProhibitedWords = () => {
+  return $form.get('prohibited-words')
+}
+// 更多配置 基础配置 预报与入库 修改禁用词库
+exports.updateProhibitedWords = params => {
+  return $form.put('prohibited-words', params)
 }
 // 更多配置  获取汇率配置
 exports.getRates = params => {
@@ -5667,3 +5683,18 @@ exports.updateTransportMode = params => {
 exports.getIdType = () => {
   return $form.get(`/setting/user-uid/init-config`)
 }
+
+// 获取抽奖活动列表
+exports.getLuckyDrawList = params => $form.get('/lucky-draw', { params })
+// 抽奖活动新增或编辑
+exports.saveLuckyDraw = params => $form.post('/lucky-draw', params)
+// 获取抽奖活动详情
+exports.getLuckyDrawInfo = (id, params) => $form.get(`/lucky-draw/show/${id}`, { params })
+// 修改抽奖活动状态
+exports.updateLuckyDraw = (id, params) => $form.put(`/lucky-draw/update/${id}`, params)
+// 删除抽奖活动
+exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete', { params })
+// 获取抽奖活动参与用户数据
+exports.getLuckyDrawRecords = params => $form.get('/lucky-draw/records', { params })
+// 更新抽奖记录状态
+exports.updateLuckyDrawRecords = (uid, params) => $form.put(`/lucky-draw/record/${uid}`, params)

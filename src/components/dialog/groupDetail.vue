@@ -440,7 +440,7 @@ export default {
     goOrderDetail(id) {
       this.show = false
       this.$router.push({
-        name: 'billDetails',
+        name: 'billDetailsr',
         params: {
           id
         }

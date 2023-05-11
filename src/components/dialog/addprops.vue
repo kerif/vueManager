@@ -72,6 +72,7 @@ export default {
         this.ruleForm.color = 'rgba(0, 0, 0, 0)'
         this.ruleForm.font_color = 'rgba(99, 111, 122,1)'
       }
+
     },
     confirm() {
       if (!this.ruleForm.cn_name) return this.$message.error(this.$t('请输入属性名称'))
