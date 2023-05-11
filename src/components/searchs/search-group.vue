@@ -15,9 +15,8 @@
           slot="append"
           @click="Enter"
           :loading="$store.state.btnLoading"
-         
-        >{{ $t('搜索') }}</el-button>
-      
+          >{{ $t('搜索') }}</el-button
+        >
       </el-input>
     </el-col>
   </el-row>

@@ -3489,6 +3489,14 @@ exports.saveOrderData = (id, params) => {
 exports.paid = (id, params) => {
   return $form.put(`orders/${id}/paid`, params)
 }
+//订单列表 待支付 取消推送发票
+exports.orderInvoiceCancel = params => {
+  return $form.put(`orders/invoice/cancel`, params)
+}
+//订单列表 已发货 重新推送发票
+exports.orderInvoiceRePush = id => {
+  return $form.post(`orders/invoice/${id}/push`)
+}
 //订单列表 待支付 获取支付方式
 exports.payMethod = () => {
   return $form.get('orders/pay-method')

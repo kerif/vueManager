@@ -112,6 +112,9 @@
             @click="batchNotify"
             >{{ $t('批量发送通知') }}</el-button
           >
+          <el-button class="btn-blue" v-if="activeName === '3'" size="small" @click="invoiceCancel"
+            >{{ $t('取消上传发票') }}
+          </el-button>
           <el-dropdown v-if="['3', '4', '5'].includes(activeName)" style="margin-left: 10px">
             <el-button class="btn-deep-purple" size="small">
               {{ $t('导出发票') }}
@@ -346,6 +349,21 @@
                 </template>
                 <template v-if="item.id === 'order_status_name'">
                   <div style="text-align: center">{{ scope.row.status_name }}</div>
+                  <div
+                    v-if="scope.row.invoice_status === 4"
+                    style="text-align: center; color: orange"
+                  >
+                    {{ $t('取消上传') }}
+                  </div>
+                  <div
+                    v-if="scope.row.invoice_status === 2"
+                    style="text-align: center; color: mediumseagreen"
+                  >
+                    {{ $t('上传成功') }}
+                  </div>
+                  <div v-if="scope.row.invoice_status === 3" style="text-align: center; color: red">
+                    {{ $t('上传失败') }}
+                  </div>
                 </template>
                 <template v-if="item.id === 'pay_info'">
                   <div class="pay-info">
@@ -758,6 +776,11 @@
                     v-if="activeName === '2'"
                     @click.native="returnBefore(scope.row.id)"
                     >{{ $t('退回待处理') }}</el-dropdown-item
+                  >
+                  <el-dropdown-item
+                    v-if="activeName === '4' && scope.row.invoice_status === 3"
+                    @click.native="rePushInvoice(scope.row.id)"
+                    >{{ $t('重新上传发票') }}</el-dropdown-item
                   >
                 </el-dropdown-menu>
               </el-dropdown>
@@ -2284,6 +2307,36 @@ export default {
           })
       })
     },
+    invoiceCancel() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您确认取消上传发票吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request
+          .orderInvoiceCancel({
+            ids: this.selectIDs
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      })
+    },
     // 获取全部物流状态
     getType() {
       this.$request.getOrderStatus().then(res => {
@@ -2974,6 +3027,23 @@ export default {
             })
           }
         })
+      })
+    },
+    rePushInvoice(id) {
+      this.$request.orderInvoiceRePush(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     batchNotify() {
