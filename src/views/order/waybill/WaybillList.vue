@@ -415,7 +415,18 @@
                       <span class="tip">{{ $t('邮编') }}：</span
                       ><span>{{ scope.row.address ? scope.row.address.postcode : '' }}</span>
                     </div>
-                    <div>
+                    <div v-if="scope.row.market">
+                      <span class="bold-font">{{ $t('超商取件') }}</span>
+                      <div>
+                        <span class="tip">{{ $t('店名') }}</span>
+                        ：<span>{{ scope.row.market.name }}</span>
+                      </div>
+                      <div>
+                        <span class="tip">{{ $t('号码') }}</span
+                        >：<span>{{ scope.row.market.number }}</span>
+                      </div>
+                    </div>
+                    <div v-if="!scope.row.market">
                       <span class="bold-font">{{ scope.row.address_type }}</span>
                     </div>
                   </div>
