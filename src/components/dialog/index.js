@@ -203,7 +203,7 @@ import packpageRemark from './packpageRemark'
 import orderRemark from './orderRemark'
 import logisticsInfo from './logisticsInfo'
 import followWx from './followWx'
-
+import customLabelLang from './customLabelLang'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -407,6 +407,7 @@ const packpageRemarkController = Vue.extend(packpageRemark)
 const orderRemarkController = Vue.extend(orderRemark)
 const logisticsInfoController = Vue.extend(logisticsInfo)
 const followWxController = Vue.extend(followWx)
+const customLabelLangControlller = Vue.extend(customLabelLang)
 
 const mixin = {
   data() {
@@ -1838,6 +1839,12 @@ function initInstance(type) {
     //关注公众号
     case 'followWx':
       instance = new followWxController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'customLabelLang':
+      instance = new customLabelLangControlller({
         el: document.createElement('div'),
         mixins: [mixin]
       })
