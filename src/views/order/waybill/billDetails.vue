@@ -518,6 +518,28 @@
               </el-table>
             </el-card>
             <br />
+            <el-card class="box-card invoice-info" v-if="invoice.type">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('发票信息') }}</span>
+              </div>
+              <div>
+                <div class="info-cell">
+                  <div class="info-title">{{ $t('发票类型') }}</div>
+                  <div>{{ $t(invoice.type_text) }}</div>
+                </div>
+                <div class="info-cell">
+                  <div class="info-title">{{ $t('发票信息') }}</div>
+                  <div v-if="invoice.type === 1">
+                    {{ $t(invoice.data_type_text) }} : {{ $t(invoice.data) }}
+                  </div>
+                  <div v-else>
+                    <p>{{ $t('统一编码') }}: {{invoice.number}}</p>
+                    <p>{{ $t('公司抬头') }}: {{invoice.title}}</p>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+            <br />
             <el-card class="box-card" v-if="productData">
               <div slot="header" class="clearfix">
                 <span>{{ $t('商品清单') }}</span>
@@ -1159,6 +1181,7 @@ export default {
       countryList: [],
       declare: {},
       videoUrl: [],
+      invoice: {},
       picking_divide_order_id: '',
       is_member: false,
       logisticsRemark: '',
@@ -1281,6 +1304,7 @@ export default {
         this.address = res.data.address
         this.baseMode = res.data.express_line.base_mode
         this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
+        this.invoice = res.data.invoice_info
         console.log(this.oderData, 'this.oderData')
         this.PackageData = res.data.packages
         this.services = res.data.services
@@ -2190,6 +2214,18 @@ export default {
     padding: 10px;
     .el-form-item {
       margin-bottom: 0;
+    }
+  }
+  .invoice-info {
+    .info-cell {
+      display: flex;
+      line-height: 40px;
+      align-items: center;
+      .info-title {
+        font-weight: 600;
+        font-size: 16px;
+        margin-right: 20px;
+      }
     }
   }
 }
