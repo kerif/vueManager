@@ -295,7 +295,7 @@
       <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
       <el-table-column :label="$t('邮箱')" prop="email" width="200"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone" width="150"></el-table-column>
-      <el-table-column v-if="company_id==1754" :label="$t('用户名')" prop="name" width="150"></el-table-column>
+      <el-table-column v-if="company_id==1754" :label="$t('用户名')" prop="username" width="150"></el-table-column>
       <el-table-column :label="$t('余额') + this.localization.currency_unit">
         <template slot-scope="scope">
           <div>
