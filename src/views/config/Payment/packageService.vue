@@ -164,7 +164,8 @@ export default {
           state: 'package'
         },
         () => {
-          this.getValue()
+          // this.getValue()
+          this.getList()
         }
       )
     },
