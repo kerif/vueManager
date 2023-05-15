@@ -5684,6 +5684,11 @@ exports.getIdType = () => {
   return $form.get(`/setting/user-uid/init-config`)
 }
 
+//显示客户概览用户名是否显示
+exports.showId = () => {
+  return $form.get(`/me`)
+}
+
 // 获取抽奖活动列表
 exports.getLuckyDrawList = params => $form.get('/lucky-draw', { params })
 // 抽奖活动新增或编辑
@@ -5698,3 +5703,13 @@ exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete', { params 
 exports.getLuckyDrawRecords = params => $form.get('/lucky-draw/records', { params })
 // 更新抽奖记录状态
 exports.updateLuckyDrawRecords = (uid, params) => $form.put(`/lucky-draw/record/${uid}`, params)
+
+// 标签 添加或修改语言
+exports.updateLabelLang = (id, params) => {
+  return $form.put(`express-line-labels/${id}/translate-data`, params)
+}
+
+// 标签 获取单条语言详情
+exports.labelAloneLang = (id, params) => {
+  return $form.get(`express-line-labels/${id}`, { params })
+}

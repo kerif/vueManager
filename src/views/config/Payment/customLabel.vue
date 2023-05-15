@@ -17,7 +17,7 @@
               <i class="el-icon-sort icon-fonts"></i>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column :label="$t('标签名称')" prop="name"></el-table-column>
           <el-table-column
             align="center"
             :label="item.name"
@@ -28,8 +28,9 @@
               <span
                 v-if="scope.row['trans_' + item.language_code]"
                 class="el-icon-check icon-sty"
+                @click="onLabel(scope.row, item)"
               ></span>
-              <span v-else class="el-icon-plus icon-sty"></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onLabel(scope.row, item)"></span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('操作')" width="200">
@@ -91,6 +92,12 @@ export default {
     //     this.getLineLabel()
     //   })
     // },
+    onLabel(line, lang) {
+      this.transCode = line['trans_' + lang.language_code]
+      dialog({ type: 'customLabelLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getLineLabel()
+      })
+    },
 
     // 翻译
     // 添加属性
