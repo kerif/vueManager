@@ -295,6 +295,7 @@
       <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
       <el-table-column :label="$t('邮箱')" prop="email" width="200"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone" width="150"></el-table-column>
+      <el-table-column v-if="company_id==1754" :label="$t('用户名')" prop="name" width="150"></el-table-column>
       <el-table-column :label="$t('余额') + this.localization.currency_unit">
         <template slot-scope="scope">
           <div>
@@ -529,7 +530,8 @@ export default {
       inviteLoading: false,
       hasFilterCondition: false,
       showLabel: false,
-      channelData: []
+      channelData: [],
+      company_id:0
     }
   },
   mixins: [pagination],
@@ -547,6 +549,7 @@ export default {
     this.getUserGroup()
     this.getStaff()
     this.getClientUser()
+    this.showId()
   },
   activated() {
     this.getList()
@@ -555,6 +558,14 @@ export default {
     })
   },
   methods: {
+    //company_id,=1754 就是淘得乐显示用户名
+    showId(){
+      this.$request.showId().then(res=>{
+        if (res.ret) {
+          this.company_id = res.data.company_id
+        }
+      })
+    },
     getList() {
       this.tableLoading = true
       if (!this.searchTime) {

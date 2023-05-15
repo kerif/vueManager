@@ -5684,6 +5684,11 @@ exports.getIdType = () => {
   return $form.get(`/setting/user-uid/init-config`)
 }
 
+//显示客户概览用户名是否显示
+exports.showId = () => {
+  return $form.get(`/me`)
+}
+
 // 获取抽奖活动列表
 exports.getLuckyDrawList = params => $form.get('/lucky-draw', { params })
 // 抽奖活动新增或编辑
