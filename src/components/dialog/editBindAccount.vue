@@ -14,7 +14,7 @@
       </el-form-item>
       <div v-if="brand == 'phone'">
         <el-form-item :label="$t('原手机号')">
-          <div>-</div>
+          <div>{{ row.phone }}</div>
         </el-form-item>
         <el-form-item :label="$t('新手机号')" class="required-item">
           <div>
@@ -40,7 +40,7 @@
       </div>
       <div v-else>
         <el-form-item :label="$t('原邮箱')">
-          <div>-</div>
+          <div>{{ row.email }}</div>
         </el-form-item>
         <el-form-item :label="$t('新邮箱')" class="required-item">
           <el-input
