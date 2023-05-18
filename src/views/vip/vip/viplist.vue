@@ -314,6 +314,7 @@
             <div @click="viewProfile(scope.row.id)">
               <span class="tip">{{ $t('系统ID') }}：</span>
               <span class="user-btn">{{ scope.row.id }}</span>
+              <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
             </div>
           </div>
           <div class="user-flex space">
@@ -1280,6 +1281,7 @@ export default {
   }
   .el-icon-lock {
     color: red;
+    margin-left: 5px;
   }
   .optionBtn {
     margin: 3px;
