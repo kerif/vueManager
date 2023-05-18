@@ -5713,3 +5713,8 @@ exports.updateLabelLang = (id, params) => {
 exports.labelAloneLang = (id, params) => {
   return $form.get(`express-line-labels/${id}`, { params })
 }
+
+// 客户预览 修改登录手机号
+exports.editLoginPhone = (id, params) => {
+  return $form.put(`users/${id}/bind-info`, params)
+}

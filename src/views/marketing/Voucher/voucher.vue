@@ -281,6 +281,10 @@
           </div>
         </div>
       </div>
+      <div>
+        <el-input class="count-ipt" :placeholder="$t('请输入投放数量')" v-model="count"></el-input
+        >{{ $t('投放数量') }}
+      </div>
       <div slot="footer">
         <el-button @click="show = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="onConfirm">{{ $t('确定') }}</el-button>
@@ -362,7 +366,8 @@ export default {
       levelList: [],
       customerList: [],
       vipList: [],
-      labelList: []
+      labelList: [],
+      count: ''
     }
   },
   created() {
@@ -664,7 +669,8 @@ export default {
               group_ids: this.userList,
               level_ids: this.levelList,
               user_ids: this.customerList.map(item => item.id),
-              tag_ids: this.tags
+              tag_ids: this.tags,
+              count: this.count
             })
             .then(res => {
               if (res.ret) {
@@ -831,6 +837,10 @@ export default {
         transition: all 0.5s ease-in;
       }
     }
+  }
+  .count-ipt {
+    width: 200px !important;
+    margin-right: 10px;
   }
   .box {
     display: flex;

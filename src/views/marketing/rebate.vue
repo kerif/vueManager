@@ -170,6 +170,24 @@
           v-model="ruleForm.max_coupon_amount"
         ></el-input>
       </el-form-item>
+      <el-form-item :label="$t('投放数量')" v-if="$route.params.type === 4">
+        <el-input
+          class="input-sty"
+          :disabled="statusEdit"
+          v-model="ruleForm.count"
+          :placeholder="$t('请输入投放数量')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          class="input-sty"
+          :disabled="statusEdit"
+          v-model="ruleForm.remark"
+          :autosize="{ minRows: 3, maxRows: 6 }"
+          :placeholder="$t('请输入说明')"
+        ></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -203,7 +221,9 @@ export default {
         type: 1,
         scope: 0,
         trigger_condition: 1,
-        express_line_ids: []
+        express_line_ids: [],
+        count: '',
+        remark: ''
       },
       options: [
         {

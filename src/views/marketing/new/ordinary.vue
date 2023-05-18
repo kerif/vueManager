@@ -179,8 +179,19 @@
           <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if='ruleForm.trigger_condition==1' :label="$t('订单支付金额门槛')" prop="trigger_condition">
-        <el-input v-model="ruleForm.order_amount" placeholder="请输入金额" class="input-sty"></el-input>
+      <el-form-item
+        :label="$t('订单支付金额门槛')"
+        prop="trigger_condition"
+        v-if="ruleForm.trigger_condition == 1 && type === 2"
+      >
+        <el-input
+          v-model="ruleForm.order_amount"
+          :placeholder="$t('请输入金额')"
+          class="input-sty"
+        ></el-input>
+        <span class="red-tip">{{
+          $t('填写金额则需客户第一单支付金额达到门槛才会发券, 不填写则注册即可领券')
+        }}</span>
       </el-form-item>
       <el-form-item :label="$t('抢券时间')" v-if="type === 8">
         <el-date-picker
@@ -212,6 +223,22 @@
           <el-radio :label="1">{{ $t('是') }}</el-radio>
           <el-radio :label="0">{{ $t('否') }}</el-radio>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item :label="$t('投放数量')" v-if="type === 1">
+        <el-input
+          class="input-sty"
+          v-model="ruleForm.count"
+          :placeholder="$t('请输入投放数量')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          class="input-sty"
+          v-model="ruleForm.remark"
+          :autosize="{ minRows: 3, maxRows: 6 }"
+          :placeholder="$t('请输入说明')"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -387,6 +414,22 @@
           <el-radio :label="0">{{ $t('否') }}</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item :label="$t('投放数量')" v-if="type === 1">
+        <el-input
+          class="input-sty"
+          v-model="form.count"
+          :placeholder="$t('请输入投放数量')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          class="input-sty"
+          v-model="form.remark"
+          :autosize="{ minRows: 3, maxRows: 6 }"
+          :placeholder="$t('请输入说明')"
+        ></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -423,11 +466,13 @@ export default {
         radio: 1,
         begin_at: '',
         end_at: '',
-        trigger_condition: 1
+        trigger_condition: 1,
         // times: 1,
-        // order_amount: '',
+        order_amount: '',
         // type: 1,
         // max_coupon_amount: ''
+        count: '',
+        remark: ''
       },
       form: {
         coupon_type: '',
@@ -446,7 +491,9 @@ export default {
         radio: 1,
         begin_at: '',
         end_at: '',
-        trigger_condition: 1
+        trigger_condition: 1,
+        count: '',
+        remark: ''
       },
       timeList: [],
       timeData: [],
@@ -481,9 +528,9 @@ export default {
         trigger_condition: [
           { required: true, message: this.$t('请选择获券条件'), trigger: 'blur' }
         ],
-        order_amount: [
-          { required: true, message: this.$t('请输入下单支付最小满足金额'), trigger: 'blur' }
-        ],
+        // order_amount: [
+        //   { required: true, message: this.$t('请输入下单支付最小满足金额'), trigger: 'blur' }
+        // ],
         max_coupon_amount: [
           { required: true, message: this.$t('请输入券最大上限金额'), trigger: 'blur' }
         ]
@@ -608,6 +655,11 @@ export default {
   }
   .coupons {
     margin-top: 60px;
+  }
+  .red-tip {
+    display: inline-block;
+    color: red;
+    margin-left: 10px;
   }
 }
 </style>

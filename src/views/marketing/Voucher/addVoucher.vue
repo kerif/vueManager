@@ -105,6 +105,15 @@
           </el-radio-group>
         </el-form-item>
       </div>
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          class="input-sty"
+          v-model="ruleForm.remark"
+          :autosize="{ minRows: 3, maxRows: 6 }"
+          :placeholder="$t('请输入说明')"
+        ></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -139,7 +148,8 @@ export default {
         ignore_launch_count: 0,
         discount_type: '',
         weight: '',
-        min_weight: ''
+        min_weight: '',
+        remark: ''
       },
       lineName: [], // 保存获取到的路线
       timeList: [],

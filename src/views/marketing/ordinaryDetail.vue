@@ -144,6 +144,24 @@
           <el-radio :label="2" :disabled="statusEdit">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item :label="$t('投放数量')" v-if="$route.params.type === 1">
+        <el-input
+          class="input-sty"
+          v-model="ruleForm.count"
+          :disabled="statusEdit"
+          :placeholder="$t('请输入投放数量')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          class="input-sty"
+          :disabled="statusEdit"
+          v-model="ruleForm.remark"
+          :autosize="{ minRows: 3, maxRows: 6 }"
+          :placeholder="$t('请输入说明')"
+        ></el-input>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -165,7 +183,9 @@ export default {
         radio: 1,
         begin_at: '',
         end_at: '',
-        trigger_condition: 1
+        trigger_condition: 1,
+        count: '',
+        remark: ''
       },
       coupon_type: '',
       statusEdit: false,
@@ -215,6 +235,7 @@ export default {
 <style lang="scss">
 .ordinary-detail {
   background-color: #fff !important;
+  padding: 20px;
   .choose-btn {
     margin-bottom: 20px;
     margin-left: 60px;
