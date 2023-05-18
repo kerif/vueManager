@@ -354,9 +354,14 @@
                       ><span>{{ scope.row.payment_type_name }}</span>
                     </div>
                     <div>
+                      <span class="tip">{{ $t('预估费用') }}：</span
+                      ><span>{{ scope.row.payment_fee }}</span>
+                    </div>
+                    <div>
                       <span class="tip">{{ $t('应付') }}：</span
                       ><span>{{ scope.row.actual_payment_fee }}</span>
                     </div>
+
                     <div v-if="scope.row.status != 2 && scope.row.status != 1">
                       <span class="tip">{{ $t('减免') }}：</span
                       ><span>{{
