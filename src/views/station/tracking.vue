@@ -35,9 +35,10 @@
             v-if="tableData.length > 0"
             :data="tableData"
             border
-            style="width: 100%;"
+            style="width: 100%"
             height="calc(100vh - 250px)"
             @row-click="goDetail"
+            row-class-name="row-style"
           >
             <template v-if="this.expressType == 2">
               <el-table-column fixed="left" prop="express_num" :label="$t('快递单号')" width="180">
@@ -120,7 +121,12 @@
         </div>
       </div>
     </div>
-    <Detail :showDetail="showDetail" :selectItem="selectItem" @receive="receive" />
+    <Detail
+      :showDetail="showDetail"
+      :expressType="expressType"
+      :selectItem="selectItem"
+      @receive="receive"
+    />
     <!--    <div class="search-main">-->
     <!--      <div class="main-top">-->
     <!--        <div class="number-sty">{{ $t('单号查询') }}:</div>-->
@@ -500,6 +506,9 @@ div::-webkit-scrollbar-track {
     .info-tab {
       width: 100%;
       height: 50px;
+      .row-style{
+        cursor: pointer;
+      }
     }
     .empty-box {
       width: 100%;

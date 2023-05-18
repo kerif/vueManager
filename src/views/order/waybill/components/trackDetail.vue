@@ -10,12 +10,12 @@
   >
     <div class="track-detail">
       <div>
-        <div class="detail-title">{{ expressType==1? $t('订单轨迹详细') : $t('包裹轨迹详细') }}</div>
+        <div class="detail-title">{{ $t('订单轨迹详细') }}</div>
         <div class="order-info">
           <div class="first-line">
             <div class="info-box">
               <div class="tip">{{ $t('订单号') }}</div>
-              <div class="bold-font">{{ expressType==1 ? item.order_sn : item.express_num }}</div>
+              <div class="bold-font">{{ expressType == 1 ? item.order_sn : item.express_num }}</div>
             </div>
             <div class="info-box">
               <div class="tip">{{ $t('订单状态') }}</div>
@@ -25,23 +25,15 @@
           <div class="first-line">
             <div class="info-box">
               <div class="tip">{{ $t('转运单号') }}</div>
-              <div v-if="expressType==1">
+              <div>
                 <span v-if="item.logistics_sn">{{ item.logistics_sn }}</span>
-                <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
-              </div>
-              <div v-else>
-                <span v-if="item.express_num">{{ item.express_num }}</span>
                 <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
               </div>
             </div>
             <div class="info-box">
               <div class="tip">{{ $t('转运公司') }}</div>
-              <div v-if='expressType==1'>
+              <div>
                 <span v-if="item.logistics_company">{{ item.logistics_company }}</span>
-                <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
-              </div>
-              <div v-else>
-                <span v-if="item.express_company">{{ item.express_company.name }}</span>
                 <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
               </div>
             </div>
@@ -59,11 +51,11 @@
               <template v-slot:title>
                 <div class="step-title">
                   <div>{{ val.context }}</div>
-                  <div class="del-font">删除</div>
+                  <div class="del-font" @click="deleteTable(val.id)">删除</div>
                 </div>
               </template>
               <template v-slot:description>
-                <div class="step-description">{{ val.ftime }}</div>
+                <div class="step-description">{{ val.created_at }}</div>
               </template>
             </el-step>
           </el-steps>
@@ -77,7 +69,6 @@
         <el-button @click="goTransport">{{ $t('设置转运订单') }}</el-button>
         <el-button @click="updateTracking">{{ $t('添加物流轨迹') }}</el-button>
       </div>
-
     </div>
   </el-drawer>
 </template>
@@ -92,13 +83,14 @@ export default {
       show: true,
       item: {},
       TrackingData: [],
-      isEmpty: false,
+      isEmpty: false
     }
   },
   mounted() {},
   methods: {
     open() {
       console.log(this.selectItem)
+      // return
       this.getDetail()
     },
     close() {
@@ -123,23 +115,19 @@ export default {
     goExpress() {
       console.log('expressType', this.expressType)
       if (this.expressType == 1) {
-        this.$request
-          .goTracking({
-            order_sn: this.item.order_sn
-          })
-          .then(res => {
-            if (res.ret) {
-              this.TrackingData = res.data.data
-              if (!this.TrackingData.length) {
-                this.isEmpty = true
-              } else {
-                this.isEmpty = false
-              }
-            } else {
-              this.TrackingData = []
+        this.$request.getAloneOrder(this.item.id).then(res => {
+          if (res.ret) {
+            this.TrackingData = res.data
+            if (!this.TrackingData.length) {
               this.isEmpty = true
+            } else {
+              this.isEmpty = false
             }
-          })
+          } else {
+            this.TrackingData = []
+            this.isEmpty = true
+          }
+        })
       } else if (this.expressType == 2) {
         this.$request
           .goTracking({
@@ -246,7 +234,25 @@ export default {
           this.getDetail()
         }
       )
-    }
+    },
+    deleteTable(id) {
+      this.$request.deleteOrderTable(this.item.id, id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.goExpress()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
   }
 }
 </script>

@@ -203,6 +203,7 @@ import packpageRemark from './packpageRemark'
 import orderRemark from './orderRemark'
 import logisticsInfo from './logisticsInfo'
 import followWx from './followWx'
+import addTrajectory from './addTrajectory'
 
 
 const InviteController = Vue.extend(inviteList)
@@ -407,6 +408,7 @@ const packpageRemarkController = Vue.extend(packpageRemark)
 const orderRemarkController = Vue.extend(orderRemark)
 const logisticsInfoController = Vue.extend(logisticsInfo)
 const followWxController = Vue.extend(followWx)
+const addTrajectoryController = Vue.extend(addTrajectory)
 
 const mixin = {
   data() {
@@ -1838,6 +1840,13 @@ function initInstance(type) {
     //关注公众号
     case 'followWx':
       instance = new followWxController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //添加物流轨迹
+    case 'addTrajectory':
+      instance = new addTrajectoryController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

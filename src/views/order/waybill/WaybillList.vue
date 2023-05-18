@@ -737,7 +737,7 @@
                   </el-dropdown-item>
                   <el-dropdown-item
                     v-if="activeName === '4'"
-                    @click.native="logistics(scope.row.id, scope.row.order_sn)"
+                    @click.native="logistics(scope.row.id, scope.row.order_sn, scope)"
                   >
                     {{ $t('轨迹') }}
                   </el-dropdown-item>
@@ -1417,6 +1417,12 @@
       ></waybill-list-tmp-drawer>
       <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passVal="passVal"></abnormal>
     </div>
+    <Detail
+      :showDetail="showDetail"
+      :expressType="expressType"
+      :selectItem="selectItem"
+      @receive="receive"
+    />
   </div>
 </template>
 
@@ -1430,18 +1436,23 @@ import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 import Abnormal from './components/abnormal'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
+import Detail from './components/trackDetail'
 export default {
   components: {
     WaybillListSearch,
     WaybillListDrawer,
     WaybillListTmpDrawer,
     NlePagination,
-    Abnormal
+    Abnormal,
+    Detail
   },
   mixins: [pagination],
   name: 'wayBillList',
   data() {
     return {
+      showDetail: false,
+      expressType: 1,
+      selectItem: null,
       tableColumn: [],
       checkColumn: [],
       sortResult: [],
@@ -1874,6 +1885,7 @@ export default {
     // 货量统计
     receive() {
       this.showDrawer = false
+      this.showDetail = false
     },
     receiveTmp() {
       this.showTmpDrawer = false
@@ -2143,7 +2155,10 @@ export default {
       })
     },
     // 轨迹
-    logistics(id, sn) {
+    logistics(id, sn, scope) {
+      this.showDetail = true
+      this.selectItem = scope.row
+      return false
       this.tableId = id
       this.tableSn = sn
       this.showDialog = true
