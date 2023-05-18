@@ -82,6 +82,7 @@ export default {
   },
   created() {
     this.getParcel()
+    this.getLanguageList()
   },
   computed: {
     formatLangData() {
@@ -91,6 +92,13 @@ export default {
   methods: {
     getList() {
       this.getParcel()
+    },
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
     },
     // 包裹 增加增值服务
     addParcel() {
@@ -156,7 +164,8 @@ export default {
           state: 'package'
         },
         () => {
-          this.getValue()
+          // this.getValue()
+          this.getList()
         }
       )
     },

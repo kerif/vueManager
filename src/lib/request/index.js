@@ -1258,6 +1258,10 @@ exports.updateSleepRules = params => {
 exports.batchWake = params => {
   return $form.post('asleep-users/notify', params)
 }
+// 优质客户
+exports.highQualityUsers = params => {
+  return $form.get('users/high-quality-users', { params })
+}
 // 客户 删除
 exports.deleteUser = ids => {
   return $form.put('users/batch-delete', ids)
@@ -1808,6 +1812,14 @@ exports.getBasic = () => {
 // 更多配置 修改基础配置
 exports.updateBasic = params => {
   return $form.put('basic-settings', params)
+}
+// 更多配置 基础配置 预报与入库 禁用词配置
+exports.getProhibitedWords = () => {
+  return $form.get('prohibited-words')
+}
+// 更多配置 基础配置 预报与入库 修改禁用词库
+exports.updateProhibitedWords = params => {
+  return $form.put('prohibited-words', params)
 }
 // 更多配置  获取汇率配置
 exports.getRates = params => {
@@ -3492,6 +3504,14 @@ exports.saveOrderData = (id, params) => {
 //订单列表 待支付 改为已付款
 exports.paid = (id, params) => {
   return $form.put(`orders/${id}/paid`, params)
+}
+//订单列表 待支付 取消推送发票
+exports.orderInvoiceCancel = params => {
+  return $form.put(`orders/invoice/cancel`, params)
+}
+//订单列表 已发货 重新推送发票
+exports.orderInvoiceRePush = id => {
+  return $form.post(`orders/invoice/${id}/push`)
 }
 //订单列表 待支付 获取支付方式
 exports.payMethod = () => {
@@ -5664,6 +5684,11 @@ exports.getIdType = () => {
   return $form.get(`/setting/user-uid/init-config`)
 }
 
+//显示客户概览用户名是否显示
+exports.showId = () => {
+  return $form.get(`/me`)
+}
+
 // 获取抽奖活动列表
 exports.getLuckyDrawList = params => $form.get('/lucky-draw', { params })
 // 抽奖活动新增或编辑
@@ -5678,3 +5703,13 @@ exports.deleteLuckyDraw = params => $form.delete('/lucky-draw/delete', { params 
 exports.getLuckyDrawRecords = params => $form.get('/lucky-draw/records', { params })
 // 更新抽奖记录状态
 exports.updateLuckyDrawRecords = (uid, params) => $form.put(`/lucky-draw/record/${uid}`, params)
+
+// 标签 添加或修改语言
+exports.updateLabelLang = (id, params) => {
+  return $form.put(`express-line-labels/${id}/translate-data`, params)
+}
+
+// 标签 获取单条语言详情
+exports.labelAloneLang = (id, params) => {
+  return $form.get(`express-line-labels/${id}`, { params })
+}
