@@ -180,15 +180,18 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item
-        v-if="ruleForm.trigger_condition == 1"
         :label="$t('订单支付金额门槛')"
         prop="trigger_condition"
+        v-if="ruleForm.trigger_condition == 1 && type === 2"
       >
         <el-input
           v-model="ruleForm.order_amount"
           :placeholder="$t('请输入金额')"
           class="input-sty"
         ></el-input>
+        <span class="red-tip">{{
+          $t('填写金额则需客户第一单支付金额达到门槛才会发券, 不填写则注册即可领券')
+        }}</span>
       </el-form-item>
       <el-form-item :label="$t('抢券时间')" v-if="type === 8">
         <el-date-picker
@@ -465,7 +468,7 @@ export default {
         end_at: '',
         trigger_condition: 1,
         // times: 1,
-        // order_amount: '',
+        order_amount: '',
         // type: 1,
         // max_coupon_amount: ''
         count: '',
@@ -525,9 +528,9 @@ export default {
         trigger_condition: [
           { required: true, message: this.$t('请选择获券条件'), trigger: 'blur' }
         ],
-        order_amount: [
-          { required: true, message: this.$t('请输入下单支付最小满足金额'), trigger: 'blur' }
-        ],
+        // order_amount: [
+        //   { required: true, message: this.$t('请输入下单支付最小满足金额'), trigger: 'blur' }
+        // ],
         max_coupon_amount: [
           { required: true, message: this.$t('请输入券最大上限金额'), trigger: 'blur' }
         ]
@@ -652,6 +655,11 @@ export default {
   }
   .coupons {
     margin-top: 60px;
+  }
+  .red-tip {
+    display: inline-block;
+    color: red;
+    margin-left: 10px;
   }
 }
 </style>

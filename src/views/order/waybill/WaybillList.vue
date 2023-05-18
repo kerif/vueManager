@@ -53,6 +53,9 @@
               <el-dropdown-item v-if="['4'].includes(activeName)" @click.native="goNotify(4)">
                 {{ $t('待取件通知') }}
               </el-dropdown-item>
+              <el-dropdown-item v-if="['4'].includes(activeName)" @click.native="goNotify(6)">
+                {{ $t('派送通知') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
@@ -153,6 +156,12 @@
             $t('货量统计')
           }}</el-button>
         </div>
+        <div style="margin-left: 5px" v-if="['5'].includes(activeName)">
+          <el-button size="small" type="danger" @click="goNotify(7)">{{
+            $t('发送通知')
+          }}</el-button>
+        </div>
+
         <div class="header-search">
           <el-input
             class="header-keyword"

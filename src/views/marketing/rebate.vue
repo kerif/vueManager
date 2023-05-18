@@ -173,6 +173,7 @@
       <el-form-item :label="$t('投放数量')" v-if="$route.params.type === 4">
         <el-input
           class="input-sty"
+          :disabled="statusEdit"
           v-model="ruleForm.count"
           :placeholder="$t('请输入投放数量')"
         ></el-input>
@@ -181,6 +182,7 @@
         <el-input
           type="textarea"
           class="input-sty"
+          :disabled="statusEdit"
           v-model="ruleForm.remark"
           :autosize="{ minRows: 3, maxRows: 6 }"
           :placeholder="$t('请输入说明')"
