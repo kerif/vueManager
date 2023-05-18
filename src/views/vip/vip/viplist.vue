@@ -13,7 +13,11 @@
       <div class="search-item">
         <div>
           <div class="search-content">{{ $t('客户组') }}</div>
-          <el-select v-model="searchParams.user_group_id" clearable :placeholder="$t('请选择客户组')">
+          <el-select
+            v-model="searchParams.user_group_id"
+            clearable
+            :placeholder="$t('请选择客户组')"
+          >
             <el-option
               v-for="item in groupList"
               :key="item.id"
@@ -27,7 +31,11 @@
       <div class="search-item">
         <div>
           <div class="search-content">{{ $t('所属客服') }}</div>
-          <el-select v-model="searchParams.customer_id" clearable :placeholder="$t('请选择所属客服')">
+          <el-select
+            v-model="searchParams.customer_id"
+            clearable
+            :placeholder="$t('请选择所属客服')"
+          >
             <el-option
               v-for="item in customerList"
               :key="item.id"
@@ -41,7 +49,11 @@
       <div class="search-item">
         <div>
           <div class="search-content">{{ $t('客户来源') }}</div>
-          <el-select v-model="searchParams.user_source" clearable :placeholder="$t('请选择客户来源')">
+          <el-select
+            v-model="searchParams.user_source"
+            clearable
+            :placeholder="$t('请选择客户来源')"
+          >
             <el-option
               v-for="item in sourceList"
               :key="item.id"
@@ -54,9 +66,14 @@
       <div class="search-item">
         <div>
           <div class="search-content">{{ $t('搜索') }}</div>
-          <div class="searchGroup" style=" display: flex;">
+          <div class="searchGroup" style="display: flex">
             <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-            <el-button style="padding: 0px 20px !important;margin-left: 5px;" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
+            <el-button
+              style="padding: 0px 20px !important; margin-left: 5px"
+              class="btn-light-red"
+              @click="reset"
+              >{{ $t('重置') }}</el-button
+            >
           </div>
         </div>
       </div>
@@ -81,7 +98,12 @@
             :remote-method="inviteMethod"
             :loading="inviteLoading"
           >
-            <el-option v-for="item in inviteList" :key="item.id" :label="item.name" :value="item.id">
+            <el-option
+              v-for="item in inviteList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
             </el-option>
           </el-select>
         </div>
@@ -89,19 +111,19 @@
       <div class="search-item" v-if="hasFilterCondition">
         <div>
           <div class="search-content">{{ $t('余额范围') }}</div>
-            <el-input
-              v-model="searchParams.min_balance"
-              :placeholder="$t('请输入最小余额')"
-              clearable
-              style="width: 35%"
-            ></el-input>
-            -
-            <el-input
-              v-model="searchParams.max_balance"
-              :placeholder="$t('请输入最大余额')"
-              clearable
-              style="width: 35%"
-            ></el-input>
+          <el-input
+            v-model="searchParams.min_balance"
+            :placeholder="$t('请输入最小余额')"
+            clearable
+            style="width: 35%"
+          ></el-input>
+          -
+          <el-input
+            v-model="searchParams.max_balance"
+            :placeholder="$t('请输入最大余额')"
+            clearable
+            style="width: 35%"
+          ></el-input>
         </div>
       </div>
       <div class="search-item" v-if="hasFilterCondition">
@@ -144,7 +166,7 @@
         <div>
           <div class="search-content">{{ $t('注册时间') }}</div>
           <el-date-picker
-            style="width: 90%;"
+            style="width: 90%"
             v-model="searchTime"
             type="daterange"
             format="yyyy 年 MM 月 dd 日"
@@ -160,7 +182,7 @@
         <div>
           <div class="search-content">{{ $t('最后登录时间') }}</div>
           <el-date-picker
-            style="width: 90%;"
+            style="width: 90%"
             v-model="loginTime"
             type="daterange"
             value-format="yyyy-MM-dd"
@@ -185,7 +207,7 @@
       </div>
       <div class="search-item"></div>
       <div class="search-item" v-if="!hasFilterCondition"></div>
-      <div class="search-item" v-if="!hasFilterCondition"> </div>
+      <div class="search-item" v-if="!hasFilterCondition"></div>
       <div class="search-item" v-if="hasFilterCondition">
         <!-- <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button> -->
       </div>
@@ -282,7 +304,128 @@
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
-      <el-table-column :label="$t('客户ID')" width="160">
+      <el-table-column :label="$t('客户基础信息')" key="basic" show-overflow-tooltip width="400">
+        <template slot-scope="scope">
+          <div class="user-flex space">
+            <div v-if="$store.state.uid === 1" @click="viewProfile(scope.row.id)">
+              <span class="tip">{{ $t('客户编号') }}：</span
+              ><span v-if="$store.state.uid === 1" class="user-btn">{{ scope.row.uid }}</span>
+            </div>
+            <div @click="viewProfile(scope.row.id)">
+              <span class="tip">{{ $t('系统ID') }}：</span>
+              <span class="user-btn">{{ scope.row.id }}</span>
+            </div>
+          </div>
+          <div class="user-flex space">
+            <div>
+              <span class="tip">{{ $t('客户昵称') }}：</span><span>{{ scope.row.name }}</span>
+            </div>
+            <div>
+              <span class="tip">{{ $t('余额') }}：</span
+              ><span v-bind:style="{ color: scope.row.balance > 0 ? 'red' : '' }">
+                {{ scope.row.balance }}</span
+              >
+            </div>
+          </div>
+          <div class="user-flex space">
+            <div>
+              <span class="tip">{{ $t('客户组') }}：</span
+              ><span>{{ scope.row.user_group.name_cn }}</span>
+            </div>
+            <div>
+              <span class="tip">{{ $t('VIP等级') }}：</span
+              ><span>{{ scope.row.member_level_name }}</span>
+            </div>
+          </div>
+          <div v-if="company_id == 1754" class="space">
+            <span class="tip">{{ $t('用户名') }}：</span><span>{{ scope.row.username }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('客户标签') }}：</span
+            ><el-tag
+              v-for="item in scope.row.tags"
+              style="margin: 0 5px 10px 0"
+              :key="item.id"
+              type="warning"
+              >{{ item.name }}</el-tag
+            >
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('联系方式')" key="contact">
+        <template slot-scope="scope">
+          <div class="space">
+            <span class="tip">{{ $t('手机号') }}：</span><span>{{ scope.row.phone }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('邮箱') }}：</span><span>{{ scope.row.email }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('邀请人') }}：</span>
+            <span class="invite-btn" @click="viewProfile(scope.row.id)"
+              >{{ scope.row.invitor }} {{ scope.row.invite_id }}</span
+            >
+            <span v-if="scope.row.is_agent_invite === 1">
+              <img class="group-sty" src="../../../assets/agent.png" />
+            </span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('渠道来源') }}：</span>
+            <span>{{ scope.row.channel && scope.row.channel.channel_name }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('客户来源') }}：</span>
+            <span>{{ scope.row.user_source }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('消费信息')" key="consume">
+        <template slot-scope="scope">
+          <div class="space">
+            <span class="tip">{{ $t('消费总额') }}：</span
+            ><span type="text" @click="onPageTo(scope.row)" class="consume-btn">{{
+              scope.row.consume_amount
+            }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('成长值') }}：</span>
+            <span>{{ scope.row.growth_value }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('积分') }}：</span>
+            <span v-bind:style="{ color: scope.row.point > 0 ? 'blue' : '' }">
+              {{ scope.row.point }}</span
+            >
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('注册时间') }}：</span>
+            <span>{{ scope.row.created_at }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('相关联系人')" key="relate">
+        <template slot-scope="scope">
+          <div class="space">
+            <span class="tip">{{ $t('所属客服') }}：</span>
+            <span>{{ scope.row.customer_name }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('所属销售') }}：</span>
+            <span>{{ scope.row.sale_name }}</span>
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('所属代理') }}：</span>
+            <span class="invite-btn" @click="viewProfile(scope.row.id)"
+              >{{ scope.row.invitor }} {{ scope.row.invite_id }}</span
+            >
+          </div>
+          <div class="space">
+            <span class="tip">{{ $t('最后登录时间') }}：</span>
+            <span>{{ scope.row.last_login_at }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column :label="$t('客户ID')" width="160">
         <template slot-scope="scope">
           <el-button @click="viewProfile(scope.row.id)" type="text">
             <span v-if="$store.state.uid === 1">{{ scope.row.uid }}</span>
@@ -292,10 +435,14 @@
           <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
-      <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
       <el-table-column :label="$t('邮箱')" prop="email" width="200"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone" width="150"></el-table-column>
-      <el-table-column v-if="company_id==1754" :label="$t('用户名')" prop="username" width="150"></el-table-column>
+      <el-table-column
+        v-if="company_id == 1754"
+        :label="$t('用户名')"
+        prop="username"
+        width="150"
+      ></el-table-column>
       <el-table-column :label="$t('余额') + this.localization.currency_unit">
         <template slot-scope="scope">
           <div>
@@ -368,8 +515,8 @@
             </span>
           </div>
         </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
+      </el-table-column> -->
+      <el-table-column :label="$t('操作')" key="operator" width="116px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary" plain>
@@ -405,6 +552,18 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPassword(scope.row.id)">
                 <span>{{ $t('修改密码') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="editPhoneOrEmail(scope.row, 'phone')"
+              >
+                <span>{{ $t('修改登陆手机号') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="editPhoneOrEmail(scope.row, 'email')"
+              >
+                <span>{{ $t('修改登录邮箱') }}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -531,7 +690,7 @@ export default {
       hasFilterCondition: false,
       showLabel: false,
       channelData: [],
-      company_id:0
+      company_id: 0
     }
   },
   mixins: [pagination],
@@ -559,8 +718,8 @@ export default {
   },
   methods: {
     //company_id,=1754 就是淘得乐显示用户名
-    showId(){
-      this.$request.showId().then(res=>{
+    showId() {
+      this.$request.showId().then(res => {
         if (res.ret) {
           this.company_id = res.data.company_id
         }
@@ -1056,6 +1215,18 @@ export default {
         name: 'transaction',
         query: { keyword: row.id }
       })
+    },
+    editPhoneOrEmail(row, brand) {
+      dialog(
+        {
+          type: 'editBindAccount',
+          row,
+          brand
+        },
+        () => {
+          this.getList()
+        }
+      )
     }
   },
   components: {
@@ -1083,13 +1254,13 @@ export default {
       display: flex;
       gap: 10px;
       align-items: center;
-      .search-content{
+      .search-content {
         margin-bottom: 5px;
       }
     }
   }
   @media screen and (max-width: 1536px) {
-    .advanced-search{
+    .advanced-search {
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
   }
@@ -1139,7 +1310,7 @@ export default {
   }
   .group-sty {
     width: 18px;
-    margin-left: 3px;
+    margin-left: 10px;
     vertical-align: middle;
   }
   .flex-btn {
@@ -1151,6 +1322,38 @@ export default {
     .flex-right {
       flex: auto;
     }
+  }
+  .user-flex {
+    display: flex;
+    align-items: center;
+    div {
+      flex: 1;
+      color: #3e3b3b;
+      overflow: hidden;
+    }
+  }
+  .data-list div {
+    color: #3e3b3b;
+  }
+  .tip {
+    display: inline-block;
+    color: #989898;
+    text-align: left;
+  }
+  .user-btn {
+    color: #3540a5;
+    cursor: pointer;
+  }
+  .consume-btn {
+    color: red;
+    cursor: pointer;
+  }
+  .invite-btn {
+    color: skyblue;
+    cursor: pointer;
+  }
+  .space {
+    margin: 10px 0;
   }
 }
 </style>

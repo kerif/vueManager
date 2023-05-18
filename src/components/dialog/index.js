@@ -204,6 +204,7 @@ import orderRemark from './orderRemark'
 import logisticsInfo from './logisticsInfo'
 import followWx from './followWx'
 import customLabelLang from './customLabelLang'
+import editBindAccount from './editBindAccount'
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -408,6 +409,7 @@ const orderRemarkController = Vue.extend(orderRemark)
 const logisticsInfoController = Vue.extend(logisticsInfo)
 const followWxController = Vue.extend(followWx)
 const customLabelLangControlller = Vue.extend(customLabelLang)
+const editBindAccountController = Vue.extend(editBindAccount)
 
 const mixin = {
   data() {
@@ -1845,6 +1847,12 @@ function initInstance(type) {
       break
     case 'customLabelLang':
       instance = new customLabelLangControlller({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'editBindAccount':
+      instance = new editBindAccountController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
