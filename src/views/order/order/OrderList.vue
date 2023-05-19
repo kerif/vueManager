@@ -911,15 +911,15 @@ export default {
     },
     importOrder() {
       // this.$router.push({ name: 'ImportOrder' })
-      this.$router.push({ name: 'warehouseOrder', query: { type: '2' } })
+      this.$router.push({ name: 'batchOperate', query: { type: '2' } })
     },
     batchShelves() {
       // this.$router.push({ name: 'BatchShelves' })
-      this.$router.push({ name: 'warehouseOrder', query: { type: '4' } })
+      this.$router.push({ name: 'batchOperate', query: { type: '4' } })
     },
     batchForecast() {
       // this.$router.push({ name: 'BatchForecast' })
-      this.$router.push({ name: 'warehouseOrder', query: { type: '3' } })
+      this.$router.push({ name: 'batchOperate', query: { type: '3' } })
     },
     getDiscard() {
       this.tableLoading = true
