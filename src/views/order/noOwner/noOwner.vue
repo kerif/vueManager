@@ -116,6 +116,7 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('品名')" prop="brand_name" width="120"></el-table-column>
         <!-- 货位 -->
         <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
         <!-- 规格 -->
