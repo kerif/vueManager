@@ -1,629 +1,712 @@
 <template>
-  <div class="warehouse-order">
-    <el-form
-      ref="ruleForm"
-      :rules="rule"
-      :model="ruleForm"
-      label-width="120px"
-      label-position="left"
-    >
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="$t('快递单号')" class="express-num" prop="express_num">
-            <el-input
-              v-model="ruleForm.express_num"
-              :placeholder="$t('请输入快递单号')"
-              @blur="getNum(ruleForm.express_num)"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('服务')" class="service" prop="chosen_services">
-            <el-checkbox-group v-model="ruleForm.chosen_services">
-              <div v-for="item in updateService" :key="item.id" class="service-item">
-                <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
-                <el-tooltip effect="dark" :content="item.remark" placement="top">
-                  <span class="el-icon-warning icon-info"></span>
-                </el-tooltip>
-                <el-input v-model="item.price" class="add-value-ipt"></el-input>
+  <div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane :label="$t('快速下单')" name="1">
+        <div class="warehouse-order">
+          <el-form
+            ref="ruleForm"
+            :rules="rule"
+            :model="ruleForm"
+            label-width="120px"
+            label-position="left"
+          >
+            <div class="type-line">
+              <div class="type-box" :class="ruleForm.mode === 1 ? 'active-open' : ''">
+                <div class="type-info">
+                  <div class="is-open" v-if="ruleForm.mode === 1">{{ $t('已启用') }}</div>
+                  <div class="title">{{ $t('集齐再发') }}</div>
+                  <div class="sub-title">
+                    {{ $t('包裹到齐仓库后，由客人选择包裹后再进行发货') }}
+                  </div>
+                  <div class="open-btn" v-if="ruleForm.mode !== 1">
+                    <el-button type="primary" @click="openType(1)">{{ $t('启用') }}</el-button>
+                  </div>
+                </div>
               </div>
-            </el-checkbox-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <div class="line-center"></div>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="$t('重量')" prop="package_weight">
-            <el-input
-              v-model="ruleForm.package_weight"
-              :placeholder="$t('请输入重量')"
-              class="input-box"
-              @blur="onLimit"
-            >
-              <template slot="append">{{ localization.weight_unit }}</template>
-            </el-input>
-          </el-form-item></el-col
-        >
-        <el-col :span="12">
-          <el-form-item :label="$t('尺寸')" class="size">
-            <el-input
-              :placeholder="$t('长') + localization.length_unit"
-              class="size-item"
-              v-model="ruleForm.length"
-              @blur="onLimitLength"
-            ></el-input>
-            <el-input
-              :placeholder="$t('宽') + localization.length_unit"
-              class="size-item"
-              v-model="ruleForm.width"
-              @blur="onLimitWidth"
-            ></el-input>
-            <el-input
-              :placeholder="$t('高') + localization.length_unit"
-              class="size-item"
-              v-model="ruleForm.height"
-              @blur="onLimitHeight"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="$t('寄往仓库')" prop="warehouse_id">
-            <el-select
-              v-model="ruleForm.warehouse_id"
-              :placeholder="$t('请选择')"
-              class="input-box"
-              @change="getAreaData"
-              clearable
-            >
-              <el-option
-                v-for="item in warehouseData"
-                :key="item.id"
-                :value="item.id"
-                :label="item.warehouse_name"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('客户编号')" class="changeQuery" prop="user_id">
-            <el-autocomplete
-              :fetch-suggestions="queryCNSearch"
-              @select="handleSelect"
-              v-model="ruleForm.user_id"
-              @change="changeSelect"
-              :placeholder="$t('请输入客户ID,不填则默认无人认领')"
-            >
-              <template slot-scope="{ item }">
-                <UserSelect :item="item" />
-              </template>
-            </el-autocomplete>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="$t('寄往地区')" prop="country_id">
-            <el-select
-              :placeholder="$t('请选择')"
-              v-model="ruleForm.country_id"
-              class="input-box"
-              clearable
-              :disabled="ruleForm.warehouse_id === '' || shipNum != ''"
-            >
-              <el-option
-                v-for="item in regionData"
-                :key="item.id"
-                :value="item.id"
-                :label="item.name"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item prop="location">
-            <div slot="label">
-              <span>{{ $t('存放货位') }}</span>
-              <el-tooltip
-                effect="dark"
-                :content="$t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-question"></span>
-              </el-tooltip>
+              <div class="type-box" :class="ruleForm.mode === 2 ? 'active-open' : ''">
+                <div class="type-info">
+                  <div class="is-open" v-if="ruleForm.mode === 2">{{ $t('已启用') }}</div>
+                  <div class="title">{{ $t('到件即发') }}</div>
+                  <div class="sub-title">
+                    {{ $t('包裹到了仓库后，立即打包发货，需要在下单时候选择收件信息及发货渠道') }}
+                  </div>
+                  <div class="open-btn" v-if="ruleForm.mode !== 2">
+                    <el-button
+                      type="primary"
+                      @click="openType(2)"
+                      :disabled="ruleForm.user_id === ''"
+                      >{{ $t('启用') }}</el-button
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
-            <el-autocomplete
-              :disabled="ruleForm.warehouse_id === ''"
-              :fetch-suggestions="locationCNSearch"
-              ref="autocompleteRef"
-              :placeholder="$t('请输入存放货位')"
-              v-model="ruleForm.location"
-            >
-            </el-autocomplete>
-            <el-button v-if="locationCode" class="location-box" @click="onRecommend"
-              >{{ $t('推荐货位') }}{{ locationCode }}</el-button
-            >
-            <el-checkbox v-model="ruleForm.isbig" @change="changeLarge" class="location-box">{{
-              $t('上大货专区')
-            }}</el-checkbox>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <div class="line-center"></div>
-      <el-row>
-        <el-col :lg="12">
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品状态')" prop="is_exceptional">
-                <el-radio-group v-model="ruleForm.is_exceptional">
-                  <el-radio :label="0">{{ $t('正常件') }}</el-radio>
-                  <el-radio :label="1">{{ $t('异常件') }}</el-radio>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item :label="$t('当前模式为')" class="express-num">
+                  <span class="type-font">{{ ruleForm.mode === 1 ? '集齐再发' : '到件即发' }}</span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item :label="$t('快递单号')" class="express-num" prop="express_num">
+                  <el-input
+                    v-model="ruleForm.express_num"
+                    :placeholder="$t('请输入快递单号')"
+                    @blur="getNum(ruleForm.express_num)"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item :label="$t('服务')" class="service" prop="chosen_services">
+                  <el-checkbox-group v-model="ruleForm.chosen_services">
+                    <div v-for="item in updateService" :key="item.id" class="service-item">
+                      <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                      <el-tooltip effect="dark" :content="item.remark" placement="top">
+                        <span class="el-icon-warning icon-info"></span>
+                      </el-tooltip>
+                      <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                    </div>
+                  </el-checkbox-group>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div class="line-center"></div>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item :label="$t('重量')" prop="package_weight">
+                  <el-input
+                    v-model="ruleForm.package_weight"
+                    :placeholder="$t('请输入重量')"
+                    class="input-box"
+                    @blur="onLimit"
+                  >
+                    <template slot="append">{{ localization.weight_unit }}</template>
+                  </el-input>
+                </el-form-item></el-col
+              >
+              <el-col :span="12">
+                <el-form-item :label="$t('尺寸')" class="size">
+                  <el-input
+                    :placeholder="$t('长') + localization.length_unit"
+                    class="size-item"
+                    v-model="ruleForm.length"
+                    @blur="onLimitLength"
+                  ></el-input>
+                  <el-input
+                    :placeholder="$t('宽') + localization.length_unit"
+                    class="size-item"
+                    v-model="ruleForm.width"
+                    @blur="onLimitWidth"
+                  ></el-input>
+                  <el-input
+                    :placeholder="$t('高') + localization.length_unit"
+                    class="size-item"
+                    v-model="ruleForm.height"
+                    @blur="onLimitHeight"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item :label="$t('寄往仓库')" prop="warehouse_id">
+                  <el-select
+                    v-model="ruleForm.warehouse_id"
+                    :placeholder="$t('请选择')"
+                    class="input-box"
+                    @change="getAreaData"
+                    clearable
+                  >
+                    <el-option
+                      v-for="item in warehouseData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.warehouse_name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item :label="$t('客户编号')" class="changeQuery" prop="user_id">
+                  <el-autocomplete
+                    :fetch-suggestions="queryCNSearch"
+                    @select="handleSelect"
+                    v-model="ruleForm.user_id"
+                    @change="changeSelect"
+                    :placeholder="$t('请输入客户ID,不填则默认无人认领')"
+                  >
+                    <template slot-scope="{ item }">
+                      <UserSelect :item="item" />
+                    </template>
+                  </el-autocomplete>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item :label="$t('寄往地区')" prop="country_id">
+                  <el-select
+                    :placeholder="$t('请选择')"
+                    v-model="ruleForm.country_id"
+                    class="input-box"
+                    clearable
+                    :disabled="ruleForm.warehouse_id === '' || shipNum != ''"
+                  >
+                    <el-option
+                      v-for="item in regionData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item prop="location">
+                  <div slot="label">
+                    <span>{{ $t('存放货位') }}</span>
+                    <el-tooltip
+                      effect="dark"
+                      :content="
+                        $t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')
+                      "
+                      placement="top"
+                    >
+                      <span class="el-icon-question icon-question"></span>
+                    </el-tooltip>
+                  </div>
+                  <el-autocomplete
+                    :disabled="ruleForm.warehouse_id === ''"
+                    :fetch-suggestions="locationCNSearch"
+                    ref="autocompleteRef"
+                    :placeholder="$t('请输入存放货位')"
+                    v-model="ruleForm.location"
+                  >
+                  </el-autocomplete>
+                  <el-button v-if="locationCode" class="location-box" @click="onRecommend"
+                    >{{ $t('推荐货位') }}{{ locationCode }}</el-button
+                  >
+                  <el-checkbox
+                    v-model="ruleForm.isbig"
+                    @change="changeLarge"
+                    class="location-box"
+                    >{{ $t('上大货专区') }}</el-checkbox
+                  >
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div class="line-center"></div>
+            <el-row>
+              <el-col :lg="12">
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('物品状态')" prop="is_exceptional">
+                      <el-radio-group v-model="ruleForm.is_exceptional">
+                        <el-radio :label="0">{{ $t('正常件') }}</el-radio>
+                        <el-radio :label="1">{{ $t('异常件') }}</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-col></el-row
+                >
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('物品属性')" prop="props">
+                      <el-checkbox-group v-model="ruleForm.props">
+                        <el-checkbox v-for="item in propList" :key="item.id" :label="item.id"
+                          ><span
+                            class="prop-box"
+                            :style="'background-color:' + item.color + ';color:' + item.font_color"
+                            >{{ item.cn_name }}</span
+                          >
+                        </el-checkbox>
+                      </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('物品照片')">
+                      <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                        <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                        <span class="model-box"></span>
+                        <span class="operat-box">
+                          <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                          <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                        </span>
+                      </span>
+                      <el-upload
+                        v-show="goodsImgList.length < 3"
+                        class="avatar-uploader"
+                        list-type="picture-card"
+                        action=""
+                        :before-upload="beforeUploadImg"
+                        :http-request="uploadGoodsImg"
+                        :show-file-list="false"
+                      >
+                        <i class="el-icon-plus"> </i>
+                      </el-upload>
+                      <div class="updateImg">
+                        {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('备注')" prop="remark">
+                      <el-input
+                        type="textarea"
+                        v-model="ruleForm.remark"
+                        :placeholder="$t('请输入备注')"
+                        :autosize="{ minRows: 4, maxRows: 6 }"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :lg="12">
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('快递公司')" prop="express_company_id">
+                      <el-select
+                        :placeholder="$t('请选择')"
+                        v-model="ruleForm.express_company_id"
+                        @change="handleExpressSelect"
+                        clearable
+                      >
+                        <el-option
+                          v-for="item in expressData"
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.name"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('物品名称')" prop="package_name">
+                      <el-input
+                        :placeholder="$t('请输入物品名称')"
+                        v-model="ruleForm.package_name"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('商品数量')" prop="qty">
+                      <el-input :placeholder="$t('请输入件数')" v-model="ruleForm.qty"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('当前件数')" prop="number">
+                      <el-input
+                        :placeholder="$t('请输入件数')"
+                        v-model="ruleForm.number"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('包裹编码')" prop="code">
+                      <el-input
+                        :placeholder="$t('请输入包裹编码')"
+                        v-model="ruleForm.code"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item
+                      :label="$t('物品总价值') + localization.currency_unit"
+                      prop="package_value"
+                    >
+                      <el-input
+                        :placeholder="$t('请输入物品总价值')"
+                        v-model="ruleForm.package_value"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="18">
+                    <el-form-item :label="$t('品牌')" prop="brand_name">
+                      <el-input
+                        :placeholder="$t('请输入品牌')"
+                        v-model="ruleForm.brand_name"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="line-center"></div>
+            <!--      <el-form-item :label="$t('下单方式')" prop="mode">-->
+            <!--        <el-radio-group v-model="ruleForm.mode" @change="changeMethod">-->
+            <!--          <el-radio :label="1">{{ $t('集齐再发') }}</el-radio>-->
+            <!--          <el-radio :label="2" :disabled="ruleForm.user_id === ''">{{ $t('到件即发') }}</el-radio>-->
+            <!--        </el-radio-group>-->
+            <!--      </el-form-item>-->
+            <div v-if="ruleForm.mode === 2">
+              <h4>{{ $t('收件信息') }}</h4>
+              <el-form-item :label="$t('收件形式')" prop="type">
+                <el-radio-group v-model="ruleForm.type" @change="changeRadio">
+                  <el-radio :label="1" :disabled="ruleForm.address_type === 2">{{
+                    $t('送货上门')
+                  }}</el-radio>
+                  <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
                 </el-radio-group>
               </el-form-item>
-            </el-col></el-row
-          >
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品属性')" prop="props">
-                <el-checkbox-group v-model="ruleForm.props">
-                  <el-checkbox v-for="item in propList" :key="item.id" :label="item.id"
-                    ><span
-                      class="prop-box"
-                      :style="'background-color:' + item.color + ';color:' + item.font_color"
-                      >{{ item.cn_name }}</span
-                    >
-                  </el-checkbox>
-                </el-checkbox-group>
+              <el-form-item :label="$t('收件地址')" prop="address_type">
+                <el-radio-group v-model="ruleForm.address_type" @change="changeRadio">
+                  <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
+                  <el-radio :label="2" :disabled="ruleForm.type === 1">{{
+                    $t('使用自提点地址')
+                  }}</el-radio>
+                </el-radio-group>
               </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品照片')">
-                <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
-                  <span class="model-box"></span>
-                  <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                  </span>
-                </span>
-                <el-upload
-                  v-show="goodsImgList.length < 3"
-                  class="avatar-uploader"
-                  list-type="picture-card"
-                  action=""
-                  :before-upload="beforeUploadImg"
-                  :http-request="uploadGoodsImg"
-                  :show-file-list="false"
-                >
-                  <i class="el-icon-plus"> </i>
-                </el-upload>
-                <div class="updateImg">
-                  {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('备注')" prop="remark">
-                <el-input
-                  type="textarea"
-                  v-model="ruleForm.remark"
-                  :placeholder="$t('请输入备注')"
-                  :autosize="{ minRows: 4, maxRows: 6 }"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :lg="12">
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('快递公司')" prop="express_company_id">
+              <el-row :gutter="20" v-if="ruleForm.address_type === 1">
+                <el-col :span="12">
+                  <el-form-item :label="$t('寄件地址')">
+                    <div class="send">
+                      <el-input
+                        type="textarea"
+                        :disabled="isDisable"
+                        :placeholder="$t('请选择寄件地址')"
+                        v-model="address"
+                        :autosize="{ minRows: 4, maxRows: 6 }"
+                      ></el-input>
+                      <el-button class="btn-green send-btn" @click="changeAddress">{{
+                        $t('更改地址')
+                      }}</el-button>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10" :offset="2"> </el-col>
+              </el-row>
+              <el-form-item :label="$t('快递方式')" prop="express_line_id">
                 <el-select
                   :placeholder="$t('请选择')"
-                  v-model="ruleForm.express_company_id"
-                  @change="handleExpressSelect"
-                  clearable
+                  v-model="ruleForm.express_line_id"
+                  @change="changeExpress"
                 >
                   <el-option
-                    v-for="item in expressData"
+                    v-for="item in options"
                     :key="item.id"
-                    :value="item.id"
                     :label="item.name"
+                    :value="item.id"
                   >
                   </el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品名称')" prop="package_name">
+              <el-form-item :label="$t('自提点地址')" v-if="ruleForm.type === 2">
+                <div @click="addressDialog = true" class="cursor">{{ $t('请选择') }}></div>
+                <div v-if="this.selfData && this.selfData.id" class="station-text">
+                  {{ selfData.address }}
+                </div>
+              </el-form-item>
+              <el-form-item :label="$t('清关编码')" prop="clearance_code" v-if="needCode">
                 <el-input
-                  :placeholder="$t('请输入物品名称')"
-                  v-model="ruleForm.package_name"
+                  v-model="ruleForm.clearance_code"
+                  :placeholder="$t('请输入清关编码')"
+                  class="ipt"
                 ></el-input>
               </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('商品数量')" prop="qty">
-                <el-input :placeholder="$t('请输入件数')" v-model="ruleForm.qty"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('当前件数')" prop="number">
-                <el-input :placeholder="$t('请输入件数')" v-model="ruleForm.number"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('包裹编码')" prop="code">
-                <el-input :placeholder="$t('请输入包裹编码')" v-model="ruleForm.code"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item
-                :label="$t('物品总价值') + localization.currency_unit"
-                prop="package_value"
-              >
+              <el-form-item :label="$t('身份证号')" prop="id_card" v-if="idCode">
                 <el-input
-                  :placeholder="$t('请输入物品总价值')"
-                  v-model="ruleForm.package_value"
+                  v-model="ruleForm.id_card"
+                  :placeholder="$t('请输入清关编码')"
+                  class="ipt"
                 ></el-input>
               </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('品牌')" prop="brand_name">
-                <el-input :placeholder="$t('请输入品牌')" v-model="ruleForm.brand_name"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <div class="line-center"></div>
-      <el-form-item :label="$t('下单方式')" prop="mode">
-        <el-radio-group v-model="ruleForm.mode" @change="changeMethod">
-          <el-radio :label="1">{{ $t('集齐再发') }}</el-radio>
-          <el-radio :label="2" :disabled="ruleForm.user_id === ''">{{ $t('到件即发') }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <div v-if="ruleForm.mode === 2">
-        <h4>{{ $t('收件信息') }}</h4>
-        <el-form-item :label="$t('收件形式')" prop="type">
-          <el-radio-group v-model="ruleForm.type" @change="changeRadio">
-            <el-radio :label="1" :disabled="ruleForm.address_type === 2">{{
-              $t('送货上门')
-            }}</el-radio>
-            <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('收件地址')" prop="address_type">
-          <el-radio-group v-model="ruleForm.address_type" @change="changeRadio">
-            <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
-            <el-radio :label="2" :disabled="ruleForm.type === 1">{{
-              $t('使用自提点地址')
-            }}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-row :gutter="20" v-if="ruleForm.address_type === 1">
-          <el-col :span="12">
-            <el-form-item :label="$t('寄件地址')">
-              <div class="send">
+              <el-form-item :label="$t('个人通关码')" prop="personal_code" v-if="personalCode">
                 <el-input
-                  type="textarea"
-                  :disabled="isDisable"
-                  :placeholder="$t('请选择寄件地址')"
-                  v-model="address"
-                  :autosize="{ minRows: 4, maxRows: 6 }"
+                  v-model="ruleForm.personal_code"
+                  :placeholder="$t('请输入个人通关码')"
+                  class="ipt"
                 ></el-input>
-                <el-button class="btn-green send-btn" @click="changeAddress">{{
-                  $t('更改地址')
-                }}</el-button>
+              </el-form-item>
+              <div class="line-center"></div>
+              <h4>{{ $t('增值服务') }}</h4>
+              <div class="express-left">
+                <span>{{ $t('保险服务') }}</span>
+                <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
+                  <span class="el-icon-warning-outline icon-info"></span> </el-tooltip
+                ><br />
+                <el-radio-group v-model="ruleForm.is_insurance" class="radio-select">
+                  <el-radio :label="1">{{ $t('启用保险') }}</el-radio>
+                  <el-radio :label="0">{{ $t('不启用保险') }}</el-radio>
+                  <el-radio :label="2">{{ $t('仅强制要求购买保险的订单启用') }}</el-radio>
+                </el-radio-group>
               </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="2"> </el-col>
-        </el-row>
-        <el-form-item :label="$t('快递方式')" prop="express_line_id">
-          <el-select
-            :placeholder="$t('请选择')"
-            v-model="ruleForm.express_line_id"
-            @change="changeExpress"
-          >
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('自提点地址')" v-if="ruleForm.type === 2">
-          <div @click="addressDialog = true" class="cursor">{{ $t('请选择') }}></div>
-          <div v-if="this.selfData && this.selfData.id" class="station-text">
-            {{ selfData.address }}
-          </div>
-        </el-form-item>
-        <el-form-item :label="$t('清关编码')" prop="clearance_code" v-if="needCode">
-          <el-input
-            v-model="ruleForm.clearance_code"
-            :placeholder="$t('请输入清关编码')"
-            class="ipt"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('身份证号')" prop="id_card" v-if="idCode">
-          <el-input
-            v-model="ruleForm.id_card"
-            :placeholder="$t('请输入清关编码')"
-            class="ipt"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('个人通关码')" prop="personal_code" v-if="personalCode">
-          <el-input
-            v-model="ruleForm.personal_code"
-            :placeholder="$t('请输入个人通关码')"
-            class="ipt"
-          ></el-input>
-        </el-form-item>
-        <div class="line-center"></div>
-        <h4>{{ $t('增值服务') }}</h4>
-        <div class="express-left">
-          <span>{{ $t('保险服务') }}</span>
-          <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
-            <span class="el-icon-warning-outline icon-info"></span> </el-tooltip
-          ><br />
-          <el-radio-group v-model="ruleForm.is_insurance" class="radio-select">
-            <el-radio :label="1">{{ $t('启用保险') }}</el-radio>
-            <el-radio :label="0">{{ $t('不启用保险') }}</el-radio>
-            <el-radio :label="2">{{ $t('仅强制要求购买保险的订单启用') }}</el-radio>
-          </el-radio-group>
-        </div>
-        <div style="margin-top: 20px">
-          <div>{{ $t('增值服务') }}</div>
-          <el-checkbox-group v-model="ruleForm.added_service" class="radio-select">
-            <el-checkbox
-              :label="item.id"
-              v-for="item in servicesData"
-              :key="item.id"
-              class="radio-main"
-              >{{ item.name }}</el-checkbox
-            >
-          </el-checkbox-group>
-        </div>
-        <div class="express-left">
-          <span>{{ $t('关税服务') }}</span>
-          <el-tooltip class="item" effect="dark" :content="tariffExplanation" placement="top">
-            <span class="el-icon-warning-outline icon-info"></span> </el-tooltip
-          ><br />
-          <el-radio-group v-model="ruleForm.is_tariff" class="radio-select">
-            <el-radio :label="1">{{ $t('启用关税') }}</el-radio>
-            <el-radio :label="0">{{ $t('不启用关税') }}</el-radio>
-            <el-radio :label="2">{{ $t('仅强制要求购买关税的订单启用') }}</el-radio>
-          </el-radio-group>
-        </div>
-        <div class="recipient-address">
-          <h4>{{ $t('付款方式') }}</h4>
-          <div class="express-left">
-            <el-radio-group v-model="ruleForm.payment_mode" class="radio-select">
-              <el-radio :label="1" class="radio-main">{{ $t('预付') }}</el-radio>
-              <el-radio :label="2" class="radio-main">{{ $t('货到付款') }}</el-radio>
-            </el-radio-group>
-          </div>
-        </div>
-        <div class="recipient-address">
-          <h4>{{ $t('批量集包方式') }}</h4>
-          <div class="express-left">
-            <el-radio-group v-model="ruleForm.changeUpdate" class="radio-select">
-              <el-radio :label="1" class="radio-main"
-                >{{ $t('按客户ID集包') }}
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('每个客户的包裹合成一个订单')"
-                  placement="top"
-                >
-                  <span class="el-icon-question icon-question"></span>
-                </el-tooltip>
-              </el-radio>
+              <div style="margin-top: 20px">
+                <div>{{ $t('增值服务') }}</div>
+                <el-checkbox-group v-model="ruleForm.added_service" class="radio-select">
+                  <el-checkbox
+                    :label="item.id"
+                    v-for="item in servicesData"
+                    :key="item.id"
+                    class="radio-main"
+                    >{{ item.name }}</el-checkbox
+                  >
+                </el-checkbox-group>
+              </div>
+              <div class="express-left">
+                <span>{{ $t('关税服务') }}</span>
+                <el-tooltip class="item" effect="dark" :content="tariffExplanation" placement="top">
+                  <span class="el-icon-warning-outline icon-info"></span> </el-tooltip
+                ><br />
+                <el-radio-group v-model="ruleForm.is_tariff" class="radio-select">
+                  <el-radio :label="1">{{ $t('启用关税') }}</el-radio>
+                  <el-radio :label="0">{{ $t('不启用关税') }}</el-radio>
+                  <el-radio :label="2">{{ $t('仅强制要求购买关税的订单启用') }}</el-radio>
+                </el-radio-group>
+              </div>
+              <div class="recipient-address">
+                <h4>{{ $t('付款方式') }}</h4>
+                <div class="express-left">
+                  <el-radio-group v-model="ruleForm.payment_mode" class="radio-select">
+                    <el-radio :label="1" class="radio-main">{{ $t('预付') }}</el-radio>
+                    <el-radio :label="2" class="radio-main">{{ $t('货到付款') }}</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div class="recipient-address">
+                <h4>{{ $t('批量集包方式') }}</h4>
+                <div class="express-left">
+                  <el-radio-group v-model="ruleForm.changeUpdate" class="radio-select">
+                    <el-radio :label="1" class="radio-main"
+                      >{{ $t('按客户ID集包') }}
+                      <el-tooltip
+                        effect="dark"
+                        :content="$t('每个客户的包裹合成一个订单')"
+                        placement="top"
+                      >
+                        <span class="el-icon-question icon-question"></span>
+                      </el-tooltip>
+                    </el-radio>
 
-              <el-radio :label="2" class="radio-main"
-                >{{ $t('快速下单') }}
-                <el-tooltip effect="dark" :content="$t('每个包裹一个订单')" placement="top">
-                  <span class="el-icon-question icon-question"></span>
-                </el-tooltip>
-              </el-radio>
-            </el-radio-group>
-          </div>
-        </div>
-      </div>
-      <div class="saveBtn">
-        <el-button @click="onSave" :loading="$store.state.btnLoading">{{ $t('保存') }}</el-button>
-      </div>
-    </el-form>
-    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clearAddress">
-      <div class="add-box" width="80%">
-        <el-button @click="goCreated">{{ $t('新增') }}</el-button>
-      </div>
-      <el-table :data="tableData" border @row-click="onRowChange" style="width: 100%">
-        <el-table-column>
-          <template slot-scope="scope">
-            <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
-        <el-table-column prop="area" :label="$t('区域')">
-          <template slot-scope="scope">
-            <span
-              >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
-                scope.row.sub_area ? scope.row.sub_area.name : ''
-              }}</span
+                    <el-radio :label="2" class="radio-main"
+                      >{{ $t('快速下单') }}
+                      <el-tooltip effect="dark" :content="$t('每个包裹一个订单')" placement="top">
+                        <span class="el-icon-question icon-question"></span>
+                      </el-tooltip>
+                    </el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+            </div>
+            <div class="saveBtn">
+              <el-button @click="onSave" :loading="$store.state.btnLoading">{{
+                $t('保存')
+              }}</el-button>
+            </div>
+          </el-form>
+          <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clearAddress">
+            <div class="add-box" width="80%">
+              <el-button @click="goCreated">{{ $t('新增') }}</el-button>
+            </div>
+            <el-table :data="tableData" border @row-click="onRowChange" style="width: 100%">
+              <el-table-column>
+                <template slot-scope="scope">
+                  <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
+                </template>
+              </el-table-column>
+              <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
+              <el-table-column prop="area" :label="$t('区域')">
+                <template slot-scope="scope">
+                  <span
+                    >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
+                      scope.row.sub_area ? scope.row.sub_area.name : ''
+                    }}</span
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
+              <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
+              <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
+              <el-table-column :label="$t('收件电话')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.timezone }}-{{ scope.row.phone }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('详细地址')">
+                <template slot-scope="scope">
+                  <span
+                    >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
+                    <span v-if="scope.row.address">({{ scope.row.address }})</span>
+                  </span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div slot="footer">
+              <el-button @click="boxDialog = false">{{ $t('取消') }}</el-button>
+              <el-button type="primary" @click="selectAddress">{{ $t('确定') }}</el-button>
+            </div>
+          </el-dialog>
+          <el-dialog
+            :visible.sync="innerVisible"
+            :title="$t('新建收货地址')"
+            width="45%"
+            @close="clearNewAddress"
+            append-to-body
+          >
+            <el-form
+              :model="form"
+              :rules="rules"
+              ref="form"
+              class="demo-form-inline"
+              label-width="100px"
             >
-          </template>
-        </el-table-column>
-        <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
-        <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
-        <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
-        <el-table-column :label="$t('收件电话')">
-          <template slot-scope="scope">
-            <span>{{ scope.row.timezone }}-{{ scope.row.phone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('详细地址')">
-          <template slot-scope="scope">
-            <span
-              >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
-              <span v-if="scope.row.address">({{ scope.row.address }})</span>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div slot="footer">
-        <el-button @click="boxDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="selectAddress">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog
-      :visible.sync="innerVisible"
-      :title="$t('新建收货地址')"
-      width="45%"
-      @close="clearNewAddress"
-      append-to-body
-    >
-      <el-form :model="form" :rules="rules" ref="form" class="demo-form-inline" label-width="100px">
-        <el-row :gutter="20">
-          <el-col :span="10">
-            <el-form-item :label="$t('国家')" prop="country_id">
-              <el-cascader
-                v-model="form.country_id"
-                :options="countryOptions"
-                ref="country"
-                :props="props"
-                collapse-tags
-                clearable
-              ></el-cascader>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('收件电话')" prop="phone">
-              <el-input
-                v-model="form.phone"
-                class="inner-textarea"
-                :placeholder="$t('请输入收件电话')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('城市')" prop="city">
-              <el-input
-                v-model="form.city"
-                class="inner-textarea"
-                :placeholder="$t('请输入城市')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('收件人')" prop="receiver_name">
-              <el-input
-                v-model="form.receiver_name"
-                class="inner-textarea"
-                :placeholder="$t('请输入收件人')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('门牌号')" prop="door_no">
-              <el-input
-                v-model="form.door_no"
-                class="inner-textarea"
-                :placeholder="$t('请输入门牌号')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('区号')" prop="timezone">
-              <el-select v-model="form.timezone" :placeholder="$t('请选择区号')" filterable>
-                <el-option
-                  v-for="item in countryData"
-                  :key="item.id"
-                  :label="item.timezone"
-                  :value="item.timezone"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('邮编')" prop="postcode">
-              <el-input
-                v-model="form.postcode"
-                class="inner-textarea"
-                :placeholder="$t('请输入邮编')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('附加地址')" prop="address">
-              <el-input
-                v-model="form.address"
-                class="inner-textarea"
-                :placeholder="$t('请输入附加地址')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item :label="$t('街道')" prop="street">
-              <el-input
-                v-model="form.street"
-                class="inner-textarea"
-                :placeholder="$t('请输入街道')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="returnShip">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirmCreated('ruleForm')">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog :visible.sync="addressDialog" :title="$t('自提点地址')" @close="clearSelf">
-      <el-table :data="stationsData" border @row-click="onRowAddress" style="width: 100%">
-        <el-table-column>
-          <template slot-scope="scope">
-            <el-radio v-model="station_id" :label="scope.row.id"></el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" :label="$t('自提点名称')"> </el-table-column>
-        <el-table-column :label="$t('详细地址')" prop="address"> </el-table-column>
-      </el-table>
-      <div slot="footer">
-        <el-button @click="addressDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirmSelf">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
+              <el-row :gutter="20">
+                <el-col :span="10">
+                  <el-form-item :label="$t('国家')" prop="country_id">
+                    <el-cascader
+                      v-model="form.country_id"
+                      :options="countryOptions"
+                      ref="country"
+                      :props="props"
+                      collapse-tags
+                      clearable
+                    ></el-cascader>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('收件电话')" prop="phone">
+                    <el-input
+                      v-model="form.phone"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入收件电话')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('城市')" prop="city">
+                    <el-input
+                      v-model="form.city"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入城市')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('收件人')" prop="receiver_name">
+                    <el-input
+                      v-model="form.receiver_name"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入收件人')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('门牌号')" prop="door_no">
+                    <el-input
+                      v-model="form.door_no"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入门牌号')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('区号')" prop="timezone">
+                    <el-select v-model="form.timezone" :placeholder="$t('请选择区号')" filterable>
+                      <el-option
+                        v-for="item in countryData"
+                        :key="item.id"
+                        :label="item.timezone"
+                        :value="item.timezone"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('邮编')" prop="postcode">
+                    <el-input
+                      v-model="form.postcode"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入邮编')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('附加地址')" prop="address">
+                    <el-input
+                      v-model="form.address"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入附加地址')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item :label="$t('街道')" prop="street">
+                    <el-input
+                      v-model="form.street"
+                      class="inner-textarea"
+                      :placeholder="$t('请输入街道')"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div slot="footer">
+              <el-button @click="returnShip">{{ $t('取消') }}</el-button>
+              <el-button type="primary" @click="confirmCreated('ruleForm')">{{
+                $t('确定')
+              }}</el-button>
+            </div>
+          </el-dialog>
+          <el-dialog :visible.sync="addressDialog" :title="$t('自提点地址')" @close="clearSelf">
+            <el-table :data="stationsData" border @row-click="onRowAddress" style="width: 100%">
+              <el-table-column>
+                <template slot-scope="scope">
+                  <el-radio v-model="station_id" :label="scope.row.id"></el-radio>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" :label="$t('自提点名称')"> </el-table-column>
+              <el-table-column :label="$t('详细地址')" prop="address"> </el-table-column>
+            </el-table>
+            <div slot="footer">
+              <el-button @click="addressDialog = false">{{ $t('取消') }}</el-button>
+              <el-button type="primary" @click="confirmSelf">{{ $t('确定') }}</el-button>
+            </div>
+          </el-dialog>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('批量入库')" name="2"><ImportOrder></ImportOrder></el-tab-pane>
+      <el-tab-pane :label="$t('批量预报')" name="3"><BatchShelves></BatchShelves></el-tab-pane>
+      <el-tab-pane :label="$t('批量上架')" name="4"><BatchForecast></BatchForecast></el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
+import ImportOrder from '@/views/order/order/importOrder'
+import BatchShelves from '@/views/order/order/batchShelves'
+import BatchForecast from '@/views/order/order/batchForecast'
 import dialog from '@/components/dialog'
 import UserSelect from '@/components/userSelect'
 export default {
   components: {
-    UserSelect
+    UserSelect,
+    ImportOrder,
+    BatchShelves,
+    BatchForecast,
   },
   data() {
     return {
+      activeName: '1',
       ruleForm: {
         user_id: '',
         express_num: '',
@@ -735,6 +818,11 @@ export default {
     this.getServices()
     this.getUid()
 
+    if (this.$route.query.type) {
+      this.activeName = this.$route.query.type
+    } else {
+      this.activeName = '1'
+    }
     if (this.$route.query.id) {
       this.getList()
     }
@@ -1168,6 +1256,14 @@ export default {
         }
       })
     },
+    openType(type) {
+      this.ruleForm.mode = type
+      if (this.ruleForm.mode === 2) {
+        if (this.ruleForm.user_id) {
+          this.getAddressDialog()
+        }
+      }
+    },
     changeMethod() {
       if (this.ruleForm.mode === 2) {
         if (this.ruleForm.user_id) {
@@ -1341,6 +1437,57 @@ export default {
 .warehouse-order {
   background-color: #fff !important;
   padding: 20px;
+  .type-line {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 60px;
+    .active-open {
+      border: 2px solid #3641a3 !important;
+    }
+    .type-box {
+      width: 450px;
+      height: 225px;
+      border: 2px solid #b8b8b8;
+      .type-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        .title {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 16px;
+        }
+        .sub-title {
+          font-size: 14px;
+          color: #737373;
+          padding: 0 16px;
+        }
+        .open-btn {
+          position: absolute;
+          bottom: 30px;
+        }
+        .is-open {
+          width: 100px;
+          height: 30px;
+          background-color: #3641a3;
+          color: #ffffff;
+          text-align: center;
+          line-height: 30px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          border-bottom-right-radius: 18px;
+        }
+      }
+    }
+  }
+  .type-font {
+    color: #993433;
+    font-weight: bold;
+  }
   .express-num {
     .el-form-item__content .el-input__inner {
       height: 50px !important;

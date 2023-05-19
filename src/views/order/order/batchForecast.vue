@@ -181,6 +181,7 @@ export default {
 
 <style>
 .batch-forecast-container {
+  padding: 16px;
   background: #fff !important;
 }
 </style>

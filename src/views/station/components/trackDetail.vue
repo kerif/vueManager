@@ -10,22 +10,28 @@
   >
     <div class="track-detail">
       <div>
-        <div class="detail-title">{{ expressType==1? $t('订单轨迹详细') : $t('包裹轨迹详细') }}</div>
+        <div class="detail-title">
+          {{ expressType == 1 ? $t('订单轨迹详细') : $t('包裹轨迹详细') }}
+        </div>
         <div class="order-info">
           <div class="first-line">
-            <div class="info-box">
+            <div class="info-box" v-if="expressType == 1">
               <div class="tip">{{ $t('订单号') }}</div>
-              <div class="bold-font">{{ expressType==1 ? item.order_sn : item.express_num }}</div>
+              <div class="bold-font">{{ item.order_sn }}</div>
+            </div>
+            <div class="info-box" v-else>
+              <div class="tip">{{ $t('包裹编号') }}</div>
+              <div class="bold-font">{{ item.code }}</div>
             </div>
             <div class="info-box">
-              <div class="tip">{{ $t('订单状态') }}</div>
+              <div class="tip">{{ expressType == 1 ? $t('订单状态') : $t('包裹状态') }}</div>
               <div class="blue-font">{{ item ? item.status_name : '' }}</div>
             </div>
           </div>
           <div class="first-line">
             <div class="info-box">
-              <div class="tip">{{ $t('转运单号') }}</div>
-              <div v-if="expressType==1">
+              <div class="tip">{{ expressType == 1 ? $t('转运单号') : $t('快递单号') }}</div>
+              <div v-if="expressType == 1">
                 <span v-if="item.logistics_sn">{{ item.logistics_sn }}</span>
                 <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
               </div>
@@ -35,8 +41,8 @@
               </div>
             </div>
             <div class="info-box">
-              <div class="tip">{{ $t('转运公司') }}</div>
-              <div v-if='expressType==1'>
+              <div class="tip">{{ expressType == 1 ? $t('转运公司') : $t('快递公司') }}</div>
+              <div v-if="expressType == 1">
                 <span v-if="item.logistics_company">{{ item.logistics_company }}</span>
                 <span style="color: #c8c8c8" v-else>{{ $t('未设置') }}</span>
               </div>
@@ -59,7 +65,7 @@
               <template v-slot:title>
                 <div class="step-title">
                   <div>{{ val.context }}</div>
-                  <div class="del-font">删除</div>
+                  <div class="del-font" v-if="val.id" @click="deleteTable(val.id)">删除</div>
                 </div>
               </template>
               <template v-slot:description>
@@ -73,11 +79,10 @@
         <img src="@/assets/empty.png" />
         <div class="tip-no">{{ $t('暂无物流消息') }}</div>
       </div>
-      <div class="operate-line">
+      <div class="operate-line" v-if="expressType == 1">
         <el-button @click="goTransport">{{ $t('设置转运订单') }}</el-button>
         <el-button @click="updateTracking">{{ $t('添加物流轨迹') }}</el-button>
       </div>
-
     </div>
   </el-drawer>
 </template>
@@ -92,7 +97,7 @@ export default {
       show: true,
       item: {},
       TrackingData: [],
-      isEmpty: false,
+      isEmpty: false
     }
   },
   mounted() {},
@@ -125,7 +130,8 @@ export default {
       if (this.expressType == 1) {
         this.$request
           .goTracking({
-            order_sn: this.item.order_sn
+            order_sn: this.item.order_sn,
+            with_id: 1
           })
           .then(res => {
             if (res.ret) {
@@ -246,6 +252,24 @@ export default {
           this.getDetail()
         }
       )
+    },
+    deleteTable(id) {
+      this.$request.deleteOrderTable(this.item.id, id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.goExpress()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }

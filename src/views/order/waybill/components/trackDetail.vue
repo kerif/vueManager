@@ -51,7 +51,7 @@
               <template v-slot:title>
                 <div class="step-title">
                   <div>{{ val.context }}</div>
-                  <div class="del-font" @click="deleteTable(val.id)">删除</div>
+                  <div class="del-font" v-if="val.id" @click="deleteTable(val.id)">删除</div>
                 </div>
               </template>
               <template v-slot:description>
@@ -115,19 +115,24 @@ export default {
     goExpress() {
       console.log('expressType', this.expressType)
       if (this.expressType == 1) {
-        this.$request.getAloneOrder(this.item.id).then(res => {
-          if (res.ret) {
-            this.TrackingData = res.data
-            if (!this.TrackingData.length) {
-              this.isEmpty = true
+        this.$request
+          .goTracking({
+            order_sn: this.item.order_sn,
+            with_id: 1
+          })
+          .then(res => {
+            if (res.ret) {
+              this.TrackingData = res.data.data
+              if (!this.TrackingData.length) {
+                this.isEmpty = true
+              } else {
+                this.isEmpty = false
+              }
             } else {
-              this.isEmpty = false
+              this.TrackingData = []
+              this.isEmpty = true
             }
-          } else {
-            this.TrackingData = []
-            this.isEmpty = true
-          }
-        })
+          })
       } else if (this.expressType == 2) {
         this.$request
           .goTracking({

@@ -277,8 +277,9 @@ export default {
   activated() {
     console.log(this.$route.query, 'this.$route.query.orderSn')
     if (this.$route.query.orderSn) {
-      this.expressNumber = this.$route.query.orderSn
-      this.goExpress()
+      console.log('啊？')
+      this.sns = this.$route.query.orderSn
+      this.getList()
     }
   },
   methods: {

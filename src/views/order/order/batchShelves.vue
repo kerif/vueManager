@@ -184,6 +184,7 @@ export default {
 
 <style lang="scss">
 .batch-shelves-container {
+  padding: 16px;
   background-color: #fff !important;
 }
 </style>
