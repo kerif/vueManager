@@ -605,6 +605,7 @@
         :pageParams="page_params"
         :notNeedInitQuery="false"
         saveSize="package"
+        v-if="activeName !== '7'"
       >
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
@@ -659,6 +660,7 @@
               </span>
             </template>
           </el-table-column>
+          <el-table-column :label="$t('品名')" prop="brand_name" width="120"></el-table-column>
           <!-- 规格 -->
           <el-table-column
             :label="$t('规格') + this.localization.length_unit"
