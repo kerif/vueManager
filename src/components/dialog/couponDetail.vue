@@ -77,7 +77,7 @@
         <!-- 付款时间 -->
         <el-table-column :label="$t('付款时间')" prop="paid_at"></el-table-column>
       </el-table>
-      <tx-pagination :pageParams="pageParams"></tx-pagination>
+      <tx-pagination :pageParams="page_params"></tx-pagination>
     </div>
   </el-drawer>
 </template>
@@ -125,15 +125,15 @@ export default {
       this.recordingData = []
       this.$request
         .userCoupons(this.couponInfo.id, {
-          page: this.pageParams.page,
-          size: this.pageParams.size
+          page: this.page_params.page,
+          size: this.page_params.size
         })
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
             this.recordingData = res.data
-            this.pageParams.page = res.meta.current_page
-            this.pageParams.total = res.meta.total
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
           } else {
             this.$notify({
               title: this.$t('操作失败'),
