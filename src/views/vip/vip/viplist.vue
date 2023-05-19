@@ -363,8 +363,9 @@
           </div>
           <div class="space">
             <span class="tip">{{ $t('邀请人') }}：</span>
-            <span class="invite-btn" @click="viewProfile(scope.row.id)"
-              >{{ scope.row.invitor }} {{ scope.row.invite_id }}</span
+            <span class="invite-btn" @click="viewProfile(scope.row.invite_id)"
+              >{{ scope.row.invitor }}
+              <span v-if="$store.state.uid === 1">{{ scope.row.invite_uid }}</span></span
             >
             <span v-if="scope.row.is_agent_invite === 1">
               <img class="group-sty" src="../../../assets/agent.png" />
@@ -416,9 +417,10 @@
           </div>
           <div class="space">
             <span class="tip">{{ $t('所属代理') }}：</span>
-            <span class="invite-btn" @click="viewProfile(scope.row.id)"
-              >{{ scope.row.invitor }} {{ scope.row.invite_id }}</span
-            >
+            <span class="invite-btn" @click="viewProfile(scope.row.invite_id)"
+              >{{ scope.row.invitor }}
+              <span v-if="$store.state.uid === 1"> {{ scope.row.invite_uid }}</span>
+            </span>
           </div>
           <div class="space">
             <span class="tip">{{ $t('最后登录时间') }}：</span>
@@ -859,6 +861,7 @@ export default {
       })
     },
     viewProfile(id) {
+      console.log(id, 'ididid')
       dialog({ type: 'vipProfile', id: id })
     },
     // 操作日志

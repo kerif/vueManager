@@ -85,6 +85,19 @@
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >
+            <div class="space-text">
+              {{ $t('客户组') }}：<span style="color: blue">{{ form.user_group_name }}</span>
+            </div>
+            <div class="space-text">
+              <span>{{ $t('客户标签') }}：</span
+              ><el-tag
+                v-for="item in form.user_tags"
+                style="margin: 0 5px 10px 0"
+                :key="item.id"
+                type="warning"
+                >{{ item.name }}</el-tag
+              >
+            </div>
           </div>
           <div class="number-top">
             <span>{{ $t('所属客服') }}: {{ form.user_customer_name }}</span>
@@ -533,8 +546,8 @@
                     {{ $t(invoice.data_type_text) }} : {{ $t(invoice.data) }}
                   </div>
                   <div v-else>
-                    <p>{{ $t('统一编码') }}: {{invoice.number}}</p>
-                    <p>{{ $t('公司抬头') }}: {{invoice.title}}</p>
+                    <p>{{ $t('统一编码') }}: {{ invoice.number }}</p>
+                    <p>{{ $t('公司抬头') }}: {{ invoice.title }}</p>
                   </div>
                 </div>
               </div>
@@ -2227,6 +2240,9 @@ export default {
         margin-right: 20px;
       }
     }
+  }
+  .space-text {
+    margin: 5px 0;
   }
 }
 </style>
