@@ -276,18 +276,46 @@
                 <template v-if="item.id === 'order_info'">
                   <div class="order_info">
                     <div class="first-line">
-                      <div>
+                      <div style="display: flex; align-items: center">
                         <el-button @click="details(scope.row.id, activeName)" type="text">{{
                           scope.row.order_sn
                         }}</el-button>
-                        <el-button
-                          type="text"
-                          v-if="scope.row.is_parent === 1"
-                          @click.native="groupBuy(scope.row)"
-                          style="margin-left: 0"
-                        >
-                          <img class="group-sty" src="../../../assets/group.jpg"
-                        /></el-button>
+                        <div class="group-box">
+                          <el-button
+                            type="text"
+                            v-if="scope.row.is_parent === 1"
+                            @click.native="groupBuy(scope.row)"
+                            style="margin-left: 0"
+                          >
+                            <img
+                              v-if="scope.row.group_status == 1 || scope.row.group_status == 2"
+                              style="width: 18px"
+                              class="group-sty"
+                              src="../../../assets/group-hui.svg"
+                            />
+                            <img
+                              v-if="scope.row.group_status == 0"
+                              class="group-sty"
+                              src="../../../assets/group.jpg"
+                            />
+                          </el-button>
+                          <div
+                            v-if="scope.row.is_parent === 1"
+                            :class="
+                              scope.row.group_status == 1 || scope.row.group_status == 2
+                                ? 'group-tip'
+                                : 'group-tip in-group'
+                            "
+                          >
+                            {{
+                              scope.row.group_status == 1
+                                ? $t('拼团已结束')
+                                : scope.row.group_status == 2
+                                ? $t('拼团已取消')
+                                : $t('拼团进行中')
+                            }}
+                          </div>
+                        </div>
                         <el-button type="text" v-if="scope.row.is_stg === 1" style="margin-left: 0">
                           <img src="../../../assets/stgv.jpg" class="group-sty" />
                         </el-button>
@@ -3178,7 +3206,30 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 20px;
+        height: 30px;
+        .group-box {
+          position: relative;
+          .group-tip {
+            display: none;
+            position: absolute;
+            right: -83px;
+            top: 13px;
+            background-color: white;
+            border: 1px solid #c8c8c8;
+            border-radius: 10px;
+            padding: 5px 10px;
+            color: #c8c8c8;
+            font-size: 10px;
+            line-height: 10px;
+            box-shadow: 1px -1px 2px #c8c8c8;
+          }
+          .in-group {
+            color: red;
+          }
+        }
+        .group-box:hover .group-tip {
+          display: block;
+        }
       }
       .info-line {
         display: flex;
