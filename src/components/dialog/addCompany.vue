@@ -186,6 +186,7 @@ export default {
     },
     goExpress() {
       this.show = false
+      this.close()
       this.$router.push({
         name: 'configurationMore',
         query: {

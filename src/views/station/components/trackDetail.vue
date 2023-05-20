@@ -177,7 +177,8 @@ export default {
         {
           type: 'addCompany',
           orderId: this.item.id,
-          state: 'multiBox'
+          state: 'multiBox',
+          close: this.close
         },
         () => {
           this.getDetail()
@@ -246,7 +247,8 @@ export default {
         {
           type: 'addTrajectory',
           orderId: this.item.id,
-          state: 'multiBox'
+          state: 'multiBox',
+          close: this.close
         },
         () => {
           this.getDetail()

@@ -2,6 +2,7 @@
   <div>
     <el-tabs v-model="activeName">
       <el-tab-pane :label="$t('快速下单')" name="1">
+        <div style='color: #ffa943;margin-bottom: 16px'>{{ $t('快速下单为协助客户来操作预报') }}</div>
         <div class="warehouse-order">
           <el-form
             ref="ruleForm"
@@ -804,7 +805,7 @@ export default {
         express_num: [{ required: true, message: '请输入快递单号', trigger: 'blur' }],
         package_weight: [{ required: true, message: '请输入重量', trigger: 'blur' }],
         warehouse_id: [{ required: true, message: '请选择寄往仓库', trigger: 'blur' }],
-        user_id: [{ required: true, message: '请选择客户', trigger: 'blur' }],
+        user_id: [{ required: true, message: '请选择客户', trigger: 'change' }],
         props: [{ required: true, message: '请选择物品属性', trigger: 'blur' }]
       }
     }
@@ -1102,11 +1103,13 @@ export default {
     },
     handleSelect(item) {
       console.log('handleSelect')
+      console.log(item)
+      console.log(item.id)
+      console.log('this.ruleForm.user_id', this.ruleForm.user_id)
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
       this.ruleForm.location = ''
-
       if (this.ruleForm.warehouse_id) {
         this.getAreaLocation()
         if (this.locationId) {

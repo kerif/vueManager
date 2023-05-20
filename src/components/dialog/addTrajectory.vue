@@ -86,7 +86,8 @@ export default {
     },
     // 弹窗 管理
     goMore() {
-      this.trackDialog = false
+      this.show = false
+      this.close()
       this.$router.push({
         name: 'configurationMore',
         query: {
