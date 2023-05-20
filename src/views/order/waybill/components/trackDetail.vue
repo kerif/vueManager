@@ -55,7 +55,7 @@
                 </div>
               </template>
               <template v-slot:description>
-                <div class="step-description">{{ val.created_at }}</div>
+                <div class="step-description">{{ val.ftime }}</div>
               </template>
             </el-step>
           </el-steps>
