@@ -2,7 +2,6 @@
   <div>
     <el-tabs v-model="activeName">
       <el-tab-pane :label="$t('快速下单')" name="1">
-        <div style='color: #ffa943;margin-bottom: 16px'>{{ $t('快速下单为协助客户来操作预报') }}</div>
         <div class="warehouse-order">
           <el-form
             ref="ruleForm"
@@ -36,7 +35,7 @@
                       type="primary"
                       @click="openType(2)"
                       :disabled="ruleForm.user_id === ''"
-                      >{{ $t('启用') }}</el-button
+                    >{{ $t('启用') }}</el-button
                     >
                   </div>
                 </div>
@@ -189,13 +188,13 @@
                   >
                   </el-autocomplete>
                   <el-button v-if="locationCode" class="location-box" @click="onRecommend"
-                    >{{ $t('推荐货位') }}{{ locationCode }}</el-button
+                  >{{ $t('推荐货位') }}{{ locationCode }}</el-button
                   >
                   <el-checkbox
                     v-model="ruleForm.isbig"
                     @change="changeLarge"
                     class="location-box"
-                    >{{ $t('上大货专区') }}</el-checkbox
+                  >{{ $t('上大货专区') }}</el-checkbox
                   >
                 </el-form-item>
               </el-col>
@@ -218,11 +217,11 @@
                     <el-form-item :label="$t('物品属性')" prop="props">
                       <el-checkbox-group v-model="ruleForm.props">
                         <el-checkbox v-for="item in propList" :key="item.id" :label="item.id"
-                          ><span
-                            class="prop-box"
-                            :style="'background-color:' + item.color + ';color:' + item.font_color"
-                            >{{ item.cn_name }}</span
-                          >
+                        ><span
+                          class="prop-box"
+                          :style="'background-color:' + item.color + ';color:' + item.font_color"
+                        >{{ item.cn_name }}</span
+                        >
                         </el-checkbox>
                       </el-checkbox-group>
                     </el-form-item>
@@ -364,8 +363,8 @@
               <el-form-item :label="$t('收件形式')" prop="type">
                 <el-radio-group v-model="ruleForm.type" @change="changeRadio">
                   <el-radio :label="1" :disabled="ruleForm.address_type === 2">{{
-                    $t('送货上门')
-                  }}</el-radio>
+                      $t('送货上门')
+                    }}</el-radio>
                   <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -373,8 +372,8 @@
                 <el-radio-group v-model="ruleForm.address_type" @change="changeRadio">
                   <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
                   <el-radio :label="2" :disabled="ruleForm.type === 1">{{
-                    $t('使用自提点地址')
-                  }}</el-radio>
+                      $t('使用自提点地址')
+                    }}</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-row :gutter="20" v-if="ruleForm.address_type === 1">
@@ -389,8 +388,8 @@
                         :autosize="{ minRows: 4, maxRows: 6 }"
                       ></el-input>
                       <el-button class="btn-green send-btn" @click="changeAddress">{{
-                        $t('更改地址')
-                      }}</el-button>
+                          $t('更改地址')
+                        }}</el-button>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -459,7 +458,7 @@
                     v-for="item in servicesData"
                     :key="item.id"
                     class="radio-main"
-                    >{{ item.name }}</el-checkbox
+                  >{{ item.name }}</el-checkbox
                   >
                 </el-checkbox-group>
               </div>
@@ -488,7 +487,7 @@
                 <div class="express-left">
                   <el-radio-group v-model="ruleForm.changeUpdate" class="radio-select">
                     <el-radio :label="1" class="radio-main"
-                      >{{ $t('按客户ID集包') }}
+                    >{{ $t('按客户ID集包') }}
                       <el-tooltip
                         effect="dark"
                         :content="$t('每个客户的包裹合成一个订单')"
@@ -499,7 +498,7 @@
                     </el-radio>
 
                     <el-radio :label="2" class="radio-main"
-                      >{{ $t('快速下单') }}
+                    >{{ $t('快速下单') }}
                       <el-tooltip effect="dark" :content="$t('每个包裹一个订单')" placement="top">
                         <span class="el-icon-question icon-question"></span>
                       </el-tooltip>
@@ -510,8 +509,8 @@
             </div>
             <div class="saveBtn">
               <el-button @click="onSave" :loading="$store.state.btnLoading">{{
-                $t('保存')
-              }}</el-button>
+                  $t('保存')
+                }}</el-button>
             </div>
           </el-form>
           <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clearAddress">
@@ -528,7 +527,7 @@
               <el-table-column prop="area" :label="$t('区域')">
                 <template slot-scope="scope">
                   <span
-                    >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
+                  >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
                       scope.row.sub_area ? scope.row.sub_area.name : ''
                     }}</span
                   >
@@ -545,7 +544,7 @@
               <el-table-column :label="$t('详细地址')">
                 <template slot-scope="scope">
                   <span
-                    >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
+                  >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
                     <span v-if="scope.row.address">({{ scope.row.address }})</span>
                   </span>
                 </template>
@@ -664,8 +663,8 @@
             <div slot="footer">
               <el-button @click="returnShip">{{ $t('取消') }}</el-button>
               <el-button type="primary" @click="confirmCreated('ruleForm')">{{
-                $t('确定')
-              }}</el-button>
+                  $t('确定')
+                }}</el-button>
             </div>
           </el-dialog>
           <el-dialog :visible.sync="addressDialog" :title="$t('自提点地址')" @close="clearSelf">
@@ -686,8 +685,8 @@
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('批量入库')" name="2"><ImportOrder></ImportOrder></el-tab-pane>
-      <el-tab-pane :label="$t('批量预报')" name="3"><BatchForecast></BatchForecast></el-tab-pane>
-      <el-tab-pane :label="$t('批量上架')" name="4"><BatchShelves></BatchShelves></el-tab-pane>
+      <el-tab-pane :label="$t('批量预报')" name="3"><BatchShelves></BatchShelves></el-tab-pane>
+      <el-tab-pane :label="$t('批量上架')" name="4"><BatchForecast></BatchForecast></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -805,7 +804,7 @@ export default {
         express_num: [{ required: true, message: '请输入快递单号', trigger: 'blur' }],
         package_weight: [{ required: true, message: '请输入重量', trigger: 'blur' }],
         warehouse_id: [{ required: true, message: '请选择寄往仓库', trigger: 'blur' }],
-        user_id: [{ required: true, message: '请选择客户', trigger: 'change' }],
+        user_id: [{ required: true, message: '请选择客户', trigger: 'blur' }],
         props: [{ required: true, message: '请选择物品属性', trigger: 'blur' }]
       }
     }
@@ -851,14 +850,8 @@ export default {
           }
           if (res.data.user_id) {
             this.userId = res.data.user_id
-            this.supplierId = res.data.user_id
           }
-          if (this.$store.state.uid === 0) {
-            this.ruleForm.user_id = res.data.user_id + '---' + res.data.user_name
-          } else {
-            this.ruleForm.user_id = res.data.user_uid + '---' + res.data.user_name
-          }
-
+          this.ruleForm.user_id = res.data.user_id + '---' + res.data.user_name
           this.ruleForm.props = res.data.props.map(item => item.id)
           this.ruleForm.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.getServices()
@@ -948,29 +941,29 @@ export default {
               item.areas < 1
                 ? undefined
                 : item.areas.map(item => {
-                    return {
-                      value: item.id,
-                      label: item.name,
-                      children:
-                        item.areas < 1
-                          ? undefined
-                          : item.areas.map(item => {
-                              return {
-                                value: item.id,
-                                label: item.name,
-                                children:
-                                  item.areas < 1
-                                    ? undefined
-                                    : item.areas.map(item => {
-                                        return {
-                                          value: item.id,
-                                          label: item.name
-                                        }
-                                      })
-                              }
-                            })
-                    }
-                  })
+                  return {
+                    value: item.id,
+                    label: item.name,
+                    children:
+                      item.areas < 1
+                        ? undefined
+                        : item.areas.map(item => {
+                          return {
+                            value: item.id,
+                            label: item.name,
+                            children:
+                              item.areas < 1
+                                ? undefined
+                                : item.areas.map(item => {
+                                  return {
+                                    value: item.id,
+                                    label: item.name
+                                  }
+                                })
+                          }
+                        })
+                  }
+                })
           }
         })
       })
@@ -1030,7 +1023,6 @@ export default {
       }
     },
     changeSelect() {
-      console.log('changeSelect')
       if (this.ruleForm.user_id) {
         if (this.locationId) {
           this.locationCNSearch()
@@ -1083,7 +1075,6 @@ export default {
       })
     },
     queryCNSearch(queryString, callback) {
-      console.log('queryCNSearch')
       var list = [{}]
       this.$request
         .Automatic({
@@ -1102,14 +1093,11 @@ export default {
         })
     },
     handleSelect(item) {
-      console.log('handleSelect')
-      console.log(item)
-      console.log(item.id)
-      console.log('this.ruleForm.user_id', this.ruleForm.user_id)
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
       this.ruleForm.location = ''
+
       if (this.ruleForm.warehouse_id) {
         this.getAreaLocation()
         if (this.locationId) {
@@ -1336,9 +1324,6 @@ export default {
       if (reg.test(this.ruleForm.package_weight)) {
         this.ruleForm.package_weight = ''
         return this.$message.error(this.$t('只能输入数字'))
-      }
-      if(this.supplierId){
-        this.getAddressDialog()
       }
     },
     onLimitLength() {

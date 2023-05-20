@@ -80,7 +80,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" width="160px">
           <template slot-scope="scope">
             <el-button class="btn-green" @click="noticeEdit(scope.row.id)">{{
               $t('修改')

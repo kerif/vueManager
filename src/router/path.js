@@ -222,6 +222,8 @@ const importLogistics = loadonDemand('station/importLogistics')
 const OrderList = loadonDemand('order/order/OrderList')
 // 订单 预报包裹列表 详情
 const oderDetails = loadonDemand('order/order/orderDetails')
+// 包裹批量操作
+const batchOperate = loadonDemand('order/order/batchOperate')
 // 订单 预报包裹列表 批量入库
 const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 预报包裹列表 批量上架
@@ -2057,6 +2059,18 @@ export default [
               level: 2,
               group: '订单管理',
               name: '预报包裹'
+            }
+          },
+          {
+            path: '/order/orderlist/batchOperate',
+            component: batchOperate,
+            name: 'batchOperate',
+            id: 2101,
+            meta: {
+              level: 3,
+              group: '订单管理',
+              name: '批量操作',
+              parent: '/order/orderlist'
             }
           },
           {

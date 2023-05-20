@@ -30,7 +30,7 @@
        </el-select> -->
       </search-group>
     </div>
-    <div style="height: calc(100vh - 275px">
+    <div style="height: calc(100vh - 275px)">
       <el-table
         :data="transactionList"
         stripe
@@ -70,7 +70,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right">
+        <el-table-column :label="$t('操作')" width="160px">
           <template slot-scope="scope">
             <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
               $t('详情')
