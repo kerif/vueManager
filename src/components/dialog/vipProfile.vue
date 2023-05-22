@@ -402,23 +402,23 @@ export default {
       this.getPointList()
     },
     handleCouponCurrentChange(pageId) {
-      this.packageParams.page = pageId
+      this.couponParams.page = pageId
       this.getCouponList()
     },
     // 分页size
     handleCouponSizeChange(pageSize) {
-      this.packageParams.page = 1
-      this.packageParams.size = pageSize
+      this.couponParams.page = 1
+      this.couponParams.size = pageSize
       this.getCouponList()
     },
     handleInvitationCurrentChange(pageId) {
-      this.packageParams.page = pageId
+      this.invitationParams.page = pageId
       this.getInvitationsList()
     },
     // 分页size
     handleInvitationSizeChange(pageSize) {
-      this.packageParams.page = 1
-      this.packageParams.size = pageSize
+      this.invitationParams.page = 1
+      this.invitationParams.size = pageSize
       this.getInvitationsList()
     },
     handlePackageCurrentChange(pageId) {
