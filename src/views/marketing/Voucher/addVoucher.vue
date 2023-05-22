@@ -105,6 +105,20 @@
           </el-radio-group>
         </el-form-item>
       </div>
+      <el-form-item :label="$t('最小计费重量')" v-if="ruleForm.discount_type == 0">
+        <el-input
+          v-model="ruleForm.min_weight"
+          :placeholder="$t('请输入最小计费重量')"
+          class="input-sty"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('最大计费重量')" v-if="ruleForm.discount_type == 0">
+        <el-input
+          v-model="ruleForm.max_weight"
+          :placeholder="$t('请输入最大计费重量')"
+          class="input-sty"
+        ></el-input>
+      </el-form-item>
       <el-form-item :label="$t('说明')">
         <el-input
           type="textarea"
@@ -149,7 +163,8 @@ export default {
         discount_type: '',
         weight: '',
         min_weight: '',
-        remark: ''
+        remark: '',
+        max_weight: ''
       },
       lineName: [], // 保存获取到的路线
       timeList: [],
