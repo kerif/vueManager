@@ -265,30 +265,30 @@ export default {
 </script>
 
 <style lang="scss">
-div::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 8px;
-  width: 8px;
-}
-
-div::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 5px;
-  background: rgba(41, 109, 241, 0.1);
-}
-
-div::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  -webkit-box-shadow: 0;
-  border-radius: 0;
-  background: #f0f2f5;
-}
 .track-detail {
   padding: 20px 30px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  div::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
+    width: 8px;
+  }
+
+  div::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    background: rgba(41, 109, 241, 0.1);
+  }
+
+  div::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: 0;
+    border-radius: 0;
+    background: #f0f2f5;
+  }
   .detail-title {
     font-size: 24px;
     font-weight: bold;

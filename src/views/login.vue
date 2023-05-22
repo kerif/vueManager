@@ -908,7 +908,7 @@ export default {
   .login-main {
     background-color: #fff;
     border-radius: 4px;
-    width: 1000px;
+    width: 60%;
     height: 60%;
     position: absolute;
     border-radius: 10px;
@@ -1206,6 +1206,7 @@ export default {
     border-radius: 10px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    background-size: cover;
   }
   .forget-sty {
     text-align: center;
