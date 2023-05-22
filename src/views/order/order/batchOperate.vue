@@ -685,8 +685,8 @@
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('批量入库')" name="2"><ImportOrder></ImportOrder></el-tab-pane>
-      <el-tab-pane :label="$t('批量预报')" name="3"><BatchShelves></BatchShelves></el-tab-pane>
-      <el-tab-pane :label="$t('批量上架')" name="4"><BatchForecast></BatchForecast></el-tab-pane>
+      <el-tab-pane :label="$t('批量预报')" name="3"><BatchForecast></BatchForecast></el-tab-pane>
+      <el-tab-pane :label="$t('批量上架')" name="4"><BatchShelves></BatchShelves></el-tab-pane>
     </el-tabs>
   </div>
 </template>
