@@ -374,6 +374,7 @@ const editContent = loadonDemand('group/editContent')
 // 订单 上门取件
 const pickupList = loadonDemand('order/pickup/pickupList')
 
+
 export default [
   {
     path: '/',
@@ -2889,7 +2890,7 @@ export default [
             }
           }
         ]
-      }
+      },
     ]
   }
 ]
