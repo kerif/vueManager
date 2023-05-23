@@ -1,93 +1,67 @@
 <template>
   <div class="public-list-container">
     <div class="searchGroup">
-      <div class="bottom-sty">
-        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      <div class="search-box">
+        <el-input class="searchfilter" :placeholder="$t('请输入关键字')" v-model="page_params.keyword"
+          @search="goSearch"></el-input>
+        <el-date-picker class="timeStyle" v-model="timeList" type="daterange" @change="onTime" format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd" :range-separator="$t('至')" :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')"></el-date-picker>
+        <div class="submit">
+          <el-button @click="getList()" class="searchBtn" type="primary" plain>
+            {{ $t('搜索') }}
+          </el-button>
+        </div>
       </div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <div class="clear-box">
-          <add-btn router="addPublic">{{ $t('新增公告') }}</add-btn>
-        </div>
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')"
-        >
-        </el-date-picker>
-        <!-- <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou">
-        <el-option
-          v-for="item in voucherChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-       </el-select> -->
-      </search-group>
+      <div class="clear-box">
+        <add-btn router="addPublic">{{ $t('新增') }}</add-btn>
+      </div>
     </div>
-    <div style="height: calc(100vh - 275px">
-      <el-table
-        :data="transactionList"
-        stripe
-        border
-        class="data-list"
-        v-loading="tableLoading"
-        ref="table"
-        height="calc(100vh - 275px)"
-        @selection-change="selectionChange"
-      >
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <!-- 公告标题 -->
-        <el-table-column :label="$t('公告标题')" prop="title" width="500"></el-table-column>
-        <el-table-column :label="$t('小程序链接')" prop="type" width="100">
-          <template slot-scope="scope">
-            <div class="copy-sty" @click="copyUrl('/pages/help/notice_detail/index', scope.row.id)">
-              <i class="el-icon-copy-document"></i>
-            </div>
-          </template>
-        </el-table-column>
-        <!-- 发布人员 -->
-        <el-table-column :label="$t('发布人员')" prop="operator"> </el-table-column>
-        <!-- 发布时间 -->
-        <el-table-column :label="$t('发布时间')" prop="created_at"> </el-table-column>
-        <el-table-column
-          :label="item.name"
-          v-for="item in formatLangData"
-          :key="item.id"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span
-              v-if="scope.row['trans_' + item.language_code]"
-              class="el-icon-check icon-sty"
-              @click="onLang(scope.row, item)"
-            ></span>
-            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right">
-          <template slot-scope="scope">
-            <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
-              $t('详情')
-            }}</el-button>
-          </template>
-        </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-        </div>
-      </template> -->
-      </el-table>
+    <div style="background-color: #f5f5f5;padding: 5px;"></div>
+    <div style="background-color: #fff;padding:15px 20px">
+      <div class="bottom-sty">
+        <el-button @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <div style="height: calc(100vh - 250px)">
+        <el-table class="data-list" :data="transactionList" stripe border :header-cell-style="{ textAlign: 'center' }"
+          :cell-style="{ textAlign: 'center' }" v-loading="tableLoading" ref="table" max-height="620"
+          @selection-change="selectionChange">
+          <el-table-column type="selection" width="55" fixed="left"></el-table-column>
+          <!-- 公告标题 -->
+          <el-table-column :label="$t('标题')" prop="title" width="400"></el-table-column>
+          <el-table-column :label="$t('小程序链接')" prop="type" width="100">
+            <template slot-scope="scope">
+              <div class="copy-sty" @click="copyUrl('/pages/help/notice_detail/index', scope.row.id)">
+                <i class="el-icon-copy-document"></i>
+              </div>
+            </template>
+          </el-table-column>
+          <!-- 发布人员 -->
+          <el-table-column :label="$t('发布人员')" prop="operator"  min-width="200"> </el-table-column>
+          <!-- 发布时间 -->
+          <el-table-column :label="$t('发布时间')" prop="created_at"  min-width="170"> </el-table-column>
+          <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" min-width="150">
+            <template slot-scope="scope">
+              <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty"
+                @click="onLang(scope.row, item)"></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')" fixed="right" width="120px">
+            <template slot-scope="scope">
+              <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
+                $t('修改')
+              }}</el-button>
+            </template>
+          </el-table-column>
+          <!-- <template slot="append">
+                <div class="append-box">
+                </div>
+              </template> -->
+        </el-table>
+      </div>
+      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
-    <nle-pagination
-      style="margin-top: 5px"
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -107,7 +81,7 @@ export default {
       type: '',
       deleteNum: [],
       languageData: [],
-      transCode: ''
+      transCode: '',
       // voucherChange: []
     }
   },
@@ -123,6 +97,11 @@ export default {
       this.$refs.table.doLayout()
     })
   },
+  // mounted(){
+  //   this.$nextTick(() => {
+  //     this.$refs.table.doLayout()
+  //   })
+  // },
   created() {
     this.getList()
     this.getLanguageList()
@@ -145,7 +124,7 @@ export default {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size, 
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
@@ -271,41 +250,95 @@ export default {
 }
 </script>
 <style lang="scss">
+.el-dialog__wrapper {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 .public-list-container {
-  padding: 10px 15px;
-  background-color: #fff !important;
+  background-color: #fff;
+
+  .el-dialog__body {
+    .img_box {
+      text-align: center;
+
+      img {
+        width: 300px !important;
+      }
+    }
+  }
+
+  .add {
+    display: none;
+  }
+
   .searchGroup {
     overflow: hidden;
     display: flex;
     align-items: center;
-    .search-group {
-      // width: 90%;
-      // float: right;
+    margin-bottom: 10px;
+    padding: 20px 15px;
+
+    .search-box {
       flex: 1;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
     }
-    .el-date-editor {
-      float: right;
+
+    .searchfilter {
+      width: 30%;
     }
-    .pull-right {
-      width: 22.5%;
-      float: right;
+
+    .searchBtn {
+      padding-left: 40px;
+      padding-right: 40px;
+      background-color: #fff !important;
+      color: black;
+      border: 1px solid #dcdfe6;
+
+      &:hover {
+        background: #3540a5 !important;
+        color: #fff;
+      }
     }
+
     .clear-box {
       float: right;
+
+      .add-btn-container {
+        background-color: #3b8ece !important;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
     }
   }
+
   .changeVou {
     margin-left: 20px;
   }
+
   .timeStyle {
     margin: 0 10px;
     width: 276px !important;
   }
+
   .bottom-sty {
-    // margin-top: 20px;
-    // margin-bottom: 10px;
-    float: left;
+    margin: 15px 0;
   }
+
+  .bottom-sty button {
+    font-weight: 600;
+    padding: 10px 40px;
+    color: #f56c6c;
+    border-color: #f56c6c;
+
+    &:hover {
+      background: #f56c6c !important;
+      color: #fff;
+    }
+  }
+
   .copy-sty {
     display: flex;
     justify-content: space-between;

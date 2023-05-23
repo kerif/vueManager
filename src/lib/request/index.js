@@ -2273,6 +2273,39 @@ exports.updateString = (id, params) => {
 exports.detailsString = id => {
   return $form.get(`string-translations/${id}`)
 }
+
+
+// app版本管理  获取列表
+exports.getAppVersionList = () => {
+  return $form.get(`apk`)
+}
+// app版本管理  获取单条数据
+// exports.getAppVersionList = () => {
+//   return $form.get(`apk`)
+// }
+// app版本管理  新增
+exports.addVersion = (params) => {
+  return $form.post(`apk`, params)
+}
+// app版本管理 上传文件
+exports.uploadApk = (params) => {
+  return $file.post(`apk/file`, params)
+}
+// app版本管理  编辑
+exports.editApk = (params) => {
+  return $form.post(`apk/file/${id}`, params)
+}
+// app版本管理  删除
+exports.deleteApk = (id) => {
+  return $form.delete(`apk/file/${id}`)
+}
+//  app版本管理  下载APK
+exports.downloadApk = () => {
+  return $form.put(`apk/download`)
+}
+
+
+
 // 更新单条详细
 exports.updateLg = (id, params) => {
   return $form.put(`languages/${id}`, params)
@@ -3992,6 +4025,7 @@ exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
 // 获取获取临时密钥
 exports.getTempKeys = () => $form.get('upload/temp-keys')
+exports.getMyTempKeys = () => $form.get('upload/public-temp-key')
 
 // 新建视频
 exports.addVideo = params => $json.post('videos', params)

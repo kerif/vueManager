@@ -74,7 +74,7 @@ export default {
         },
         {
           key: 6,
-          lists: ['config', 'language', 'staff', 'basics', 'website']
+          lists: ['config', 'language', 'staff', 'basics', 'website', 'appversion']
         }
       ]
     }

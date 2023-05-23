@@ -385,6 +385,10 @@ const addLuckDraw = loadonDemand('marketing/luckyDraw/addLuckyDraw')
 
 // 订单 上门取件
 const pickupList = loadonDemand('order/pickup/pickupList')
+
+// app版本管理
+const appVersionManage = loadonDemand('appVersion/appVersion')
+
 export default [
   {
     path: '/',
@@ -3148,6 +3152,44 @@ export default [
         ]
       },
       {
+        path: 'appversion',
+        component: LayoutContainer,
+        icon: 'appVersion',
+        id: 6400,
+        children: [
+          {
+            path: '/appVersion/appVersion',
+            name: 'appVersion',
+            component: appVersionManage,
+            id: 6401,
+            meta: {
+              level: 2,
+              group: 'APP版本管理',
+              name: 'APP版本管理'
+            }
+          },
+        ]
+      },
+      // {
+      //   path: 'appversion',
+      //   component: LayoutContainer,
+      //   icon: 'content',
+      //   id: 6400,
+      //   children: [
+      //     {
+      //       path: '/appVersion/appVersion',
+      //       name: 'appVersion',
+      //       component: appVersionManage,
+      //       id: 6401,
+      //       meta: {
+      //         level: 2,
+      //         group: 'APP版本管理',
+      //         name: 'APP版本管理'
+      //       }
+      //     },
+      //   ]
+      // },
+      {
         path: 'overview',
         component: LayoutContainer,
         icon: 'dataEcharts',
@@ -3231,7 +3273,8 @@ export default [
             }
           }
         ]
-      }
+      },
+
     ]
   }
 ]
