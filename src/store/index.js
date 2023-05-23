@@ -74,7 +74,6 @@ export default new Vuex.Store({
         state.menuTitleId = 1
         state.menuTitle = ''
       }
-
     },
     switchCollapse(state, isCollapse) {
       state.isCollapse = isCollapse
