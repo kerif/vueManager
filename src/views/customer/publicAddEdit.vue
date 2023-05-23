@@ -133,7 +133,8 @@ export default {
       params: {
         title: '',
         content: '',
-        created_at:''
+        created_at:'',
+        cover_content:'',
       },
       fileList: [],
       editor: null,
@@ -250,6 +251,8 @@ export default {
     // 自动截断公告内容
     deadlineContentFunc() {
       this.deadlineContent = !this.deadlineContent
+
+      
     },
   }
 }

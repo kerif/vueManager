@@ -2366,7 +2366,12 @@ export default {
     display: flex;
     justify-content: space-between;
     .mos {
-      padding: 5px 12px;
+      //padding: 5px 12px;
+      display: block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
       font-size: 40px;
       background-color: #ffffff !important;
       border-radius: 50%;

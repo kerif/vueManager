@@ -912,13 +912,16 @@ export default {
         .catch(() => (this.tableLoading = false))
     },
     importOrder() {
-      this.$router.push({ name: 'ImportOrder' })
+      // this.$router.push({ name: 'ImportOrder' })
+      this.$router.push({ name: 'batchOperate', query: { type: '2' } })
     },
     batchShelves() {
-      this.$router.push({ name: 'BatchShelves' })
+      // this.$router.push({ name: 'BatchShelves' })
+      this.$router.push({ name: 'batchOperate', query: { type: '4' } })
     },
     batchForecast() {
-      this.$router.push({ name: 'BatchForecast' })
+      // this.$router.push({ name: 'BatchForecast' })
+      this.$router.push({ name: 'batchOperate', query: { type: '3' } })
     },
     getDiscard() {
       this.tableLoading = true
@@ -946,7 +949,7 @@ export default {
       this.$router.push({ name: 'editStorage', params: { id: id } })
     },
     onStorage(id) {
-      this.$router.push({ name: 'warehouseOrder', query: { id } })
+      this.$router.push({ name: 'warehouseOrder', query: { id, type: '1' } })
     },
     // 已入库编辑
     editWarehoused(id) {

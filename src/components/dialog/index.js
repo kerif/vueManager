@@ -205,6 +205,8 @@ import logisticsInfo from './logisticsInfo'
 import followWx from './followWx'
 import customLabelLang from './customLabelLang'
 import editBindAccount from './editBindAccount'
+import addTrajectory from './addTrajectory'
+
 
 const InviteController = Vue.extend(inviteList)
 const lead = Vue.extend(leadIn)
@@ -410,6 +412,7 @@ const logisticsInfoController = Vue.extend(logisticsInfo)
 const followWxController = Vue.extend(followWx)
 const customLabelLangControlller = Vue.extend(customLabelLang)
 const editBindAccountController = Vue.extend(editBindAccount)
+const addTrajectoryController = Vue.extend(addTrajectory)
 
 const mixin = {
   data() {
@@ -1853,6 +1856,13 @@ function initInstance(type) {
       break
     case 'editBindAccount':
       instance = new editBindAccountController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //添加物流轨迹
+    case 'addTrajectory':
+      instance = new addTrajectoryController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
