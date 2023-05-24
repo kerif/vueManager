@@ -32,7 +32,7 @@
       <el-form-item :label="$t('最低重量')" prop="min_weight" v-if="ruleForm.discount_type === 2">
         <el-input :placeholder="$t('请输入最低重量')" v-model="ruleForm.min_weight"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('生效时间')" prop="effected_at">
+      <!-- <el-form-item :label="$t('生效时间')" prop="effected_at">
         <el-date-picker
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="ruleForm.effected_at"
@@ -42,8 +42,8 @@
           :placeholder="$t('请输入生效时间')"
         >
         </el-date-picker>
-      </el-form-item>
-      <el-form-item :label="$t('失效时间')" prop="expired_at">
+      </el-form-item> -->
+      <!-- <el-form-item :label="$t('失效时间')" prop="expired_at">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -53,6 +53,36 @@
           :placeholder="$t('请输入失效时间')"
         >
         </el-date-picker>
+      </el-form-item> -->
+      <el-form-item :label="$t('有效期')" prop="radio">
+        <el-radio-group v-model="ruleForm.radio">
+          <div style="margin: 0 0 10px 0">
+            <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
+            <el-input v-model="ruleForm.days" style="width: 340px"></el-input>
+          </div>
+          <div class="input-flex">
+            <el-radio :label="2">{{ $t('具体日期范围') }}</el-radio>
+            <el-date-picker
+              :picker-options="pickerOptions"
+              v-model="ruleForm.effected_at"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              :placeholder="$t('请选择开始日期')"
+            >
+            </el-date-picker>
+            &nbsp;&nbsp;<span style="display: inline-block; width: 10px">-</span>&nbsp;&nbsp;
+            <el-date-picker
+              :picker-options="pickerOptions"
+              v-model="ruleForm.expired_at"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              :placeholder="$t('请选择结束日期')"
+            >
+            </el-date-picker>
+          </div>
+        </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('使用范围')" prop="scope">
         <el-radio-group v-model="ruleForm.scope">
@@ -105,6 +135,20 @@
           </el-radio-group>
         </el-form-item>
       </div>
+      <el-form-item :label="$t('最小计费重量')" v-if="ruleForm.discount_type == 0">
+        <el-input
+          v-model="ruleForm.min_weight"
+          :placeholder="$t('请输入最小计费重量')"
+          class="input-sty"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('最大计费重量')" v-if="ruleForm.discount_type == 0">
+        <el-input
+          v-model="ruleForm.max_weight"
+          :placeholder="$t('请输入最大计费重量')"
+          class="input-sty"
+        ></el-input>
+      </el-form-item>
       <el-form-item :label="$t('说明')">
         <el-input
           type="textarea"
@@ -149,7 +193,10 @@ export default {
         discount_type: '',
         weight: '',
         min_weight: '',
-        remark: ''
+        remark: '',
+        max_weight: '',
+        days: '',
+        radio: 1
       },
       lineName: [], // 保存获取到的路线
       timeList: [],
@@ -161,7 +208,8 @@ export default {
         effected_at: [{ required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }],
         scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }],
         weight: [{ required: true, message: this.$t('请输入重量'), trigger: 'blur' }],
-        min_weight: [{ required: true, message: this.$t('请输入最低重量'), trigger: 'blur' }]
+        min_weight: [{ required: true, message: this.$t('请输入最低重量'), trigger: 'blur' }],
+        radio: [{ required: true, message: this.$t('请选择有效期'), trigger: 'change' }]
       },
       pickerOptions: {
         disabledDate(time) {
@@ -260,6 +308,10 @@ export default {
     p {
       margin: 0;
     }
+  }
+  .input-flex {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
