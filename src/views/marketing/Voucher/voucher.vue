@@ -92,6 +92,11 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('有效天数')" prop="days">
+          <template slot-scope="scope">
+            <span>{{ scope.row.days > 0 ? scope.row.days : '' }}</span>
+          </template>
+        </el-table-column>
         <!-- 失效时间 -->
         <el-table-column :label="$t('失效时间')" prop="expired_at" width="160"></el-table-column>
         <!-- 投放数量 -->
