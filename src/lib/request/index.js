@@ -5752,3 +5752,8 @@ exports.labelAloneLang = (id, params) => {
 exports.editLoginPhone = (id, params) => {
   return $form.put(`users/${id}/bind-info`, params)
 }
+
+// 同步物流单号
+exports.logisticTrackNum = ids => {
+  return $form.post(`declare/update-track-number`, ids)
+}
