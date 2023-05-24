@@ -79,6 +79,7 @@
         <el-table-column :label="$t('订单金额')" prop="order_amount"></el-table-column>
         <!-- 付款时间 -->
         <el-table-column :label="$t('付款时间')" prop="paid_at"></el-table-column>
+        <el-table-column :label="$t('过期时间')" prop="expired_at"></el-table-column>
       </el-table>
       <tx-pagination :pageParams="page_params"></tx-pagination>
     </div>
