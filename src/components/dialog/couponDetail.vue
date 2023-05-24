@@ -55,6 +55,9 @@
         <el-descriptions-item v-if="param === 1" :label="$t('作废数量')">{{
           couponInfo.invalid_count
         }}</el-descriptions-item>
+        <el-descriptions-item v-if="param === 1" :label="$t('计费重量范围')">
+          {{ couponInfo.min_weight }} 至 {{ couponInfo.max_weight }}
+        </el-descriptions-item>
       </el-descriptions>
       <br />
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="recordingData">
