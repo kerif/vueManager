@@ -40,67 +40,71 @@
 
     <div class="content">
       <div class="searchGroup">
-      <div class="bottom-sty">
-        <el-button class="btn-deep-purple" size="small" @click="confirmWake">{{
-          $t('批量唤醒')
-        }}</el-button>
-        <el-button class="btn-blue-green" size="small" @click="sleepWake">{{
-          $t('沉睡设置')
-        }}</el-button>
-      </div>
-      <div class="search-l">
-        <search-group
-          :placeholder="$t('请输入关键字')"
-          v-model="page_params.keyword"
-          @search="goSearch"
-        >
-        </search-group>
-        <div class="filter">
-          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-          ></el-button>
+        <div class="bottom-sty">
+          <el-button class="btn-deep-purple" size="small" @click="confirmWake">{{
+            $t('批量唤醒')
+          }}</el-button>
+          <el-button class="btn-blue-green" size="small" @click="sleepWake">{{
+            $t('沉睡设置')
+          }}</el-button>
+        </div>
+        <div class="search-l">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          >
+          </search-group>
+          <div class="filter">
+            <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+              >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+            ></el-button>
+          </div>
         </div>
       </div>
+      <div>
+        <el-table
+          :data="tableShip"
+          stripe
+          border
+          class="data-list"
+          ref="table"
+          @selection-change="selectionChange"
+          height="calc(100vh - 255px)"
+          v-loading="tableLoading"
+        >
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
+          <el-table-column :label="$t('会员ID')" prop="id"></el-table-column>
+          <el-table-column :label="$t('会员昵称')" prop="name"></el-table-column>
+          <el-table-column :label="$t('代理')" prop="invitor"></el-table-column>
+          <el-table-column :label="$t('未登录天')" prop="not_login_days"></el-table-column>
+          <el-table-column :label="$t('未下单天')" prop="not_order_days"></el-table-column>
+          <el-table-column
+            :label="$t('最后下单时间')"
+            prop="last_order_at"
+            width="155"
+          ></el-table-column>
+          <el-table-column
+            :label="$t('登录时间')"
+            prop="last_login_at"
+            width="155"
+          ></el-table-column>
+          <el-table-column
+            :label="$t('最近唤醒时间')"
+            prop="wakeup_time"
+            width="155"
+          ></el-table-column>
+          <!-- 操作 -->
+          <el-table-column :label="$t('操作')" width="116px" fixed="right">
+            <template slot-scope="scope">
+              <el-button class="btn-green" @click="wake(scope.row.id)">{{ $t('唤醒') }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
-    <div>
-      <el-table
-        :data="tableShip"
-        stripe
-        border
-        class="data-list"
-        ref="table"
-        @selection-change="selectionChange"
-        height="calc(100vh - 255px)"
-        v-loading="tableLoading"
-      >
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column :label="$t('会员ID')" prop="id"></el-table-column>
-        <el-table-column :label="$t('会员昵称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('代理')" prop="invitor"></el-table-column>
-        <el-table-column :label="$t('未登录天')" prop="not_login_days"></el-table-column>
-        <el-table-column :label="$t('未下单天')" prop="not_order_days"></el-table-column>
-        <el-table-column
-          :label="$t('最后下单时间')"
-          prop="last_order_at"
-          width="155"
-        ></el-table-column>
-        <el-table-column :label="$t('登录时间')" prop="last_login_at" width="155"></el-table-column>
-        <el-table-column
-          :label="$t('最近唤醒时间')"
-          prop="wakeup_time"
-          width="155"
-        ></el-table-column>
-        <!-- 操作 -->
-        <el-table-column :label="$t('操作')" width="116px" fixed="right">
-          <template slot-scope="scope">
-            <el-button class="btn-green" @click="wake(scope.row.id)">{{ $t('唤醒') }}</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    </div>
-    
+
     <!-- 轨迹 -->
     <el-dialog :visible.sync="sleepDialog" width="65%" :title="$t('沉睡设置')" @close="clearSn">
       <div style="margin-bottom: 20px">
@@ -384,9 +388,9 @@ export default {
 <style lang="scss">
 .sleep-reminder-container {
   background-color: #f5f5f5;
-  .content{
+  .content {
     background-color: #fff;
-    padding:15px 20px;
+    padding: 15px 20px;
   }
   .select-box {
     display: inline-block;

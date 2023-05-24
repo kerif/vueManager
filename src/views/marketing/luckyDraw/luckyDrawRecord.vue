@@ -1,10 +1,5 @@
 <template>
-  <el-drawer
-    :visible="value"
-    @close="handleClose"
-    size="60%"
-    :with-header="false"
-  >
+  <el-drawer :visible="value" @close="handleClose" size="60%" :with-header="false">
     <div class="luckyDrawRecordContainer">
       <el-card style="margin: 10px 0">
         <div slot="header" style="font-weight: 600">{{ activity.name }}</div>
@@ -22,12 +17,7 @@
       </el-card>
       <el-card>
         <div class="search">
-          <el-form
-            ref="form"
-            :model="searchForm"
-            label-width="80px"
-            size="small"
-          >
+          <el-form ref="form" :model="searchForm" label-width="80px" size="small">
             <div class="search-form">
               <el-form-item :label="$t('用户')" style="margin-right: 10px">
                 <el-select v-model="searchForm.uids" style="width: 280px" filterable multiple>
@@ -41,11 +31,12 @@
                 </el-select>
               </el-form-item>
               <el-form-item :label="$t('状态')" style="margin-right: 10px">
-                <el-select v-model="searchForm.status" style="width: 200px" >
+                <el-select v-model="searchForm.status" style="width: 200px">
                   <el-option
                     v-for="item in statusList"
                     :label="item.label"
                     :value="item.id"
+                    :key="item.id"
                   >
                   </el-option>
                 </el-select>
@@ -69,18 +60,38 @@
             <el-table-column prop="score" :label="$t('成长值')"> </el-table-column>
             <el-table-column prop="status_text" :label="$t('状态')">
               <template slot-scope="scope">
-                <el-tag type="info" v-if="scope.row.status === 1">{{ scope.row.status_text }}</el-tag>
-                <el-tag type="success" v-if="scope.row.status === 2">{{ scope.row.status_text }}</el-tag>
-                <el-tag type="warning" v-if="scope.row.status === 3">{{ scope.row.status_text }}</el-tag>
-                <el-tag type="danger" v-if="scope.row.status === -1">{{ scope.row.status_text }}</el-tag>
+                <el-tag type="info" v-if="scope.row.status === 1">{{
+                  scope.row.status_text
+                }}</el-tag>
+                <el-tag type="success" v-if="scope.row.status === 2">{{
+                  scope.row.status_text
+                }}</el-tag>
+                <el-tag type="warning" v-if="scope.row.status === 3">{{
+                  scope.row.status_text
+                }}</el-tag>
+                <el-tag type="danger" v-if="scope.row.status === -1">{{
+                  scope.row.status_text
+                }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="gift_name" :label="$t('奖品')"> </el-table-column>
             <el-table-column prop="draw_time" :label="$t('抽奖时间')"> </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
-                <el-button type="primary" size="small" v-if="scope.row.status === 2" @click="updateStatus(scope.row.uid, 3)">{{ $t('兑换') }}</el-button>
-                <el-button type="danger" size="small" v-if="scope.row.status === 1" @click="updateStatus(scope.row.uid, -1)">{{ $t('禁止抽奖') }}</el-button>
+                <el-button
+                  type="primary"
+                  size="small"
+                  v-if="scope.row.status === 2"
+                  @click="updateStatus(scope.row.uid, 3)"
+                  >{{ $t('兑换') }}</el-button
+                >
+                <el-button
+                  type="danger"
+                  size="small"
+                  v-if="scope.row.status === 1"
+                  @click="updateStatus(scope.row.uid, -1)"
+                  >{{ $t('禁止抽奖') }}</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
