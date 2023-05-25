@@ -12,6 +12,9 @@
         <el-button size="small" class="btn-main" @click="batchCustomConfig">{{
           $t('自定义配置')
         }}</el-button>
+        <el-button size="small" class="btn-main" @click="batchTrack">{{
+          $t('同步物流单号')
+        }}</el-button>
       </div>
       <div class="btn-left">
         <el-button size="mini" class="btn-light-red" @click="setNormal">{{
@@ -566,6 +569,27 @@ export default {
     goSearch() {
       this.getList()
     },
+    batchTrack() {
+      if (!this.declareNum || !this.declareNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$request.logisticTrackNum({ ids: this.declareNum }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     batchSub() {
       if (!this.declareNum || !this.declareNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -895,7 +919,7 @@ export default {
 <style lang="scss">
 .declare-container {
   padding: 10px 15px;
-  background-color: #fff ;
+  background-color: #fff;
   font-size: 14px;
   .el-dialog__header {
     background-color: #0e102a;

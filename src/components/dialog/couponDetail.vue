@@ -55,6 +55,9 @@
         <el-descriptions-item v-if="param === 1" :label="$t('作废数量')">{{
           couponInfo.invalid_count
         }}</el-descriptions-item>
+        <el-descriptions-item v-if="param === 1" :label="$t('计费重量范围')">
+          {{ couponInfo.min_weight }} 至 {{ couponInfo.max_weight }}
+        </el-descriptions-item>
       </el-descriptions>
       <br />
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="recordingData">
@@ -76,6 +79,7 @@
         <el-table-column :label="$t('订单金额')" prop="order_amount"></el-table-column>
         <!-- 付款时间 -->
         <el-table-column :label="$t('付款时间')" prop="paid_at"></el-table-column>
+        <el-table-column :label="$t('过期时间')" prop="expired_at"></el-table-column>
       </el-table>
       <tx-pagination :pageParams="page_params"></tx-pagination>
     </div>

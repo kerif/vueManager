@@ -953,6 +953,9 @@ export default {
         })
         if (flag) return this.$message.error(this.$t('单位续重不能为空或为0'))
       }
+      if (this.form.checked && !this.form.condition) {
+        return this.$message.error(this.$t('条件不能为空'))
+      }
       if (this.$route.params.id) {
         // 编辑状态
         let checkStatus = this.form.checked ? Number(this.form.checked) : ''
