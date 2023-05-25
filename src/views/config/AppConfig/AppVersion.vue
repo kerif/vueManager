@@ -320,6 +320,7 @@ export default {
       this.ruleForm.version = ''
       this.ruleForm.file_name = ''
       this.ruleForm.file_path = ''
+      this.getList()
     }
   },
   components: {
