@@ -2274,37 +2274,28 @@ exports.detailsString = id => {
   return $form.get(`string-translations/${id}`)
 }
 
-
 // app版本管理  获取列表
-exports.getAppVersionList = () => {
-  return $form.get(`apk`)
-}
-// app版本管理  获取单条数据
-// exports.getAppVersionList = () => {
-//   return $form.get(`apk`)
-// }
+exports.getAppVersionList = params => $form.get(`apk`, { params })
+
 // app版本管理  新增
-exports.addVersion = (params) => {
+exports.addVersion = params => {
   return $form.post(`apk`, params)
 }
 // app版本管理 上传文件
-exports.uploadApk = (params) => {
+exports.uploadApk = params => {
   return $file.post(`apk/file`, params)
 }
 // app版本管理  编辑
-exports.editApk = (params) => {
+exports.editApkVersion = (id, params) => {
   return $form.post(`apk/file/${id}`, params)
 }
 // app版本管理  删除
-exports.deleteApk = (id) => {
+exports.deleteApk = id => {
   return $form.delete(`apk/file/${id}`)
 }
-//  app版本管理  下载APK
-exports.downloadApk = () => {
-  return $form.put(`apk/download`)
-}
 
-
+// app 版本管理 获取 apk cos 上传配置
+exports.getCosUploadConfig = () => $json.get('apk/upload-config')
 
 // 更新单条详细
 exports.updateLg = (id, params) => {

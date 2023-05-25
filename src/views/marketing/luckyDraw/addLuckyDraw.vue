@@ -151,28 +151,30 @@
             <el-table-column prop="gift_num" :label="$t('投放数量')"> </el-table-column>
             <el-table-column :label="$t('限定中奖用户')" width="200px">
               <template slot-scope="scope">
-                <span v-for="(item) in scope.row.limit_user">
-                  {{ item }} ,
-                </span>
+                <span v-for="item in scope.row.limit_user" :key="item.id"> {{ item }} , </span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
-                <el-button type="text" @click="showAddGift(scope.row, scope.$index)">编辑</el-button>
-                <el-button type="text" style="color: red" @click="delGift(scope.$index)"
-                  >删除</el-button
-                >
+                <el-button type="text" @click="showAddGift(scope.row, scope.$index)">{{
+                  $t('编辑')
+                }}</el-button>
+                <el-button type="text" style="color: red" @click="delGift(scope.$index)">{{
+                  $t('删除')
+                }}</el-button>
                 <el-button
                   type="text"
                   style="color: red"
                   @click="setDefaultGift(scope.row, 1)"
                   v-show="scope.row.is_default !== 1"
-                >{{ $t('设为默认奖品') }}</el-button>
+                  >{{ $t('设为默认奖品') }}</el-button
+                >
                 <el-button
                   type="text"
                   @click="setDefaultGift(scope.row, 0)"
                   v-show="scope.row.is_default === 1"
-                >{{ $t('取消默认奖品') }}</el-button>
+                  >{{ $t('取消默认奖品') }}</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -184,9 +186,9 @@
               <el-button type="primary" @click="addProbability()" size="small">{{
                 $t('添加')
               }}</el-button>
-<!--              <el-button type="danger" @click="showAddGift()" size="small">{{-->
-<!--                $t('删除')-->
-<!--              }}</el-button>-->
+              <!--              <el-button type="danger" @click="showAddGift()" size="small">{{-->
+              <!--                $t('删除')-->
+              <!--              }}</el-button>-->
             </div>
           </div>
           <el-table :data="giftProbability" :border="true">
@@ -204,7 +206,11 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column v-for="(item, index) in giftList" :label="item.gift_name">
+            <el-table-column
+              v-for="(item, index) in giftList"
+              :label="item.gift_name"
+              :key="item.id"
+            >
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.probability[index].rate"
@@ -217,16 +223,15 @@
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column
-              label="操作"
-            >
+            <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button
                   type="text"
                   style="color: red"
                   @click="deleteProbability(scope.$index)"
                   v-if="giftProbability.length > 1"
-                >{{ $t('删除') }}</el-button>
+                  >{{ $t('删除') }}</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -235,7 +240,9 @@
     </div>
     <div class="base-submit" v-if="~~infoType === 2">
       <el-button>{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="saveInfo" v-loading="loadingData.saveInfo">{{ $t('保存') }}</el-button>
+      <el-button type="primary" @click="saveInfo" v-loading="loadingData.saveInfo">{{
+        $t('保存')
+      }}</el-button>
     </div>
     <add-gift v-model="visibleData.addGift" :gift-info="activeGift" @submit="addGift"></add-gift>
     <choose-user
@@ -250,7 +257,7 @@
 <script>
 import AddGift from './components/addGift.vue'
 import chooseUser from '@/components/chooseUser/index.vue'
-import dialog from "../../../components/dialog";
+import dialog from '../../../components/dialog'
 export default {
   name: 'addLuckyDraw',
   components: {
@@ -452,7 +459,7 @@ export default {
         giftList[0].lucky_draw_probability.forEach(item => {
           getProbability.push({ limit: item.limit, probability: [] })
         })
-        giftList.forEach((gift, index) => {
+        giftList.forEach(gift => {
           gift.lucky_draw_probability.forEach(item => {
             getProbability.forEach((v, k) => {
               if (v.limit === item.limit) {

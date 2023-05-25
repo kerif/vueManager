@@ -389,7 +389,7 @@ const addLuckDraw = loadonDemand('marketing/luckyDraw/addLuckyDraw')
 const pickupList = loadonDemand('order/pickup/pickupList')
 
 // app版本管理
-const appVersionManage = loadonDemand('appVersion/appVersion')
+const appVersionManage = loadonDemand('config/AppConfig/AppVersion')
 
 export default [
   {
@@ -820,7 +820,7 @@ export default [
               group: '营销管理',
               name: '编辑抽奖活动'
             }
-          },
+          }
         ]
       },
       {
@@ -3184,16 +3184,16 @@ export default [
         id: 6400,
         children: [
           {
-            path: '/appVersion/appVersion',
+            path: '/app/app_version',
             name: 'appVersion',
             component: appVersionManage,
             id: 6401,
             meta: {
               level: 2,
-              group: 'APP版本管理',
+              group: 'APP管理',
               name: 'APP版本管理'
             }
-          },
+          }
         ]
       },
       // {
@@ -3299,8 +3299,7 @@ export default [
             }
           }
         ]
-      },
-
+      }
     ]
   }
 ]

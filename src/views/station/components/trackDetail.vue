@@ -58,14 +58,16 @@
       <div v-if="!isEmpty" class="step-list">
         <div>
           <el-steps :active="1" direction="vertical" :space="100">
-            <el-step v-for="(val, index) in TrackingData">
+            <el-step v-for="(val, index) in TrackingData" :key="val.ftime">
               <template v-slot:icon>
                 <div :class="index == 0 ? 'icon-bag active-icon' : 'icon-bag'"></div>
               </template>
               <template v-slot:title>
                 <div class="step-title">
                   <div>{{ val.context }}</div>
-                  <div class="del-font" v-if="val.id" @click="deleteTable(val.id)">删除</div>
+                  <div class="del-font" v-if="val.id" @click="deleteTable(val.id)">
+                    {{ $t('删除') }}
+                  </div>
                 </div>
               </template>
               <template v-slot:description>
@@ -396,7 +398,7 @@ div::-webkit-scrollbar-track {
   .operate-line {
     margin-top: 16px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
   }
 }
 </style>

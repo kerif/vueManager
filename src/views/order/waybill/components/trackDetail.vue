@@ -44,7 +44,7 @@
       <div v-if="!isEmpty" class="step-list">
         <div>
           <el-steps :active="1" direction="vertical" :space="100">
-            <el-step v-for="(val, index) in TrackingData">
+            <el-step v-for="(val, index) in TrackingData" :key="index">
               <template v-slot:icon>
                 <div :class="index == 0 ? 'icon-bag active-icon' : 'icon-bag'"></div>
               </template>
@@ -113,7 +113,6 @@ export default {
       })
     },
     goExpress() {
-      console.log('expressType', this.expressType)
       if (this.expressType == 1) {
         this.$request
           .goTracking({
@@ -165,7 +164,7 @@ export default {
           type: 'addCompany',
           orderId: this.item.id,
           state: 'multiBox',
-          close:this.close
+          close: this.close
         },
         () => {
           this.getDetail()
@@ -235,7 +234,7 @@ export default {
           type: 'addTrajectory',
           orderId: this.item.id,
           state: 'multiBox',
-          close:this.close
+          close: this.close
         },
         () => {
           this.getDetail()
@@ -259,7 +258,7 @@ export default {
           })
         }
       })
-    },
+    }
   }
 }
 </script>
@@ -383,7 +382,7 @@ export default {
   .operate-line {
     margin-top: 16px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
   }
 }
 </style>

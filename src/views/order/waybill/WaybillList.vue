@@ -2230,10 +2230,10 @@ export default {
       this.showDetail = true
       this.selectItem = scope.row
       return false
-      this.tableId = id
-      this.tableSn = sn
-      this.showDialog = true
-      this.getAlone()
+      // this.tableId = id
+      // this.tableSn = sn
+      // this.showDialog = true
+      // this.getAlone()
     },
     // 获取单条轨迹
     getAlone() {
