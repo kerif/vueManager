@@ -389,7 +389,7 @@ const addLuckDraw = loadonDemand('marketing/luckyDraw/addLuckyDraw')
 const pickupList = loadonDemand('order/pickup/pickupList')
 
 // app版本管理
-const appVersionManage = loadonDemand('appVersion/appVersion')
+const appVersionManage = loadonDemand('config/AppConfig/AppVersion')
 
 export default [
   {
@@ -3184,7 +3184,7 @@ export default [
         id: 6400,
         children: [
           {
-            path: '/appVersion/appVersion',
+            path: '/app/app_version',
             name: 'appVersion',
             component: appVersionManage,
             id: 6401,

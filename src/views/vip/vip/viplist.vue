@@ -635,7 +635,7 @@
   </div>
 </template>
 <script>
-import { SearchSelect, SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
@@ -1234,7 +1234,6 @@ export default {
     }
   },
   components: {
-    SearchSelect,
     SearchGroup,
     NlePagination,
     AddBtn,

@@ -4,21 +4,25 @@
       <div class="add-btn">
         <el-button @click.native="addEditVersion">{{ $t('添加更新') }}</el-button>
       </div>
-      <div style="height: calc(100vh - 230px)">
+      <div style="height: calc(100vh - 290px)">
         <el-table
           :data="versionData"
           v-loading="tableLoading"
           class="data-list"
           border
           stripe
-          height="calc(100vh - 250px)"
+          height="calc(100vh - 290px)"
           ref="table"
           :header-cell-style="{ textAlign: 'center' }"
           :cell-style="{ textAlign: 'center' }"
         >
           <el-table-column type="index" :label="$t('#')"></el-table-column>
           <el-table-column :label="$t('版本')" prop="version"></el-table-column>
-          <el-table-column :label="$t('更新内容')" prop="content"></el-table-column>
+          <el-table-column :label="$t('更新内容')" prop="content">
+            <template slot-scope="scope">
+              <div v-html="scope.row.content" class="update-content"></div>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
           <el-table-column :label="$t('创建人')" prop="creator.name"></el-table-column>
           <el-table-column :label="$t('下载')">
@@ -45,6 +49,13 @@
           </template>
         </el-table>
       </div>
+      <nle-pagination
+        style="margin-top: 10px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+        saveSize="package"
+      >
+      </nle-pagination>
     </div>
 
     <!-- 修改弹框 -->
@@ -75,6 +86,7 @@
             :before-upload="beforeUploadAPK"
             :http-request="uploadAPK"
             :show-file-list="false"
+            :disabled="uploadInfo.loading"
             accept="application/vnd.android.package-archive"
           >
             <el-button style="color: black">{{ $t('上传APK') }}</el-button>
@@ -99,6 +111,8 @@
 <script>
 import COS from 'cos-js-sdk-v5'
 import baseUrl from '@/lib/axios/baseApi'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -127,6 +141,7 @@ export default {
       cos: null
     }
   },
+  mixins: [pagination],
   name: 'appVersionList',
   mounted() {
     this.getList()
@@ -137,15 +152,21 @@ export default {
     // apk 版本列表
     getList() {
       this.tableLoading = true
-      this.$request.getAppVersionList().then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.versionData = res.data
-          this.$nextTick(() => {
-            this.$refs.table.doLayout()
-          })
-        }
-      })
+      this.$request
+        .getAppVersionList({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.page_params.total = res.meta.total
+          this.tableLoading = false
+          if (res.ret) {
+            this.versionData = res.data
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          }
+        })
     },
 
     // 新增按钮
@@ -300,6 +321,9 @@ export default {
       this.ruleForm.file_name = ''
       this.ruleForm.file_path = ''
     }
+  },
+  components: {
+    NlePagination
   }
 }
 </script>
@@ -333,6 +357,9 @@ export default {
 
   .el-upload button {
     padding: 10px 30px !important;
+  }
+  .update-content {
+    white-space: pre-line;
   }
 }
 </style>

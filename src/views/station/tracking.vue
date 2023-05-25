@@ -235,12 +235,10 @@
 
 <script>
 import Detail from './components/trackDetail'
-import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
-import dialog from '@/components/dialog'
+// import dialog from '@/components/dialog'
 export default {
   components: {
-    NlePagination,
     Detail
   },
   name: 'tracking',
@@ -291,18 +289,18 @@ export default {
       this.selectItem = scope
       console.log('scope', scope)
       return false
-      if (this.expressType == 1) {
-        dialog({ type: 'logisticsInfo', id: scope.order_sn, expressType: this.expressType }, () => {
-          console.log('aa')
-        })
-      } else {
-        dialog(
-          { type: 'logisticsInfo', id: scope.express_num, expressType: this.expressType },
-          () => {
-            console.log('aa')
-          }
-        )
-      }
+      // if (this.expressType == 1) {
+      //   dialog({ type: 'logisticsInfo', id: scope.order_sn, expressType: this.expressType }, () => {
+      //     console.log('aa')
+      //   })
+      // } else {
+      //   dialog(
+      //     { type: 'logisticsInfo', id: scope.express_num, expressType: this.expressType },
+      //     () => {
+      //       console.log('aa')
+      //     }
+      //   )
+      // }
     },
     changeType() {
       this.sns = null
@@ -506,7 +504,7 @@ export default {
     .info-tab {
       width: 100%;
       height: 50px;
-      .row-style{
+      .row-style {
         cursor: pointer;
       }
     }

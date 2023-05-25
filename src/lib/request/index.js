@@ -2275,13 +2275,8 @@ exports.detailsString = id => {
 }
 
 // app版本管理  获取列表
-exports.getAppVersionList = () => {
-  return $form.get(`apk`)
-}
-// app版本管理  获取单条数据
-// exports.getAppVersionList = () => {
-//   return $form.get(`apk`)
-// }
+exports.getAppVersionList = params => $form.get(`apk`, { params })
+
 // app版本管理  新增
 exports.addVersion = params => {
   return $form.post(`apk`, params)
