@@ -2852,6 +2852,18 @@ export default [
             }
           },
           {
+            path: '/config/payment/delivery-company/:id/:name',
+            component: deliveryCompany,
+            name: 'deliveryCompany',
+            id: 6301,
+            meta: {
+              group: '基础数据',
+              level: 3,
+              name: '详情',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
             path: '/config/payment/add',
             component: AddEditEmail,
             name: 'emailAdd',
@@ -3071,6 +3083,18 @@ export default [
               group: '基础配置',
               level: 2,
               name: '渠道路线配置'
+            }
+          },
+          {
+            path: '/config/icon/add',
+            component: IconAdd,
+            name: 'IconAdd',
+            id: 6307,
+            meta: {
+              group: '基础数据',
+              level: 3,
+              name: '路线icon',
+              parent: '/config/line/linelist'
             }
           },
           {
