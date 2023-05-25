@@ -2857,7 +2857,7 @@ export default [
             name: 'deliveryCompany',
             id: 6301,
             meta: {
-              group: '基础数据',
+              group: '基础配置',
               level: 3,
               name: '详情',
               parent: '/config/configuration-more'
@@ -3091,10 +3091,10 @@ export default [
             name: 'IconAdd',
             id: 6307,
             meta: {
-              group: '基础数据',
+              group: '基础配置',
               level: 3,
               name: '路线icon',
-              parent: '/config/line/linelist'
+              parent: '/config/line'
             }
           },
           {
