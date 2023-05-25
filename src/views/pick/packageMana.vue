@@ -32,7 +32,7 @@
               <span>{{ form.contactor }}</span>
             </el-col>
             <el-col :span="9">
-              <span class="leftWidth" style='width: 100px'>{{ $t('计佣方式') }}：</span>
+              <span class="leftWidth" style="width: 100px">{{ $t('计佣方式') }}：</span>
               <span>{{ form.rule && form.rule.name }}</span>
             </el-col>
           </el-row>
@@ -42,7 +42,7 @@
             <!--            <span>{{ form.address }}</span>-->
             <!--          </el-col>-->
             <el-col :span="8">
-              <span class="leftWidth" style='width: 100px'>{{ $t('联系电话') }}：</span>
+              <span class="leftWidth" style="width: 100px">{{ $t('联系电话') }}：</span>
               <span>{{ form.contact_info }}</span>
             </el-col>
             <el-col :span="8">
@@ -75,7 +75,7 @@
             <div class="operate-box" @click="fastDelivery">{{ $t('快速出库') }}</div>
           </el-col>
         </el-row>
-        <el-row :gutter="20" style='margin-top: 8px'>
+        <el-row :gutter="20" style="margin-top: 8px">
           <el-col :span="8">
             <div class="operate-box" @click="fastTransport">{{ $t('快速转运') }}</div>
           </el-col>
@@ -88,25 +88,25 @@
         </el-row>
       </div>
     </div>
-<!--    <div class="package-middle">-->
-<!--      <el-row>-->
-<!--        &lt;!&ndash; <el-col :span="5">-->
-<!--          <div class="middle-left" @click="goAnnouncement">{{ $t('公告设置') }}</div>-->
-<!--        </el-col> &ndash;&gt;-->
-<!--        <el-col :span="5">-->
-<!--          <div class="middle-left" @click="fastReceipt">{{ $t('快速收货') }}</div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="5" :offset="1">-->
-<!--          <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="5" :offset="1">-->
-<!--          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="5" :offset="1">-->
-<!--          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--    </div>-->
+    <!--    <div class="package-middle">-->
+    <!--      <el-row>-->
+    <!--        &lt;!&ndash; <el-col :span="5">-->
+    <!--          <div class="middle-left" @click="goAnnouncement">{{ $t('公告设置') }}</div>-->
+    <!--        </el-col> &ndash;&gt;-->
+    <!--        <el-col :span="5">-->
+    <!--          <div class="middle-left" @click="fastReceipt">{{ $t('快速收货') }}</div>-->
+    <!--        </el-col>-->
+    <!--        <el-col :span="5" :offset="1">-->
+    <!--          <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>-->
+    <!--        </el-col>-->
+    <!--        <el-col :span="5" :offset="1">-->
+    <!--          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>-->
+    <!--        </el-col>-->
+    <!--        <el-col :span="5" :offset="1">-->
+    <!--          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>-->
+    <!--        </el-col>-->
+    <!--      </el-row>-->
+    <!--    </div>-->
     <el-tabs v-model="activeName" class="tabLength">
       <!-- 未到自提点 -->
       <el-tab-pane
@@ -229,7 +229,7 @@
       :data="oderData"
       @selection-change="selectionChange"
       v-loading="tableLoading"
-      height='calc(100vh - 550px)'
+      height="calc(100vh - 550px)"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
@@ -247,7 +247,7 @@
       <!-- 发货时间 -->
       <el-table-column :label="$t('发货时间')" prop="shipped_at"> </el-table-column>
       <!-- 箱数 -->
-      <el-table-column :label="$t('箱数')" width='50'>
+      <el-table-column :label="$t('箱数')" width="50">
         <template slot-scope="scope">
           <span v-if="scope.row.box_count > 0">{{ scope.row.box_count }}</span>
           <span v-else>1</span>
@@ -257,7 +257,7 @@
       <el-table-column
         :label="$t('重量') + `${localization ? localization.weight_unit : ''}`"
         prop="actual_weight"
-        width='100'
+        width="100"
       >
       </el-table-column>
       <!-- 尺寸/体积 -->
@@ -965,6 +965,16 @@ export default {
 </script>
 
 <style lang="scss">
+.el-table {
+  display: flex;
+  flex-direction: column; //垂直排列
+}
+.el-table__body-wrapper {
+  flex: 1; //表格高度自适应，因为flex布局的原因，会自动撑满
+}
+.el-table__header-wrapper {
+  border-bottom: 1px solid rgb(235, 238, 245);
+}
 .package-management-container {
   .top-line {
     display: flex;

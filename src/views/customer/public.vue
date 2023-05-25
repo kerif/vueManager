@@ -124,7 +124,7 @@ export default {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size, 
+        size: this.page_params.size,
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
