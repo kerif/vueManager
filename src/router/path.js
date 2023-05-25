@@ -3205,13 +3205,13 @@ export default [
         path: 'appversion',
         component: LayoutContainer,
         icon: 'appVersion',
-        id: 6400,
+        id: 6500,
         children: [
           {
             path: '/app/app_version',
             name: 'appVersion',
             component: appVersionManage,
-            id: 6401,
+            id: 6501,
             meta: {
               level: 2,
               group: 'APP管理',
