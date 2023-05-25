@@ -23,6 +23,7 @@
                 v-for="item in statusList"
                 :label="item.label"
                 :value="item.id"
+                :key="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -89,14 +90,14 @@
               size="small"
               @click="updateStatus(scope.row.id, 2)"
               v-if="scope.row.status === 1"
-            >{{ $t('开始活动') }}</el-button
+              >{{ $t('开始活动') }}</el-button
             >
             <el-button
               class="btn-light-red detailsBtn"
               size="small"
               @click="updateStatus(scope.row.id, 3)"
               v-if="scope.row.status === 2"
-            >{{ $t('结束活动') }}</el-button
+              >{{ $t('结束活动') }}</el-button
             >
           </template>
         </el-table-column>
@@ -210,8 +211,7 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.updateLuckyDraw(id, params)
-        .then(res => {
+        this.$request.updateLuckyDraw(id, params).then(res => {
           if (res.ret === 1) {
             this.$message.success('操作成功')
             setTimeout(() => {

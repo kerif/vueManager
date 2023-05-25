@@ -33,7 +33,7 @@
                 <el-input
                   :placeholder="$t('请输入内容')"
                   v-model="ruleForm.receiver_name"
-                  @input='replaceUserId'
+                  @input="replaceUserId"
                 ></el-input>
               </el-col>
             </el-row>
@@ -66,23 +66,21 @@
                 ></el-input>
               </el-col>
             </el-row>
-            <div class="tip-line" style='color: #c5c5c6'>
-              {{
-                $t('*个别出货面单的仓库发件人地址从这里读取')
-              }}
+            <div class="tip-line" style="color: #c5c5c6">
+              {{ $t('*个别出货面单的仓库发件人地址从这里读取') }}
             </div>
           </el-form-item>
           <el-form-item :label="$t('')" prop="city">
             <el-row>
-              <el-col
-                :span="8"
-
-                style="display: flex; align-items: center; flex-direction: row"
-              >
+              <el-col :span="8" style="display: flex; align-items: center; flex-direction: row">
                 <span style="padding-right: 8px">{{ $t('省') }}</span>
                 <el-input :placeholder="$t('请输入')" v-model="ruleForm.province"></el-input>
               </el-col>
-              <el-col :span="8" :offset="4" style="display: flex; align-items: center; flex-direction: row">
+              <el-col
+                :span="8"
+                :offset="4"
+                style="display: flex; align-items: center; flex-direction: row"
+              >
                 <span style="width: 40px">{{ $t('城市') }}</span>
                 <el-input :placeholder="$t('请输入')" v-model="ruleForm.city"></el-input>
               </el-col>
@@ -102,7 +100,7 @@
                   :placeholder="$t('请输入内容')"
                   type="textarea"
                   :row="3"
-                  @input='replaceUserId'
+                  @input="replaceUserId"
                   v-model="ruleForm.address"
                 ></el-input>
               </el-col>
@@ -348,9 +346,8 @@ export default {
           { required: true, message: this.$t('请选择国家或地区'), trigger: 'blur' }
         ]
       },
-      preview_receiver_name:null,
-      preview_address:null,
-
+      preview_receiver_name: null,
+      preview_address: null
     }
   },
   created() {
@@ -385,10 +382,10 @@ export default {
     //替换user_id
     replaceUserId() {
       console.log(this.ruleForm.receiver_name.indexOf('USER_ID'))
-      this.preview_receiver_name = this.ruleForm.receiver_name.replace('{USER_ID}','壹贰叁肆伍')
-      this.preview_receiver_name = this.preview_receiver_name.replace('{user_id}','12345')
-      this.preview_address = this.ruleForm.address.replace('{USER_ID}','壹贰叁肆伍')
-      this.preview_address = this.preview_address.replace('{user_id}','12345')
+      this.preview_receiver_name = this.ruleForm.receiver_name.replace('{USER_ID}', '壹贰叁肆伍')
+      this.preview_receiver_name = this.preview_receiver_name.replace('{user_id}', '12345')
+      this.preview_address = this.ruleForm.address.replace('{USER_ID}', '壹贰叁肆伍')
+      this.preview_address = this.preview_address.replace('{user_id}', '12345')
     },
     // 添加国家或地区
     onAddCountry() {
@@ -552,7 +549,7 @@ export default {
     }
     .radio-box {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       height: 40px;
       align-items: center;
     }

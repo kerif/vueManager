@@ -167,7 +167,7 @@
           </div>
         </div>
         <!--        <div class="right-text">{{ $t('查询结果') }}</div>-->
-        <div class='right-button'>
+        <div class="right-button">
           <div class="none-box" v-show="isEmpty">
             <img src="../../../assets/wu.png" />
             <div class="right-text">{{ $t('您可以在这里估算运费请在上边输入相关参数') }}!</div>
@@ -175,7 +175,7 @@
           <div class="result-list">
             <div
               class="result-item is-click"
-              v-for="(item, index) in lineList"
+              v-for="item in lineList"
               :key="item.id"
               @click="onDetail(item)"
             >
@@ -199,10 +199,10 @@
                     <span class="tip-span">时效：</span>{{ item.region.reference_time }}个工作日
                   </div>
                   <div>
-                  <span class="tip-span">{{ $t('预估费用') }}：</span
-                  ><span class="price-span"
-                  >{{ localization.currency_unit }}{{ item.expire_fee | formatPrice }}</span
-                  >
+                    <span class="tip-span">{{ $t('预估费用') }}：</span
+                    ><span class="price-span"
+                      >{{ localization.currency_unit }}{{ item.expire_fee | formatPrice }}</span
+                    >
                   </div>
                 </div>
                 <!--            <div class="result-item_index">{{ index + 1 }}</div>-->
@@ -213,7 +213,9 @@
                   <span class="tip-span">{{ $t('渠道编码') }}：</span> {{ item.channel_code }}
                 </div>
                 <div>
-                  <span class="prop-span" v-for="prop in item.props">{{ prop.name }}</span>
+                  <span class="prop-span" v-for="prop in item.props" :key="prop.id">{{
+                    prop.name
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -359,7 +361,6 @@ export default {
   font-size: 0;
   height: 100%;
   .freight-total {
-
     height: 100%;
   }
   .freight-left,
@@ -513,7 +514,7 @@ export default {
       .attribute {
         margin-top: 16px;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         span {
           margin-bottom: -2px;
         }
@@ -555,17 +556,16 @@ export default {
   .icon-detail {
     right: 15px;
     font-size: 18px;
-
   }
   .none-box {
     text-align: center;
     color: #c8c8c8;
     margin-top: 100px;
   }
-  .right-button{
-    background-color: #FFFFFF;
+  .right-button {
+    background-color: #ffffff;
     margin-top: 16px;
-    padding:0 16px;
+    padding: 0 16px;
     border-radius: 10px;
     flex: 1;
     overflow-y: auto;
@@ -607,7 +607,7 @@ export default {
         .tip-span {
           color: #c8c8c8;
         }
-        .prop-span{
+        .prop-span {
           color: #c8c8c8;
           padding-left: 8px;
         }
