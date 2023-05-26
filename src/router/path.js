@@ -22,7 +22,7 @@ const InfoDetails = loadonDemand('home/infoDetails')
 // 员工列表
 const StaffList = loadonDemand('staff/stafflist')
 // 员工组列表
-const StaffGroupList = loadonDemand('staff/staffgrouplist')
+const StaffGroupList = loadonDemand('staff/newstaffgrouplist')
 // 添加、编辑员工
 const StaffEdit = loadonDemand('staff/staffaddedit')
 // 员工组修改权限

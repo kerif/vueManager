@@ -150,6 +150,7 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.staff_group_list = res.data
+            console.log('list的数据为:', res.data)
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
