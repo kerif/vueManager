@@ -3,13 +3,26 @@
   <el-container>
     <el-header>
       <div class="header-container">
-        <button id="add-actor">+添加角色</button>
+        <button id="add-actor" @click="addStaff">+添加角色</button>
       </div>
     </el-header>
     <el-container>
-      <el-main style="height:735px !important;">
+      <el-main style="height:739px !important;">
         <el-tabs tab-position="left" style="height: 200px;">
-          <el-tab-pane v-for="item in staff_group_list" :key="item" :label ="item.name_cn">{{item.name_cn + '的内容'}}</el-tab-pane>
+          <el-tab-pane v-for="(item,index) in staff_group_list" :key="index" :label="item.name_cn">
+            <div class="tab-container">
+              <basic-info
+                :name="item.name_cn"
+                :description="item.description"
+                :hidePhone="item.hide_phone"
+                :id="item.id"
+                @hidePhoneChange="changeHidePhone"
+                @updateBaseInfo="editStaff"
+              ></basic-info>
+
+              <staff-info :permission="item.permissions" :id="item.id"></staff-info>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </el-main>
     </el-container>
@@ -17,7 +30,14 @@
 </template>
 
 <script>
+import BasicInfo from './basicInfo.vue'
+import StaffInfo from './staffInfo.vue'
+import dialog from '@/components/dialog'
 export default {
+  components: {
+    BasicInfo,
+    StaffInfo,
+  },
   data() {
     return {
       staff_group_list: [],
@@ -25,21 +45,24 @@ export default {
       normal: 1,
       dataPermission: {},
       show: false,
-      hide_phone: 0
+      hide_phone: 0,
     }
   },
 
   created() {
-    this.getList();
+    this.getConfig()
   },
 
+  mounted() {
+    this.getList()
+  },
   methods: {
     getList() {
       this.$request
         .getVipGroup({
           keyword: '',
           page: 1,
-          size: 10
+          size: 1000
         })
         .then(res => {
           this.tableLoading = false
@@ -49,11 +72,54 @@ export default {
           }
         })
     },
+
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        if (res.ret) {
+          this.dataPermission = res.data[2]
+          console.log(this.dataPermission)
+        }
+      })
+    },
+
+    changeHidePhone(id, hide_phone) {
+      let params = {}
+      params.hide_phone = hide_phone
+      this.$request.telPermission(id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 编辑
+    editStaff(id) {
+      dialog({ type: 'addStaff', id: id, staff: 'edit' }, () => {
+        this.getList()
+      })
+    },
+
+    // 添加员工组
+    addStaff() {
+      dialog({ type: 'addStaff', staff: 'add' }, () => {
+        this.getList()
+      })
+    }
   }
-  
 }
 </script>
-<style lang="scss" scoped>
+
+<style lang="scss">
 .el-header {
   height: 50px !important;
 }
@@ -74,37 +140,39 @@ export default {
     font-size: 16px;
   }
 }
-.el-card {
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 // 修改侧边Tab的样式
-::v-deep .el-tabs__active-bar {
-background-color:transparent !important;
+.el-tabs__active-bar {
+  background-color: transparent;
 }
-::v-deep .el-tabs__nav-scroll {
+.el-tabs__nav-scroll {
   overflow: visible;
 }
-::v-deep .el-tabs__nav-prev  {
-  z-index: -1000000;
+.el-tabs__nav-prev {
+  z-index: 100;
 }
-::v-deep .el-tabs__nav-next {
-  z-index: -1000000;
+.el-tabs__nav-next {
+  z-index: 100;
 }
-::v-deep .el-tabs__item{
+.el-tabs__item {
   background-color: white;
   border: 0.5px solid rgba(230, 230, 230, 0.5);
   height: 50px;
   width: 200px;
   display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
+  flex-direction: row;
+  justify-content: center;
 }
-
-::v-deep .el-tabs {
+.el-tabs__content {
+  height: 1000px;
+}
+.el-tabs {
   height: 100% !important;
-} 
+}
+.tab-container {
+  padding: 10px;
+}
+#pager-container {
+  width: 200px;
+}
 </style>

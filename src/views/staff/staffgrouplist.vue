@@ -3,9 +3,11 @@
     <div class="select-box">
       <div class="bottom-sty">
         <!-- 删除 -->
-        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+        <el-button class="btn-light-red" size="small" @click="deleteData">
+          {{
           $t('删除')
-        }}</el-button>
+          }}
+        </el-button>
       </div>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
@@ -22,16 +24,15 @@
         ref="table"
         height="calc(100vh - 275px)"
       >
-        <el-table-column type="selection" width="55"> </el-table-column>
+        <el-table-column type="selection" width="55"></el-table-column>
         <!-- 员工组中文名 -->
-        <el-table-column prop="name_cn" :label="$t('员工组中文名')"> </el-table-column>
+        <el-table-column prop="name_cn" :label="$t('员工组中文名')"></el-table-column>
         <!-- 员工组英文名 -->
-        <el-table-column prop="name_en" :label="$t('员工组英文名')"> </el-table-column>
+        <el-table-column prop="name_en" :label="$t('员工组英文名')"></el-table-column>
         <!-- 成员数量 -->
-        <el-table-column prop="admin_count" :label="$t('成员数量')" width="100"> </el-table-column>
+        <el-table-column prop="admin_count" :label="$t('成员数量')" width="100"></el-table-column>
         <!-- 所属仓库 -->
-        <el-table-column prop="warehouses" :label="$t('所属仓库')" :formatter="fileData">
-        </el-table-column>
+        <el-table-column prop="warehouses" :label="$t('所属仓库')" :formatter="fileData"></el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="500">
           <template slot-scope="scope">
@@ -40,46 +41,42 @@
               v-if="scope.row.permissions === 1"
               class="btn-blue"
               @click.stop="editStaff(scope.row.id)"
-              >{{ $t('编辑') }}</el-button
-            >
+            >{{ $t('编辑') }}</el-button>
             <!-- 修改权限 -->
             <el-button
               class="btn-purple"
               v-if="scope.row.permissions === 1"
               @click.stop="changePre(scope.row.id)"
-            >
-              {{ $t('修改权限') }}
-            </el-button>
+            >{{ $t('修改权限') }}</el-button>
             <!-- 成员 -->
-            <el-button @click.stop="member(scope.row.id)" class="btn-green">{{
+            <el-button @click.stop="member(scope.row.id)" class="btn-green">
+              {{
               $t('成员')
-            }}</el-button>
+              }}
+            </el-button>
             <!-- 所属仓库 -->
             <el-button
               class="btn-deep-blue"
               v-if="scope.row.permissions === 1"
               @click="warehouseChange(scope.row.id)"
-              >{{ $t('所属仓库') }}</el-button
-            >
+            >{{ $t('所属仓库') }}</el-button>
             <!-- 自提点权限 -->
             <el-button
               class="btn-pink"
               v-if="scope.row.permissions === 1"
               @click="pickPiont(scope.row.id)"
-              >{{ $t('自提点权限') }}</el-button
-            >
+            >{{ $t('自提点权限') }}</el-button>
             <el-button
               class="btn-light-red"
               v-if="dataPermission.enabled === 1"
               @click="editTelPermission(scope.row.id, scope.row.hide_phone)"
-              >{{ $t('数据权限') }}</el-button
-            >
+            >{{ $t('数据权限') }}</el-button>
           </template>
         </el-table-column>
         <!-- <template slot="append">
         <div class="append-box">
         </div>
-      </template> -->
+        </template>-->
       </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -94,15 +91,16 @@
             :inactive-text="$t('关')"
             active-color="#13ce66"
             inactive-color="gray"
-          >
-          </el-switch>
+          ></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="show = false">{{ $t('取消') }}</el-button>
-        <el-button :loading="$store.state.btnLoading" type="primary" @click="onConfirm">{{
+        <el-button :loading="$store.state.btnLoading" type="primary" @click="onConfirm">
+          {{
           $t('确定')
-        }}</el-button>
+          }}
+        </el-button>
       </div>
     </el-dialog>
   </div>
